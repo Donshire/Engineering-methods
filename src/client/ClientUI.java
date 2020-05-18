@@ -3,6 +3,7 @@ package client;
 import java.io.IOException;
 
 import boundery.LogInController;
+import boundery.MyOrderConrtoller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -16,7 +17,7 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LogInController aFrame = new LogInController();
+		MyOrderConrtoller aFrame = new MyOrderConrtoller();
 		// create StudentFrame
 		aFrame.start(primaryStage);
 

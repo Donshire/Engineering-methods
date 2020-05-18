@@ -31,14 +31,19 @@ public class MyFuelClient extends AbstractClient {
 		System.out.println("recive---");
 		if (msg != null) {
 			Message message = (Message) msg;
-			//if (message.getObj() != null) {
-				switch (message.getCmd()) {
-				case LoginRes:// receive from server ArrayList<employee>
-					ServerRetObj = message.getObj();
 
-					break;
-				}
-			//}
+			switch (message.getCmd()) {
+			case LoginRes:// receive from server ArrayList<employee>
+				ServerRetObj = message.getObj();
+
+				break;
+
+			case CustomerOrderListRes:
+				ServerRetObj = message.getObj();
+				break;
+
+			}
+
 		}
 
 		awaitResponse = false;

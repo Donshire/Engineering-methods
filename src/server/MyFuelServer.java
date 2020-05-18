@@ -32,6 +32,16 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case CustomerOrderList:
+			String s = (String) (message.getObj());
+			try {
+				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.LoginRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 
 		default:
 			System.out.println("default");
@@ -40,7 +50,7 @@ public class MyFuelServer extends AbstractServer {
 	}
 
 	protected void serverStarted() {
-		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
+		ConnectionToDB.connectToDB("myfueldb", "1611");
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 

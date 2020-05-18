@@ -44,9 +44,8 @@ public class LogInController {
 			if(obj instanceof Customer) System.out.println("customer");
 			else if(obj instanceof Employee) System.out.println("employee");
 			else if(obj instanceof Supplier) System.out.println("supplier");
-			else if(obj==null)System.out.println("not exist");
-			else if(obj.equals(Commands.UserAlreadyConnected))
-					System.out.println("already online");
+			else if(obj!=null && obj.equals(Commands.UserAlreadyConnected)) System.out.println("already online");
+			else System.out.println("not exist");
 		}
 
 	}
