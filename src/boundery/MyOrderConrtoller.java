@@ -105,7 +105,6 @@ public class MyOrderConrtoller extends Application {
 		Scene scene = new Scene(vbox);
 		window.setScene(scene);
 		window.show();
-
 	}
 
 	public ObservableList<GasOrder> getOrders() {
