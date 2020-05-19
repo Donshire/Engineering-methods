@@ -35,7 +35,6 @@ public class MyFuelClient extends AbstractClient {
 				switch (message.getCmd()) {
 				case LoginRes:// receive from server ArrayList<employee>
 					ServerRetObj = message.getObj();
-
 					break;
 				}
 			//}

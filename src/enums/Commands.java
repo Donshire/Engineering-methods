@@ -2,6 +2,6 @@ package enums;
 
 public enum Commands {
 	
-	Login,LoginRes,UserAlreadyConnected;
+	Login,LoginRes,UserAlreadyConnected, GetMaxPrice;
 
 }

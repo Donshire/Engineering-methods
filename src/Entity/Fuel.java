@@ -2,10 +2,12 @@ package Entity;
 
 public class Fuel {
 	private String fuelType;
-	private float maxPrice;
+	private double maxPrice;
 
-	public Fuel(String fuelType, float maxPrice) {
-		super();
+	public Fuel() {
+	}
+	
+	public Fuel(String fuelType, double maxPrice) {
 		this.fuelType = fuelType;
 		this.maxPrice = maxPrice;
 	}
@@ -18,7 +20,7 @@ public class Fuel {
 		this.fuelType = fuelType;
 	}
 
-	public float getMaxPrice() {
+	public double getMaxPrice() {
 		return maxPrice;
 	}
 
