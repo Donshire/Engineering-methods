@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 
+import boundery.GasHomeController;
 import boundery.LogInController;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -16,7 +17,10 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LogInController aFrame = new LogInController();
+//		LogInController aFrame = new LogInController();
+		GasHomeController aFrame = new GasHomeController();
+		
+		
 		// create StudentFrame
 		aFrame.start(primaryStage);
 

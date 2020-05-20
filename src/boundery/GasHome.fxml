@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="875.0" prefWidth="1289.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.GasHomeController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#DragSlider" prefHeight="875.0" prefWidth="1289.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.GasHomeController">
    <children>
       <Text layoutX="396.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gas Home" textAlignment="CENTER">
          <font>
@@ -33,8 +33,8 @@
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <Slider fx:id="sliderAmount" layoutX="291.0" layoutY="460.0" max="2000.0" onDragDetected="#DragSlider" prefHeight="33.0" prefWidth="606.0" value="900.0" />
-      <TextField fx:id="textAmount" layoutX="911.0" layoutY="460.0" onInputMethodTextChanged="#TextAmountChanged" />
+      <Slider fx:id="sliderAmount" blockIncrement="0.0" layoutX="291.0" layoutY="460.0" majorTickUnit="200.0" max="2000.0" minorTickCount="200" onDragDetected="#DragSlider" prefHeight="33.0" prefWidth="606.0" showTickMarks="true" snapToTicks="true" />
+      <TextField fx:id="textAmount" layoutX="911.0" layoutY="460.0" onInputMethodTextChanged="#TextAmountChanged" text="0" />
       <Pane layoutX="249.0" layoutY="534.0" prefHeight="236.0" prefWidth="853.0" style="-fx-background-color: caf0f8;">
          <children>
             <Text layoutX="22.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price to pay:" wrappingWidth="162.21288983523846">
@@ -47,7 +47,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <Text fx:id="priceList" fill="#092aeb" layoutX="340.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="115.63086585700512">
+            <Text fx:id="priceList" fill="#092aeb" layoutX="332.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00" wrappingWidth="115.63086585700512">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -67,7 +67,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Text>
-            <Text fx:id="total" fill="#eb0909" layoutX="340.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="115.63086585700512">
+            <Text fx:id="total" fill="#eb0909" layoutX="340.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00" wrappingWidth="115.63086585700512">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -79,11 +79,11 @@
             </Button>
          </children>
       </Pane>
-      <Text fx:id="textSupplyDate" disable="true" layoutX="349.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" wrappingWidth="179.21288983523846">
+      <Text fx:id="textSupplyDate" layoutX="349.0" layoutY="326.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
       </Text>
-      <DatePicker fx:id="filedSupplyDate" disable="true" editable="false" layoutX="349.0" layoutY="339.0" onAction="#supplyDateSelected" />
+      <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="349.0" layoutY="339.0" onAction="#supplyDateSelected" visible="false" />
    </children>
 </Pane>
