@@ -1,26 +1,34 @@
 package boundery;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent.EventType;
 
 import Entity.Employee;
 import Entity.Fuel;
 import Entity.Rates;
 import client.ClientUI;
 import enums.RatesStatus;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -29,6 +37,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class MarketingManagerController implements Initializable{
 
@@ -212,12 +221,42 @@ public class MarketingManagerController implements Initializable{
 		ObservableList<Rates> data=
 				FXCollections.observableArrayList(new Rates("1", 1.2f,"95", RatesStatus.done.toString(),"20/2/2020", "Paz"));
 		//perpare the table
-		
+		/*
 		 rateCheckBoxSelect.setCellValueFactory( new PropertyValueFactory<Rates,Boolean>("check") );
 		 rateCheckBoxSelect.setCellFactory( CheckBoxTableCell.forTableColumn( rateCheckBoxSelect ) );
-		 rateCheckBoxSelect.setEditable(true);;
-		//problem is object Fuel not string       **********************************
-		//**************************************************************************
+		 */
+		 
+		//CheckBox
+		
+		 rateCheckBoxSelect.setCellValueFactory(new Callback<CellDataFeatures<Rates,Boolean>, ObservableValue<Boolean>>() {
+	            @Override
+	            public ObservableValue<Boolean> call(CellDataFeatures<Rates,Boolean> param) {
+	            	Rates rate = param.getValue();
+	                SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(rate.getCheck());
+	                
+	                booleanProp.addListener(new ChangeListener<Boolean>() {
+	                    @Override
+	                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+	                            Boolean newValue) {
+	                    	if(newValue==true) selectedRates.add(rate);
+	                    	else selectedRates.remove(rate);
+	                    	rate.setCheck(newValue);
+	                    }
+	                });
+	                return booleanProp;
+	            }
+	        });
+		 
+		 rateCheckBoxSelect.setCellFactory(new Callback<TableColumn<Rates,Boolean>, //
+			        TableCell<Rates, Boolean>>() {
+			            @Override
+			            public TableCell<Rates, Boolean> call(TableColumn<Rates, Boolean> p) {
+			                CheckBoxTableCell<Rates, Boolean> cell = new CheckBoxTableCell<Rates, Boolean>();
+			                cell.setAlignment(Pos.CENTER);
+			                return cell;
+			            }
+			        });
+		//End of checkBox
 		 rateFuelType.setCellValueFactory(
 					new PropertyValueFactory<Rates, String>("fuelType"));
 		
@@ -237,6 +276,7 @@ public class MarketingManagerController implements Initializable{
 	
 	private Pane currentPane;
 	private Employee markitingManager ;
+	private ArrayList<Rates> selectedRates=new ArrayList<Rates>();
 	
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;

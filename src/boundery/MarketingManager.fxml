@@ -16,14 +16,14 @@
       <Button fx:id="fuelRatesWindowBtn" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#openFuelRatesPane" prefHeight="60.0" prefWidth="141.0" text="Fuel Rates" />
       <Button fx:id="reportGenerationWindowBtn" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#openReportGenerationPane" prefHeight="60.0" prefWidth="141.0" text="Report generation" />
       <Button fx:id="logOutBtn" layoutX="713.0" layoutY="24.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
-      <Pane fx:id="markitingManagerNofPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
+      <Pane fx:id="markitingManagerNofPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
             <Text fx:id="helloUserTxt" layoutX="475.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" />
             <Text layoutX="28.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications" />
             <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
          </children>
       </Pane>
-      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
          <children>
             <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Fuel Rate">
                <font>
@@ -36,7 +36,7 @@
             <TextField fx:id="newRatetxt" layoutX="368.0" layoutY="60.0" />
             <Text fx:id="maxFuelPricetxt" layoutX="23.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max Price for %s is %.2f" />
             <ComboBox fx:id="rateTypeCombo" layoutX="483.0" layoutY="175.0" onAction="#chooserateType" prefWidth="150.0" />
-            <TableView fx:id="fuelRatesTable" layoutX="55.0" layoutY="226.0" prefHeight="200.0" prefWidth="500.0">
+            <TableView fx:id="fuelRatesTable" editable="true" layoutX="55.0" layoutY="226.0" prefHeight="200.0" prefWidth="500.0">
               <columns>
                   <TableColumn fx:id="rateCheckBoxSelect" minWidth="100.0" prefWidth="75.0" text="Select Rates" />
                 <TableColumn fx:id="rateIDrate" minWidth="100.0" prefWidth="75.0" text="rateId" />

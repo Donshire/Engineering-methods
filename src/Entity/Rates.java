@@ -32,11 +32,11 @@ public class Rates {
 		this.check=false;
 	}
 	
-	public boolean getSelect() {
+	public boolean getCheck() {
 		return check;
 	}
 
-	public void setSelect(boolean check) {
+	public void setCheck(boolean check) {
 		this.check = check;
 	}
 
