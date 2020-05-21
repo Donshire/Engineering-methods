@@ -31,20 +31,12 @@ public abstract class User implements Serializable{
 		this.online = online;
 	}
 
-
-
 	public int getOnline() {
 		return online;
 	}
-
-
-
 	public void setOnline(int online) {
 		this.online = online;
 	}
-
-
-
 	public String getUserName() {
 		return userName;
 	}
@@ -88,7 +80,11 @@ public abstract class User implements Serializable{
 		this.phoneNumber = phoneNumber;
 	}
 
-	
-
+	@Override
+	public String toString() {
+		return "User [userName=" + userName + ", password=" + password + ", id=" + id + "\n"+ ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", mail=" + mail + "\n"+ ", phoneNumber=" + phoneNumber + ", online=" + online
+				+ "]";
+	}
 	
 }

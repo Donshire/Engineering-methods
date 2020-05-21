@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import Entity.Customer;
 import Entity.Message;
+import boundery.ServerController;
 import enums.Commands;
 import ocsf.server.*;
 
@@ -19,7 +20,7 @@ public class MyFuelServer extends AbstractServer {
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Message message = (Message) msg;
 
-		System.out.println(
+		ServerController.writeToServerConsole(
 				"Message received: cmd " + message.getCmd() + " the object " + message.getObj() + " from " + client);
 
 		switch (message.getCmd()) {
@@ -41,10 +42,12 @@ public class MyFuelServer extends AbstractServer {
 
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
+		//ServerController.writeToServerConsole("Server listening for connections on port " + getPort());
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 
 	protected void serverStopped() {
+		//ServerController.writeToServerConsole("Server has stopped listening for connections.");
 		System.out.println("Server has stopped listening for connections.");
 	}
 }

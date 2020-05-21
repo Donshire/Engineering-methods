@@ -9,9 +9,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.ServerController">
+<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.ServerController">
    <children>
-      <Pane fx:id="serverPortPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0">
+      <Pane fx:id="serverPortPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0">
          <children>
             <TextField fx:id="portNumber" layoutX="25.0" layoutY="153.0" text="exp.5555(default)" />
             <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
@@ -31,7 +31,7 @@
          <children>
             <TextField id="text" fx:id="serverScreen" layoutX="593.0" layoutY="23.0" text="Server is OFF" />
             <Button id="OnOFF" fx:id="OnOffBtn" layoutX="627.0" layoutY="73.0" mnemonicParsing="false" onAction="#OnOff" prefHeight="31.0" prefWidth="118.0" text="ON/OFF" />
-            <TextArea fx:id="serverConsole" layoutX="26.0" layoutY="147.0" prefHeight="420.0" prefWidth="550.0" />
+            <TextArea layoutX="26.0" layoutY="147.0" prefHeight="420.0" prefWidth="550.0" />
             <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
                <font>
                   <Font name="Arial Bold" size="48.0" />

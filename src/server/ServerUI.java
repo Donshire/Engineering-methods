@@ -27,7 +27,7 @@ public class ServerUI extends Application{
 			port = Integer.parseInt(p); // Set port to 5555
 
 		} catch (Throwable t) {
-			System.out.println("ERROR - Could not connect!");
+			ServerController.writeToServerConsole("ERROR - Could not connect!");
 		}
 
 		sv = new MyFuelServer(port);
@@ -35,7 +35,7 @@ public class ServerUI extends Application{
 		try {
 			sv.listen(); // Start listening for connections
 		} catch (Exception ex) {
-			System.out.println("ERROR - Could not listen for clients!");
+			ServerController.writeToServerConsole("ERROR - Could not listen for clients!");
 		}
 	}
 	
@@ -43,7 +43,7 @@ public class ServerUI extends Application{
 		try {
 			sv.close(); // Start listening for connections
 		} catch (Exception ex) {
-			System.out.println("ERROR - Could not close the server!");
+			ServerController.writeToServerConsole("ERROR - Could not close the server!");
 		}
 	}
 

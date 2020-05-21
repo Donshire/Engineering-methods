@@ -1,10 +1,12 @@
 package boundery;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -14,8 +16,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import server.ServerUI;
+import java.time.LocalTime;
+import java.util.ResourceBundle;
 
-public class ServerController {
+public class ServerController{
 
     @FXML
     private Pane mainPane;
@@ -32,18 +36,16 @@ public class ServerController {
 	@FXML
 	private Button OnOffBtn;
 	@FXML
-	private TextArea serverConsole;
-	@FXML
 	private TableView<?> UsersTable;
 	@FXML
 	private TableColumn<?, ?> userID;
 	@FXML
 	private TableColumn<?, ?> userType;
 
+	
+	private static TextArea serverConsole;
 	private boolean serverStatus = false;
 	private String serverPortNumber;
-	private Scene s;
-	private Stage stage;
 
 	@FXML
 	public void OnOff(ActionEvent event) throws Exception {
@@ -51,10 +53,12 @@ public class ServerController {
 			// run server
 			ServerUI.runServer(serverPortNumber);
 			serverScreen.setText("Server is running");
+			writeToServerConsole("Server is running");
 			serverStatus = true;
 		} else {
 			// stop server
 			serverScreen.setText("Server Stop");
+			writeToServerConsole("Server Stop");
 			ServerUI.stopServer();
 			serverStatus = false;
 		}
@@ -64,29 +68,31 @@ public class ServerController {
 	public void seTPort(ActionEvent event) {
 		serverPortNumber=portNumber.getText();
 		serverPortPane.setVisible(false);
-		
-		mainPane.setMinWidth(800);
-		mainPane.resize(800, 600);
-		
-		//s.setMinWidth(800);
-		//s.setMinHeight(600);
-		System.out.println(stage);
 		serverPane.setVisible(true);
-		s = new Scene(serverPane);
-
-		
+	}
+	
+	public static void writeToServerConsole(String str) {
+		StringBuilder sb=new StringBuilder(serverConsole.getText());
+		sb.append(String.format("<%s><server> %s\n",LocalTime.now()
+				, str));
+		serverConsole.setText(sb.toString());
 	}
 
 	public void start(Stage primaryStage) throws Exception {
+		
+		Scene s;
 		
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("ServerGUI.fxml"));
 		try {
 			mainPane = loader.load();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//get the Text Area "ServerConsole"
+		Pane pane=(Pane)mainPane.getChildren().get(1);
+		serverConsole=(TextArea) pane.getChildren().get(2);
+				
 		s = new Scene(mainPane);
 		
 		primaryStage.setTitle("MyFuel ltm");
@@ -94,6 +100,5 @@ public class ServerController {
 		primaryStage.show();
 
 	}
-
 
 }
