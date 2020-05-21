@@ -1,5 +1,7 @@
 package Entity;
 
+import enums.OrderStatus;
+
 public class GasOrder {
 
 	private int purchaseID;

@@ -1,16 +1,36 @@
 package boundery;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
+import Entity.Employee;
+import Entity.Fuel;
+import Entity.Rates;
+import client.ClientUI;
+import enums.RatesStatus;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class MarketingManagerController {
+public class MarketingManagerController implements Initializable{
 
 	@FXML
 	private Button SalesWindowBtn;
@@ -27,25 +47,25 @@ public class MarketingManagerController {
 	@FXML
 	private Pane fuelRatesPane;
 	@FXML
-	private ComboBox<?> fuelTypesCombo;
+	private ComboBox<String> fuelTypesRateCombo;
 	@FXML
 	private TextField newRatetxt;
 	@FXML
 	private Text maxFuelPricetxt;
 	@FXML
-	private ComboBox<?> rateTypeCombo;
+	private ComboBox<RatesStatus> rateTypeCombo;
 	@FXML
-	private TableView<?> fuelRatesTable;
+	private TableView<Rates> fuelRatesTable;
 	@FXML
-	private TableColumn<?, ?> rateCheckBoxSelect;
+	private TableColumn<Rates, Boolean> rateCheckBoxSelect;
 	@FXML
-	private TableColumn<?, ?> rateFuelType;
+	private TableColumn<Rates, String> rateFuelType;
 	@FXML
-	private TableColumn<?, ?> rateOldRate;
+	private TableColumn<Rates, String> rateIDrate;
 	@FXML
-	private TableColumn<?, ?> rateNewRate;
+	private TableColumn<Rates, Float> rateNewRate;
 	@FXML
-	private TableColumn<?, ?> rateStatus;
+	private TableColumn<Rates, RatesStatus> rateStatus;
 	@FXML
 	private Button updateRates;
 	@FXML
@@ -67,7 +87,9 @@ public class MarketingManagerController {
 	@FXML
 	private Button activateSaleBtn;
 	@FXML
-	private ComboBox<?> salesTypeCombo;
+	private Button logOutBtn;
+	@FXML
+	private ComboBox<String> salesTypeCombo;
 	@FXML
 	private Pane reportsPane;
 	@FXML
@@ -100,7 +122,7 @@ public class MarketingManagerController {
 	
 	@FXML
 	void OpenSalePane(ActionEvent event) {
-
+		switchPanes(salePane);
 	}
 
 	@FXML
@@ -121,11 +143,30 @@ public class MarketingManagerController {
 	@FXML
 	void chooseSaleType(ActionEvent event) {
 
+		//call the server to get the sales data 
+		System.out.println("load sales data");
+		
 	}
 
 	@FXML
 	void createNewRate(ActionEvent event) {
-
+		//get the data entered
+		String fuelTypeName = (String)fuelTypesRateCombo.getValue();
+		String sFuelNewRate=newRatetxt.getText();
+		
+		//check the data
+		if(fuelTypeName.isEmpty() == true)
+			JOptionPane.showMessageDialog(null, "please choose Fuel Type");
+		else if(sFuelNewRate.isEmpty() == true)
+			JOptionPane.showMessageDialog(null, "please enter the new rate");
+		else {
+			float fFuelNewRate=Float.valueOf(sFuelNewRate);
+			if(fFuelNewRate<=0)
+				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
+			else {
+				//send to server
+			}
+		}
 	}
 
 	@FXML
@@ -135,14 +176,13 @@ public class MarketingManagerController {
 
 	@FXML
 	void openFuelRatesPane(ActionEvent event) {
-
+		switchPanes(fuelRatesPane);
 	}
 
 	@FXML
 	void openReportGenerationPane(ActionEvent event) {
-
+		switchPanes(reportsPane);
 	}
-
 	@FXML
 	void selectedSaleadd(ActionEvent event) {
 
@@ -151,6 +191,107 @@ public class MarketingManagerController {
 	@FXML
 	void viewMoreSaleDetails(ActionEvent event) {
 
+	}
+	@FXML
+	void logOut(ActionEvent event) {
+		System.out.println("log Out");
+	}
+	@FXML
+	void chooseFuelTypeForNewRate(ActionEvent event) {
+		String fuelType=fuelTypesRateCombo.getValue();
+		//get the max price and the current rate for the fuel
+		
+		maxFuelPricetxt.setText(String.format("for Fuel %s : The Max Price is %.2f and the "
+				+ "current rate is %.2f","95",10f,5f));
+	}
+	@FXML
+	void chooserateType(ActionEvent event) {
+		RatesStatus selected=rateTypeCombo.getValue();
+		//get the data 
+		
+		ObservableList<Rates> data=
+				FXCollections.observableArrayList(new Rates("1", 1.2f,"95", RatesStatus.done.toString(),"20/2/2020", "Paz"));
+		//perpare the table
+		
+		 rateCheckBoxSelect.setCellValueFactory( new PropertyValueFactory<Rates,Boolean>("check") );
+		 rateCheckBoxSelect.setCellFactory( CheckBoxTableCell.forTableColumn( rateCheckBoxSelect ) );
+		 rateCheckBoxSelect.setEditable(true);;
+		//problem is object Fuel not string       **********************************
+		//**************************************************************************
+		 rateFuelType.setCellValueFactory(
+					new PropertyValueFactory<Rates, String>("fuelType"));
+		
+		 rateIDrate.setCellValueFactory(
+					new PropertyValueFactory<Rates, String>("rateId"));
+		
+		 rateNewRate.setCellValueFactory(
+					new PropertyValueFactory<Rates, Float>("rateValue"));
+		
+		 rateStatus.setCellValueFactory(
+					new PropertyValueFactory<Rates, RatesStatus>("status"));
+		//fill the table
+		 fuelRatesTable.getItems().setAll(data);
+		
+	}
+	
+	
+	private Pane currentPane;
+	private Employee markitingManager ;
+	
+	public void start(Stage primaryStage) throws Exception {
+		Pane mainPane;
+		Scene s;
+
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("MarketingManager.fxml"));
+		mainPane = loader.load();
+
+		// connect the scene to the file
+		s = new Scene(mainPane);
+
+		primaryStage.setTitle("MyFuel ltm");
+		primaryStage.setScene(s);
+		primaryStage.show();
+
+	}
+	
+	private void switchPanes(Pane newPane) {
+		currentPane.setVisible(false);
+		currentPane=newPane;
+		currentPane.setVisible(true);
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		//loading the main window data
+		markitingManager =(Employee)ClientUI.user;
+		
+		helloUserTxt.setText("hello "+markitingManager.getFirstName()+" "
+		+markitingManager.getLastName());
+		
+		currentPane=markitingManagerNofPane;
+		
+		//add on the nofitication
+		
+		//loading SalePane data 
+		
+		//initialize saleTypes comboBox
+		ObservableList<String> saleTypes = FXCollections.observableArrayList
+				("Activated","Not-Activated");
+		salesTypeCombo.setItems(saleTypes);
+		
+		
+		//loading RatesPane data
+		//call server and get fuel types from company
+		ObservableList<String> fuelTypes = FXCollections.observableArrayList
+				("95","solar");
+		fuelTypesRateCombo.setItems(fuelTypes);
+		
+		//initialize rateTypeCombo comboBox
+		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList
+				(RatesStatus.values());
+		rateTypeCombo.setItems(rateType);
+		
 	}
 
 }
