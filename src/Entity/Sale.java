@@ -1,8 +1,18 @@
 package Entity;
 
-public class Sale {
-	private String saleID;
-	private boolean status;
+import java.io.Serializable;
+
+import enums.SaleStatus;
+
+public class Sale implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4112663596694462413L;
+	
+	private Integer saleID;
+	private SaleStatus status;
 	private String companyName;
 	private String fuelType;
 	private String purchaseModule;
@@ -12,11 +22,12 @@ public class Sale {
 	private String startDate;
 	private String endDate;
 	private String saleDays;
+	private boolean select;
 
-	public Sale(String saleID, boolean status, String companyName, String fuelType, String purchaseModule,
+	public Sale(Integer saleID, String status, String companyName, String fuelType, String purchaseModule,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
 		this.saleID = saleID;
-		this.status = status;
+		this.status = SaleStatus.valueOf(status);
 		this.companyName = companyName;
 		this.fuelType = fuelType;
 		this.purchaseModule = purchaseModule;
@@ -26,21 +37,30 @@ public class Sale {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.saleDays = saleDays;
+		select=false;
+	}
+	
+	public boolean getSelect() {
+		return select;
+	}
+	public void setSelect(boolean select) {
+		this.select = select;
 	}
 
-	public String getSaleID() {
+
+	public int getSaleID() {
 		return saleID;
 	}
 
-	public void setSaleID(String saleID) {
+	public void setSaleID(int saleID) {
 		this.saleID = saleID;
 	}
 
-	public boolean isStatus() {
+	public SaleStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(SaleStatus status) {
 		this.status = status;
 	}
 

@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.Supplier;
+import client.ClientUI;
 import client.UserCC;
 import enums.Commands;
 import javafx.event.ActionEvent;
@@ -42,7 +43,19 @@ public class LogInController {
 		else {
 			Object obj = UserCC.login(username, password);
 			if(obj instanceof Customer) System.out.println("customer");
-			else if(obj instanceof Employee) System.out.println("employee");
+			//
+			else if(obj instanceof Employee) {
+				
+				System.out.println("employee");
+				ClientUI.user=obj;
+				MarketingManagerController marketingManager = new MarketingManagerController();
+				try {
+					marketingManager.start(ClientUI.mainStage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			//
 			else if(obj instanceof Supplier) System.out.println("supplier");
 			else if(obj==null)System.out.println("not exist");
 			else if(obj.equals(Commands.UserAlreadyConnected))

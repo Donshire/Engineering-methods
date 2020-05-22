@@ -2,7 +2,7 @@ package Entity;
 
 public class GasStationOrder {
 
-	private String orderID;
+	private Integer orderID;
 	private Supplier supplier;
 	private GasStation station;
 	private String status;
@@ -10,7 +10,7 @@ public class GasStationOrder {
 	private String orderPrice;
 	private String fuelType;
 
-	public GasStationOrder(String orderID, Supplier supplier, GasStation station, String status, String date,
+	public GasStationOrder(Integer orderID, Supplier supplier, GasStation station, String status, String date,
 			String orderPrice, String fuelType) {
 		this.orderID = orderID;
 		this.supplier = supplier;
@@ -21,11 +21,11 @@ public class GasStationOrder {
 		this.fuelType = fuelType;
 	}
 
-	public String getOrderID() {
+	public int getOrderID() {
 		return orderID;
 	}
 
-	public void setOrderID(String orderID) {
+	public void setOrderID(int orderID) {
 		this.orderID = orderID;
 	}
 

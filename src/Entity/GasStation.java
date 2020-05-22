@@ -6,13 +6,13 @@ import java.util.Set;
 public class GasStation {
 
 	private String companyName;
-	private String stationID;
+	private Integer stationID;
 	private String cityName;
 	private String areaName;
 	private StationManager manger;
 	private Set<StationFuel> stationFuel = new HashSet<StationFuel>();
 
-	public GasStation(String companyName, String stationID, String cityName, String areaName, StationManager manger,
+	public GasStation(String companyName, Integer stationID, String cityName, String areaName, StationManager manger,
 			Set<StationFuel> stationFuel) {
 		this.companyName = companyName;
 		this.stationID = stationID;
@@ -30,11 +30,11 @@ public class GasStation {
 		this.companyName = companyName;
 	}
 
-	public String getStationID() {
+	public int getStationID() {
 		return stationID;
 	}
 
-	public void setStationID(String stationID) {
+	public void setStationID(int stationID) {
 		this.stationID = stationID;
 	}
 

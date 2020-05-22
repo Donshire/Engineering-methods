@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.MarketingManagerController">
+   <children>
+      <Button fx:id="SalesWindowBtn" layoutX="14.0" layoutY="352.0" mnemonicParsing="false" onAction="#OpenSalePane" prefHeight="60.0" prefWidth="141.0" text="Sales" />
+      <Button fx:id="fuelRatesWindowBtn" layoutX="14.0" layoutY="272.0" mnemonicParsing="false" onAction="#openFuelRatesPane" prefHeight="60.0" prefWidth="141.0" text="Fuel Rates" />
+      <Button fx:id="reportGenerationWindowBtn" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#openReportGenerationPane" prefHeight="60.0" prefWidth="141.0" text="Report generation" />
+      <Button fx:id="logOutBtn" layoutX="713.0" layoutY="24.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+      <Pane fx:id="markitingManagerNofPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+         <children>
+            <Text fx:id="helloUserTxt" layoutX="475.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" />
+            <Text layoutX="28.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications" />
+            <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+         <children>
+            <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Fuel Rate">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <ComboBox fx:id="fuelTypesRateCombo" layoutX="120.0" layoutY="60.0" onAction="#chooseFuelTypeForNewRate" prefWidth="150.0" />
+            <Text layoutX="23.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Type" />
+            <Text layoutX="294.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Rate" />
+            <TextField fx:id="newRatetxt" layoutX="368.0" layoutY="60.0" />
+            <Text fx:id="maxFuelPricetxt" layoutX="23.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Max Price for %s is %.2f" />
+            <ComboBox fx:id="rateTypeCombo" layoutX="483.0" layoutY="175.0" onAction="#chooserateType" prefWidth="150.0" />
+            <TableView fx:id="fuelRatesTable" editable="true" layoutX="55.0" layoutY="226.0" prefHeight="200.0" prefWidth="500.0">
+              <columns>
+                  <TableColumn fx:id="rateCheckBoxSelect" minWidth="100.0" prefWidth="75.0" text="Select Rates" />
+                <TableColumn fx:id="rateIDrate" minWidth="100.0" prefWidth="75.0" text="rateId" />
+                <TableColumn fx:id="rateFuelType" minWidth="100.0" prefWidth="75.0" text="Fuel Type" />
+                  <TableColumn fx:id="rateNewRate" minWidth="100.0" prefWidth="75.0" text="Rate" />
+                  <TableColumn fx:id="rateStatus" minWidth="100.0" prefWidth="75.0" text="Status" />
+              </columns>
+            </TableView>
+            <Button layoutX="571.0" layoutY="60.0" mnemonicParsing="false" onAction="#createNewRate" text="Create" />
+            <Text layoutX="17.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Rate">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="305.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Rate Type(status)" />
+            <Button fx:id="updateRates" layoutX="542.0" layoutY="455.0" mnemonicParsing="false" onAction="#UpdateSelectedRates" text="Update" />
+         </children>
+      </Pane>
+      <Pane fx:id="saleDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
+         <children>
+            <VBox layoutX="70.0" layoutY="50.0" prefHeight="400.0" prefWidth="200.0" spacing="10.0">
+               <padding>
+                  <Insets bottom="20.0" top="10.0" />
+               </padding>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="sale ID">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="status">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="companyName">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="fuelType">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="purchase Module">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="sale Percent">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="start Time">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="end Time">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="start Date">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="end Date">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="sale Days">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox layoutX="270.0" layoutY="50.0" prefHeight="400.0" prefWidth="200.0" spacing="10.0">
+               <padding>
+                  <Insets bottom="20.0" top="10.0" />
+               </padding>
+               <children>
+                  <Text fx:id="SaleIDSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="statusSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="CompanyNameSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="fuelTypeSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="purchaseModuleSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="salePercentSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="startTimeSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="endTimeSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="startDateSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="endDateSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="saleDaysSaleDAta" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <Text layoutX="30.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sale Data">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Button fx:id="nextSaleDetailsBtn" layoutX="564.0" layoutY="402.0" mnemonicParsing="false" onAction="#nextSaleDetails" text="Next" />
+            <Button layoutX="531.0" layoutY="443.0" mnemonicParsing="false" onAction="#finishViweingSaleDetails" text="Finish" />
+            <Button fx:id="PrevSaleDetailsBtn" layoutX="503.0" layoutY="402.0" mnemonicParsing="false" onAction="#PrevSaleDetails" text="Prev" />
+            <Text fx:id="saleDataViewIndex" layoutX="538.0" layoutY="384.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+         </children>
+      </Pane>
+      <Pane fx:id="salePane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0">
+         <children>
+            <TableView fx:id="salesDetailsTable" editable="true" layoutX="25.0" layoutY="177.0" prefHeight="200.0" prefWidth="600.0">
+              <columns>
+                  <TableColumn fx:id="SelectSale" minWidth="100.0" prefWidth="75.0" text="Select" />
+                  <TableColumn fx:id="saleNumber" minWidth="100.0" prefWidth="75.0" text="Sale Number" />
+                <TableColumn fx:id="SaleFuelType" minWidth="100.0" prefWidth="75.0" text="Fuel Type" />
+                <TableColumn fx:id="SaleStartDate" minWidth="100.0" prefWidth="75.0" text="Start Date" />
+                  <TableColumn fx:id="saleEndDate" minWidth="100.0" prefWidth="75.0" text="End Date" />
+                  <TableColumn fx:id="salePercent" minWidth="100.0" prefWidth="75.0" text="Sale Percent" />
+              </columns>
+            </TableView>
+            <Text layoutX="25.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Available Non-Activated Sales:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Button fx:id="viewMoreSaleDetailsBtn" layoutX="43.0" layoutY="391.0" mnemonicParsing="false" onAction="#viewMoreSaleDetails" text="View More Details" />
+            <Button fx:id="activateSaleBtn" layoutX="43.0" layoutY="428.0" mnemonicParsing="false" onAction="#activateSale" text="Activate" />
+            <ComboBox fx:id="salesTypeCombo" layoutX="197.0" layoutY="68.0" onAction="#chooseSaleType" prefWidth="150.0" />
+            <Text layoutX="25.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="55.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Sale Type" />
+         </children>
+      </Pane>
+      <Pane fx:id="reportsPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+         <children>
+            <Text layoutX="24.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Report To Generate:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <ComboBox fx:id="reportKindCombo" layoutX="363.0" layoutY="20.0" prefWidth="150.0" />
+            <Text layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Sale ID/Number" />
+            <TextField fx:id="reportsaleNumber" layoutX="188.0" layoutY="74.0" />
+            <Button fx:id="generateReportBtn" layoutX="405.0" layoutY="73.0" mnemonicParsing="false" onAction="#generateReport" text="Generate" />
+            <Pane fx:id="PeriodicReportPane" layoutX="25.0" layoutY="120.0" prefHeight="370.0" prefWidth="620.0" visible="false">
+               <children>
+                  <VBox fx:id="vboxPeriodicGuiTable" layoutX="10.0" layoutY="10.0" prefHeight="300.0" prefWidth="600.0" spacing="5.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </Pane>
+            <Pane fx:id="saleResponseReportPane" layoutX="25.0" layoutY="120.0" prefHeight="370.0" prefWidth="600.0">
+               <children>
+                  <TableView fx:id="saleResponseReportTable" layoutX="100.0" layoutY="86.0" prefHeight="270.0" prefWidth="420.0">
+                    <columns>
+                      <TableColumn fx:id="customerIDResponseReport" minWidth="250.0" prefWidth="75.0" text="Customer ID" />
+                      <TableColumn fx:id="amountOfPurchaseresponseReport" minWidth="170.0" prefWidth="75.0" text="Amount of purchase" />
+                    </columns>
+                  </TableView>
+                  <Text layoutX="28.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Totale Number of customers">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text layoutX="28.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Totale purchases">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="totaleNumberOfCustomersResponseReport" fill="#1bff00" layoutX="283.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="totalePurchasesResponseReport" fill="#00ff1e" layoutX="190.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</Pane>
