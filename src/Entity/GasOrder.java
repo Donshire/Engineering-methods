@@ -2,6 +2,8 @@ package Entity;
 
 import java.io.Serializable;
 
+import enums.OrderStatus;
+
 public class GasOrder implements Serializable {
 
 	/**

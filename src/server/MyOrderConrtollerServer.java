@@ -3,9 +3,9 @@ package server;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.GasOrder;
-import Entity.OrderStatus;
 import Entity.Supplier;
 import enums.Commands;
+import enums.OrderStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
