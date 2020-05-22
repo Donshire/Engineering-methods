@@ -12,6 +12,7 @@ import Entity.Fuel;
 import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
+import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -37,12 +38,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class MarketingManagerController implements Initializable {
 
+	@FXML
+	private VBox vboxPeriodicGuiTable;
 	@FXML
 	private Text SaleIDSaleDAta;
 	@FXML
@@ -130,7 +134,7 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Pane reportsPane;
 	@FXML
-	private ComboBox<?> reportKindCombo;
+	private ComboBox<MarkitingManagerReport> reportKindCombo;
 	@FXML
 	private TextField reportsaleNumber;
 	@FXML
@@ -138,21 +142,15 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Pane PeriodicReportPane;
 	@FXML
-	private TableView<?> periodicReportTable;
-	@FXML
-	private TableColumn<?, ?> customerIDPeriodicReport;
-	@FXML
-	private TableColumn<?, ?> totalPurchasePeriodicReport;
-	@FXML
 	private Pane saleResponseReportPane;
 	@FXML
 	private Pane saleDataPane;
 	@FXML
-	private TableView<?> saleResponseReportTable;
+	private TableView<responseReportData> saleResponseReportTable;
 	@FXML
-	private TableColumn<?, ?> customerIDResponseReport;
+	private TableColumn<responseReportData, String> customerIDResponseReport;
 	@FXML
-	private TableColumn<?, ?> amountOfPurchaseresponseReport;
+	private TableColumn<responseReportData, Float> amountOfPurchaseresponseReport;
 	@FXML
 	private Text totaleNumberOfCustomersResponseReport;
 	@FXML
@@ -165,60 +163,28 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
 		// logics
-		if (currentSaleDataIndex == selectedSales.size() - 2)
+		if (currentSaleDataIndex == selectedSales.size() - 1)
 			nextSaleDetailsBtn.setDisable(false);
-		if (currentSaleDataIndex <= 0)
+		if (currentSaleDataIndex == 1)
 			PrevSaleDetailsBtn.setDisable(true);
 		// get the data
-		Sale sale = selectedSales.get(currentSaleDataIndex--);
-
-		// show the data
-		SaleIDSaleDAta.setText(sale.getSaleID());
-		if (sale.getStatus())
-			statusSaleDAta.setText(SaleStatus.activated.toString());
-		else
-			statusSaleDAta.setText(SaleStatus.not_Activated.toString());
-		CompanyNameSaleDAta.setText(sale.getCompanyName());
-		fuelTypeSaleDAta.setText(sale.getFuelType());
-		purchaseModuleSaleDAta.setText(sale.getPurchaseModule());
-		salePercentSaleDAta.setText(Float.toString(sale.getSalePercent()));
-		startTimeSaleDAta.setText(sale.getStartTime());
-		endTimeSaleDAta.setText(sale.getEndTime());
-		startDateSaleDAta.setText(sale.getStartDate());
-		endDateSaleDAta.setText(sale.getEndDate());
-		saleDaysSaleDAta.setText(sale.getSaleDays());
+		loadSaleFullDetails(false);
 	}
 
 	@FXML
 	void nextSaleDetails(ActionEvent event) {
 		// logics
-		if (currentSaleDataIndex > selectedSales.size() - 2)
+		if (currentSaleDataIndex == selectedSales.size() - 2)
 			nextSaleDetailsBtn.setDisable(true);
-		if (currentSaleDataIndex == 1)
+		if (currentSaleDataIndex == 0)
 			PrevSaleDetailsBtn.setDisable(false);
 		// get the data
-		Sale sale = selectedSales.get(currentSaleDataIndex++);
-		saleDataViewIndex.setText(String.format("Page %d/%d",currentSaleDataIndex,selectedSales.size()));
-		// show the data
-		SaleIDSaleDAta.setText(sale.getSaleID());
-		if (sale.getStatus())
-			statusSaleDAta.setText(SaleStatus.activated.toString());
-		else
-			statusSaleDAta.setText(SaleStatus.not_Activated.toString());
-		CompanyNameSaleDAta.setText(sale.getCompanyName());
-		fuelTypeSaleDAta.setText(sale.getFuelType());
-		purchaseModuleSaleDAta.setText(sale.getPurchaseModule());
-		salePercentSaleDAta.setText(Float.toString(sale.getSalePercent()));
-		startTimeSaleDAta.setText(sale.getStartTime());
-		endTimeSaleDAta.setText(sale.getEndTime());
-		startDateSaleDAta.setText(sale.getStartDate());
-		endDateSaleDAta.setText(sale.getEndDate());
-		saleDaysSaleDAta.setText(sale.getSaleDays());
+		loadSaleFullDetails(true);
 	}
 
 	@FXML
 	void finishViweingSaleDetails(ActionEvent event) {
-
+		switchPanes(salePane);
 	}
 
 	@FXML
@@ -231,9 +197,9 @@ public class MarketingManagerController implements Initializable {
 		// update all the selected rates
 		// sond to server selectedRates
 		for (Rates rate : selectedRates) {
-			rate.setStatus(RatesStatus.done.toString());
+			rate.setStatus(RatesStatus.active.toString());
 		}
-		
+
 	}
 
 	@FXML
@@ -250,45 +216,43 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	@FXML
-	void chooseReportType(ActionEvent event) {
-
-	}
-
-	@FXML
 	void chooseSaleType(ActionEvent event) {
 		// get the data from gui
 		SaleStatus guiData = salesTypeCombo.getValue();
 		// call the server to get the sales data
+
 		// to get company name and all that stuf there is object that contains employee
 		System.out.println("load sales data");
 
 		ObservableList<Sale> data = FXCollections.observableArrayList(
-				new Sale("1", false, "Paz", "95","non",10.2f , "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"));
+				new Sale("1", false, "Paz", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
+				new Sale("1", false, "Sonol", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
+				new Sale("1", false, "yellow", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020",
+						"Sunday"));
 
 		// build table structure
 
 		// Check Box
-		SelectSale
-				.setCellValueFactory(new Callback<CellDataFeatures<Sale, Boolean>, ObservableValue<Boolean>>() {
-					@Override
-					public ObservableValue<Boolean> call(CellDataFeatures<Sale, Boolean> param) {
-						Sale sale = param.getValue();
-						SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(sale.getSelect());
+		SelectSale.setCellValueFactory(new Callback<CellDataFeatures<Sale, Boolean>, ObservableValue<Boolean>>() {
+			@Override
+			public ObservableValue<Boolean> call(CellDataFeatures<Sale, Boolean> param) {
+				Sale sale = param.getValue();
+				SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(sale.getSelect());
 
-						booleanProp.addListener(new ChangeListener<Boolean>() {
-							@Override
-							public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
-									Boolean newValue) {
-								if (newValue == true)
-									selectedSales.add(sale);
-								else
-									selectedSales.remove(sale);
-								sale.setSelect(newValue);
-							}
-						});
-						return booleanProp;
+				booleanProp.addListener(new ChangeListener<Boolean>() {
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+							Boolean newValue) {
+						if (newValue == true)
+							selectedSales.add(sale);
+						else
+							selectedSales.remove(sale);
+						sale.setSelect(newValue);
 					}
 				});
+				return booleanProp;
+			}
+		});
 
 		SelectSale.setCellFactory(new Callback<TableColumn<Sale, Boolean>, //
 				TableCell<Sale, Boolean>>() {
@@ -335,6 +299,32 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	void generateReport(ActionEvent event) {
+		// get data from gui
+		String reportKind = reportKindCombo.getValue().toString();
+		String saleNumber = reportsaleNumber.getText();
+
+		if (saleNumber.isEmpty() == true)
+			JOptionPane.showMessageDialog(null, "please enter sale number");
+		else if (reportKind.isEmpty() == true)
+			JOptionPane.showMessageDialog(null, "please Select report kind");
+		else {
+			ObservableList<responseReportData> data = FXCollections.observableArrayList();
+			// call the server and get the data
+
+			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
+				PeriodicReportPane.setVisible(true);
+				
+				//use this to fill
+				
+			}
+			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
+				saleResponseReportPane.setVisible(true);
+				
+				
+				saleResponseReportTable.getItems().setAll(data);
+				//
+			}
+		}
 
 	}
 
@@ -355,10 +345,19 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	void viewMoreSaleDetails(ActionEvent event) {
+		currentSaleDataIndex = -1;
 		if (selectedSales.size() <= 0)
 			JOptionPane.showMessageDialog(null, "please select at least one sale");
-		else
+		else {
 			switchPanes(saleDataPane);
+			nextSaleDetailsBtn.setDisable(false);
+			PrevSaleDetailsBtn.setDisable(false);
+			if (currentSaleDataIndex >= selectedSales.size() - 2)
+				nextSaleDetailsBtn.setDisable(true);
+			if (currentSaleDataIndex <= 0)
+				PrevSaleDetailsBtn.setDisable(true);
+			loadSaleFullDetails(true);
+		}
 	}
 
 	@FXML
@@ -378,10 +377,14 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void chooserateType(ActionEvent event) {
 		RatesStatus selected = rateTypeCombo.getValue();
+		if (selected == RatesStatus.confirmed)
+			updateRates.setVisible(true);
+		else
+			updateRates.setVisible(false);
 		// get the data
 
 		ObservableList<Rates> data = FXCollections.observableArrayList(
-				new Rates("1", 1.2f, new Fuel("95", 10f), RatesStatus.done.toString(), "20/2/2020", "Paz"));
+				new Rates(1, 1.2f, new Fuel("95", 10f), RatesStatus.active.toString(), "20/2/2020", "Paz"));
 		// perpare the table
 		/*
 		 * rateCheckBoxSelect.setCellValueFactory( new
@@ -440,7 +443,58 @@ public class MarketingManagerController implements Initializable {
 	private Employee markitingManager;
 	private ArrayList<Rates> selectedRates = new ArrayList<Rates>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
-	private int currentSaleDataIndex = 0;
+	private int currentSaleDataIndex;
+
+	private class responseReportData{
+		String customerID;
+		float amountOfPurchase;
+		
+		public responseReportData(String customerID,float amountOfPurchase) {
+			this.customerID=customerID;
+			this.amountOfPurchase=amountOfPurchase;
+		}
+		
+		public String getCustomerID() {
+			return customerID;
+		}
+		public void setCustomerID(String customerID) {
+			this.customerID = customerID;
+		}
+		public float getAmountOfPurchase() {
+			return amountOfPurchase;
+		}
+		public void setAmountOfPurchase(float amountOfPurchase) {
+			this.amountOfPurchase = amountOfPurchase;
+		}
+		
+	}
+	
+	private void loadSaleFullDetails(boolean b) {
+		Sale sale;
+
+		if (b)
+			currentSaleDataIndex++;
+		else
+			currentSaleDataIndex--;
+		sale = selectedSales.get(currentSaleDataIndex);
+
+		saleDataViewIndex.setText(String.format("Page %d/%d", currentSaleDataIndex + 1, selectedSales.size()));
+		// show the data
+		SaleIDSaleDAta.setText(sale.getSaleID());
+		if (sale.getStatus())
+			statusSaleDAta.setText(SaleStatus.activated.toString());
+		else
+			statusSaleDAta.setText(SaleStatus.not_Activated.toString());
+		CompanyNameSaleDAta.setText(sale.getCompanyName());
+		fuelTypeSaleDAta.setText(sale.getFuelType());
+		purchaseModuleSaleDAta.setText(sale.getPurchaseModule());
+		salePercentSaleDAta.setText(Float.toString(sale.getSalePercent()));
+		startTimeSaleDAta.setText(sale.getStartTime());
+		endTimeSaleDAta.setText(sale.getEndTime());
+		startDateSaleDAta.setText(sale.getStartDate());
+		endDateSaleDAta.setText(sale.getEndDate());
+		saleDaysSaleDAta.setText(sale.getSaleDays());
+	}
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
@@ -474,6 +528,15 @@ public class MarketingManagerController implements Initializable {
 
 		currentPane = markitingManagerNofPane;
 
+		// show the maon pane and hide the others
+		markitingManagerNofPane.setVisible(true);
+		fuelRatesPane.setVisible(false);
+		saleDataPane.setVisible(false);
+		salePane.setVisible(false);
+		reportsPane.setVisible(false);
+		PeriodicReportPane.setVisible(false);
+		saleResponseReportPane.setVisible(false);
+
 		// add on the nofitication
 
 		// loading SalePane data
@@ -490,6 +553,11 @@ public class MarketingManagerController implements Initializable {
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
 		rateTypeCombo.setItems(rateType);
+
+		// initialize reportKindCombo comboBox
+		ObservableList<MarkitingManagerReport> MarkitingReportType = FXCollections
+				.observableArrayList(MarkitingManagerReport.values());
+		reportKindCombo.setItems(MarkitingReportType);
 
 	}
 

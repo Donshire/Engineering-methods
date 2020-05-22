@@ -1,5 +1,5 @@
 package enums;
 
 public enum RatesStatus {
-	confirmed,created,done
+	confirmed,created,active
 }

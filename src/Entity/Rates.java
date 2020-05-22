@@ -1,7 +1,7 @@
 package Entity;
 
 public class Rates {
-	private String rateId;
+	private int rateId;
 	private float rateValue;
 	private Fuel fuel;
 	private String fuelType;
@@ -10,7 +10,7 @@ public class Rates {
 	private String companyName;
 	private boolean check;
 
-	public Rates(String rateId, float rateValue, Fuel fuel, String status, String date, String companyName) {
+	public Rates(int rateId, float rateValue, Fuel fuel, String status, String date, String companyName) {
 		this.rateId = rateId;
 		this.rateValue = rateValue;
 		this.fuel = fuel;
@@ -37,11 +37,11 @@ public class Rates {
 		this.check = check;
 	}
 
-	public String getRateId() {
+	public int getRateId() {
 		return rateId;
 	}
 
-	public void setRateId(String rateId) {
+	public void setRateId(int rateId) {
 		this.rateId = rateId;
 	}
 
