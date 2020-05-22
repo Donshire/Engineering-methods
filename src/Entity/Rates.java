@@ -1,37 +1,34 @@
 package Entity;
 
-import javafx.scene.control.CheckBox;
-
 public class Rates {
 	private String rateId;
 	private float rateValue;
-	//private Fuel fuelType;
+	private Fuel fuel;
 	private String fuelType;
 	private String status;
 	private String date;
 	private String companyName;
 	private boolean check;
-/*
-	public Rates(String rateId, float rateValue, Fuel fuelType, String status, String date, String companyName) {
+
+	public Rates(String rateId, float rateValue, Fuel fuel, String status, String date, String companyName) {
 		this.rateId = rateId;
 		this.rateValue = rateValue;
-		this.fuelType = fuelType;
+		this.fuel = fuel;
 		this.status = status;
 		this.date = date;
 		this.companyName = companyName;
+		this.fuelType=this.fuel.getFuelType();
 		this.check=false;
 	}
-*/
-	public Rates(String rateId, float rateValue, String fuelType, String status, String date, String companyName) {
-		this.rateId = rateId;
-		this.rateValue = rateValue;
-		this.fuelType = fuelType;
-		this.status = status;
-		this.date = date;
-		this.companyName = companyName;
-		this.check=false;
-	}
+
 	
+	public Fuel getFuel() {
+		return fuel;
+	}
+	public void setFuel(Fuel fuel) {
+		this.fuel = fuel;
+	}
+
 	public boolean getCheck() {
 		return check;
 	}

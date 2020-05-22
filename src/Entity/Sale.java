@@ -12,6 +12,7 @@ public class Sale {
 	private String startDate;
 	private String endDate;
 	private String saleDays;
+	private boolean select;
 
 	public Sale(String saleID, boolean status, String companyName, String fuelType, String purchaseModule,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
@@ -26,7 +27,16 @@ public class Sale {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.saleDays = saleDays;
+		select=false;
 	}
+	
+	public boolean getSelect() {
+		return select;
+	}
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
+
 
 	public String getSaleID() {
 		return saleID;
@@ -36,7 +46,7 @@ public class Sale {
 		this.saleID = saleID;
 	}
 
-	public boolean isStatus() {
+	public boolean getStatus() {
 		return status;
 	}
 
