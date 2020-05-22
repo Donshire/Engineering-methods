@@ -48,8 +48,7 @@ public class LogInController {
 				
 				System.out.println("employee");
 				ClientUI.user=obj;
-				MarketingManagerController marketingManager=
-						new MarketingManagerController();
+				MarketingManagerController marketingManager = new MarketingManagerController();
 				try {
 					marketingManager.start(ClientUI.mainStage);
 				} catch (Exception e) {

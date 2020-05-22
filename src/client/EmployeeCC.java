@@ -11,29 +11,30 @@ public class EmployeeCC {
 
 	public static boolean updateFuelRate(ArrayList<Rates> rates) {
 
-	ClientUI.client.accept(new Message(rates, Commands.updateFuelRate));
+		ClientUI.client.accept(new Message(rates, Commands.updateFuelRate));
 
-		return (boolean)MyFuelClient.ServerRetObj;
+		return (boolean) MyFuelClient.ServerRetObj;
 	}
 
 	public static ArrayList<Rates> getAllCompanyRatesByStatus(Rates rate) {
-
-		ArrayList<Rates> list = new ArrayList<Rates>();
 		ClientUI.client.accept(new Message(rate, Commands.getAllCompanyRatesByStatus));
-		list = (ArrayList<Rates>) MyFuelClient.ServerRetObj;
-		return list;
+		return (ArrayList<Rates>) MyFuelClient.ServerRetObj;
 	}
-	
-	public static boolean updateSale (ArrayList<Sale> sales) {
+
+	public static boolean updateSale(ArrayList<Sale> sales) {
 		ClientUI.client.accept(new Message(sales, Commands.updateSale));
-		//may Cause some problems 
-		return (boolean)MyFuelClient.ServerRetObj;
+		// may Cause some problems
+		return (boolean) MyFuelClient.ServerRetObj;
 	}
-	
-	public static ArrayList<Sale> getCompanySalesByStatus(Sale sale){
+
+	public static ArrayList<Sale> getCompanySalesByStatus(Sale sale) {
 		ClientUI.client.accept(new Message(sale, Commands.getAllCompanySalesByStatus));
-		
-		return (ArrayList<Sale>)MyFuelClient.ServerRetObj;
+
+		return (ArrayList<Sale>) MyFuelClient.ServerRetObj;
 	}
-	
+
+	public static boolean craeteNewRate(Rates rate) {
+		ClientUI.client.accept(new Message(rate, Commands.saveRate));
+		return (boolean) MyFuelClient.ServerRetObj;
+	}
 }

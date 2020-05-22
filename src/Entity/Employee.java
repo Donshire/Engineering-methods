@@ -11,11 +11,11 @@ public class Employee extends User implements Serializable {
 	private static final long serialVersionUID = -3457828437098587272L;
 	private String role;
 	private String department;
-	private String workerID;
+	private Integer workerID;
 	private String companyName;
 	
 	public Employee(String userName, String password, String firstName, String lastName, String mail, String id,
-			String phoneNumber,String department,String role,int online,String workerID,String companyName) {
+			String phoneNumber,String department,String role,int online,Integer workerID,String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber,online);
 		this.workerID = workerID;
 		this.role = role;
@@ -34,11 +34,11 @@ public class Employee extends User implements Serializable {
 	}
 
 
-	public String getWorkerID() {
+	public Integer getWorkerID() {
 		return workerID;
 	}
 
-	public void setWorkerID(String workerID) {
+	public void setWorkerID(Integer workerID) {
 		this.workerID = workerID;
 	}
 

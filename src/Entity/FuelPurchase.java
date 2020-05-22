@@ -2,7 +2,7 @@ package Entity;
 
 public class FuelPurchase {
 
-	private int purchaseID;
+	private Integer purchaseID;
 	private int stationId;
 	private String CarNumber;
 	
@@ -13,7 +13,7 @@ public class FuelPurchase {
 	private int saleID;
 	private float currentPrice;
 	
-	public FuelPurchase(int purchaseID, int stationId, String carNumber, float fuelQuantity, float priceOfPurchase,
+	public FuelPurchase(Integer purchaseID, int stationId, String carNumber, float fuelQuantity, float priceOfPurchase,
 			String time, String date, int saleID, float currentPrice) {
 		this.purchaseID = purchaseID;
 		this.stationId = stationId;

@@ -1,6 +1,8 @@
 package boundery;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -213,7 +215,7 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "please select at least one sale");
 		else {
 			for (Sale sale : selectedSales) {
-				sale.setStatus(true);
+				sale.setStatus(SaleStatus.activated);
 			}
 
 			if (EmployeeCC.updateSale(selectedSales))
@@ -228,16 +230,10 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void chooseSaleType(ActionEvent event) {
 		// get the data from gui
-		boolean flage = false;
-		if (salesTypeCombo.getValue() == SaleStatus.activated)
-			flage = true;
+		String saleType = salesTypeCombo.getValue().toString();
 		// call the server to get the sales data
-
-		// to get company name and all that stuf there is object that contains employee
-		System.out.println("load sales data");
-
 		ObservableList<Sale> data = FXCollections.observableArrayList(EmployeeCC.getCompanySalesByStatus(
-				new Sale(0, flage, markitingManager.getCompanyName(), null, null, 0, null, null, null, null, null)));
+				new Sale(0, saleType, markitingManager.getCompanyName(), null, null, 0, null, null, null, null, null)));
 
 		// build table structure
 
@@ -301,11 +297,13 @@ public class MarketingManagerController implements Initializable {
 			if (fFuelNewRate <= 0)
 				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
 			else {
-				// send to server
+				EmployeeCC.craeteNewRate(new Rates(null, Float.valueOf(sFuelNewRate), fuelTypeName, RatesStatus.created,
+						LocalDate.now().toString(), markitingManager.getCompanyName()));
 			}
 		}
 	}
 
+	//not done
 	@FXML
 	void generateReport(ActionEvent event) {
 		// get data from gui
@@ -373,14 +371,14 @@ public class MarketingManagerController implements Initializable {
 	void logOut(ActionEvent event) {
 		System.out.println("log Out");
 	}
-
+//not done
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
 		String fuelType = fuelTypesRateCombo.getValue();
 		// get the max price and the current rate for the fuel
 
 		maxFuelPricetxt.setText(
-				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f", "95", 10f, 5f));
+				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, 10f, 5f));
 	}
 
 	@FXML
@@ -390,7 +388,10 @@ public class MarketingManagerController implements Initializable {
 			updateRates.setVisible(true);
 		else
 			updateRates.setVisible(false);
-		// get the data
+		
+		//sending partial rate
+		EmployeeCC.getAllCompanyRatesByStatus(new Rates(null,0, "", selected,
+				"", markitingManager.getCompanyName()));
 
 		ObservableList<Rates> data = FXCollections
 				.observableArrayList(new Rates(1, 1.2f, new Fuel("95", 10f), RatesStatus.active, "20/2/2020", "Paz"));
@@ -449,11 +450,12 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	private Pane currentPane;
-	private Employee markitingManager;
+	public static Employee markitingManager;
 	private ArrayList<Rates> selectedRates = new ArrayList<Rates>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 
+	//this class is just to show the table of the report
 	private class ResponseReportData {
 		String customerID;
 		float amountOfPurchase;
@@ -493,7 +495,7 @@ public class MarketingManagerController implements Initializable {
 		saleDataViewIndex.setText(String.format("Page %d/%d", currentSaleDataIndex + 1, selectedSales.size()));
 		// show the data
 		SaleIDSaleDAta.setText(Integer.toString(sale.getSaleID()));
-		if (sale.getStatus())
+		if (sale.getStatus() == SaleStatus.activated)
 			statusSaleDAta.setText(SaleStatus.activated.toString());
 		else
 			statusSaleDAta.setText(SaleStatus.not_Activated.toString());

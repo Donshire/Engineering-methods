@@ -35,8 +35,9 @@ public class LogINController {
 			if (res.next() == true) {
 				Employee employee = new Employee(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getInt(10), res.getString(11), res.getString(12));
+						res.getInt(10), res.getInt(11), res.getString(12));
 				res.close();
+				System.out.println(employee);
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
 				else
@@ -64,25 +65,16 @@ public class LogINController {
 	}
 
 	private static ResultSet logIn(String tableName, String userName, String password) throws SQLException {
-		stm = ConnectionToDB.conn.prepareStatement("select * from ? where userName = ? and passWord = ?");
-		stm.setString(1, tableName);
-		stm.setString(2, userName);
-		stm.setString(3, password);
+		stm = ConnectionToDB.conn.prepareStatement("select * from "+ tableName +" where userName = ? and passWord = ?");
+		stm.setString(1, userName);
+		stm.setString(2, password);
 		return stm.executeQuery();
 	}
 
-	/**
-	 * 
-	 * @param tableName String
-	 * @param userID    String
-	 * @throws SQLException
-	 */
-
 	public static void updateUserOnlineStatus(String tableName, String userID) throws SQLException {
-		stm = ConnectionToDB.conn.prepareStatement("update ? set online = ? where id = ?");
-		stm.setString(1, tableName);
-		stm.setInt(2, 1);
-		stm.setString(3, userID);
+		stm = ConnectionToDB.conn.prepareStatement("update "+tableName +" set online = ? where id = ?");
+		stm.setInt(1, 1);
+		stm.setString(2, userID);
 		stm.executeUpdate();
 		stm.close();
 	}

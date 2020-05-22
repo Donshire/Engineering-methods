@@ -1,13 +1,13 @@
 package Entity;
 
 public class GenericReport {
-	private String reportId;
+	private Integer reportId;
 	private String date;
 	private String time;
 	private String fileName;
 	private String reportType;
 
-	public GenericReport(String reportId, String date, String time, String fileName, String reportType) {
+	public GenericReport(Integer reportId, String date, String time, String fileName, String reportType) {
 		this.reportId = reportId;
 		this.date = date;
 		this.time = time;
@@ -15,11 +15,11 @@ public class GenericReport {
 		this.reportType = reportType;
 	}
 
-	public String getReportId() {
+	public int getReportId() {
 		return reportId;
 	}
 
-	public void setReportId(String reportId) {
+	public void setReportId(int reportId) {
 		this.reportId = reportId;
 	}
 

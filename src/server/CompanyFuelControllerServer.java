@@ -84,7 +84,7 @@ public class CompanyFuelControllerServer {
 
 	}
 
-	public static Object getAllCompanyRatesByStatusRes(String companyName, RatesStatus status) {
+	public static ArrayList<Rates> getAllCompanyRatesByStatus(String companyName, RatesStatus status) {
 
 		PreparedStatement stm;
 		ResultSet res, res2;
@@ -117,7 +117,7 @@ public class CompanyFuelControllerServer {
 		return rates;
 	}
 
-	public static Object saveRate(Rates rate) {
+	public static boolean saveRate(Rates rate) {
 
 		PreparedStatement stm;
 		ResultSet res;
@@ -151,7 +151,7 @@ public class CompanyFuelControllerServer {
 					"INSERT INTO myfueldb.rates (saleID,status,companyName,fueltype,purchaseModule,salePercent,startTime,"
 							+ "endTime,startDate,endDate,days)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?) where saleID = ?");
 			stm.setInt(1, sale.getSaleID());
-			stm.setBoolean(2, sale.getStatus());
+			stm.setString(2, sale.getStatus().toString());
 			stm.setString(3, sale.getCompanyName());
 			stm.setString(4, sale.getFuelType());
 			stm.setString(5, sale.getPurchaseModule());
@@ -182,7 +182,7 @@ public class CompanyFuelControllerServer {
 					"INSERT INTO myfueldb.rates (saleID,status,companyName,fueltype,purchaseModule,salePercent,startTime,"
 							+ "endTime,startDate,endDate,days)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 			stm.setInt(1, sale.getSaleID());
-			stm.setBoolean(2, sale.getStatus());
+			stm.setString(2, sale.getStatus().toString());
 			stm.setString(3, sale.getCompanyName());
 			stm.setString(4, sale.getFuelType());
 			stm.setString(5, sale.getPurchaseModule());
@@ -232,7 +232,7 @@ public class CompanyFuelControllerServer {
 
 			while (res.next() == true) {
 
-				Sale sale = new Sale(res.getInt(1), res.getBoolean(2), res.getString(3), res.getString(4),
+				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
 						res.getString(10), res.getString(11));
 
@@ -248,4 +248,5 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	
 }

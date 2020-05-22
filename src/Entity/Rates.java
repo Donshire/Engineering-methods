@@ -1,9 +1,16 @@
 package Entity;
 
+import java.io.Serializable;
+
 import enums.RatesStatus;
 
-public class Rates {
-	private int rateId;
+public class Rates implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7146248837119996672L;
+	private Integer rateId;
 	private float rateValue;
 	private Fuel fuel;
 	private String fuelType;
@@ -11,8 +18,16 @@ public class Rates {
 	private String date;
 	private String companyName;
 	private boolean check;
-
-	public Rates(int rateId, float rateValue, Fuel fuel, RatesStatus status, String date, String companyName) {
+/**
+ * rateId,rateValue,fuel,status,date,companyName
+ * @param rateId Integer
+ * @param rateValue float
+ * @param fuel Fuel
+ * @param status RatesStatus
+ * @param date String
+ * @param companyName String
+ */
+	public Rates(Integer rateId, float rateValue, Fuel fuel, RatesStatus status, String date, String companyName) {
 		this.rateId = rateId;
 		this.rateValue = rateValue;
 		this.fuel = fuel;
@@ -22,7 +37,24 @@ public class Rates {
 		this.fuelType=this.fuel.getFuelType();
 		this.check=false;
 	}
-
+	/**
+	 * rateId,rateValue,fuel,status,date,companyName
+	 * @param rateId Integer
+	 * @param rateValue float
+	 * @param fuelType String
+	 * @param status RatesStatus
+	 * @param date String
+	 * @param companyName String
+	 */
+	public Rates(Integer rateId, float rateValue, String fueltype, RatesStatus status, String date, String companyName) {
+		this.rateId = rateId;
+		this.rateValue = rateValue;
+		this.status = status;
+		this.date = date;
+		this.companyName = companyName;
+		this.fuelType=fueltype;
+		this.check=false;
+	}
 	
 	public Fuel getFuel() {
 		return fuel;

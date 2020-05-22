@@ -4,7 +4,7 @@ import enums.OrderStatus;
 
 public class GasOrder {
 
-	private int purchaseID;
+	private Integer purchaseID;
 	private String custmoerId;
 	private String fuelType;
 	private String supplyDate;
@@ -18,7 +18,7 @@ public class GasOrder {
 	private float currentPrice;
 	private String companyName;
 
-	public GasOrder(int purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
+	public GasOrder(Integer purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
 			float priceOfPurchase, boolean urgent, OrderStatus status, int saleID, float currentPrice,
 			String companyName) {
 		this.purchaseID = purchaseID;
