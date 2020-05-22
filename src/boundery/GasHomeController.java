@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.InputMethodEvent;
@@ -65,18 +68,27 @@ public class GasHomeController implements Initializable {
 	private Button buttonBuy;
 
 	@FXML
-	void DragSlider(MouseEvent event) {
-		textAmount.textProperty().bind(
-				Bindings.format("%.2f", sliderAmount.valueProperty())
-				);
+	private Spinner<?> spinnerAmount;
 
+	@FXML
+	void DragSlider(MouseEvent event) {
+		/*
+		 * textAmount.textProperty().bind( Bindings.format("%.0f",
+		 * sliderAmount.valueProperty()) );
+		 */
+		Double d = new Double(sliderAmount.getValue());
+		textAmount.setText(String.format("%.0f", d));
+//		gasAmount = Double.valueOf(textAmount.textProperty().getValue());
+		gasAmount = d;
 		settingDiscount();
-		setPrice();
+//		setPrice();
 	}
 
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
-		Double value = new Double(textAmount.getText());
+		
+		gasAmount = new Double(textAmount.getText());
+		// gasAmount = (double) spinnerAmount.getValue();
 		// sliderAmount.setValue(value);
 		settingDiscount();
 		setPrice();
@@ -126,11 +138,10 @@ public class GasHomeController implements Initializable {
 		loader.setLocation(getClass().getResource("GasHome.fxml"));
 
 		mainPane = loader.load();
-
-		Pane pane = (Pane) mainPane.getChildren().get(8);
-		Text t = (Text) pane.getChildren().get(2);
-		t.setText(String.format("%.2f", priceListPrice));
-
+		
+		
+		
+		
 		// connect the scene to the file
 		s = new Scene(mainPane);
 
@@ -142,32 +153,53 @@ public class GasHomeController implements Initializable {
 
 	void settingDiscount() {
 		/*
-		textAmount.textProperty().bind(
-				Bindings.format("%.2f", sliderAmount.valueProperty())
-				);
-		*/
-		DoubleProperty d = sliderAmount.valueProperty();
-		Double amount = d.get();
-	//	Double amount = (new DoubleProperty(sliderAmount.valueProperty())).get();
+		 * textAmount.textProperty().bind( Bindings.format("%.2f",
+		 * sliderAmount.valueProperty()) );
+		 */
+
+		// Double amount = (new DoubleProperty(sliderAmount.valueProperty())).get();
 		if (radioImmediat.isSelected())
 			discount = 2;
 		else {
-			if (amount > 600 && amount < 801)
+//			DoubleProperty d = sliderAmount.valueProperty();
+//			Double amount = d.get();
+
+			if (gasAmount > 600.0 && gasAmount <= 800.0)
 				discount = -3;
-			else if (amount > 800)
+			else if (gasAmount > 800.0)
 				discount = -4;
 			else
 				discount = 0;
 		}
-		
-		textDiscount.textProperty().bind(Bindings.format("%d", sliderAmount.valueProperty()));
-		//total.setText(String.format("%.2f", priceOfPurchase));
+		textDiscount.setText(discount.toString());
+		// textDiscount.textProperty().bind(Bindings.format("%d",
+		// sliderAmount.valueProperty()));
+		// total.setText(String.format("%.2f", priceOfPurchase));
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
+		priceList.setText("4.8");
+		textDiscount.setText("0");
 		
+/*		
+		textAmount.textProperty().addListener((observable, oldValue, newValue) -> {
+		    System.out.println("textfield changed from " + oldValue + " to " + newValue);
+			});
+	*/	
+
+		textAmount.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+
+		    	 System.out.println("textfield changed from " + oldValue + " to " + newValue);
+		    	 gasAmount = Double.valueOf(newValue);
+		    }
+		});
+
+
 	}
 
 }
