@@ -146,11 +146,11 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Pane saleDataPane;
 	@FXML
-	private TableView<responseReportData> saleResponseReportTable;
+	private TableView<ResponseReportData> saleResponseReportTable;
 	@FXML
-	private TableColumn<responseReportData, String> customerIDResponseReport;
+	private TableColumn<ResponseReportData, String> customerIDResponseReport;
 	@FXML
-	private TableColumn<responseReportData, Float> amountOfPurchaseresponseReport;
+	private TableColumn<ResponseReportData, Float> amountOfPurchaseresponseReport;
 	@FXML
 	private Text totaleNumberOfCustomersResponseReport;
 	@FXML
@@ -225,9 +225,9 @@ public class MarketingManagerController implements Initializable {
 		System.out.println("load sales data");
 
 		ObservableList<Sale> data = FXCollections.observableArrayList(
-				new Sale("1", false, "Paz", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
-				new Sale("1", false, "Sonol", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
-				new Sale("1", false, "yellow", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020",
+				new Sale(1, false, "Paz", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
+				new Sale(1, false, "Sonol", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
+				new Sale(1, false, "yellow", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020",
 						"Sunday"));
 
 		// build table structure
@@ -308,7 +308,7 @@ public class MarketingManagerController implements Initializable {
 		else if (reportKind.isEmpty() == true)
 			JOptionPane.showMessageDialog(null, "please Select report kind");
 		else {
-			ObservableList<responseReportData> data = FXCollections.observableArrayList();
+			ObservableList<ResponseReportData> data = FXCollections.observableArrayList();
 			// call the server and get the data
 
 			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
@@ -319,9 +319,13 @@ public class MarketingManagerController implements Initializable {
 			}
 			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
 				saleResponseReportPane.setVisible(true);
-				
-				
+				//build the table
+				customerIDResponseReport.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
+				amountOfPurchaseresponseReport.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
+				//fill the data
 				saleResponseReportTable.getItems().setAll(data);
+				totaleNumberOfCustomersResponseReport.setText("0");
+				totalePurchasesResponseReport.setText("0");
 				//
 			}
 		}
@@ -336,11 +340,6 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void openReportGenerationPane(ActionEvent event) {
 		switchPanes(reportsPane);
-	}
-
-	@FXML
-	void selectedSaleadd(ActionEvent event) {
-
 	}
 
 	@FXML
@@ -445,11 +444,11 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 
-	private class responseReportData{
+	private class ResponseReportData{
 		String customerID;
 		float amountOfPurchase;
 		
-		public responseReportData(String customerID,float amountOfPurchase) {
+		public ResponseReportData(String customerID,float amountOfPurchase) {
 			this.customerID=customerID;
 			this.amountOfPurchase=amountOfPurchase;
 		}
@@ -480,7 +479,7 @@ public class MarketingManagerController implements Initializable {
 
 		saleDataViewIndex.setText(String.format("Page %d/%d", currentSaleDataIndex + 1, selectedSales.size()));
 		// show the data
-		SaleIDSaleDAta.setText(sale.getSaleID());
+		SaleIDSaleDAta.setText(Integer.toString(sale.getSaleID()));
 		if (sale.getStatus())
 			statusSaleDAta.setText(SaleStatus.activated.toString());
 		else

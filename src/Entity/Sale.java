@@ -1,7 +1,7 @@
 package Entity;
 
 public class Sale {
-	private String saleID;
+	private int saleID;
 	private boolean status;
 	private String companyName;
 	private String fuelType;
@@ -14,7 +14,7 @@ public class Sale {
 	private String saleDays;
 	private boolean select;
 
-	public Sale(String saleID, boolean status, String companyName, String fuelType, String purchaseModule,
+	public Sale(int saleID, boolean status, String companyName, String fuelType, String purchaseModule,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
 		this.saleID = saleID;
 		this.status = status;
@@ -38,11 +38,11 @@ public class Sale {
 	}
 
 
-	public String getSaleID() {
+	public int getSaleID() {
 		return saleID;
 	}
 
-	public void setSaleID(String saleID) {
+	public void setSaleID(int saleID) {
 		this.saleID = saleID;
 	}
 
