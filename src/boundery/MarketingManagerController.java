@@ -12,6 +12,7 @@ import Entity.Fuel;
 import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
+import client.EmployeeCC;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
@@ -195,10 +196,14 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void UpdateSelectedRates(ActionEvent event) {
 		// update all the selected rates
-		// sond to server selectedRates
+		// send to server selectedRates
 		for (Rates rate : selectedRates) {
-			rate.setStatus(RatesStatus.active.toString());
+			rate.setStatus(RatesStatus.active);
 		}
+		if (EmployeeCC.updateFuelRate(selectedRates))
+			JOptionPane.showMessageDialog(null, "upate succeded");
+		else
+			JOptionPane.showMessageDialog(null, "update un-succeded one or more of the data didn't update");
 
 	}
 
@@ -211,24 +216,28 @@ public class MarketingManagerController implements Initializable {
 				sale.setStatus(true);
 			}
 
-			// call the serever and update the data
+			if (EmployeeCC.updateSale(selectedSales))
+				JOptionPane.showMessageDialog(null, "Acctivation succeded");
+			else
+				JOptionPane.showMessageDialog(null,
+						"Acctivation un-succeded one or more of the data didn't Acctivation");
+
 		}
 	}
 
 	@FXML
 	void chooseSaleType(ActionEvent event) {
 		// get the data from gui
-		SaleStatus guiData = salesTypeCombo.getValue();
+		boolean flage = false;
+		if (salesTypeCombo.getValue() == SaleStatus.activated)
+			flage = true;
 		// call the server to get the sales data
 
 		// to get company name and all that stuf there is object that contains employee
 		System.out.println("load sales data");
 
-		ObservableList<Sale> data = FXCollections.observableArrayList(
-				new Sale(1, false, "Paz", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
-				new Sale(1, false, "Sonol", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020", "Sunday"),
-				new Sale(1, false, "yellow", "95", "non", 10.2f, "10:30", "12:00", "1/2/2020", "10/10/2020",
-						"Sunday"));
+		ObservableList<Sale> data = FXCollections.observableArrayList(EmployeeCC.getCompanySalesByStatus(
+				new Sale(0, flage, markitingManager.getCompanyName(), null, null, 0, null, null, null, null, null)));
 
 		// build table structure
 
@@ -313,16 +322,17 @@ public class MarketingManagerController implements Initializable {
 
 			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
 				PeriodicReportPane.setVisible(true);
-				
-				//use this to fill
-				
-			}
-			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
+
+				// use this to fill
+
+			} else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
 				saleResponseReportPane.setVisible(true);
-				//build the table
-				customerIDResponseReport.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
-				amountOfPurchaseresponseReport.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
-				//fill the data
+				// build the table
+				customerIDResponseReport
+						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
+				amountOfPurchaseresponseReport
+						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
+				// fill the data
 				saleResponseReportTable.getItems().setAll(data);
 				totaleNumberOfCustomersResponseReport.setText("0");
 				totalePurchasesResponseReport.setText("0");
@@ -382,8 +392,8 @@ public class MarketingManagerController implements Initializable {
 			updateRates.setVisible(false);
 		// get the data
 
-		ObservableList<Rates> data = FXCollections.observableArrayList(
-				new Rates(1, 1.2f, new Fuel("95", 10f), RatesStatus.active.toString(), "20/2/2020", "Paz"));
+		ObservableList<Rates> data = FXCollections
+				.observableArrayList(new Rates(1, 1.2f, new Fuel("95", 10f), RatesStatus.active, "20/2/2020", "Paz"));
 		// perpare the table
 		/*
 		 * rateCheckBoxSelect.setCellValueFactory( new
@@ -444,30 +454,33 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 
-	private class ResponseReportData{
+	private class ResponseReportData {
 		String customerID;
 		float amountOfPurchase;
-		
-		public ResponseReportData(String customerID,float amountOfPurchase) {
-			this.customerID=customerID;
-			this.amountOfPurchase=amountOfPurchase;
+
+		public ResponseReportData(String customerID, float amountOfPurchase) {
+			this.customerID = customerID;
+			this.amountOfPurchase = amountOfPurchase;
 		}
-		
+
 		public String getCustomerID() {
 			return customerID;
 		}
+
 		public void setCustomerID(String customerID) {
 			this.customerID = customerID;
 		}
+
 		public float getAmountOfPurchase() {
 			return amountOfPurchase;
 		}
+
 		public void setAmountOfPurchase(float amountOfPurchase) {
 			this.amountOfPurchase = amountOfPurchase;
 		}
-		
+
 	}
-	
+
 	private void loadSaleFullDetails(boolean b) {
 		Sale sale;
 

@@ -12,28 +12,35 @@ public class Employee extends User implements Serializable {
 	private String role;
 	private String department;
 	private String workerID;
-
+	private String companyName;
+	
 	public Employee(String userName, String password, String firstName, String lastName, String mail, String id,
-			String phoneNumber,String department,String role,int online,String workerID) {
+			String phoneNumber,String department,String role,int online,String workerID,String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber,online);
 		this.workerID = workerID;
 		this.role = role;
 		this.department = department;
+		this.companyName=companyName;
 	}
 
+
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 
 
 	public String getWorkerID() {
 		return workerID;
 	}
 
-
-
 	public void setWorkerID(String workerID) {
 		this.workerID = workerID;
 	}
-
-
 
 	public String getRole() {
 		return role;
@@ -51,9 +58,14 @@ public class Employee extends User implements Serializable {
 		this.department = department;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Employee [workerID=" + workerID + ", role=" + role + ", department=" + department + "]";
+		return super.toString()+" Employee [role=" + role + ", department=" + department + ", workerID=" + workerID + ", companyName="
+				+ companyName + "]";
 	}
+
+	
 
 }

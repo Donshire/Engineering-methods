@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import Entity.Customer;
+import Entity.Employee;
 import Entity.Message;
+import Entity.Rates;
+import Entity.Sale;
 import boundery.ServerController;
+import client.EmployeeCC;
 import enums.Commands;
 import ocsf.server.*;
 
@@ -27,13 +31,43 @@ public class MyFuelServer extends AbstractServer {
 		case Login:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				client.sendToClient(new Message(LogINController.LogIn(arr.get(0), arr.get(1)), Commands.LoginRes));
+				client.sendToClient(new Message(LogINController.LogIn(arr.get(0), arr.get(1)), Commands.defaultRes));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+			
+		case updateFuelRate:
+			
+			ArrayList<Rates> rates = (ArrayList<Rates>) message.getObj();
+			try {
+				boolean flag=true;
+				for(Rates rate:rates) {
+					if(!CompanyFuelControllerServer.updateRateStatus(rate.getRateId(),rate.getStatus()))
+						flag=false;
+				}
+				client.sendToClient(new Message(flag,Commands.defaultRes));
+				
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
 
+		case updateSale:
+			ArrayList<Sale> sales = (ArrayList<Sale>) message.getObj();
+			try {
+				boolean flag=true;
+				for(Sale sale:sales) {
+					if(!CompanyFuelControllerServer.updateSale(sale))
+						flag=false;
+				}
+				client.sendToClient(new Message(flag,Commands.defaultRes));
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+			
 		default:
 			System.out.println("default");
 		}

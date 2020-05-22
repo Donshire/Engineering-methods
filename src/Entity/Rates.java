@@ -1,16 +1,18 @@
 package Entity;
 
+import enums.RatesStatus;
+
 public class Rates {
 	private int rateId;
 	private float rateValue;
 	private Fuel fuel;
 	private String fuelType;
-	private String status;
+	private RatesStatus status;
 	private String date;
 	private String companyName;
 	private boolean check;
 
-	public Rates(int rateId, float rateValue, Fuel fuel, String status, String date, String companyName) {
+	public Rates(int rateId, float rateValue, Fuel fuel, RatesStatus status, String date, String companyName) {
 		this.rateId = rateId;
 		this.rateValue = rateValue;
 		this.fuel = fuel;
@@ -69,11 +71,11 @@ public class Rates {
 		this.fuelType = fuelType;
 	}
 	
-	public String getStatus() {
+	public RatesStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(RatesStatus status) {
 		this.status = status;
 	}
 
