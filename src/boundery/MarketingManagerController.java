@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent.EventType;
 
+import Entity.CompanyFuel;
 import Entity.Employee;
 import Entity.Fuel;
 import Entity.Rates;
@@ -419,10 +420,11 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
 		String fuelType = fuelTypesRateCombo.getValue();
-		// get the max price and the current rate for the fuel
 
+		CompanyFuel fuel = EmployeeCC.getCompanyFuel(markitingManager.getCompanyName(), fuelType);		
+		System.out.println(fuel);
 		maxFuelPricetxt.setText(
-				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, 10f, 5f));
+				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, fuel.getFuel().getMaxPrice(),fuel.getFuel().getMaxPrice() - fuel.getCompanyPrice()));
 	}
 
 	@FXML
@@ -434,6 +436,7 @@ public class MarketingManagerController implements Initializable {
 			updateRates.setVisible(false);
 		
 		//sending partial rate
+		
 		ObservableList<Rates> data = FXCollections
 				.observableArrayList(EmployeeCC.getAllCompanyRatesByStatus(new Rates(null,0, "", selected,
 				"", markitingManager.getCompanyName())));
@@ -500,7 +503,8 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Rates> selectedRates = new ArrayList<Rates>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
-
+	private ArrayList<CompanyFuel> companyFuel = new ArrayList<CompanyFuel>();
+	
 	//this class is just to show the table of the report
 	private class ResponseReportData {
 		String customerID;
@@ -582,6 +586,7 @@ public class MarketingManagerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
+		System.out.println("hello");
 		markitingManager = (Employee) ClientUI.user;
 		//if agreed we can use a file to load and save the nofitications
 
@@ -589,7 +594,7 @@ public class MarketingManagerController implements Initializable {
 
 		currentPane = markitingManagerNofPane;
 
-		// show the maon pane and hide the others
+		// show the main pane and hide the others
 		markitingManagerNofPane.setVisible(true);
 		fuelRatesPane.setVisible(false);
 		saleDataPane.setVisible(false);
@@ -608,13 +613,13 @@ public class MarketingManagerController implements Initializable {
 
 		// loading RatesPane data
 		// call server and get fuel types from company
-		ObservableList<String> fuelTypes = FXCollections.observableArrayList("95", "solar");
+		ObservableList<String> fuelTypes = FXCollections.observableArrayList(EmployeeCC.getAllCompanyFuelTypes(markitingManager.getCompanyName()));
 		fuelTypesRateCombo.setItems(fuelTypes);
 
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
 		rateTypeCombo.setItems(rateType);
-
+		
 		// initialize reportKindCombo comboBox
 		ObservableList<MarkitingManagerReport> MarkitingReportType = FXCollections
 				.observableArrayList(MarkitingManagerReport.values());

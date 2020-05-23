@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
+import Entity.CompanyFuel;
 import Entity.Fuel;
 import Entity.Rates;
 import Entity.Sale;
@@ -63,6 +64,61 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	public static Object getCompanyFuel(String companyName,String fuelType) {
+
+		PreparedStatement stm;
+		ResultSet res, res2;
+		CompanyFuel companyFuel=null;
+
+		try {
+
+			stm = ConnectionToDB.conn
+					.prepareStatement("select currentPrice from company where companyName = ? "+
+			"And fuelType = ? ");
+			stm.setString(1, companyName);
+			stm.setString(2, fuelType);
+			res = stm.executeQuery();
+
+			res.next();
+			stm = ConnectionToDB.conn
+					.prepareStatement("select maxPrice from fuel where fuelType = ? ");
+			stm.setString(1, fuelType);
+			res2 = stm.executeQuery();
+			
+			res2.next();
+			Fuel f = new Fuel(fuelType, res2.getFloat(1));
+			
+			companyFuel= new CompanyFuel(companyName, f, res.getFloat(1));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return companyFuel;
+	}
+	
+	public static ArrayList<String> getAllCompanyFuelTypes(String companyName) {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<String> str = new ArrayList<String>();
+		try {
+			stm = ConnectionToDB.conn
+					.prepareStatement("select fuelType from company where companyName = ? ");
+			stm.setString(1, companyName);
+			res = stm.executeQuery();
+			
+			while(res.next()) {
+				str.add(res.getString(1));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return str;
+	}
+	
 	public static boolean updateRateStatus(Rates rate) {
 
 		PreparedStatement stm;
@@ -131,7 +187,7 @@ public class CompanyFuelControllerServer {
 			stm.setString(2, companyName);
 			res = stm.executeQuery();
 
-			while (res.next() == true) {
+			while (res.next()) {
 
 				stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.fuel where fuelType = ?");
 				stm.setString(1, res.getString(3));
@@ -149,7 +205,7 @@ public class CompanyFuelControllerServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		System.out.println();
 		return rates;
 	}
 

@@ -26,7 +26,7 @@
             <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
          </children>
       </Pane>
-      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
          <children>
             <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Fuel Rate">
                <font>

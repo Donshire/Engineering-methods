@@ -1,5 +1,8 @@
 package server;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +10,7 @@ import java.util.ArrayList;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.Message;
+import Entity.MyFile;
 import Entity.Rates;
 import Entity.Sale;
 import Entity.Supplier;
@@ -151,13 +155,59 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-
+			
+		case getAllCompanyFuel:
+			String companyName = (String) message.getObj();
+			try {
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case getCompanyFuel:
+			ArrayList<String> compName = (ArrayList<String>) message.getObj();
+			try {
+				client.sendToClient(new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+			
 		default:
 			System.out.println("default");
 		}
 
 	}
 
+	/**
+	 * convert File To Seializable
+	 * @param fileName
+	 * @param filePath
+	 * @return
+	 */
+	
+	private MyFile convertFileToSeializable(String fileName,String filePath) {
+		MyFile msg = new MyFile(fileName);
+		String LocalfilePath = filePath+"\\"+fileName;
+		try {
+			File newFile = new File(LocalfilePath);
+
+			byte[] mybytearray = new byte[(int) newFile.length()];
+			FileInputStream fis = new FileInputStream(newFile);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+
+			msg.initArray(mybytearray.length);
+			msg.setSize(mybytearray.length);
+
+			bis.read(msg.getMybytearray(), 0, mybytearray.length);
+		} catch (Exception e) {
+			System.out.println("Error send (Files)msg) to Server");
+		}
+		return msg;
+	}
+	
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
 		// ServerController.writeToServerConsole("Server listening for connections on

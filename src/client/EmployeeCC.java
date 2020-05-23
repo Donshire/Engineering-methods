@@ -2,6 +2,7 @@ package client;
 
 import java.util.ArrayList;
 
+import Entity.CompanyFuel;
 import Entity.Message;
 import Entity.Rates;
 import Entity.Sale;
@@ -40,5 +41,18 @@ public class EmployeeCC {
 	
 	public static void createSaleResponseResport(int id) {
 		ClientUI.client.accept(new Message(id, Commands.getSaleResponseReport));
+	}
+	
+	public static ArrayList<String> getAllCompanyFuelTypes(String CompanyName){
+		ClientUI.client.accept(new Message(CompanyName, Commands.getAllCompanyFuel));
+		return (ArrayList<String>) MyFuelClient.ServerRetObj;
+	}
+	
+	public static CompanyFuel getCompanyFuel(String CompanyName,String fuelType){
+		ArrayList<String> str =new ArrayList<String>(); 
+		str.add(CompanyName);
+		str.add(fuelType);
+		ClientUI.client.accept(new Message(str, Commands.getCompanyFuel));
+		return (CompanyFuel) MyFuelClient.ServerRetObj;
 	}
 }
