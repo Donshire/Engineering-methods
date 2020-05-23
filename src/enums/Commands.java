@@ -2,8 +2,9 @@ package enums;
 
 public enum Commands {
 	
-	defaultRes,Login,UserAlreadyConnected,updateFuelRate,getAllCompanyRatesByStatus
+	defaultRes,Login,UserAlreadyConnected,logOut,updateFuelRate,getAllCompanyRatesByStatus
 	,getAllCompanyRatesByStatusRes,saveRate,saveRateRes,updateSale,
-	addNewSale,addNewSaleRes,deleteSale,deleteSaleRes,getAllCompanySalesByStatusRes,getAllCompanySalesByStatus;
+	addNewSale,addNewSaleRes,deleteSale,deleteSaleRes,getAllCompanySalesByStatusRes,
+	getAllCompanySalesByStatus,getSaleResponseReport;
 
 }

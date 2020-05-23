@@ -3,6 +3,7 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.sun.xml.internal.ws.api.ha.StickyFeature;
@@ -15,20 +16,66 @@ import enums.SaleStatus;
 
 public class CompanyFuelControllerServer {
 
-	public static boolean updateRateStatus(int rateId, RatesStatus status) {
+	public static Object doh(int saleid) {
+		PreparedStatement stm;
+		ResultSet res1, res2, res3;
+
+		try {
+
+			// price count
+			stm = ConnectionToDB.conn
+					.prepareStatement("SELECT SUM(priceOfPurchase)" + " FROM fuelpurchase " + "where saleID = ?");
+			stm.setInt(1, saleid);
+			res1 = stm.executeQuery();
+			System.out.println("SUM(priceOfPurchase)");
+			while (res1.next()) {
+				System.out.println(res1.getString(1));
+			}
+
+			// number of customers
+			System.out.println("number of customers");
+			stm = ConnectionToDB.conn
+					.prepareStatement("SELECT COUNT(DISTINCT customerID)" + " FROM fuelpurchase " + "where saleID = ?");
+			stm.setInt(1, saleid);
+			res2 = stm.executeQuery();
+
+			while (res2.next()) {
+				System.out.println(res2.getString(1));
+			}
+
+			// for each customer total purchases
+			String query3 ="SELECT customerID,SUM(priceOfPurchase) " + 
+					"FROM myfueldb.fuelpurchase " + " WHERE saleID = ?" + 
+					" GROUP BY customerID" ;
+					stm = ConnectionToDB.conn.prepareStatement(query3);
+			stm.setInt(1, saleid);
+			res3=stm.executeQuery();
+			
+			System.out.println("for each customer total purchases");
+			while(res3.next())
+				System.out.println(res3.getString(1)+":"+res3.getString(2));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	public static boolean updateRateStatus(Rates rate) {
 
 		PreparedStatement stm;
-		ResultSet res, res2;
 
-		switch (status) {
+		switch (rate.getStatus()) {
 
 		// ceo chage rate status to confirmed
 		case confirmed:
 
 			try {
 				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.rates set status = ? where rateID = ?");
-				stm.setInt(1, rateId);
-				stm.setString(2, status.toString());
+				stm.setString(1,rate.getStatus().toString());
+				stm.setInt(2, rate.getRateId());
 				stm.executeQuery();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -39,41 +86,29 @@ public class CompanyFuelControllerServer {
 		// marketing emp update after confirmd
 		case active:
 			try {
-				stm = ConnectionToDB.conn
-						.prepareStatement("select * from myfueldb.rates where status = ? where rateID = ?");
-				stm.setInt(1, rateId);
-				stm.setString(2, status.toString());
-				res = stm.executeQuery();
-
-				// create fuel intance - find max price for rate constarctor
-
-				stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.fuel where fuelType = ?");
-				stm.setString(1, res.getString(3));
-				res2 = stm.executeQuery();
-
-				Fuel f = new Fuel(res2.getString(1), res.getFloat(2));
-
-				// create new instance of rate
-				Rates rate = new Rates(res.getInt(1), res.getFloat(2), f, RatesStatus.active,
-						res.getString(5), res.getString(6));
-
-				// delete the row that was confirmed
-
-				stm = ConnectionToDB.conn.prepareStatement("DELETE FROM myfueldb.rates WHERE where rateID = ?");
-				stm.executeQuery();
-
-				// udate the row with active status with the new rate
+				//delete the old rate
+				stm = ConnectionToDB.conn.prepareStatement("DELETE FROM myfueldb.rates WHERE status = ? AND company = ?");
+				stm.setString(1,RatesStatus.active.toString());
+				stm.setString(2,rate.getCompanyName());
+				stm.executeUpdate();
+				
+				//update the new rate status
 				stm = ConnectionToDB.conn.prepareStatement(
-						"update myfueldb.rates set rateID = ?,rateValue = ?,fuelType = ?,status=?,date=?,company=? where status = ?");
-				stm.setInt(1, rate.getRateId());
-				stm.setFloat(2, rate.getRateValue());
-				stm.setString(3, rate.getFuel().getFuelType());
-				stm.setString(4, rate.getStatus().toString());
-				stm.setString(5, rate.getDate());
-				stm.setString(6, rate.getCompanyName());
-				stm.executeQuery();
+						"update myfueldb.rates set status=? where rateID = ?");
+				stm.setString(1, rate.getStatus().toString());
+				stm.setInt(2, rate.getRateId());
+				stm.executeUpdate();
+				
+				//update the current price in the company
+				stm = ConnectionToDB.conn.prepareStatement(
+						"update myfueldb.company set currentPrice=? where companyName = ? AND fuelType = ?");
+				stm.setString(1,String.valueOf(rate.getFuel().getMaxPrice()+rate.getRateValue()));
+				stm.setString(2, rate.getCompanyName());
+				stm.setString(3, rate.getFuelType());
+				stm.executeUpdate();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				return false;
 			}
 
@@ -101,10 +136,11 @@ public class CompanyFuelControllerServer {
 				stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.fuel where fuelType = ?");
 				stm.setString(1, res.getString(3));
 				res2 = stm.executeQuery();
+				res2.next();
 				Fuel f = new Fuel(res2.getString(1), res.getFloat(2));
 
-				Rates rate = new Rates(res.getInt(1), res.getFloat(2), f,RatesStatus.valueOf(res.getString(4)), res.getString(5),
-						res.getString(6));
+				Rates rate = new Rates(res.getInt(1), res.getFloat(2), f, RatesStatus.valueOf(res.getString(4)),
+						res.getString(5), res.getString(6));
 
 				rates.add(rate);
 
@@ -118,23 +154,20 @@ public class CompanyFuelControllerServer {
 	}
 
 	public static boolean saveRate(Rates rate) {
-
+		String query = "insert into rates (rateValue,fuelType,status,date,company) " + "values (?,?,?,?,?)";
 		PreparedStatement stm;
-		ResultSet res;
-
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("INSERT INTO myfueldb.rates (rateID,rateValue,fuelType,status,date,company)"
-							+ "VALUES (?,?,?,?,?,?)");
-			stm.setInt(1, rate.getRateId());
-			stm.setFloat(2, rate.getRateValue());
-			stm.setString(3, rate.getFuel().getFuelType());
-			stm.setString(4, rate.getStatus().toString());
-			stm.setString(5, rate.getDate());
-			stm.setString(6, rate.getCompanyName());
-			stm.executeQuery();
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setFloat(1, rate.getRateValue());
+			stm.setString(2, rate.getFuelType());
+			stm.setString(3, rate.getStatus().toString());
+			stm.setString(4, rate.getDate());
+			stm.setString(5, rate.getCompanyName());
 
+			stm.executeUpdate();
+			stm.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -148,24 +181,24 @@ public class CompanyFuelControllerServer {
 		try {
 
 			stm = ConnectionToDB.conn.prepareStatement(
-					"INSERT INTO myfueldb.rates (saleID,status,companyName,fueltype,purchaseModule,salePercent,startTime,"
-							+ "endTime,startDate,endDate,days)" + "VALUES (?,?,?,?,?,?,?,?,?,?,?) where saleID = ?");
-			stm.setInt(1, sale.getSaleID());
-			stm.setString(2, sale.getStatus().toString());
-			stm.setString(3, sale.getCompanyName());
-			stm.setString(4, sale.getFuelType());
-			stm.setString(5, sale.getPurchaseModule());
-			stm.setFloat(6, sale.getSalePercent());
-			stm.setString(7, sale.getStartTime());
-			stm.setString(8, sale.getEndTime());
-			stm.setString(9, sale.getStartDate());
-			stm.setString(10, sale.getEndDate());
-			stm.setString(11, sale.getSaleDays());
-			stm.setInt(12, sale.getSaleID());
+					"UPDATE myfueldb.sale set status=?,companyName=?,fueltype=?,purchaseModule=?,salePercent=?,startTime=?"
+							+ ",endTime=?,startDate=?,endDate=?,days=?" + " WHERE saleID = ?");
+			stm.setString(1, sale.getStatus().toString());
+			stm.setString(2, sale.getCompanyName());
+			stm.setString(3, sale.getFuelType());
+			stm.setString(4, sale.getPurchaseModule());
+			stm.setFloat(5, sale.getSalePercent());
+			stm.setString(6, sale.getStartTime());
+			stm.setString(7, sale.getEndTime());
+			stm.setString(8, sale.getStartDate());
+			stm.setString(9, sale.getEndDate());
+			stm.setString(10, sale.getSaleDays());
+			stm.setInt(11, sale.getSaleID());
 
-			stm.executeQuery();
-
+			stm.executeUpdate();
+			stm.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -193,9 +226,11 @@ public class CompanyFuelControllerServer {
 			stm.setString(10, sale.getEndDate());
 			stm.setString(11, sale.getSaleDays());
 
-			stm.executeQuery();
+			stm.executeUpdate();
 
+			stm.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -210,7 +245,9 @@ public class CompanyFuelControllerServer {
 			stm = ConnectionToDB.conn.prepareStatement("DELETE FROM myfueldb.sale WHERE where saleID = ?");
 			stm.setInt(1, sale.getSaleID());
 			stm.executeQuery();
+			stm.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 
@@ -239,7 +276,8 @@ public class CompanyFuelControllerServer {
 				sales.add(sale);
 
 			}
-
+			res.close();
+			stm.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -248,5 +286,4 @@ public class CompanyFuelControllerServer {
 
 	}
 
-	
 }

@@ -27,7 +27,7 @@ public class LogINController {
 				if (customer.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
 				else
-					updateUserOnlineStatus("customer", customer.getId());
+					updateUserOnlineStatus("customer", customer.getId(),1);
 				return customer;
 			}
 
@@ -41,7 +41,7 @@ public class LogINController {
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
 				else
-					updateUserOnlineStatus("customer", employee.getId());
+					updateUserOnlineStatus("employee", employee.getId(),1);
 				return employee;
 			}
 
@@ -53,7 +53,7 @@ public class LogINController {
 				if (supplier.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
 				else
-					updateUserOnlineStatus("customer", supplier.getId());
+					updateUserOnlineStatus("supplier", supplier.getId(),1);
 				return supplier;
 			}
 
@@ -71,9 +71,9 @@ public class LogINController {
 		return stm.executeQuery();
 	}
 
-	public static void updateUserOnlineStatus(String tableName, String userID) throws SQLException {
+	public static void updateUserOnlineStatus(String tableName, String userID,int status) throws SQLException {
 		stm = ConnectionToDB.conn.prepareStatement("update "+tableName +" set online = ? where id = ?");
-		stm.setInt(1, 1);
+		stm.setInt(1, status);
 		stm.setString(2, userID);
 		stm.executeUpdate();
 		stm.close();

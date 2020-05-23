@@ -12,9 +12,11 @@ public class FuelPurchase {
 	private String date;
 	private int saleID;
 	private float currentPrice;
-	
+	private String customerID;
+
 	public FuelPurchase(Integer purchaseID, int stationId, String carNumber, float fuelQuantity, float priceOfPurchase,
-			String time, String date, int saleID, float currentPrice) {
+			String time, String date, int saleID, float currentPrice, String customerID) {
+		super();
 		this.purchaseID = purchaseID;
 		this.stationId = stationId;
 		CarNumber = carNumber;
@@ -24,6 +26,20 @@ public class FuelPurchase {
 		this.date = date;
 		this.saleID = saleID;
 		this.currentPrice = currentPrice;
+		this.customerID = customerID;
+	}
+	
+
+	public String getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(String customerID) {
+		this.customerID = customerID;
+	}
+
+	public void setPurchaseID(Integer purchaseID) {
+		this.purchaseID = purchaseID;
 	}
 
 	public int getPurchaseID() {

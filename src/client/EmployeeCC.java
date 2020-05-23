@@ -37,4 +37,8 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(rate, Commands.saveRate));
 		return (boolean) MyFuelClient.ServerRetObj;
 	}
+	
+	public static void createSaleResponseResport(int id) {
+		ClientUI.client.accept(new Message(id, Commands.getSaleResponseReport));
+	}
 }
