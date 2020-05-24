@@ -1,6 +1,7 @@
 package client;
 
 import boundery.LogInController;
+import boundery.StationManagerController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -18,7 +19,7 @@ public class ClientUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		mainStage=primaryStage;
 		
-		LogInController aFrame = new LogInController();
+		StationManagerController aFrame = new StationManagerController();
 		aFrame.start(primaryStage);
 
 	}

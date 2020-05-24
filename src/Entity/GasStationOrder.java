@@ -7,11 +7,11 @@ public class GasStationOrder {
 	private GasStation station;
 	private String status;
 	private String date;
-	private String orderPrice;
+	private float orderPrice;
 	private String fuelType;
 
 	public GasStationOrder(Integer orderID, Supplier supplier, GasStation station, String status, String date,
-			String orderPrice, String fuelType) {
+			float orderPrice, String fuelType) {
 		this.orderID = orderID;
 		this.supplier = supplier;
 		this.station = station;
@@ -61,11 +61,11 @@ public class GasStationOrder {
 		this.date = date;
 	}
 
-	public String getOrderPrice() {
+	public float getOrderPrice() {
 		return orderPrice;
 	}
 
-	public void setOrderPrice(String orderPrice) {
+	public void setOrderPrice(float orderPrice) {
 		this.orderPrice = orderPrice;
 	}
 
