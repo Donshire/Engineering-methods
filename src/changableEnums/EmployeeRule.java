@@ -1,4 +1,4 @@
-package Entity;
+package changableEnums;
 
 import java.util.ArrayList;
 

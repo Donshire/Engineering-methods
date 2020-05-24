@@ -77,9 +77,9 @@ public class Customer extends User implements Serializable {
 
 	@Override
 	public String toString() {
-		return super.toString() + " Customer [visaNumber=" + visaNumber + ", adress=" + adress + ", pricingModel="
-				+ pricingModel + ", purchaseModule=" + purchaseModule + ", customerTypeAnaleticRank="
-				+ customerTypeAnaleticRank + ", fuelingHourAnaleticRank=" + fuelingHourAnaleticRank + "]";
+		return super.toString() + " Customer [visaNumber=" + visaNumber + ", adress=" + adress +"\n"+ ", pricingModel="
+				+ pricingModel + ", purchaseModule=" +"\n"+ purchaseModule + ", customerTypeAnaleticRank="
+				+ customerTypeAnaleticRank + "\n"+ ", fuelingHourAnaleticRank=" + fuelingHourAnaleticRank + "]";
 	}
 
 }
