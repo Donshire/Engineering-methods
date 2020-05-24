@@ -1,6 +1,12 @@
 package Entity;
 
-public class Fuel {
+import java.io.Serializable;
+
+public class Fuel implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8904134409630964150L;
 	private String fuelType;
 	private float maxPrice;
 

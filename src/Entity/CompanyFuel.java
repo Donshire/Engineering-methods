@@ -1,7 +1,13 @@
 package Entity;
 
-public class CompanyFuel {
+import java.io.Serializable;
 
+public class CompanyFuel implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6279808662776147250L;
 	private String companyName;
 	private Fuel fuel;
 	private float companyPrice;
