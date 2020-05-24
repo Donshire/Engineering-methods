@@ -84,6 +84,7 @@ public class GasHomeController implements Initializable {
 //		setPrice();
 	}
 
+
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
 		
@@ -193,9 +194,13 @@ public class GasHomeController implements Initializable {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
 		            String oldValue, String newValue) {
-
+		    	
+		    	 if (newValue == " ") newValue="0.0";//
 		    	 System.out.println("textfield changed from " + oldValue + " to " + newValue);
 		    	 gasAmount = Double.valueOf(newValue);
+		    	 settingDiscount();
+		    	 setPrice();
+		    	 //TextAmountChanged(newValue);
 		    }
 		});
 
