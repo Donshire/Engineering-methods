@@ -9,12 +9,14 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent.EventType;
 
+import Entity.CompanyFuel;
 import Entity.Employee;
 import Entity.Fuel;
 import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
 import client.EmployeeCC;
+import client.UserCC;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
@@ -77,6 +79,8 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Button SalesWindowBtn;
 	@FXML
+	private Button deActivateSaleBtn;
+	@FXML
 	private Button fuelRatesWindowBtn;
 	@FXML
 	private Button reportGenerationWindowBtn;
@@ -84,6 +88,8 @@ public class MarketingManagerController implements Initializable {
 	private Pane markitingManagerNofPane;
 	@FXML
 	private Text helloUserTxt;
+	@FXML
+	private Text salesHeader;
 	@FXML
 	private TextArea NotificationsTextArea;
 	@FXML
@@ -132,6 +138,8 @@ public class MarketingManagerController implements Initializable {
 	private Button activateSaleBtn;
 	@FXML
 	private Button logOutBtn;
+	@FXML
+	private Button mainPane;
 	@FXML
 	private ComboBox<SaleStatus> salesTypeCombo;
 	@FXML
@@ -191,8 +199,15 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	@FXML
+	void openMainPane(ActionEvent event) {
+		switchPanes(markitingManagerNofPane);
+	}
+	
+	@FXML
 	void OpenSalePane(ActionEvent event) {
 		switchPanes(salePane);
+		activateSaleBtn.setVisible(false);
+		deActivateSaleBtn.setVisible(false);
 	}
 
 	@FXML
@@ -208,27 +223,48 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "update un-succeded one or more of the data didn't update");
 
 	}
-
+	
 	@FXML
 	void activateSale(ActionEvent event) {
 		if (selectedSales.size() <= 0)
 			JOptionPane.showMessageDialog(null, "please select at least one sale");
 		else {
-			for (Sale sale : selectedSales) {
-				sale.setStatus(SaleStatus.activated);
+			if(event.getSource().equals(activateSaleBtn)) {
+				//System.out.println("activateSaleBtn");
+				for (Sale sale : selectedSales) 
+					sale.setStatus(SaleStatus.activated);
 			}
+			else if(event.getSource().equals(deActivateSaleBtn)) {
+				//System.out.println("deActivateSaleBtn");
+				for (Sale sale : selectedSales)
+					sale.setStatus(SaleStatus.not_Activated);
+			}
+				
 
 			if (EmployeeCC.updateSale(selectedSales))
-				JOptionPane.showMessageDialog(null, "Acctivation succeded");
+				JOptionPane.showMessageDialog(null, "upadting succeded");
 			else
 				JOptionPane.showMessageDialog(null,
-						"Acctivation un-succeded one or more of the data didn't Acctivation");
+						"upadting un-succeded one or more of the data didn't upadte");
 
 		}
 	}
 
 	@FXML
 	void chooseSaleType(ActionEvent event) {
+		//GUI-structure
+		if(salesTypeCombo.getValue()==SaleStatus.activated) {
+			deActivateSaleBtn.setVisible(true);
+			deActivateSaleBtn.setLayoutX(43);
+			activateSaleBtn.setVisible(false);
+			salesHeader.setText("Available Activated Sales:");
+		}
+		else {
+			deActivateSaleBtn.setVisible(false);
+			activateSaleBtn.setVisible(true);
+			salesHeader.setText("Available Non-Activated Sales:");
+		}
+		
 		// get the data from gui
 		String saleType = salesTypeCombo.getValue().toString();
 		// call the server to get the sales data
@@ -279,6 +315,9 @@ public class MarketingManagerController implements Initializable {
 
 		// Fill the table
 		salesDetailsTable.getItems().setAll(data);
+		
+		//empety the selected row 
+		selectedSales.clear();
 	}
 
 	@FXML
@@ -297,8 +336,10 @@ public class MarketingManagerController implements Initializable {
 			if (fFuelNewRate <= 0)
 				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
 			else {
-				EmployeeCC.craeteNewRate(new Rates(null, Float.valueOf(sFuelNewRate), fuelTypeName, RatesStatus.created,
-						LocalDate.now().toString(), markitingManager.getCompanyName()));
+				if(EmployeeCC.craeteNewRate(new Rates(null, Float.valueOf(sFuelNewRate), fuelTypeName, RatesStatus.created,
+						LocalDate.now().toString(), markitingManager.getCompanyName())))
+				JOptionPane.showMessageDialog(null, "Creating New Rate done succesfully");
+				else JOptionPane.showMessageDialog(null, "Creating New Rate un-succesfull");
 			}
 		}
 	}
@@ -325,6 +366,9 @@ public class MarketingManagerController implements Initializable {
 
 			} else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
 				saleResponseReportPane.setVisible(true);
+				
+				EmployeeCC.createSaleResponseResport(Integer.valueOf(saleNumber));
+				
 				// build the table
 				customerIDResponseReport
 						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
@@ -369,16 +413,18 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	void logOut(ActionEvent event) {
-		System.out.println("log Out");
+		UserCC.logOut(markitingManager.getId(),markitingManager.getClass().toString());
+		
 	}
 //not done
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
 		String fuelType = fuelTypesRateCombo.getValue();
-		// get the max price and the current rate for the fuel
 
+		CompanyFuel fuel = EmployeeCC.getCompanyFuel(markitingManager.getCompanyName(), fuelType);		
+		System.out.println(fuel);
 		maxFuelPricetxt.setText(
-				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, 10f, 5f));
+				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, fuel.getFuel().getMaxPrice(),fuel.getFuel().getMaxPrice() - fuel.getCompanyPrice()));
 	}
 
 	@FXML
@@ -390,11 +436,11 @@ public class MarketingManagerController implements Initializable {
 			updateRates.setVisible(false);
 		
 		//sending partial rate
-		EmployeeCC.getAllCompanyRatesByStatus(new Rates(null,0, "", selected,
-				"", markitingManager.getCompanyName()));
-
+		
 		ObservableList<Rates> data = FXCollections
-				.observableArrayList(new Rates(1, 1.2f, new Fuel("95", 10f), RatesStatus.active, "20/2/2020", "Paz"));
+				.observableArrayList(EmployeeCC.getAllCompanyRatesByStatus(new Rates(null,0, "", selected,
+				"", markitingManager.getCompanyName())));
+
 		// perpare the table
 		/*
 		 * rateCheckBoxSelect.setCellValueFactory( new
@@ -446,6 +492,9 @@ public class MarketingManagerController implements Initializable {
 		rateStatus.setCellValueFactory(new PropertyValueFactory<Rates, RatesStatus>("status"));
 		// fill the table
 		fuelRatesTable.getItems().setAll(data);
+		
+		//empety the selected row 
+		selectedRates.clear();
 
 	}
 
@@ -454,7 +503,8 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Rates> selectedRates = new ArrayList<Rates>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
-
+	private ArrayList<CompanyFuel> companyFuel = new ArrayList<CompanyFuel>();
+	
 	//this class is just to show the table of the report
 	private class ResponseReportData {
 		String customerID;
@@ -536,13 +586,15 @@ public class MarketingManagerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
+		System.out.println("hello");
 		markitingManager = (Employee) ClientUI.user;
+		//if agreed we can use a file to load and save the nofitications
 
 		helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " + markitingManager.getLastName());
 
 		currentPane = markitingManagerNofPane;
 
-		// show the maon pane and hide the others
+		// show the main pane and hide the others
 		markitingManagerNofPane.setVisible(true);
 		fuelRatesPane.setVisible(false);
 		saleDataPane.setVisible(false);
@@ -550,7 +602,7 @@ public class MarketingManagerController implements Initializable {
 		reportsPane.setVisible(false);
 		PeriodicReportPane.setVisible(false);
 		saleResponseReportPane.setVisible(false);
-
+		updateRates.setVisible(false);
 		// add on the nofitication
 
 		// loading SalePane data
@@ -561,13 +613,13 @@ public class MarketingManagerController implements Initializable {
 
 		// loading RatesPane data
 		// call server and get fuel types from company
-		ObservableList<String> fuelTypes = FXCollections.observableArrayList("95", "solar");
+		ObservableList<String> fuelTypes = FXCollections.observableArrayList(EmployeeCC.getAllCompanyFuelTypes(markitingManager.getCompanyName()));
 		fuelTypesRateCombo.setItems(fuelTypes);
 
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
 		rateTypeCombo.setItems(rateType);
-
+		
 		// initialize reportKindCombo comboBox
 		ObservableList<MarkitingManagerReport> MarkitingReportType = FXCollections
 				.observableArrayList(MarkitingManagerReport.values());
