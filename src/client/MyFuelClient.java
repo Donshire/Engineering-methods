@@ -44,6 +44,10 @@ public class MyFuelClient extends AbstractClient {
 //				saveFile(myFile);
 //				ServerRetObj=myFile.getFileName();
 //				break;
+
+			case CustomerOrderListRes:
+				ServerRetObj = message.getObj();
+				break;
 			}
 
 		}

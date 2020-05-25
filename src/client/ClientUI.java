@@ -1,6 +1,7 @@
 package client;
 
 import boundery.LogInController;
+import boundery.MyOrderConrtoller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -19,6 +20,7 @@ public class ClientUI extends Application {
 		mainStage=primaryStage;
 		
 		LogInController aFrame = new LogInController();
+		//MyOrderConrtoller aFrame = new MyOrderConrtoller();
 		aFrame.start(primaryStage);
 
 	}
