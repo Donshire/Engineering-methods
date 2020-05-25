@@ -179,7 +179,7 @@ public class MyFuelServer extends AbstractServer {
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
 			try {
-				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.LoginRes));
+				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
