@@ -25,8 +25,7 @@ import javafx.stage.Stage;
 public class GasHomeController implements Initializable {
 
 	Integer discount = 0;
-	// double priceListPrice = (double) ClientCC.getMaxPrice("HOME GAS");
-	double priceListPrice = 4.8;
+	double PricePerUnit;
 	String supplyDate;
 	double gasAmount;
 	double priceOfPurchase = 0;
@@ -161,6 +160,7 @@ public class GasHomeController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		//double plp = (double) ClientCC.getMaxPrice("HOME GAS");
 		priceList.setText("4.8");
 		textDiscount.setText("0");
 
