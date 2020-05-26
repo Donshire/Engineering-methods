@@ -35,21 +35,24 @@ public class MyFuelClient extends AbstractClient {
 			//there is a serios bug here 
 			System.out.println(message.getCmd());
 			switch (message.getCmd()) {
-			case defaultRes:// receive from server ArrayList<employee>
-				ServerRetObj = message.getObj();
-				
-//			case reciveFile:
-//				System.out.println("MyFuelClient");
-//				MyFile myFile=(MyFile) msg;
-//				saveFile(myFile);
-//				ServerRetObj=myFile.getFileName();
-//				break;
-
-			case CustomerOrderListRes:
-				ServerRetObj = message.getObj();
-				break;
+				case defaultRes:// receive from server ArrayList<employee>
+					ServerRetObj = message.getObj();
+					
+	//			case reciveFile:
+	//				System.out.println("MyFuelClient");
+	//				MyFile myFile=(MyFile) msg;
+	//				saveFile(myFile);
+	//				ServerRetObj=myFile.getFileName();
+	//				break;
+	
+				case CustomerOrderListRes:
+					ServerRetObj = message.getObj();
+					break;
+					
+				case GetMaxPriceRes: // receive from server ArrayList<employee>
+					ServerRetObj = message.getObj();
+					break;
 			}
-
 		}
 		
 		awaitResponse = false;

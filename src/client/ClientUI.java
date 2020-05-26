@@ -1,5 +1,8 @@
 package client;
 
+import java.io.IOException;
+
+import boundery.GasHomeController;
 import boundery.LogInController;
 import boundery.MyOrderConrtoller;
 import javafx.application.Application;
@@ -17,9 +20,8 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		mainStage=primaryStage;
-		
-		LogInController aFrame = new LogInController();
+//		LogInController aFrame = new LogInController();
+		GasHomeController aFrame = new GasHomeController();
 		//MyOrderConrtoller aFrame = new MyOrderConrtoller();
 		aFrame.start(primaryStage);
 

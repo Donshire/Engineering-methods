@@ -174,6 +174,14 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case GetMaxPrice:
+			try {
+				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.GetMaxPriceRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
 
 			
 		case CustomerOrderList:
