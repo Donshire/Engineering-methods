@@ -20,7 +20,7 @@ public class MyOrderConrtollerServer {
 		ArrayList<GasOrder> orderList = new ArrayList<GasOrder>();
 
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.gasorder where customerID = ?");
+			stm = ConnectionToDB.conn.prepareStatement("select * from gasorder where customerID = ?");
 			stm.setString(1, customerId);
 			res = stm.executeQuery();
 
@@ -28,7 +28,7 @@ public class MyOrderConrtollerServer {
 				GasOrder order = new GasOrder(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8),
 						(OrderStatus.valueOf(res.getString(9))), res.getInt(10), res.getFloat(11), res.getString(12));
-
+				System.out.println(order);
 				orderList.add(order);
 			}
 			

@@ -88,8 +88,8 @@ public class MyOrderConrtoller implements Initializable {
 	}
 
 	public ObservableList<GasOrder> getOrders() {
-		ObservableList<GasOrder> orders = FXCollections.observableArrayList(CustomerCC.GasOrderList("22"));
-
+		ObservableList<GasOrder> orders = FXCollections.observableArrayList(CustomerCC.GasOrderList("685269785"));
+		System.out.println("get the id from the log in user this why there is a bug-saleem");
 		return orders;
 	}
 
