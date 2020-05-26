@@ -24,6 +24,8 @@ import server.ServerUI;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import Entity.Sale;
 
 public class ServerController implements Initializable {
@@ -34,6 +36,10 @@ public class ServerController implements Initializable {
 	private Pane serverPane;
 	@FXML
 	private TextField portNumber;
+	@FXML
+	private TextField dbPassword;
+	@FXML
+	private TextField schemaName;
 	@FXML
 	private Button setPortNumberBtn;
 	@FXML
@@ -74,10 +80,17 @@ public class ServerController implements Initializable {
 	}
 
 	@FXML
-	public void seTPort(ActionEvent event) {
+	public void setServerData(ActionEvent event) {
 		serverPortNumber = portNumber.getText();
-		serverPortPane.setVisible(false);
-		serverPane.setVisible(true);
+		MyFuelServer.schemaName=schemaName.getText();
+		MyFuelServer.dbPassword=dbPassword.getText();
+		
+		if(serverPortNumber.isEmpty()||MyFuelServer.schemaName.isEmpty()||MyFuelServer.dbPassword.isEmpty())
+			JOptionPane.showMessageDialog(null, "Please fill all the server details");
+		else {
+			serverPortPane.setVisible(false);
+			serverPane.setVisible(true);
+		}
 	}
 
 	public static void writeToServerConsole(String str) {

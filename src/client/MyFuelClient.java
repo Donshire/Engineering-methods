@@ -34,6 +34,7 @@ public class MyFuelClient extends AbstractClient {
 			Message message = (Message) msg;
 			//there is a serios bug here 
 			System.out.println(message.getCmd());
+			
 			switch (message.getCmd()) {
 			case defaultRes:// receive from server ArrayList<employee>
 				ServerRetObj = message.getObj();

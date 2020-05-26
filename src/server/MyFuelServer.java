@@ -22,6 +22,7 @@ import ocsf.server.*;
 public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
+	public static String schemaName,dbPassword;
 	
 	public MyFuelServer(int port) {
 		super(port);
