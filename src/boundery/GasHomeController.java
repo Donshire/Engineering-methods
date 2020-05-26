@@ -2,9 +2,6 @@ package boundery;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -99,8 +96,6 @@ public class GasHomeController implements Initializable {
 	/**
 	 * Displays or hides the option to select a date according to the selected radio
 	 * button
-	 * 
-	 * @param event
 	 */
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
@@ -131,6 +126,7 @@ public class GasHomeController implements Initializable {
 		 */
 	}
 
+	
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -139,9 +135,6 @@ public class GasHomeController implements Initializable {
 		loader.setLocation(getClass().getResource("GasHome.fxml"));
 
 		mainPane = loader.load();
-		
-		
-		
 		
 		// connect the scene to the file
 		s = new Scene(mainPane);
@@ -153,18 +146,9 @@ public class GasHomeController implements Initializable {
 	}
 
 	void settingDiscount() {
-		/*
-		 * textAmount.textProperty().bind( Bindings.format("%.2f",
-		 * sliderAmount.valueProperty()) );
-		 */
-
-		// Double amount = (new DoubleProperty(sliderAmount.valueProperty())).get();
 		if (radioImmediat.isSelected())
 			discount = 2;
 		else {
-//			DoubleProperty d = sliderAmount.valueProperty();
-//			Double amount = d.get();
-
 			if (gasAmount > 600.0 && gasAmount <= 800.0)
 				discount = -3;
 			else if (gasAmount > 800.0)
@@ -173,34 +157,28 @@ public class GasHomeController implements Initializable {
 				discount = 0;
 		}
 		textDiscount.setText(discount.toString());
-		// textDiscount.textProperty().bind(Bindings.format("%d",
-		// sliderAmount.valueProperty()));
-		// total.setText(String.format("%.2f", priceOfPurchase));
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
 		priceList.setText("4.8");
 		textDiscount.setText("0");
-		
-/*		
-		textAmount.textProperty().addListener((observable, oldValue, newValue) -> {
-		    System.out.println("textfield changed from " + oldValue + " to " + newValue);
-			});
-	*/	
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
 		    public void changed(ObservableValue<? extends String> observable,
 		            String oldValue, String newValue) {
 		    	
-		    	 if (newValue == " ") newValue="0.0";//
+		    	try {
+		    		gasAmount = Double.valueOf(newValue);
+				} catch (Exception e) {
+					gasAmount = 0;
+					newValue="0.0";
+				}
 		    	 System.out.println("textfield changed from " + oldValue + " to " + newValue);
-		    	 gasAmount = Double.valueOf(newValue);
+		    	 
 		    	 settingDiscount();
 		    	 setPrice();
-		    	 //TextAmountChanged(newValue);
 		    }
 		});
 

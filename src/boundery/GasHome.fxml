@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Pane?>
@@ -84,6 +83,5 @@
          </font>
       </Text>
       <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="349.0" layoutY="339.0" onAction="#supplyDateSelected" visible="false" />
-      <Spinner fx:id="spinnerAmount" layoutX="522.0" layoutY="460.0" onInputMethodTextChanged="#TextAmountChanged" />
    </children>
 </Pane>
