@@ -1,6 +1,7 @@
 package boundery;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import Entity.GasStation;
@@ -13,6 +14,7 @@ import client.UserCC;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
+import enums.SupplierOrderStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,6 +37,12 @@ public class SupplierController implements Initializable {
 
     @FXML
     private Pane SupplierOrdersPane;
+    
+    @FXML
+    private Text chooseTypeLbl;
+
+    @FXML
+    private ComboBox<SupplierOrderStatus> OrderTypeCombox;
 
     @FXML
     private Label OrdersLbl;
@@ -50,6 +59,7 @@ public class SupplierController implements Initializable {
 	@FXML
 	private TableColumn<GasStationOrder,GasStation> StationId;
     
+	//need to check what king of data the status will be
 //	@FXML
 //	private TableColumn<GasStationOrder,GasStation> status;
 	
@@ -67,6 +77,9 @@ public class SupplierController implements Initializable {
 	
 	@FXML
     private Button LogOutBtn;
+	
+    @FXML
+    private Text OrderHeader;
 
     @FXML
     private Button MainPaneBtn;
@@ -84,9 +97,13 @@ public class SupplierController implements Initializable {
     private TextArea NotificationText;
 
     @FXML
+    private Button UpdateBtn;
+
+    @FXML
     private Label NotificationLbl;
     private Pane currentPane;
 	public static Supplier Supplier;
+	private ArrayList<GasStationOrder> selectedOrders = new ArrayList<GasStationOrder>();
 	
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
@@ -139,10 +156,30 @@ public class SupplierController implements Initializable {
 		SupplierMainPane.setVisible(true);
 		SupplierOrdersPane.setVisible(false);
 		
+		ObservableList<SupplierOrderStatus> orderTypes = FXCollections.observableArrayList(SupplierOrderStatus.values());
+		OrderTypeCombox.setItems(orderTypes);
 	}
     
     @FXML
     void logOut(ActionEvent event) {
     	UserCC.logOut(Supplier.getId(),Supplier.getClass().toString());
     }
+    
+    @FXML
+	void chooseOrderType(ActionEvent event) {
+	   	if(OrderTypeCombox.getValue()==SupplierOrderStatus.supplied) {
+	   		OrderHeader.setText("All Supplied Orders: ");
+	   		UpdateBtn.setVisible(false);
+	   	}
+	   	else {
+	   		OrderHeader.setText("All un-Supplied Orders: ");
+	   		UpdateBtn.setVisible(true);
+	   	}
+	   	
+	   	String OrderType = OrderTypeCombox.getValue().toString();
+	   //	ObservableList<GasStationOrder> data = FXCollections.observableArrayList()
+	   	
+    }
+    
+    
 }
