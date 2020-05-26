@@ -9,6 +9,7 @@ public class GasStationOrder {
 	private String date;
 	private String orderPrice;
 	private String fuelType;
+	private Integer quantity;
 
 	public GasStationOrder(Integer orderID, Supplier supplier, GasStation station, String status, String date,
 			String orderPrice, String fuelType) {

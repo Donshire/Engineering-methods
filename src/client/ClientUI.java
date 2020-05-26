@@ -19,7 +19,7 @@ public class ClientUI extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		mainStage=primaryStage;
 		
-		SupplierController aFrame = new SupplierController();
+		LogInController aFrame = new LogInController();
 		aFrame.start(primaryStage);
 
 	}
