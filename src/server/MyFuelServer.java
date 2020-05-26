@@ -165,6 +165,7 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
 			try {
@@ -193,6 +194,7 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
 		default:
 			System.out.println("default");
 		}
