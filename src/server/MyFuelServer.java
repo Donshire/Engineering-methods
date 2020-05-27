@@ -210,9 +210,11 @@ public class MyFuelServer extends AbstractServer {
 	}
 	
 	protected void serverStarted() {
-		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
+		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
+		FileManagmentSys.createSystemWorkSpace();
+		
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 
