@@ -295,7 +295,7 @@ public class MarketingManagerController implements Initializable {
 			}
 		});
 
-		SelectSale.setCellFactory(new Callback<TableColumn<Sale, Boolean>, //
+		SelectSale.setCellFactory(new Callback<TableColumn<Sale, Boolean>, 
 				TableCell<Sale, Boolean>>() {
 			@Override
 			public TableCell<Sale, Boolean> call(TableColumn<Sale, Boolean> p) {

@@ -174,6 +174,17 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+		case getAllOrdersByStatus:
+			ArrayList<Object> objs = (ArrayList<Object>) message.getObj();
+			String supplierId = (String)objs.get(0);
+			String status =(String) objs.get(1);
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.getAllOrdersByStatus(supplierId,status),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			break;
+			
 			
 		default:
 			System.out.println("default");

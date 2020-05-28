@@ -4,107 +4,113 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import Entity.GasStation;
 import Entity.GasStationOrder;
 import Entity.Sale;
 import Entity.Supplier;
 import client.ClientUI;
-import client.EmployeeCC;
+import client.SupplierCC;
 import client.UserCC;
-import enums.MarkitingManagerReport;
-import enums.RatesStatus;
-import enums.SaleStatus;
 import enums.SupplierOrderStatus;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class SupplierController implements Initializable {
 
-    @FXML
-    private Pane SupplierOrdersPane;
-    
-    @FXML
-    private Text chooseTypeLbl;
-
-    @FXML
-    private ComboBox<SupplierOrderStatus> OrderTypeCombox;
-
-    @FXML
-    private Label OrdersLbl;
-
-    @FXML
-    private CheckBox SuppliedCBox;
-
-    @FXML
-    private TableView<?> OrdersTbl;
-    
 	@FXML
-	private TableColumn<GasStationOrder,Integer> orderId;
-	
+	private Pane SupplierOrdersPane;
+
 	@FXML
-	private TableColumn<GasStationOrder,GasStation> StationId;
-    
-	//need to check what king of data the status will be
-//	@FXML
-//	private TableColumn<GasStationOrder,GasStation> status;
-	
+	private Label OrdersLbl;
+
 	@FXML
-	private TableColumn<GasStationOrder,String> Date;
-	
+	private Text chooseTypeLbl;
+
 	@FXML
-	private TableColumn<GasStationOrder,String> orderPrice;
-	
+	private ComboBox<SupplierOrderStatus> OrderTypeCombox;
+
 	@FXML
-	private TableColumn<GasStationOrder,String> FuelType;
-	
+	private Text OrderHeader;
+
 	@FXML
-	private TableColumn<GasStationOrder,Integer> quantity;
-	
+	private TableView<GasStationOrder> OrdersTbl;
+
 	@FXML
-    private Button LogOutBtn;
-	
-    @FXML
-    private Text OrderHeader;
+	private TableColumn<GasStationOrder, Boolean> select;
 
-    @FXML
-    private Button MainPaneBtn;
+	@FXML
+	private TableColumn<GasStationOrder, Integer> orderId;
 
-    @FXML
-    private Text HelloLbl;
+	@FXML
+	private TableColumn<GasStationOrder, Integer> stationId;
 
-    @FXML
-    private Button OrdersBtn;
+	@FXML
+	private TableColumn<GasStationOrder, String> status;
 
-    @FXML
-    private Pane SupplierMainPane;
+	@FXML
+	private TableColumn<GasStationOrder, String> date;
 
-    @FXML
-    private TextArea NotificationText;
+	@FXML
+	private TableColumn<GasStationOrder, String> orderPrice;
 
-    @FXML
-    private Button UpdateBtn;
+	@FXML
+	private TableColumn<GasStationOrder, String> fuelType;
 
-    @FXML
-    private Label NotificationLbl;
-    private Pane currentPane;
-	public static Supplier Supplier;
+	@FXML
+	private TableColumn<GasStationOrder, Integer> quantity;
+
+	@FXML
+	private Pane SupplierMainPane;
+
+	@FXML
+	private Label NotificationLbl;
+
+	@FXML
+	private TextArea NotificationText;
+
+	@FXML
+	private Button LogOutBtn;
+
+	@FXML
+	private Button MainPaneBtn;
+
+	@FXML
+	private Button OrdersBtn;
+
+	@FXML
+	private Button UpdateBtn;
+
+	@FXML
+	private Text HelloLbl;
+
+	private Pane currentPane;
+	public static Supplier supplier;
 	private ArrayList<GasStationOrder> selectedOrders = new ArrayList<GasStationOrder>();
-	
+
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -122,52 +128,10 @@ public class SupplierController implements Initializable {
 
 	}
 
-	//Switching Pans - hide the other
-    private void switchPanes(Pane newPane) {
-		currentPane.setVisible(false);
-		currentPane = newPane;
-		currentPane.setVisible(true);
-	}
-    
-    //switch to the main pane
-    @FXML
-	void openMainPane(ActionEvent event) {
-		switchPanes(SupplierMainPane);
-	}
-    
-    
-    //switch to orders pane
-    @FXML
-  	void openOrdersPane(ActionEvent event) {
-  		switchPanes(SupplierOrdersPane);
-  	}
-      
-    //initializing the scene
-    @Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// loading the main window data
-		System.out.println("hello");
-		Supplier = (Supplier) ClientUI.user;
-		System.out.println(Supplier);
-		HelloLbl.setText("hello " + Supplier.getFirstName() + " " + Supplier.getLastName());
-		//set the current pane as the main
-		currentPane = SupplierMainPane;
-		// show the main pane and hide the others
-		SupplierMainPane.setVisible(true);
-		SupplierOrdersPane.setVisible(false);
-		
-		ObservableList<SupplierOrderStatus> orderTypes = FXCollections.observableArrayList(SupplierOrderStatus.values());
-		OrderTypeCombox.setItems(orderTypes);
-	}
-    
-    @FXML
-    void logOut(ActionEvent event) {
-    	UserCC.logOut(Supplier.getId(),Supplier.getClass().toString());
-    }
-    
-    @FXML
-	void chooseOrderType(ActionEvent event) {
-	   	if(OrderTypeCombox.getValue()==SupplierOrderStatus.supplied) {
+	@FXML
+    void chooseOrderType(ActionEvent event) {
+    	
+    	if(OrderTypeCombox.getValue()==SupplierOrderStatus.supplied) {
 	   		OrderHeader.setText("All Supplied Orders: ");
 	   		UpdateBtn.setVisible(false);
 	   	}
@@ -175,11 +139,100 @@ public class SupplierController implements Initializable {
 	   		OrderHeader.setText("All un-Supplied Orders: ");
 	   		UpdateBtn.setVisible(true);
 	   	}
+    	
+	   	String orderType = OrderTypeCombox.getValue().toString();
+	   	//bring all the data of this supplier with this orderType
+
+	   	select.setCellValueFactory(new Callback<CellDataFeatures<GasStationOrder,Boolean>,ObservableValue<Boolean>>() {
+			
+			@Override
+			public ObservableValue<Boolean> call(CellDataFeatures<GasStationOrder, Boolean> param) {
+				GasStationOrder order = param.getValue();
+				SimpleBooleanProperty booleanProp =  new SimpleBooleanProperty(order.getSelect());
+				
+				booleanProp.addListener(new ChangeListener<Boolean>(){
+					@Override
+					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
+						if(newValue==true) selectedOrders.add(order);
+						else selectedOrders.remove(order);
+						order.setSelect(newValue);
+					}
+				});
+					return booleanProp;
+			}
+	   	});
 	   	
-	   	String OrderType = OrderTypeCombox.getValue().toString();
-	   //	ObservableList<GasStationOrder> data = FXCollections.observableArrayList()
-	   	
+	   	select.setCellFactory(new Callback<TableColumn<GasStationOrder,Boolean>, TableCell<GasStationOrder,Boolean>>() {
+
+			@Override
+			public TableCell<GasStationOrder, Boolean> call(TableColumn<GasStationOrder, Boolean> param) {
+				CheckBoxTableCell<GasStationOrder, Boolean> cell = new CheckBoxTableCell<GasStationOrder, Boolean>();
+				cell.setAlignment(Pos.CENTER);
+				return cell;
+			}
+		});
+	
+	   	orderId.setCellValueFactory(new PropertyValueFactory<GasStationOrder,Integer>("orderID"));
+	   	stationId.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("stationID"));
+	   	status.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("status"));
+	   	date.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
+	   	orderPrice.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("orderPrice"));
+	   	fuelType.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
+	   	quantity.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("quantity"));
+	  
+	   	OrdersTbl.setItems(getOrders(supplier.getId(), orderType));
     }
-    
-    
+
+	public ObservableList<GasStationOrder> getOrders(String supplierId, String orderType) {
+		System.out.println("1 " + supplierId + " 2 " + orderType.toString());
+		ArrayList<GasStationOrder> newOrders = SupplierCC.getAllOrdersByStatus(supplierId, orderType);
+
+		ObservableList<GasStationOrder> orders = FXCollections.observableArrayList(newOrders);
+		// System.out.println(newOrders.get(0).toString());
+		return orders;
+	}
+
+	@FXML
+	void logOut(ActionEvent event) {
+		UserCC.logOut(supplier.getId(), supplier.getClass().toString());
+	}
+
+	// Switching Pans - hide the other
+	private void switchPanes(Pane newPane) {
+		currentPane.setVisible(false);
+		currentPane = newPane;
+		currentPane.setVisible(true);
+	}
+
+	// switch to the main pane
+	@FXML
+	void openMainPane(ActionEvent event) {
+		switchPanes(SupplierMainPane);
+	}
+
+	// switch to orders pane
+	@FXML
+	void openOrdersPane(ActionEvent event) {
+		switchPanes(SupplierOrdersPane);
+	}
+
+	// initializing the scene
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		// loading the main window data
+		System.out.println("hello");
+		supplier = (Supplier) ClientUI.user;
+		System.out.println(supplier);
+		// set the current pane as the main
+		currentPane = SupplierMainPane;
+		// show the main pane and hide the others
+		SupplierMainPane.setVisible(true);
+		SupplierOrdersPane.setVisible(false);
+
+		ObservableList<SupplierOrderStatus> orderTypes = FXCollections
+				.observableArrayList(SupplierOrderStatus.values());
+		OrderTypeCombox.setItems(orderTypes);
+	}
+
 }

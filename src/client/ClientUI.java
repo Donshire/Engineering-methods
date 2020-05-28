@@ -21,6 +21,9 @@ public class ClientUI extends Application {
 		
 		LogInController aFrame = new LogInController();
 		aFrame.start(primaryStage);
+		
+//		SupplierController aFrame = new SupplierController();
+//		aFrame.start(primaryStage);
 
 	}
 

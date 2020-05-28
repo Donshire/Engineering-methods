@@ -7,8 +7,11 @@ import Entity.Message;
 import enums.Commands;
 public class SupplierCC {
 
-	public static ArrayList<GasStationOrder> getAllOrdersByStatus(GasStationOrder order){
-		ClientUI.client.accept(new Message(order, Commands.getAllOrdersByStatus));
+	public static ArrayList<GasStationOrder> getAllOrdersByStatus(String supplierId, String status){
+		ArrayList<Object> objs = new ArrayList<Object>();
+		objs.add(supplierId);
+		objs.add(status);
+		ClientUI.client.accept(new Message(objs, Commands.getAllOrdersByStatus));
 		return(ArrayList<GasStationOrder>)MyFuelClient.ServerRetObj;
 	}
 	
