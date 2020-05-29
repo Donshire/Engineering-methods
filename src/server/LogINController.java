@@ -26,8 +26,8 @@ public class LogINController {
 				res.close();
 				if (customer.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("customer", customer.getId(),1);
+//				else
+//					updateUserOnlineStatus("customer", customer.getId(),1);
 				return customer;
 			}
 
@@ -40,8 +40,8 @@ public class LogINController {
 				System.out.println(employee);
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("employee", employee.getId(),1);
+//				else
+//					updateUserOnlineStatus("employee", employee.getId(),1);
 				return employee;
 			}
 
@@ -52,8 +52,8 @@ public class LogINController {
 				res.close();
 				if (supplier.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("supplier", supplier.getId(),1);
+//				else
+//					updateUserOnlineStatus("supplier", supplier.getId(),1);
 				return supplier;
 			}
 

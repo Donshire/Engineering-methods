@@ -1,15 +1,19 @@
 package server;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
 import Entity.CompanyFuel;
 import Entity.Fuel;
+import Entity.GenericReport;
 import Entity.Rates;
 import Entity.Sale;
 import enums.RatesStatus;
@@ -17,9 +21,301 @@ import enums.SaleStatus;
 
 public class CompanyFuelControllerServer {
 
-	public static Object doh(int saleid) {
+	
+	/**
+	 * create periodicReport and save it in a file
+	 * @param companyName String
+	 * @param date String
+	 * @param time String
+	 * @return
+	 */
+	public static File periodicReport(String companyName,String date, String time) {
+		File file = null;
+		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases();
+		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
+		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
+		
+		//sort
+		Collections.sort(customerTotalPurchaseArray);
+		Collections.sort(customerCompaniesDiversionArray);
+		
+		customerTotalPurchase customerTotalPurchasearray[];
+		customerCompaniesDiversion customerCompaniesDiversionarray[];
+		
+		//Merge
+		try {
+			//convert customerTotalPurchaseArray to array
+			customerTotalPurchasearray=new customerTotalPurchase[customerTotalPurchaseArray.size()];
+			customerTotalPurchaseArray.toArray(customerTotalPurchasearray);
+			//convert customerTotalPurchaseArray to array
+			customerCompaniesDiversionarray=new customerCompaniesDiversion[customerCompaniesDiversionArray.size()];
+			customerCompaniesDiversionArray.toArray(customerCompaniesDiversionarray);	
+		}catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+		int j,i;
+		
+		for(i=0;i<customerTotalPurchasearray.length;i++) {
+			for(j=0;j<customerCompaniesDiversionarray.length;j++) {
+				if(customerTotalPurchasearray[i].customerId.compareTo(customerCompaniesDiversionarray[j].customerId)==0)
+					break;
+			}
+			rankedcustomerArray.add(new rankedcustomer(customerTotalPurchasearray[i],customerCompaniesDiversionarray[j],i,j));
+		}
+		
+		//Sort the merged Arrays
+		Collections.sort(rankedcustomerArray);
+		//Conver to array
+		rankedcustomer rankedcustomerarray[]=new rankedcustomer[rankedcustomerArray.size()];
+		rankedcustomerArray.toArray(rankedcustomerarray);
+		//Write to the result file
+		file=FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
+				FileManagmentSys.marketingManagerReports,FileManagmentSys.periodicReport),
+				FileManagmentSys.periodicReport,0);
+		
+		StringBuilder data = new StringBuilder("");
+		
+		for(i=0;i<rankedcustomerarray.length;i++) {
+			data.append(FileManagmentSys.periodicReportFileFormate(rankedcustomerarray[i].companies.customerId,
+					customerCompaniesDiversion.getPurchasePercent(rankedcustomerarray[i].companies.numOfPurchaeseByCompanies,
+							rankedcustomerarray[i].companies.totalNumOfPurchaese),
+					rankedcustomerarray[i].companies.numOfPurchaeseByCompanies.length));
+		}
+		
+		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
+
+		return file;
+	}
+
+	public static ArrayList<customerTotalPurchase> customersTotalPurchases() {
+		Statement stm;
+		ResultSet res;
+
+		ArrayList<customerTotalPurchase> result = new ArrayList<customerTotalPurchase>();
+
+		try {
+			// calculate the totale prices
+			String query = "Select cus.id,sum(fu.priceOfPurchase) as countofpurchase "
+					+ "from myfueldb.customer as cus " + "left join myfueldb.car as car " + "on car.CustomerID=cus.id "
+					+ "left join myfueldb.fuelpurchase as fu " + "on fu.CarNumber=car.carNumber " + "group by cus.id";
+			stm = ConnectionToDB.conn.createStatement();
+			res = stm.executeQuery(query);
+
+			// save the data in arrayList
+			while (res.next())
+				result.add(new customerTotalPurchase(res.getString(1), res.getFloat(2)));
+
+			res.close();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * create an ArrayList containig for each customer purchase diversion by
+	 * companies
+	 * 
+	 * @return that ArrayList
+	 */
+	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion() {
+		Statement stm;
+		ResultSet res;
+
+		ArrayList<customerCompaniesDiversion> result = new ArrayList<customerCompaniesDiversion>();
+		ArrayList<String> companies = CompanyFuelControllerServer.getAllCompanies();
+		String curID;
+		int array[] = new int[companies.size()];
+		int sumOfPuchases = 0;
+
+		try {
+			// calculate the totale prices
+			String query = "Select cu.id,ga.companyName,count(ga.companyName) as countofpurchase "
+					+ "from myfueldb.customer as cu " + "left join myfueldb.car as ca " + "on cu.id=ca.CustomerID "
+					+ "left join myfueldb.fuelpurchase as fu " + "on ca.carNumber=fu.carNumber "
+					+ "left join myfueldb.gasstation as ga " + "on ga.stationId=fu.stationId "
+					+ "GROUP BY cu.id,ga.companyName " + "order by cu.id";
+			stm = ConnectionToDB.conn.createStatement();
+			res = stm.executeQuery(query);
+
+			// save the data in arrayList
+			if (res.next()) {
+				// to get the first customer Id and compare it to the next one
+				curID = res.getString(1);
+				array[companies.indexOf(res.getString(2))] = res.getInt(3);
+				sumOfPuchases += res.getInt(3);
+				// check if the same customer
+				while (res.next()) {
+					// there is another cutomer save the data in the arraylist and rest all the
+					// parameters
+					if (res.getString(1).compareTo(curID) != 0) {
+						result.add(new customerCompaniesDiversion(curID, sumOfPuchases, array));
+						sumOfPuchases = 0;
+						array= new int[companies.size()];
+					}
+					curID = res.getString(1);
+					array[companies.indexOf(res.getString(2))] = res.getInt(3);
+					sumOfPuchases += res.getInt(3);
+				}
+				//add the last one 
+				result.add(new customerCompaniesDiversion(curID, sumOfPuchases,array));
+			}
+
+			res.close();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * @return all the distinct(companyName) in myfueldb.company
+	 */
+	public static ArrayList<String> getAllCompanies() {
+		Statement stm;
+		ResultSet res;
+		String query = "Select distinct(companyName) " + "From myfueldb.company";
+		ArrayList<String> result = new ArrayList<String>();
+		try {
+			stm = ConnectionToDB.conn.createStatement();
+			res = stm.executeQuery(query);
+			while (res.next())
+				result.add(res.getString(1));
+			res.close();
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	private static class rankedcustomer implements Comparable<rankedcustomer> {
+		customerTotalPurchase purchas;
+		customerCompaniesDiversion companies;
+
+		int customerTotalPurchaseRank, customerCompaniesDiversionRank,realRank;
+		/**
+		 * 
+		 * @param purchas customerTotalPurchase
+		 * @param companies customerCompaniesDiversion
+		 * @param customerTotalPurchaseRank int
+		 * @param customerCompaniesDiversionRank int
+		 */
+		public rankedcustomer(customerTotalPurchase purchas,customerCompaniesDiversion companies,
+				int customerTotalPurchaseRank,
+				int customerCompaniesDiversionRank) {
+			this.purchas = purchas;
+			this.companies = companies;
+			this.customerTotalPurchaseRank = customerTotalPurchaseRank;
+			this.customerCompaniesDiversionRank = customerCompaniesDiversionRank;
+			this.realRank=customerCompaniesDiversionRank + customerTotalPurchaseRank;
+		}
+
+		@Override
+		public int compareTo(rankedcustomer o) {
+			if (this.realRank > o.realRank)
+				return 1;
+			if (this.realRank < o.realRank)
+				return -1;
+			return 0;
+		}
+
+	}
+
+	private static class customerTotalPurchase implements Comparable<customerTotalPurchase> {
+		String customerId;
+		float totalPurchase;
+
+		public customerTotalPurchase(String customerId, float totalPurchase) {
+			this.customerId = customerId;
+			this.totalPurchase = totalPurchase;
+		}
+
+		@Override
+		public int compareTo(customerTotalPurchase o) {
+			if (this.totalPurchase > o.totalPurchase)
+				return 1;
+			if (this.totalPurchase < o.totalPurchase)
+				return -1;
+			return 0;
+		}
+
+		@Override
+		public String toString() {
+			return "customerTotalPurchase [customerId=" + customerId + ", totalPurchase=" + totalPurchase + "]";
+		}
+
+	}
+
+	private static class customerCompaniesDiversion implements Comparable<customerCompaniesDiversion> {
+		String customerId;
+		int totalNumOfPurchaese;
+		int numOfPurchaeseByCompanies[];
+		
+		public customerCompaniesDiversion(String customerId, int totalNumOfPurchaese, int[] numOfPurchaeseByCompanies) {
+			this.customerId = customerId;
+			this.totalNumOfPurchaese = totalNumOfPurchaese;
+			this.numOfPurchaeseByCompanies = numOfPurchaeseByCompanies;
+		}
+
+		public static float[] getPurchasePercent(int []purchases,int numOfPurchaese) {
+			float[] res = new float[purchases.length];
+			for(int i=0;i<purchases.length;i++)
+				res[i]=(purchases[i]/(float)numOfPurchaese)*100;
+			return res;
+		}
+		
+		// The ALG
+		private static int calculateRank(customerCompaniesDiversion o) {
+			int numOfCompanies = o.numOfPurchaeseByCompanies.length;
+			float average = o.totalNumOfPurchaese / numOfCompanies;
+			int rank = 0;
+			for (int i = 0; i < o.numOfPurchaeseByCompanies.length; i++)
+				rank += Math.abs((average - o.numOfPurchaeseByCompanies[i]) * numOfCompanies);
+			return rank;
+		}
+
+		// is inverted beacuse the lower is better
+		@Override
+		public int compareTo(customerCompaniesDiversion o) {
+			if (calculateRank(this) < o.calculateRank(o))
+				return 1;
+			if (calculateRank(this) > o.calculateRank(o))
+				return -1;
+			return 0;
+		}
+
+		@Override
+		public String toString() {
+			return "customerCompaniesDiversion [customerId=" + customerId + ", totalNumOfPurchaese="
+					+ totalNumOfPurchaese + ", numOfPurchaeseByCompanies=" + Arrays.toString(numOfPurchaeseByCompanies)
+					+ "]";
+		}
+	}
+
+	/**
+	 * 
+	 * @param saleid      int
+	 * @param companyName String
+	 * @param date        String
+	 * @param time        String
+	 * @return
+	 */
+	public static File responseReport(int saleid, String companyName, String date, String time) {
 		PreparedStatement stm;
-		ResultSet res1, res2, res3;
+		ResultSet res;
+
+		File file = null;
+
+		StringBuilder strBRes3 = new StringBuilder();
+		String strRes1, strRes2;
 
 		try {
 
@@ -27,68 +323,101 @@ public class CompanyFuelControllerServer {
 			stm = ConnectionToDB.conn
 					.prepareStatement("SELECT SUM(priceOfPurchase)" + " FROM fuelpurchase " + "where saleID = ?");
 			stm.setInt(1, saleid);
-			res1 = stm.executeQuery();
-			System.out.println("SUM(priceOfPurchase)");
-			while (res1.next()) {
-				System.out.println(res1.getString(1));
-			}
+			res = stm.executeQuery();
+
+			res.next();
+			strRes2 = res.getString(1);
+//			System.out.println("SUM(priceOfPurchase)");
+//			while (res1.next()) {
+//				System.out.println(res1.getString(1));
+//			}
 
 			// number of customers
-			System.out.println("number of customers");
-			stm = ConnectionToDB.conn
-					.prepareStatement("SELECT COUNT(DISTINCT customerID)" + " FROM fuelpurchase " + "where saleID = ?");
+			stm = ConnectionToDB.conn.prepareStatement("SELECT COUNT(DISTINCT customerID) " + "FROM myfueldb.car as c "
+					+ "LEFT JOIN myfueldb.fuelpurchase as f " + "ON c.carNumber = f.CarNumber " + "where saleID = ?");
 			stm.setInt(1, saleid);
-			res2 = stm.executeQuery();
+			res = stm.executeQuery();
 
-			while (res2.next()) {
-				System.out.println(res2.getString(1));
-			}
+			res.next();
+			strRes1 = res.getString(1);
+//			while (res2.next()) {
+//				System.out.println(res2.getString(1));
+//			}
 
 			// for each customer total purchases
-			String query3 ="SELECT customerID,SUM(priceOfPurchase) " + 
-					"FROM myfueldb.fuelpurchase " + " WHERE saleID = ?" + 
-					" GROUP BY customerID" ;
-					stm = ConnectionToDB.conn.prepareStatement(query3);
+			String query3 = "SELECT customerID,SUM(priceOfPurchase) " + "FROM myfueldb.car as c "
+					+ "LEFT JOIN myfueldb.fuelpurchase as f " + "ON c.carNumber = f.CarNumber " + "WHERE saleID = ? "
+					+ "GROUP BY customerID";
+			stm = ConnectionToDB.conn.prepareStatement(query3);
 			stm.setInt(1, saleid);
-			res3=stm.executeQuery();
-			
-			System.out.println("for each customer total purchases");
-			while(res3.next())
-				System.out.println(res3.getString(1)+":"+res3.getString(2));
+			res = stm.executeQuery();
 
+			res.next();
+			while (res.next())
+				strBRes3.append(FileManagmentSys.responseReportFileFormate(res.getString(1), res.getString(2)));
+
+			if(strBRes3.toString().isEmpty())return null;
+			// creating the file and saving it in the server system
+			file = FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
+					FileManagmentSys.marketingManagerReports, FileManagmentSys.responseReport),
+					FileManagmentSys.responseReport, 0);
+			// fill the file with the details
+			FileManagmentSys.writeToMarkitingManagerReport(file, strBRes3.toString(), FileManagmentSys.responseReport,
+					Integer.valueOf(strRes1), Float.valueOf(strRes2), null);
+
+			// connecting to the db
+			createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return file;
 
 	}
 
-	public static Object getCompanyFuel(String companyName,String fuelType) {
+	public static boolean createGenericReport(GenericReport report) {
+		String query = "insert into genericreport (date,time,Filename,reportType) " + "values (?,?,?,?)";
+		PreparedStatement stm;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, report.getDate());
+			stm.setString(2, report.getTime());
+			stm.setString(3, report.getFileName());
+			stm.setString(4, report.getReportType());
+
+			stm.executeUpdate();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	public static Object getCompanyFuel(String companyName, String fuelType) {
 
 		PreparedStatement stm;
 		ResultSet res, res2;
-		CompanyFuel companyFuel=null;
+		CompanyFuel companyFuel = null;
 
 		try {
 
 			stm = ConnectionToDB.conn
-					.prepareStatement("select currentPrice from company where companyName = ? "+
-			"And fuelType = ? ");
+					.prepareStatement("select currentPrice from company where companyName = ? " + "And fuelType = ? ");
 			stm.setString(1, companyName);
 			stm.setString(2, fuelType);
 			res = stm.executeQuery();
 
 			res.next();
-			stm = ConnectionToDB.conn
-					.prepareStatement("select maxPrice from fuel where fuelType = ? ");
+			stm = ConnectionToDB.conn.prepareStatement("select maxPrice from fuel where fuelType = ? ");
 			stm.setString(1, fuelType);
 			res2 = stm.executeQuery();
-			
+
 			res2.next();
 			Fuel f = new Fuel(fuelType, res2.getFloat(1));
-			
-			companyFuel= new CompanyFuel(companyName, f, res.getFloat(1));
+
+			companyFuel = new CompanyFuel(companyName, f, res.getFloat(1));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -96,29 +425,27 @@ public class CompanyFuelControllerServer {
 
 		return companyFuel;
 	}
-	
+
 	public static ArrayList<String> getAllCompanyFuelTypes(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<String> str = new ArrayList<String>();
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("select fuelType from company where companyName = ? ");
+			stm = ConnectionToDB.conn.prepareStatement("select fuelType from company where companyName = ? ");
 			stm.setString(1, companyName);
 			res = stm.executeQuery();
-			
-			while(res.next()) {
+
+			while (res.next()) {
 				str.add(res.getString(1));
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		return str;
 	}
-	
+
 	public static boolean updateRateStatus(Rates rate) {
 
 		PreparedStatement stm;
@@ -130,9 +457,9 @@ public class CompanyFuelControllerServer {
 
 			try {
 				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.rates set status = ? where rateID = ?");
-				stm.setString(1,rate.getStatus().toString());
+				stm.setString(1, rate.getStatus().toString());
 				stm.setInt(2, rate.getRateId());
-				stm.executeQuery();
+				stm.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -142,23 +469,23 @@ public class CompanyFuelControllerServer {
 		// marketing emp update after confirmd
 		case active:
 			try {
-				//delete the old rate
-				stm = ConnectionToDB.conn.prepareStatement("DELETE FROM myfueldb.rates WHERE status = ? AND company = ?");
-				stm.setString(1,RatesStatus.active.toString());
-				stm.setString(2,rate.getCompanyName());
+				// delete the old rate
+				stm = ConnectionToDB.conn
+						.prepareStatement("DELETE FROM myfueldb.rates WHERE status = ? AND company = ?");
+				stm.setString(1, RatesStatus.active.toString());
+				stm.setString(2, rate.getCompanyName());
 				stm.executeUpdate();
-				
-				//update the new rate status
-				stm = ConnectionToDB.conn.prepareStatement(
-						"update myfueldb.rates set status=? where rateID = ?");
+
+				// update the new rate status
+				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.rates set status=? where rateID = ?");
 				stm.setString(1, rate.getStatus().toString());
 				stm.setInt(2, rate.getRateId());
 				stm.executeUpdate();
-				
-				//update the current price in the company
+
+				// update the current price in the company
 				stm = ConnectionToDB.conn.prepareStatement(
 						"update myfueldb.company set currentPrice=? where companyName = ? AND fuelType = ?");
-				stm.setString(1,String.valueOf(rate.getFuel().getMaxPrice()+rate.getRateValue()));
+				stm.setString(1, String.valueOf(rate.getFuel().getMaxPrice() + rate.getRateValue()));
 				stm.setString(2, rate.getCompanyName());
 				stm.setString(3, rate.getFuelType());
 				stm.executeUpdate();

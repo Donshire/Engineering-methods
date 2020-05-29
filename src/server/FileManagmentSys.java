@@ -23,7 +23,7 @@ public class FileManagmentSys {
 	public static final String purchasesReport = "purchasesReport";
 	public static final String inventoryReport = "inventoryReport";
 
-	public static final String markyingManagerReports = "markyingManagerReports";
+	public static final String marketingManagerReports = "marketingManagerReports";
 	public static final String stationManagerReports = "stationManagerReports";
 
 	public static final String analiticData = "analiticData";
@@ -36,7 +36,7 @@ public class FileManagmentSys {
 		// Create the main System directory(Folder)
 		mainFoler = createSingleFolder(curWorkingDir);
 		//
-		createCompanyFolderSystem("Paz");
+		createCompanyFolderSystem("PAZ");
 	}
 
 	public static boolean createCompanyFolderSystem(String CompanyName) {
@@ -44,7 +44,7 @@ public class FileManagmentSys {
 		String temp;
 		createSingleFolder(curr);
 		temp = curr;
-		curr += "\\" + markyingManagerReports;
+		curr += "\\" + marketingManagerReports;
 		createSingleFolder(curr);
 		createSingleFolder(curr + "\\" + responseReport);
 		createSingleFolder(curr + "\\" + periodicReport);
@@ -63,7 +63,7 @@ public class FileManagmentSys {
 		return true;
 	}
 
-	private static File createSingleFolder(String workingDir) {
+	public static File createSingleFolder(String workingDir) {
 		File file = new File(workingDir);
 		if (!Files.isDirectory(Paths.get(workingDir))) {
 			file.mkdir();
@@ -72,18 +72,17 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * There is three types of Files All of them require "fileID,fileType" : One for
+	 * There is three types of Files All of them require "fileType" : One for
 	 * Marketing manager reports witch requires (), Second for station manager
 	 * reports witch requires (stationID), Third for the analytic data witch
 	 * requires ()
 	 * 
 	 * @param loc       String the file path
 	 * @param fileType  String must be one of the class static types
-	 * @param fileID    int to connect to the db
 	 * @param stationID int
 	 * @return the created File
 	 */
-	public static File createFile(String loc, String fileType, int fileID, int stationID) {
+	public static File createFile(String loc, String fileType, int stationID) {
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -93,32 +92,30 @@ public class FileManagmentSys {
 		switch (fileType) {
 		case (responseReport):
 		case (periodicReport):
-			// ReportType-fileID-dateTime
-			fileName = String.format("%s-%d-%s", fileType, fileID, dtf.format(now));
+			// ReportType-dateTime
+			fileName = String.format("%s-%s", fileType, dtf.format(now));
 			break;
 		case (incomeReport):
 		case (purchasesReport):
 		case (inventoryReport):
-			// ReportType-stationID-fileID
-			fileName = String.format("%s-%d-%d-%s", fileType, stationID, fileID);
+			// ReportType-stationID
+			fileName = String.format("%s-%d", fileType, stationID);
 			break;
 		case (analiticData):
-			// analiticData-fileID-Date
-			fileName = String.format("%s-%d-%s", fileType, fileID, dtf.format(now));
-			System.out.println(fileName);
+			// analiticData-Date
+			fileName = String.format("%s-%s", fileType, dtf.format(now));
 			break;
 
 		}
 
 		file = new File(loc + "\\" + fileName + ".txt");
-
 		try {
 			if (!file.createNewFile()) {
 				file = null;
 				System.out.println("File already exists.");
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("System clould not create the file");
 			e.printStackTrace();
 		}
 
@@ -134,7 +131,6 @@ public class FileManagmentSys {
 	 * @param fileType    String
 	 * @param companyName String
 	 * @param stationID   int
-	 * @param fileID      int
 	 * @return File object String
 	 */
 
@@ -156,11 +152,19 @@ public class FileManagmentSys {
 	 * return the file path according to the data sent ,it doesn't end with \\
 	 * 
 	 * @param ComapnayName String
-	 * @param fileType     String
+	 * @param Owner String as markiting manager or analitic data
+	 * @param fileType String
 	 * @return file path String
 	 */
-	public static String createLocation(String ComapnayName, String fileType) {
-		return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company" + "\\" + fileType;
+	public static String createLocation(String ComapnayName,String Owner,String fileType) {
+		if(ComapnayName.isEmpty())return null;
+		if(Owner.isEmpty())
+			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company";
+		if(fileType.isEmpty())
+			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company" + "\\" + Owner;
+		else 
+			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company" + "\\" + Owner + "\\" + fileType;
+		
 	}
 
 	public static boolean writeToQuarterReport(File file, String data, String QuarterData) {
@@ -211,7 +215,8 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * 
+	 * responseReport doesn't requier companies
+	 * periodicReport doesn't requier numberOfCustomers,totalPurchases
 	 * @param file
 	 * @param data
 	 * @param reportType
@@ -222,7 +227,7 @@ public class FileManagmentSys {
 	 */
 
 	public static boolean writeToMarkitingManagerReport(File file, String data, String reportType,
-			int numberOfCustomers, float totalPurchases,String [] companies) {
+			int numberOfCustomers, float totalPurchases,ArrayList<String> companies) {
 		FileWriter myWriter;
 		// String[] lines = data.split(System.getProperty("line.separator"));
 		try {
@@ -231,13 +236,15 @@ public class FileManagmentSys {
 			if (reportType.compareTo(periodicReport) == 0) {
 				int i=0;
 				String str=String.format("%-12s ", "CutomerID");
-				while(i<companies.length) str+=String.format("%-20s ",companies[i]+" Rank");
+				for(String strfor:companies)
+					str+=String.format("%-20s",strfor+" Rank");
 		
-				myWriter.write(str+"/n");
+				myWriter.write(str+"\n");
 			} else if (reportType.compareTo(responseReport) == 0) {
 				myWriter.write(String.format("Number of cutomers in the SALE %s\n", Integer.toString(numberOfCustomers)));
 				myWriter.write(
 						String.format("Total purchases of cutomers in the SALE %s\n", Float.toString(totalPurchases)));
+				myWriter.write(String.format("\n%-12s %s\n", "CutomerID", "totalePurchases"));
 			}
 			myWriter.write(data);
 			myWriter.close();
@@ -266,16 +273,17 @@ public class FileManagmentSys {
 			// characters
 			String line1 = null, line2 = null, rest = null;
 			if ((line1 = br.readLine()) != null)
-				if ((line2 = br.readLine()) != null) {
-					br.skip(line1.length() + line2.length());
-					while ((rest = br.readLine()) != null) {
+				if ((line2 = br.readLine()) != null)
+					if((rest = br.readLine()) != null)
+					while ((rest = br.readLine()) != null)
 						strBuilder.append(rest + "\n");
-					}
-				}
+			
 			fr.close();
 			resArray.add(line1);
 			resArray.add(line2);
-			resArray.add(strBuilder.toString());
+			rest=strBuilder.toString();
+			System.out.println(rest.length());
+			resArray.add(rest.substring(29,rest.length()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} // reads the file
@@ -343,7 +351,7 @@ public class FileManagmentSys {
 		String str=String.format("%-12s ", CutomerID);
 		StringBuilder strb = new StringBuilder(str); 
 		for(int i=0;i<numOfComapnies;i++) {
-			strb.append(String.format("%-20.2f ", CustomerRank[i]));
+			strb.append(String.format("%-20.2f", CustomerRank[i]));
 		}
 		return strb.toString()+"\n";
 	}

@@ -1,5 +1,6 @@
 package boundery;
 
+import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +17,9 @@ import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
 import client.EmployeeCC;
+import client.MyFuelClient;
 import client.UserCC;
+import enums.Commands;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
@@ -47,6 +50,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import server.FileManagmentSys;
 
 public class MarketingManagerController implements Initializable {
 
@@ -70,6 +74,8 @@ public class MarketingManagerController implements Initializable {
 	private Text endTimeSaleDAta;
 	@FXML
 	private Text saleDataViewIndex;
+	@FXML
+	private Text enterSaleTxt;
 	@FXML
 	private Text startDateSaleDAta;
 	@FXML
@@ -161,7 +167,7 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private TableColumn<ResponseReportData, String> customerIDResponseReport;
 	@FXML
-	private TableColumn<ResponseReportData, Float> amountOfPurchaseresponseReport;
+	private TableColumn<ResponseReportData, String> amountOfPurchaseresponseReport;
 	@FXML
 	private Text totaleNumberOfCustomersResponseReport;
 	@FXML
@@ -171,6 +177,30 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Button nextSaleDetailsBtn;
 
+	@FXML
+	void selectReportType(ActionEvent event) {
+		if(reportKindCombo.getValue()==MarkitingManagerReport.PeriodicReport) {
+			enterSaleTxt.setVisible(false);
+			reportsaleNumber.setVisible(false);
+			
+			PeriodicReportPane.setVisible(true);
+			saleResponseReportPane.setVisible(false);
+			
+			generateReportBtn.setLayoutX(534);
+			generateReportBtn.setLayoutY(20);
+		}
+		if(reportKindCombo.getValue()==MarkitingManagerReport.saleResponseReport) {
+			enterSaleTxt.setVisible(true);
+			reportsaleNumber.setVisible(true);
+			
+			PeriodicReportPane.setVisible(false);
+			saleResponseReportPane.setVisible(true);
+			
+			generateReportBtn.setLayoutX(405);
+			generateReportBtn.setLayoutY(73);
+		}
+	}
+	
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
 		// logics
@@ -360,24 +390,36 @@ public class MarketingManagerController implements Initializable {
 			// call the server and get the data
 
 			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
-				PeriodicReportPane.setVisible(true);
-
 				// use this to fill
-
+				EmployeeCC.createPeriodicResport(markitingManager.getCompanyName());
+				
 			} else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
-				saleResponseReportPane.setVisible(true);
 				
-				EmployeeCC.createSaleResponseResport(Integer.valueOf(saleNumber));
-				
+				Object obj=EmployeeCC.createSaleResponseResport(saleNumber,markitingManager.getCompanyName());
+				if(obj instanceof Commands) {
+					JOptionPane.showMessageDialog(null, "there is no such sale with this ID");
+					return;
+				}
+				File file = (File)obj;
 				// build the table
 				customerIDResponseReport
 						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
 				amountOfPurchaseresponseReport
-						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
+						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("amountOfPurchase"));
 				// fill the data
+				
+				ArrayList<String> resArray=FileManagmentSys.readMarkitingManagerReport(file);
+				//sprerate to lines
+				String[] lines = resArray.get(2).split("\\n");
+				//fill the data object
+				for(int lineIndex=0;lineIndex<lines.length;lineIndex++) {
+					data.add(new ResponseReportData(lines[lineIndex].substring(0, 12).replaceAll("\\s+", ""),
+							lines[lineIndex].substring(12,lines[lineIndex].length()).replaceAll("\\s+", "")));
+				}
+				
 				saleResponseReportTable.getItems().setAll(data);
-				totaleNumberOfCustomersResponseReport.setText("0");
-				totalePurchasesResponseReport.setText("0");
+				totaleNumberOfCustomersResponseReport.setText(resArray.get(0).substring(31, resArray.get(0).length()));
+				totalePurchasesResponseReport.setText(resArray.get(1).substring(40, resArray.get(1).length()));
 				//
 			}
 		}
@@ -506,13 +548,13 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<CompanyFuel> companyFuel = new ArrayList<CompanyFuel>();
 	
 	//this class is just to show the table of the report
-	private class ResponseReportData {
+	protected class ResponseReportData {
 		String customerID;
-		float amountOfPurchase;
+		String priceOfPurchase;
 
-		public ResponseReportData(String customerID, float amountOfPurchase) {
+		public ResponseReportData(String customerID, String priceOfPurchase) {
 			this.customerID = customerID;
-			this.amountOfPurchase = amountOfPurchase;
+			this.priceOfPurchase = priceOfPurchase;
 		}
 
 		public String getCustomerID() {
@@ -523,12 +565,12 @@ public class MarketingManagerController implements Initializable {
 			this.customerID = customerID;
 		}
 
-		public float getAmountOfPurchase() {
-			return amountOfPurchase;
+		public String getAmountOfPurchase() {
+			return priceOfPurchase;
 		}
 
-		public void setAmountOfPurchase(float amountOfPurchase) {
-			this.amountOfPurchase = amountOfPurchase;
+		public void setAmountOfPurchase(String amountOfPurchase) {
+			this.priceOfPurchase = amountOfPurchase;
 		}
 
 	}

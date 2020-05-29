@@ -5,6 +5,7 @@
 package client;
 
 import ocsf.client.*;
+import server.FileManagmentSys;
 import common.MyFuelIF;
 import enums.Commands;
 
@@ -32,23 +33,22 @@ public class MyFuelClient extends AbstractClient {
 		System.out.println("recive---");
 		if (msg != null) {
 			Message message = (Message) msg;
-			//there is a serios bug here 
-			System.out.println(message.getCmd());
-			
+
 			switch (message.getCmd()) {
 			case defaultRes:// receive from server ArrayList<employee>
 				ServerRetObj = message.getObj();
-				
-//			case reciveFile:
-//				System.out.println("MyFuelClient");
-//				MyFile myFile=(MyFile) msg;
-//				saveFile(myFile);
-//				ServerRetObj=myFile.getFileName();
-//				break;
+				break;
+			case reciveFile:
+				MyFile myFile = (MyFile) message.getObj();
+				ServerRetObj = saveFile(myFile);
+				break;
+			case ThereIsNoSale:
+				ServerRetObj = Commands.ThereIsNoSale;
+				break;
 			}
 
 		}
-		
+
 		awaitResponse = false;
 	}
 
@@ -82,20 +82,23 @@ public class MyFuelClient extends AbstractClient {
 		}
 		System.exit(0);
 	}
-	
-	private static void saveFile(MyFile file) {
+
+	private static File saveFile(MyFile file) {
 		try {
 			int fileSize = file.getSize();
 			System.out.println("Message received: " + file.getFileName() + "length " + fileSize);
-			FileOutputStream fos = new FileOutputStream("C:\\Users\\iamme\\Desktop\\server\\" + file.getFileName());
+			FileManagmentSys.createSingleFolder("C:\\MyFuel_Client");
+			FileOutputStream fos = new FileOutputStream("C:\\MyFuel_Client\\temp.txt");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			bos.write(file.mybytearray, 0, fileSize);
 			bos.flush();
 			fos.flush();
+			return new File("C:\\MyFuel_Client\\temp.txt");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 }
 //End of ChatClient class

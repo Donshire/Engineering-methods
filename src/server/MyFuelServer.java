@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Entity.Customer;
 import Entity.Employee;
@@ -22,8 +25,8 @@ import ocsf.server.*;
 public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
-	public static String schemaName,dbPassword;
-	
+	public static String schemaName, dbPassword;
+
 	public MyFuelServer(int port) {
 		super(port);
 	}
@@ -40,27 +43,27 @@ public class MyFuelServer extends AbstractServer {
 		case Login:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				Object resltObject=LogINController.LogIn(arr.get(0), arr.get(1));
-				//founded a user
-				if(resltObject!=null) {
-					if(resltObject instanceof Supplier) {
-						Supplier supplier= (Supplier)resltObject;
-						ServerController.onlineUserTableCont(supplier.getId(),"supplier");
+				Object resltObject = LogINController.LogIn(arr.get(0), arr.get(1));
+				// founded a user
+				if (resltObject != null) {
+					if (resltObject instanceof Supplier) {
+						Supplier supplier = (Supplier) resltObject;
+						ServerController.onlineUserTableCont(supplier.getId(), "supplier");
 						client.sendToClient(new Message(supplier, Commands.defaultRes));
 					}
-					if(resltObject instanceof Customer) {
-						Customer customer= (Customer)resltObject;
-						ServerController.onlineUserTableCont(customer.getId(),"customer");
+					if (resltObject instanceof Customer) {
+						Customer customer = (Customer) resltObject;
+						ServerController.onlineUserTableCont(customer.getId(), "customer");
 						client.sendToClient(new Message(customer, Commands.defaultRes));
 					}
-					if(resltObject instanceof Employee) {
-						Employee employee= (Employee)resltObject;
-						ServerController.onlineUserTableCont(employee.getId(),employee.getRole());
+					if (resltObject instanceof Employee) {
+						Employee employee = (Employee) resltObject;
+						ServerController.onlineUserTableCont(employee.getId(), employee.getRole());
 						client.sendToClient(new Message(employee, Commands.defaultRes));
 					}
 				}
 				client.sendToClient(new Message(resltObject, Commands.defaultRes));
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -69,9 +72,9 @@ public class MyFuelServer extends AbstractServer {
 		case logOut:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				String tableName=arr.get(1).toLowerCase().substring(13, arr.get(1).length());
-				LogINController.updateUserOnlineStatus(tableName,arr.get(0), 0);
-				ServerController.onlineUserTableCont(arr.get(0),"");
+				String tableName = arr.get(1).toLowerCase().substring(13, arr.get(1).length());
+				LogINController.updateUserOnlineStatus(tableName, arr.get(0), 0);
+				ServerController.onlineUserTableCont(arr.get(0), "");
 				try {
 					client.sendToClient(new Message(null, Commands.defaultRes));
 				} catch (IOException e) {
@@ -149,18 +152,41 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getSaleResponseReport:
-			int salID = (int) message.getObj();
+			ArrayList<String> array = (ArrayList<String>) message.getObj();
+			//salID,CompanyName 
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.doh(salID), Commands.defaultRes));
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+				Date date = new Date();
+
+				File file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFormat.format(date));
+				if(file!=null)
+				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+				else client.sendToClient(new Message("", Commands.ThereIsNoSale));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
-			
+		case getPeriodicReport:
+			String companyName_getPeriodicReport = (String) message.getObj();
+			try {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+				Date date = new Date();
+
+				File file=CompanyFuelControllerServer.periodicReport(companyName_getPeriodicReport,dateFormat.format(date), timeFormat.format(date));
+				System.out.println("created the file");
+				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+
 		case getAllCompanyFuel:
 			String companyName = (String) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),Commands.defaultRes));
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),
+						Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -169,13 +195,15 @@ public class MyFuelServer extends AbstractServer {
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),Commands.defaultRes));
+				client.sendToClient(
+						new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),
+								Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
-			
+
 		default:
 			System.out.println("default");
 		}
@@ -184,19 +212,17 @@ public class MyFuelServer extends AbstractServer {
 
 	/**
 	 * convert File To Seializable
+	 * 
 	 * @param fileName
 	 * @param filePath
 	 * @return
 	 */
-	
-	private MyFile convertFileToSeializable(String fileName,String filePath) {
-		MyFile msg = new MyFile(fileName);
-		String LocalfilePath = filePath+"\\"+fileName;
-		try {
-			File newFile = new File(LocalfilePath);
 
-			byte[] mybytearray = new byte[(int) newFile.length()];
-			FileInputStream fis = new FileInputStream(newFile);
+	private MyFile convertFileToSeializable(File file) {
+		MyFile msg = new MyFile(file.getName());
+		try {
+			byte[] mybytearray = new byte[(int) file.length()];
+			FileInputStream fis = new FileInputStream(file);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 
 			msg.initArray(mybytearray.length);
@@ -204,17 +230,18 @@ public class MyFuelServer extends AbstractServer {
 
 			bis.read(msg.getMybytearray(), 0, mybytearray.length);
 		} catch (Exception e) {
-			System.out.println("Error send (Files)msg) to Server");
+			System.out.println("Error send ((Files)msg) to Server");
 		}
+		System.out.println("file had been converted");
 		return msg;
 	}
-	
+
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
 		FileManagmentSys.createSystemWorkSpace();
-		
+
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 
@@ -222,78 +249,80 @@ public class MyFuelServer extends AbstractServer {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
-		//log out all the users
+		// log out all the users
 		/*
-		for(UserOnline user : usersOnline) {
-				try {
-					if(user.userType.compareTo("customer")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					if(user.userType.compareTo("supplier")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					else 
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			ServerController.onlineUserTableCont(user.getUserID(),"");
-		}
-		*/
+		 * for(UserOnline user : usersOnline) { try {
+		 * if(user.userType.compareTo("customer")==0)
+		 * LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * 
+		 * if(user.userType.compareTo("supplier")==0)
+		 * LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * 
+		 * else LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * } catch (SQLException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * ServerController.onlineUserTableCont(user.getUserID(),""); }
+		 */
 	}
-	
-	//just to show in the GUI
+
+	// just to show in the GUI
 	/**
 	 * String UserID ,String userType
+	 * 
 	 * @author iamme
 	 *
 	 */
-		public static class UserOnline{
-			String UserID;
-			String userType;
-			/**
-			 * 
-			 * @param userID
-			 * @param userType
-			 */
-			public UserOnline(String userID, String userType) {
-				UserID = userID;
-				this.userType = userType;
-			}
-			public String getUserID() {
-				return UserID;
-			}
-			public void setUserID(String userID) {
-				UserID = userID;
-			}
-			public String getUserType() {
-				return userType;
-			}
-			public void setUserType(String userType) {
-				this.userType = userType;
-			}
-			
-			@Override
-			public boolean equals(Object obj) {
-				if (this == obj)
-					return true;
-				if (obj == null)
-					return false;
-				if (getClass() != obj.getClass())
-					return false;
-				UserOnline other = (UserOnline) obj;
-				if (UserID == null) {
-					if (other.UserID != null)
-						return false;
-				} else if (!UserID.equals(other.UserID))
-					return false;
-				return true;
-			}
-			@Override
-			public String toString() {
-				return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
-			}
-			
+	public static class UserOnline {
+		String UserID;
+		String userType;
+
+		/**
+		 * 
+		 * @param userID
+		 * @param userType
+		 */
+		public UserOnline(String userID, String userType) {
+			UserID = userID;
+			this.userType = userType;
 		}
+
+		public String getUserID() {
+			return UserID;
+		}
+
+		public void setUserID(String userID) {
+			UserID = userID;
+		}
+
+		public String getUserType() {
+			return userType;
+		}
+
+		public void setUserType(String userType) {
+			this.userType = userType;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			UserOnline other = (UserOnline) obj;
+			if (UserID == null) {
+				if (other.UserID != null)
+					return false;
+			} else if (!UserID.equals(other.UserID))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
+		}
+
+	}
 }
