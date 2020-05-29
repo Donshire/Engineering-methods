@@ -27,10 +27,32 @@ public class LogInController {
 
 	@FXML
 	private TextField usernametxt;
+	
+	@FXML
+	private TextField carNumberInput;
+	
+	@FXML
+	private Button fastFuelBtn;
 
 	@FXML
 	private Button loginbtb;
 
+	@FXML
+	void fastFuel(ActionEvent event) {
+		String value = carNumberInput.getText();
+		if(value.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
+		else {
+			//call the server and get the car details
+			
+			FastFuelingController customerCar = new FastFuelingController();
+			try {
+				customerCar.start(ClientUI.mainStage);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	@FXML
 	void login(ActionEvent event) {
 

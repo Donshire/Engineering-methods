@@ -35,6 +35,9 @@ public class CompanyFuelControllerServer {
 		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
 		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
 		
+		for(customerCompaniesDiversion cus:customerCompaniesDiversionArray)
+			System.out.println(cus.numOfPurchaeseByCompanies+","+customerCompaniesDiversion.calculateRank(cus));
+		
 		//sort
 		Collections.sort(customerTotalPurchaseArray);
 		Collections.sort(customerCompaniesDiversionArray);
@@ -81,7 +84,8 @@ public class CompanyFuelControllerServer {
 			data.append(FileManagmentSys.periodicReportFileFormate(rankedcustomerarray[i].companies.customerId,
 					customerCompaniesDiversion.getPurchasePercent(rankedcustomerarray[i].companies.numOfPurchaeseByCompanies,
 							rankedcustomerarray[i].companies.totalNumOfPurchaese),
-					rankedcustomerarray[i].companies.numOfPurchaeseByCompanies.length));
+					rankedcustomerarray[i].companies.numOfPurchaeseByCompanies.length,
+					rankedcustomerarray[i].purchas.totalPurchase));
 		}
 		
 		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
@@ -241,9 +245,9 @@ public class CompanyFuelControllerServer {
 		@Override
 		public int compareTo(customerTotalPurchase o) {
 			if (this.totalPurchase > o.totalPurchase)
-				return 1;
-			if (this.totalPurchase < o.totalPurchase)
 				return -1;
+			if (this.totalPurchase < o.totalPurchase)
+				return 1;
 			return 0;
 		}
 
@@ -282,12 +286,11 @@ public class CompanyFuelControllerServer {
 			return rank;
 		}
 
-		// is inverted beacuse the lower is better
 		@Override
 		public int compareTo(customerCompaniesDiversion o) {
-			if (calculateRank(this) < o.calculateRank(o))
+			if (calculateRank(this) > calculateRank(o))
 				return 1;
-			if (calculateRank(this) > o.calculateRank(o))
+			if (calculateRank(this) < calculateRank(o))
 				return -1;
 			return 0;
 		}

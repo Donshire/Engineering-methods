@@ -5,7 +5,9 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent.EventType;
@@ -179,28 +181,28 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	void selectReportType(ActionEvent event) {
-		if(reportKindCombo.getValue()==MarkitingManagerReport.PeriodicReport) {
+		if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
 			enterSaleTxt.setVisible(false);
 			reportsaleNumber.setVisible(false);
-			
+
 			PeriodicReportPane.setVisible(true);
 			saleResponseReportPane.setVisible(false);
-			
+
 			generateReportBtn.setLayoutX(534);
 			generateReportBtn.setLayoutY(20);
 		}
-		if(reportKindCombo.getValue()==MarkitingManagerReport.saleResponseReport) {
+		if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
 			enterSaleTxt.setVisible(true);
 			reportsaleNumber.setVisible(true);
-			
+
 			PeriodicReportPane.setVisible(false);
 			saleResponseReportPane.setVisible(true);
-			
+
 			generateReportBtn.setLayoutX(405);
 			generateReportBtn.setLayoutY(73);
 		}
 	}
-	
+
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
 		// logics
@@ -232,7 +234,7 @@ public class MarketingManagerController implements Initializable {
 	void openMainPane(ActionEvent event) {
 		switchPanes(markitingManagerNofPane);
 	}
-	
+
 	@FXML
 	void OpenSalePane(ActionEvent event) {
 		switchPanes(salePane);
@@ -244,8 +246,22 @@ public class MarketingManagerController implements Initializable {
 	void UpdateSelectedRates(ActionEvent event) {
 		// update all the selected rates
 		// send to server selectedRates
+		boolean flag=false;
+		Set<String> sets = new HashSet<String>();
 		for (Rates rate : selectedRates) {
 			rate.setStatus(RatesStatus.active);
+			if(sets.contains(rate.getFuelType())) {
+				flag=true;
+				break;
+			}
+			sets.add(rate.getFuelType());
+		}
+		if(flag) {
+			for (Rates rate : selectedRates) {
+				rate.setStatus(RatesStatus.confirmed);
+			}
+			JOptionPane.showMessageDialog(null, "can't choose the same fuel type twice");
+			return;
 		}
 		if (EmployeeCC.updateFuelRate(selectedRates))
 			JOptionPane.showMessageDialog(null, "upate succeded");
@@ -253,48 +269,44 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "update un-succeded one or more of the data didn't update");
 
 	}
-	
+
 	@FXML
 	void activateSale(ActionEvent event) {
 		if (selectedSales.size() <= 0)
 			JOptionPane.showMessageDialog(null, "please select at least one sale");
 		else {
-			if(event.getSource().equals(activateSaleBtn)) {
-				//System.out.println("activateSaleBtn");
-				for (Sale sale : selectedSales) 
+			if (event.getSource().equals(activateSaleBtn)) {
+				// System.out.println("activateSaleBtn");
+				for (Sale sale : selectedSales)
 					sale.setStatus(SaleStatus.activated);
-			}
-			else if(event.getSource().equals(deActivateSaleBtn)) {
-				//System.out.println("deActivateSaleBtn");
+			} else if (event.getSource().equals(deActivateSaleBtn)) {
+				// System.out.println("deActivateSaleBtn");
 				for (Sale sale : selectedSales)
 					sale.setStatus(SaleStatus.not_Activated);
 			}
-				
 
 			if (EmployeeCC.updateSale(selectedSales))
 				JOptionPane.showMessageDialog(null, "upadting succeded");
 			else
-				JOptionPane.showMessageDialog(null,
-						"upadting un-succeded one or more of the data didn't upadte");
+				JOptionPane.showMessageDialog(null, "upadting un-succeded one or more of the data didn't upadte");
 
 		}
 	}
 
 	@FXML
 	void chooseSaleType(ActionEvent event) {
-		//GUI-structure
-		if(salesTypeCombo.getValue()==SaleStatus.activated) {
+		// GUI-structure
+		if (salesTypeCombo.getValue() == SaleStatus.activated) {
 			deActivateSaleBtn.setVisible(true);
 			deActivateSaleBtn.setLayoutX(43);
 			activateSaleBtn.setVisible(false);
 			salesHeader.setText("Available Activated Sales:");
-		}
-		else {
+		} else {
 			deActivateSaleBtn.setVisible(false);
 			activateSaleBtn.setVisible(true);
 			salesHeader.setText("Available Non-Activated Sales:");
 		}
-		
+
 		// get the data from gui
 		String saleType = salesTypeCombo.getValue().toString();
 		// call the server to get the sales data
@@ -345,8 +357,8 @@ public class MarketingManagerController implements Initializable {
 
 		// Fill the table
 		salesDetailsTable.getItems().setAll(data);
-		
-		//empety the selected row 
+
+		// empety the selected row
 		selectedSales.clear();
 	}
 
@@ -366,24 +378,23 @@ public class MarketingManagerController implements Initializable {
 			if (fFuelNewRate <= 0)
 				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
 			else {
-				if(EmployeeCC.craeteNewRate(new Rates(null, Float.valueOf(sFuelNewRate), fuelTypeName, RatesStatus.created,
-						LocalDate.now().toString(), markitingManager.getCompanyName())))
-				JOptionPane.showMessageDialog(null, "Creating New Rate done succesfully");
-				else JOptionPane.showMessageDialog(null, "Creating New Rate un-succesfull");
+				if (EmployeeCC.craeteNewRate(new Rates(null, Float.valueOf(sFuelNewRate), fuelTypeName,
+						RatesStatus.created, LocalDate.now().toString(), markitingManager.getCompanyName())))
+					JOptionPane.showMessageDialog(null, "Creating New Rate done succesfully");
+				else
+					JOptionPane.showMessageDialog(null, "Creating New Rate un-succesfull");
 			}
 		}
 	}
 
-	//not done
+	// not done
 	@FXML
 	void generateReport(ActionEvent event) {
 		// get data from gui
 		String reportKind = reportKindCombo.getValue().toString();
 		String saleNumber = reportsaleNumber.getText();
 
-		if (saleNumber.isEmpty() == true)
-			JOptionPane.showMessageDialog(null, "please enter sale number");
-		else if (reportKind.isEmpty() == true)
+		if (reportKind.isEmpty() == true)
 			JOptionPane.showMessageDialog(null, "please Select report kind");
 		else {
 			ObservableList<ResponseReportData> data = FXCollections.observableArrayList();
@@ -392,31 +403,33 @@ public class MarketingManagerController implements Initializable {
 			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
 				// use this to fill
 				EmployeeCC.createPeriodicResport(markitingManager.getCompanyName());
-				
-			} else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
-				
-				Object obj=EmployeeCC.createSaleResponseResport(saleNumber,markitingManager.getCompanyName());
-				if(obj instanceof Commands) {
+
+			} else if (saleNumber.isEmpty() == true)
+				JOptionPane.showMessageDialog(null, "please enter sale number");
+			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
+
+				Object obj = EmployeeCC.createSaleResponseResport(saleNumber, markitingManager.getCompanyName());
+				if (obj instanceof Commands) {
 					JOptionPane.showMessageDialog(null, "there is no such sale with this ID");
 					return;
 				}
-				File file = (File)obj;
+				File file = (File) obj;
 				// build the table
 				customerIDResponseReport
 						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
 				amountOfPurchaseresponseReport
 						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("amountOfPurchase"));
 				// fill the data
-				
-				ArrayList<String> resArray=FileManagmentSys.readMarkitingManagerReport(file);
-				//sprerate to lines
+
+				ArrayList<String> resArray = FileManagmentSys.readMarkitingManagerReport(file);
+				// sprerate to lines
 				String[] lines = resArray.get(2).split("\\n");
-				//fill the data object
-				for(int lineIndex=0;lineIndex<lines.length;lineIndex++) {
+				// fill the data object
+				for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
 					data.add(new ResponseReportData(lines[lineIndex].substring(0, 12).replaceAll("\\s+", ""),
-							lines[lineIndex].substring(12,lines[lineIndex].length()).replaceAll("\\s+", "")));
+							lines[lineIndex].substring(12, lines[lineIndex].length()).replaceAll("\\s+", "")));
 				}
-				
+
 				saleResponseReportTable.getItems().setAll(data);
 				totaleNumberOfCustomersResponseReport.setText(resArray.get(0).substring(31, resArray.get(0).length()));
 				totalePurchasesResponseReport.setText(resArray.get(1).substring(40, resArray.get(1).length()));
@@ -455,18 +468,19 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	void logOut(ActionEvent event) {
-		UserCC.logOut(markitingManager.getId(),markitingManager.getClass().toString());
-		
+		UserCC.logOut(markitingManager.getId(), markitingManager.getClass().toString());
+
 	}
+
 //not done
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
 		String fuelType = fuelTypesRateCombo.getValue();
 
-		CompanyFuel fuel = EmployeeCC.getCompanyFuel(markitingManager.getCompanyName(), fuelType);		
+		CompanyFuel fuel = EmployeeCC.getCompanyFuel(markitingManager.getCompanyName(), fuelType);
 		System.out.println(fuel);
-		maxFuelPricetxt.setText(
-				String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",fuelType, fuel.getFuel().getMaxPrice(),fuel.getFuel().getMaxPrice() - fuel.getCompanyPrice()));
+		maxFuelPricetxt.setText(String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",
+				fuelType, fuel.getFuel().getMaxPrice(), fuel.getFuel().getMaxPrice() - fuel.getCompanyPrice()));
 	}
 
 	@FXML
@@ -476,12 +490,11 @@ public class MarketingManagerController implements Initializable {
 			updateRates.setVisible(true);
 		else
 			updateRates.setVisible(false);
-		
-		//sending partial rate
-		
-		ObservableList<Rates> data = FXCollections
-				.observableArrayList(EmployeeCC.getAllCompanyRatesByStatus(new Rates(null,0, "", selected,
-				"", markitingManager.getCompanyName())));
+
+		// sending partial rate
+
+		ObservableList<Rates> data = FXCollections.observableArrayList(EmployeeCC
+				.getAllCompanyRatesByStatus(new Rates(null, 0, "", selected, "", markitingManager.getCompanyName())));
 
 		// perpare the table
 		/*
@@ -534,8 +547,8 @@ public class MarketingManagerController implements Initializable {
 		rateStatus.setCellValueFactory(new PropertyValueFactory<Rates, RatesStatus>("status"));
 		// fill the table
 		fuelRatesTable.getItems().setAll(data);
-		
-		//empety the selected row 
+
+		// empety the selected row
 		selectedRates.clear();
 
 	}
@@ -546,8 +559,8 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 	private ArrayList<CompanyFuel> companyFuel = new ArrayList<CompanyFuel>();
-	
-	//this class is just to show the table of the report
+
+	// this class is just to show the table of the report
 	protected class ResponseReportData {
 		String customerID;
 		String priceOfPurchase;
@@ -630,7 +643,7 @@ public class MarketingManagerController implements Initializable {
 		// loading the main window data
 		System.out.println("hello");
 		markitingManager = (Employee) ClientUI.user;
-		//if agreed we can use a file to load and save the nofitications
+		// if agreed we can use a file to load and save the nofitications
 
 		helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " + markitingManager.getLastName());
 
@@ -655,13 +668,14 @@ public class MarketingManagerController implements Initializable {
 
 		// loading RatesPane data
 		// call server and get fuel types from company
-		ObservableList<String> fuelTypes = FXCollections.observableArrayList(EmployeeCC.getAllCompanyFuelTypes(markitingManager.getCompanyName()));
+		ObservableList<String> fuelTypes = FXCollections
+				.observableArrayList(EmployeeCC.getAllCompanyFuelTypes(markitingManager.getCompanyName()));
 		fuelTypesRateCombo.setItems(fuelTypes);
 
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
 		rateTypeCombo.setItems(rateType);
-		
+
 		// initialize reportKindCombo comboBox
 		ObservableList<MarkitingManagerReport> MarkitingReportType = FXCollections
 				.observableArrayList(MarkitingManagerReport.values());

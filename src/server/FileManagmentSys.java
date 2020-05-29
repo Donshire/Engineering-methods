@@ -239,7 +239,7 @@ public class FileManagmentSys {
 				for(String strfor:companies)
 					str+=String.format("%-20s",strfor+" Rank");
 		
-				myWriter.write(str+"\n");
+				myWriter.write(str+String.format("%-12s \n", "total_Purchases"));
 			} else if (reportType.compareTo(responseReport) == 0) {
 				myWriter.write(String.format("Number of cutomers in the SALE %s\n", Integer.toString(numberOfCustomers)));
 				myWriter.write(
@@ -268,9 +268,9 @@ public class FileManagmentSys {
 		StringBuilder strBuilder = new StringBuilder();
 		try {
 			fr = new FileReader(file);
-			BufferedReader br = new BufferedReader(fr); // creates a buffering character input stream
-			// StringBuffer sb=new StringBuffer(); //constructs a string buffer with no
-			// characters
+			// creates a buffering character input stream
+			BufferedReader br = new BufferedReader(fr); 
+			//response Report
 			String line1 = null, line2 = null, rest = null;
 			if ((line1 = br.readLine()) != null)
 				if ((line2 = br.readLine()) != null)
@@ -347,13 +347,13 @@ public class FileManagmentSys {
 	 * @param numOfComapnies
 	 * @return the string containing /n
 	 */
-	public static String periodicReportFileFormate(String CutomerID,float[] CustomerRank,int numOfComapnies) {
+	public static String periodicReportFileFormate(String CutomerID,float[] CustomerRank,int numOfComapnies,float totalPurchases) {
 		String str=String.format("%-12s ", CutomerID);
 		StringBuilder strb = new StringBuilder(str); 
 		for(int i=0;i<numOfComapnies;i++) {
 			strb.append(String.format("%-20.2f", CustomerRank[i]));
 		}
-		return strb.toString()+"\n";
+		return strb.toString()+String.format("%-20.2f\n", totalPurchases);
 	}
 	
 	/**
