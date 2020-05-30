@@ -1,10 +1,13 @@
 package boundery;
 
 
+import java.util.ArrayList;
+
 import javax.swing.JOptionPane;
 
-
+import Entity.Car;
 import Entity.Customer;
+import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.Supplier;
 import client.ClientUI;
@@ -39,14 +42,23 @@ public class LogInController {
 
 	@FXML
 	void fastFuel(ActionEvent event) {
-		String value = carNumberInput.getText();
-		if(value.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
+		String carNumber = carNumberInput.getText();
+		if(carNumber.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
 			//call the server and get the car details
+			ArrayList<Object> result=(ArrayList<Object>) UserCC.fastFuelingLogIn(carNumber);
+			if(result==null) {
+				JOptionPane.showMessageDialog(null, "Car wasn't found");
+				return;
+			}
+			FastFuelingController fastFueling = new FastFuelingController();
 			
-			FastFuelingController customerCar = new FastFuelingController();
+			fastFueling.car=(Car)result.get(0);
+			fastFueling.customer=(Customer)result.get(1);
+			fastFueling.customerModule=(CustomerModule)result.get(2);
+			
 			try {
-				customerCar.start(ClientUI.mainStage);
+				fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -3,7 +3,9 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.Supplier;
@@ -12,7 +14,7 @@ import enums.Commands;
 public class LogINController {
 
 	private static PreparedStatement stm;
-
+	
 	public static Object LogIn(String userName, String password) {
 		ResultSet res;
 

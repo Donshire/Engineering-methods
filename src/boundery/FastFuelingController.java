@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import Entity.Car;
 import Entity.Customer;
+import Entity.CustomerModule;
 import client.ClientUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,8 +24,9 @@ import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable{
 
-	private Car car;
-	private Customer customer;
+	public Car car;
+	public Customer customer;
+	public CustomerModule customerModule;
 	
 	@FXML
 	private Pane dataPane;
@@ -55,7 +57,7 @@ public class FastFuelingController implements Initializable{
     private Text customerPriceTxt;
 
     @FXML
-    private Text purchaseModelTxt;
+    private Text pricingModelTxt;
 
     @FXML
     private Text salePercentTxt;
@@ -142,7 +144,7 @@ public class FastFuelingController implements Initializable{
 		//set the data for the customer
 		carNumberTxt.setText(car.getCarNumber());
 		fuelTypeTxt.setText(car.getFuelType());
-		purchaseModelTxt.setText(Integer.toString(customer.getPricingModel()));
+		pricingModelTxt.setText(Integer.toString(customer.getPricingModel()));
 		
 		//fill the combo with companies Names
 		//call server

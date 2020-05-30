@@ -22,4 +22,8 @@ public class UserCC {
 		ClientUI.client.accept(new Message(array, Commands.logOut));
 	}
 
+	public static Object fastFuelingLogIn(String catNumber) {
+		ClientUI.client.accept(new Message(catNumber, Commands.fastFuelingLogIn));
+		return MyFuelClient.ServerRetObj;
+	}
 }

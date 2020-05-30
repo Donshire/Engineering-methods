@@ -9,14 +9,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
    <children>
-      <Pane prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="205.0" layoutX="22.0" layoutY="167.0" stroke="#dddddd" strokeType="INSIDE" width="557.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#969696" height="120.0" layoutX="77.0" layoutY="21.0" stroke="#969696" strokeType="INSIDE" width="411.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" height="120.0" layoutY="72.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" height="131.0" layoutY="72.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
             <Text layoutX="94.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel - Fast Fueling System">
                <font>
                   <Font name="System Bold" size="27.0" />
@@ -27,24 +26,24 @@
             <Text fill="WHITE" layoutX="20.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Type" />
             <Text fx:id="fuelTypeTxt" fill="WHITE" layoutX="189.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Text fill="WHITE" layoutX="21.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Price per leter" />
-            <Text layoutX="50.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select station id" />
+            <Text layoutX="53.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select station id" />
             <Text fx:id="fuelPricePL" fill="WHITE" layoutX="189.0" layoutY="168.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-            <Text layoutX="49.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Fuel amount" />
-            <TextField fx:id="fuelAmount" layoutX="189.0" layoutY="312.0" promptText="000" />
-            <Button fx:id="nextToPaymentBtn" layoutX="438.0" layoutY="312.0" mnemonicParsing="false" onAction="#nextToPayment" text="Next" />
-            <ComboBox fx:id="companiesCombo" layoutX="189.0" layoutY="224.0" onAction="#selectCompany" prefWidth="150.0" promptText="Company" style="-fx-background-color: white;" />
-            <ComboBox fx:id="StationsIDCombo" layoutX="189.0" layoutY="271.0" onAction="#selectStationId" prefWidth="150.0" promptText="StationID" style="-fx-background-color: white;" />
-            <Text layoutX="49.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Company" />
+            <Text layoutX="52.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Fuel amount" />
+            <TextField fx:id="fuelAmount" layoutX="192.0" layoutY="323.0" promptText="000" />
+            <Button fx:id="nextToPaymentBtn" layoutX="441.0" layoutY="323.0" mnemonicParsing="false" onAction="#nextToPayment" text="Next" />
+            <ComboBox fx:id="companiesCombo" layoutX="192.0" layoutY="235.0" onAction="#selectCompany" prefWidth="150.0" promptText="Company" style="-fx-background-color: white;" />
+            <ComboBox fx:id="stationsIDCombo" layoutX="192.0" layoutY="282.0" onAction="#selectStationId" prefWidth="150.0" promptText="StationID" style="-fx-background-color: white;" />
+            <Text layoutX="52.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Company" />
             <Text fill="WHITE" layoutX="305.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Percent" />
-            <Text fill="WHITE" layoutX="305.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="purchase model" />
+            <Text fill="WHITE" layoutX="305.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel" />
             <Text fill="WHITE" layoutX="300.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you'r Price per leter" />
             <Text fx:id="customerPriceTxt" fill="WHITE" layoutX="464.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-            <Text fx:id="purchaseModelTxt" fill="WHITE" layoutX="464.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text fx:id="pricingModelTxt" fill="WHITE" layoutX="464.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Text fx:id="salePercentTxt" fill="WHITE" layoutX="464.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" onAction="#backToLogInPage" text="Back" />
          </children>
       </Pane>
-      <Pane prefHeight="400.0" prefWidth="600.0">
+      <Pane fx:id="paymentPane" prefHeight="400.0" prefWidth="600.0" visible="false">
          <children>
             <Text layoutX="74.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total price" />
             <Text layoutX="76.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose payment method" />

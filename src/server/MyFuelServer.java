@@ -84,7 +84,15 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-
+		case fastFuelingLogIn:
+			String carNumber=(String)message.getObj();
+			try {
+				
+				client.sendToClient(new Message(flag, Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
 		case updateFuelRate:
 			ArrayList<Rates> rates = (ArrayList<Rates>) message.getObj();
 			try {
