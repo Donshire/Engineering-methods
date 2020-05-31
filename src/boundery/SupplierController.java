@@ -4,8 +4,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import Entity.GasStationOrder;
-import Entity.Sale;
 import Entity.Supplier;
 import client.ClientUI;
 import client.SupplierCC;
@@ -23,7 +24,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -33,7 +33,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -129,62 +128,65 @@ public class SupplierController implements Initializable {
 	}
 
 	@FXML
-    void chooseOrderType(ActionEvent event) {
-    	
-    	if(OrderTypeCombox.getValue()==SupplierOrderStatus.supplied) {
-	   		OrderHeader.setText("All Supplied Orders: ");
-	   		UpdateBtn.setVisible(false);
-	   	}
-	   	else {
-	   		OrderHeader.setText("All un-Supplied Orders: ");
-	   		UpdateBtn.setVisible(true);
-	   	}
-    	
-	   	String orderType = OrderTypeCombox.getValue().toString();
-	   	//bring all the data of this supplier with this orderType
+	void chooseOrderType(ActionEvent event) {
+		//show the suitable data according to the selected status
+		if (OrderTypeCombox.getValue() == SupplierOrderStatus.supplied) {
+			OrderHeader.setText("All Supplied Orders: ");
+			UpdateBtn.setVisible(false);
+		} else {
+			OrderHeader.setText("All un-Supplied Orders: ");
+			UpdateBtn.setVisible(true);
+		}
 
-	   	select.setCellValueFactory(new Callback<CellDataFeatures<GasStationOrder,Boolean>,ObservableValue<Boolean>>() {
-			
-			@Override
-			public ObservableValue<Boolean> call(CellDataFeatures<GasStationOrder, Boolean> param) {
-				GasStationOrder order = param.getValue();
-				SimpleBooleanProperty booleanProp =  new SimpleBooleanProperty(order.getSelect());
-				
-				booleanProp.addListener(new ChangeListener<Boolean>(){
+		String orderType = OrderTypeCombox.getValue().toString();
+		// bring all the data of this supplier with this orderType
+		//checkbox initializing
+		select.setCellValueFactory(
+				new Callback<CellDataFeatures<GasStationOrder, Boolean>, ObservableValue<Boolean>>() {
+
 					@Override
-					public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue){
-						if(newValue==true) selectedOrders.add(order);
-						else selectedOrders.remove(order);
-						order.setSelect(newValue);
+					public ObservableValue<Boolean> call(CellDataFeatures<GasStationOrder, Boolean> param) {
+						GasStationOrder order = param.getValue();
+						SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(order.getSelect());
+
+						booleanProp.addListener(new ChangeListener<Boolean>() {
+							@Override
+							public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
+									Boolean newValue) {
+								if (newValue == true)
+									selectedOrders.add(order);
+								else
+									selectedOrders.remove(order);
+								order.setSelect(newValue);
+							}
+						});
+						return booleanProp;
 					}
 				});
-					return booleanProp;
-			}
-	   	});
-	   	
-	   	select.setCellFactory(new Callback<TableColumn<GasStationOrder,Boolean>, TableCell<GasStationOrder,Boolean>>() {
 
-			@Override
-			public TableCell<GasStationOrder, Boolean> call(TableColumn<GasStationOrder, Boolean> param) {
-				CheckBoxTableCell<GasStationOrder, Boolean> cell = new CheckBoxTableCell<GasStationOrder, Boolean>();
-				cell.setAlignment(Pos.CENTER);
-				return cell;
-			}
-		});
-	
-	   	orderId.setCellValueFactory(new PropertyValueFactory<GasStationOrder,Integer>("orderID"));
-	   	stationId.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("stationID"));
-	   	status.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("status"));
-	   	date.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
-	   	orderPrice.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("orderPrice"));
-	   	fuelType.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
-	   	quantity.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("quantity"));
-	  
-	   	OrdersTbl.setItems(getOrders(supplier.getId(), orderType));
-    }
+		select.setCellFactory(
+				new Callback<TableColumn<GasStationOrder, Boolean>, TableCell<GasStationOrder, Boolean>>() {
+
+					@Override
+					public TableCell<GasStationOrder, Boolean> call(TableColumn<GasStationOrder, Boolean> param) {
+						CheckBoxTableCell<GasStationOrder, Boolean> cell = new CheckBoxTableCell<GasStationOrder, Boolean>();
+						cell.setAlignment(Pos.CENTER);
+						return cell;
+					}
+				});
+		//column define
+		orderId.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("orderID"));
+		stationId.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("stationID"));
+		status.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("status"));
+		date.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
+		orderPrice.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("orderPrice"));
+		fuelType.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
+		quantity.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("quantity"));
+		//upload all data to the table
+		OrdersTbl.setItems(getOrders(supplier.getId(), orderType));
+	}
 
 	public ObservableList<GasStationOrder> getOrders(String supplierId, String orderType) {
-		System.out.println("1 " + supplierId + " 2 " + orderType.toString());
 		ArrayList<GasStationOrder> newOrders = SupplierCC.getAllOrdersByStatus(supplierId, orderType);
 
 		ObservableList<GasStationOrder> orders = FXCollections.observableArrayList(newOrders);
@@ -233,6 +235,21 @@ public class SupplierController implements Initializable {
 		ObservableList<SupplierOrderStatus> orderTypes = FXCollections
 				.observableArrayList(SupplierOrderStatus.values());
 		OrderTypeCombox.setItems(orderTypes);
+	}
+	
+	@FXML
+	void updateSuppliedOrders(ActionEvent event) {
+		//for each row that the supplier selected we update the data
+		for (GasStationOrder order : selectedOrders) {
+			order.setStatus(SupplierOrderStatus.supplied.toString());
+		}
+		//show the suitable message
+		if(SupplierCC.updateGasOrdersStatus(selectedOrders))
+			JOptionPane.showMessageDialog(null, "Update succeded!");
+		else
+			JOptionPane.showMessageDialog(null, "Update un-succeded one or more of the data didn't update");	
+		//move the order from the table
+		OrdersTbl.setItems(getOrders(supplier.getId(), SupplierOrderStatus.confirmed.toString()));
 	}
 
 }

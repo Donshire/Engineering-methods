@@ -15,7 +15,7 @@
    <children>
       <Pane fx:id="SupplierOrdersPane" layoutX="180.0" layoutY="152.0" prefHeight="676.0" prefWidth="840.0">
          <children>
-            <TableView fx:id="OrdersTbl" layoutX="34.0" layoutY="200.0" prefHeight="200.0" prefWidth="720.0">
+            <TableView fx:id="OrdersTbl" editable="true" layoutX="34.0" layoutY="200.0" prefHeight="200.0" prefWidth="720.0">
               <columns>
                   <TableColumn fx:id="select" prefWidth="90.0" text="Select" />
                 <TableColumn fx:id="orderId" prefWidth="90.0" text="Order ID" />
@@ -40,7 +40,7 @@
       <Button fx:id="LogOutBtn" layoutX="903.0" layoutY="45.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" text="Log Out" />
       <Button fx:id="MainPaneBtn" layoutX="26.0" layoutY="320.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="64.0" prefWidth="142.0" text="Main Pane" />
       <Button fx:id="OrdersBtn" layoutX="26.0" layoutY="391.0" mnemonicParsing="false" onAction="#openOrdersPane" prefHeight="64.0" prefWidth="142.0" text="Orders" />
-      <Button fx:id="UpdateBtn" layoutX="850.0" layoutY="650.0" mnemonicParsing="false" text="Update" />
+      <Button fx:id="UpdateBtn" layoutX="850.0" layoutY="650.0" mnemonicParsing="false" onAction="#updateSuppliedOrders" text="Update" />
       <Text fx:id="HelloLbl" layoutX="713.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" wrappingWidth="172.6708984375" />
       <Pane fx:id="SupplierMainPane" layoutX="160.0" layoutY="150.0" prefHeight="669.0" prefWidth="840.0">
          <children>
