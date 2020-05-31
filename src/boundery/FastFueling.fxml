@@ -32,7 +32,7 @@
             <TextField fx:id="fuelAmount" layoutX="192.0" layoutY="323.0" promptText="000" />
             <Button fx:id="nextToPaymentBtn" layoutX="441.0" layoutY="323.0" mnemonicParsing="false" onAction="#nextToPayment" text="Next" />
             <ComboBox fx:id="companiesCombo" layoutX="192.0" layoutY="235.0" onAction="#selectCompany" prefWidth="150.0" promptText="Company" style="-fx-background-color: white;" />
-            <ComboBox fx:id="stationsIDCombo" layoutX="192.0" layoutY="282.0" onAction="#selectStationId" prefWidth="150.0" promptText="StationID" style="-fx-background-color: white;" />
+            <ComboBox fx:id="stationsIDCombo" layoutX="192.0" layoutY="282.0" prefWidth="150.0" promptText="StationID" style="-fx-background-color: white;" />
             <Text layoutX="52.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Company" />
             <Text fill="WHITE" layoutX="305.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Percent" />
             <Text fill="WHITE" layoutX="305.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel" />
@@ -54,7 +54,7 @@
                   <Font name="System Bold" size="30.0" />
                </font>
             </Text>
-            <Button fx:id="pay" layoutX="223.0" layoutY="169.0" mnemonicParsing="false" text="Pay" />
+            <Button fx:id="pay" layoutX="223.0" layoutY="169.0" mnemonicParsing="false" onAction="#procedPayment" text="Pay" />
             <Text fx:id="purchaseStatus" layoutX="227.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you'r purchases status" textAlignment="CENTER" visible="false" />
             <Text fx:id="totalPrice" layoutX="171.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>

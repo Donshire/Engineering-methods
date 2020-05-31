@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import Entity.Customer;
+import Entity.CustomerModule;
 import Entity.Employee;
+import Entity.FuelPurchase;
 import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
@@ -87,8 +89,32 @@ public class MyFuelServer extends AbstractServer {
 		case fastFuelingLogIn:
 			String carNumber=(String)message.getObj();
 			try {
-				
-				client.sendToClient(new Message(flag, Commands.defaultRes));
+				//
+				client.sendToClient(new Message(FastFuelController.fastFuelingLogIn(carNumber), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		case getAllCompanyFuelStationID:
+			String companyName=(String)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.getAllCompanyFuelStationID(companyName), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
+		case getPurchasePriceDetails:
+			ArrayList<Object> str =(ArrayList<Object>)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.priceCalculationAndPricingModel
+						((String)str.get(0),(CustomerModule)str.get(1),(int)str.get(2)), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
+		case commitFuelPurchase:
+			ArrayList<Object> str1 =(ArrayList<Object>)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.commitFuelPurchase((String)str1.get(0),(String)str1.get(1),(FuelPurchase)str1.get(2)), Commands.defaultRes));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -191,9 +217,9 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getAllCompanyFuel:
-			String companyName = (String) message.getObj();
+			String companyName1 = (String) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),
 						Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

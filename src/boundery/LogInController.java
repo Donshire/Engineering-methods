@@ -45,17 +45,19 @@ public class LogInController {
 		String carNumber = carNumberInput.getText();
 		if(carNumber.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
-			//call the server and get the car details
-			ArrayList<Object> result=(ArrayList<Object>) UserCC.fastFuelingLogIn(carNumber);
-			if(result==null) {
+			//call the server and get the car details 
+			Car car =UserCC.fastFuelingLogIn(carNumber);
+			if(car==null) {
 				JOptionPane.showMessageDialog(null, "Car wasn't found");
 				return;
 			}
 			FastFuelingController fastFueling = new FastFuelingController();
 			
-			fastFueling.car=(Car)result.get(0);
-			fastFueling.customer=(Customer)result.get(1);
-			fastFueling.customerModule=(CustomerModule)result.get(2);
+			fastFueling.car= car;
+			
+//			fastFueling.car=(Car)result.get(0);
+//			fastFueling.customer=(Customer)result.get(1);
+//			fastFueling.customerModule=(CustomerModule)result.get(2);
 			
 			try {
 				fastFueling.start(ClientUI.mainStage);

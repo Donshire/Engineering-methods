@@ -20,14 +20,13 @@ public class FastFuelController {
 	 * @param carNumber
 	 * @return ArrayList of Objects containig  objects car,customer,cutomer model,purchase model
 	 */
-	public static ArrayList<Object> fastFuelingLogIn(String carNumber) {
-		ResultSet res;
-		ArrayList<Object> results = new ArrayList<Object>();
+	public static Car fastFuelingLogIn(String carNumber) {
+//		ArrayList<Object> results = new ArrayList<Object>();
 		
 		//adding car to the result
-		Car car=EmployeeController.getCarByNumber(carNumber);
-		if(car==null)return null;
-		results.add(car);
+		return EmployeeController.getCarByNumber(carNumber);
+		//results.add(car);
+		/*
 		//adding customer to the result
 		Customer customer=EmployeeController.getCutomerByCarNumber(car.getCarCustomerId());
 		if(customer==null)return null;
@@ -38,10 +37,22 @@ public class FastFuelController {
 		if(customer==null)return null;
 		results.add(customerModule);
 		
-		return null;
+		return results;
+		*/
+		
 	}
-	
-	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,CustomerModule model,int prcingModelNumber,float amount) {
+	/**
+	 * calculate the current price of the company fuel and the 
+	 * customer price according to his subsection,and the current sale
+	 * also return percent of sale,percent of rate, and the current sales id##
+	 * the calculation are done by other functions 
+	 * @param companyName String
+	 * @param model CustomerModule
+	 * @param prcingModelNumber int
+	 * @param amount float
+	 * @return
+	 */
+	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,CustomerModule model,int prcingModelNumber) {
 		//the ArrayList contains purchasePrice,currentPrice,SalePercent
 		ArrayList<Float> result= new ArrayList<Float>();
 		
@@ -52,19 +63,21 @@ public class FastFuelController {
 		
 		result.add(10.2f);//purchasePrice
 		result.add(15.3f);//currentPrice
-		result.add(0.15f);//SalePercent
+		result.add(0.1f);//SalePercent
+		result.add(0.04f);//RatePercent
+		result.add(1f);//Sale ID cloud be many
 		
 		return result;
 	}
 	
 	/**
 	 * call payment method and save the purchase details
-	 * @param customerId
-	 * @param purchase
+	 * @param customerId String
 	 * @param paymentOption if visa must contain visa number if cash "cash"
+	 * @param purchase FuelPurchase
 	 * @return
 	 */
-	public static boolean commitFuelPurchase(String customerId,FuelPurchase purchase,String paymentOption) {
+	public static boolean commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase) {
 		//call paymentMethod
 		if(payment(customerId, paymentOption,purchase.getPriceOfPurchase()))
 		//save purchase details
@@ -177,7 +190,7 @@ public class FastFuelController {
 	 * @param time String
 	 * @return in case of succed return true else false
 	 */
-	public static boolean savePurchaseDetails(FuelPurchase purchase) {
+	private static boolean savePurchaseDetails(FuelPurchase purchase) {
 		PreparedStatement stm;
 		
 		String query="insert into myfueldb.fuelpurchase " + 

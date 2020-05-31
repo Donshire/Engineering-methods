@@ -90,7 +90,7 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * conver String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW] 
+	 * Convert String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW] 
 	 * @param companies
 	 * @return
 	 */

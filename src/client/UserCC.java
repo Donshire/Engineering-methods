@@ -2,6 +2,7 @@ package client;
 
 import java.util.ArrayList;
 
+import Entity.Car;
 import Entity.Message;
 import enums.Commands;
 
@@ -22,8 +23,8 @@ public class UserCC {
 		ClientUI.client.accept(new Message(array, Commands.logOut));
 	}
 
-	public static Object fastFuelingLogIn(String catNumber) {
+	public static Car fastFuelingLogIn(String catNumber) {
 		ClientUI.client.accept(new Message(catNumber, Commands.fastFuelingLogIn));
-		return MyFuelClient.ServerRetObj;
+		return (Car)MyFuelClient.ServerRetObj;
 	}
 }

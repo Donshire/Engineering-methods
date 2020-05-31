@@ -24,12 +24,11 @@ public class CustomerCC {
 		return (ArrayList<Integer>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<Float> getPurchasePriceDetails(String companyName,CustomerModule model,int prcingModelNumber,float amount) {
+	public static ArrayList<Float> getPurchasePriceDetails(String companyName,CustomerModule model,int prcingModelNumber) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(companyName);
 		str.add(model);
 		str.add(prcingModelNumber);
-		str.add(amount);
 		ClientUI.client.accept(new Message(str, Commands.getPurchasePriceDetails));
 		return (ArrayList<Float>) MyFuelClient.ServerRetObj;
 	}
