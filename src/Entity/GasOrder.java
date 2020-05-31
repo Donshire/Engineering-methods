@@ -2,9 +2,17 @@ package Entity;
 
 import enums.OrderStatus;
 
-public class GasOrder {
+import java.io.Serializable;
 
-	private Integer purchaseID;
+import enums.OrderStatus;
+
+public class GasOrder implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2753012256812143843L;
+	private int purchaseID;
 	private String custmoerId;
 	private String fuelType;
 	private String supplyDate;
@@ -18,7 +26,7 @@ public class GasOrder {
 	private float currentPrice;
 	private String companyName;
 
-	public GasOrder(Integer purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
+	public GasOrder(int purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
 			float priceOfPurchase, boolean urgent, OrderStatus status, int saleID, float currentPrice,
 			String companyName) {
 		this.purchaseID = purchaseID;

@@ -8,10 +8,12 @@ public class Fuel implements Serializable{
 	 */
 	private static final long serialVersionUID = 8904134409630964150L;
 	private String fuelType;
-	private float maxPrice;
+	private double maxPrice;
 
-	public Fuel(String fuelType, float maxPrice) {
-		super();
+	public Fuel() {
+	}
+	
+	public Fuel(String fuelType, double maxPrice) {
 		this.fuelType = fuelType;
 		this.maxPrice = maxPrice;
 	}
@@ -24,7 +26,7 @@ public class Fuel implements Serializable{
 		this.fuelType = fuelType;
 	}
 
-	public float getMaxPrice() {
+	public double getMaxPrice() {
 		return maxPrice;
 	}
 
@@ -38,3 +40,4 @@ public class Fuel implements Serializable{
 	}
 
 }
+

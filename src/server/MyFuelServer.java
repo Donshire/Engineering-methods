@@ -180,6 +180,7 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
 			try {
@@ -200,6 +201,25 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 			
+			
+		case GetMaxPrice:
+			try {
+				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.GetMaxPriceRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+
+			
+		case CustomerOrderList:
+			String s = (String) (message.getObj());
+			try {
+				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 			
 		default:
 			System.out.println("default");

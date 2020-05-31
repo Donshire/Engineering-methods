@@ -1,3 +1,4 @@
+
 package server;
 
 import boundery.ServerController;
@@ -48,3 +49,4 @@ public class ServerUI extends Application{
 	}
 
 }
+

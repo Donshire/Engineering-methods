@@ -1,3 +1,4 @@
+
 package Entity;
 
 import java.io.Serializable;
@@ -69,3 +70,4 @@ public class Employee extends User implements Serializable {
 	
 
 }
+
