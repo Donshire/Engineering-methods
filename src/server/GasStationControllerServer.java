@@ -28,7 +28,7 @@ public class GasStationControllerServer {
 
 			while (res.next() == true) {
 				GasStationOrder order = new GasStationOrder(res.getInt(1), res.getString(2), res.getInt(3),
-						res.getString(4), res.getString(5), res.getString(6), res.getString(7), res.getInt(8));
+						res.getString(4), res.getString(5), res.getString(6), res.getString(7), res.getFloat(8));
 				orders.add(order);
 			}
 

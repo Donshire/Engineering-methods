@@ -1,8 +1,6 @@
 package boundery;
 
-
 import javax.swing.JOptionPane;
-
 
 import Entity.Customer;
 import Entity.Employee;
@@ -42,12 +40,13 @@ public class LogInController {
 
 		else {
 			Object obj = UserCC.login(username, password);
-			if(obj instanceof Customer) System.out.println("customer");
+			if (obj instanceof Customer)
+				System.out.println("customer");
 			//
-			else if(obj instanceof Employee) {
-				
+			else if (obj instanceof Employee) {
+
 				System.out.println("employee");
-				ClientUI.user=obj;
+				ClientUI.user = obj;
 				MarketingManagerController marketingManager = new MarketingManagerController();
 				try {
 					marketingManager.start(ClientUI.mainStage);
@@ -56,19 +55,19 @@ public class LogInController {
 				}
 			}
 			//
-			else if(obj instanceof Supplier) {
-		System.out.println("supplier");
-		ClientUI.user=obj;
-		SupplierController supplier = new SupplierController();
-		try {
-			supplier.start(ClientUI.mainStage);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-			}
-			else if(obj==null)System.out.println("not exist");
-			else if(obj.equals(Commands.UserAlreadyConnected))
-					System.out.println("already online");
+			else if (obj instanceof Supplier) {
+				System.out.println("supplier");
+				ClientUI.user = obj;
+				SupplierController supplier = new SupplierController();
+				try {
+					supplier.start(ClientUI.mainStage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (obj == null)
+				System.out.println("not exist");
+			else if (obj.equals(Commands.UserAlreadyConnected))
+				System.out.println("already online");
 		}
 
 	}

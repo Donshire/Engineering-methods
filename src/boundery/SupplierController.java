@@ -80,7 +80,7 @@ public class SupplierController implements Initializable {
 	private TableColumn<GasStationOrder, String> fuelType;
 
 	@FXML
-	private TableColumn<GasStationOrder, Integer> quantity;
+	private TableColumn<GasStationOrder, Float> quantity;
 
 	@FXML
 	private Pane SupplierMainPane;
@@ -181,7 +181,7 @@ public class SupplierController implements Initializable {
 		date.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
 		orderPrice.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("orderPrice"));
 		fuelType.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
-		quantity.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("quantity"));
+		quantity.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Float>("quantity"));
 		//upload all data to the table
 		OrdersTbl.setItems(getOrders(supplier.getId(), orderType));
 	}

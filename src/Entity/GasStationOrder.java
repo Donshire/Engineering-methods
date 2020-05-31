@@ -18,13 +18,13 @@ public class GasStationOrder  implements Serializable{
 	private String date;
 	private String orderPrice;
 	private String fuelType;
-	private Integer quantity;
+	private float quantity;
 	private Boolean select;
 
 	
 
 	public GasStationOrder(Integer orderID, String supplierId, Integer stationID, String status, String date,
-			String orderPrice, String fuelType, Integer quantity) {
+			String orderPrice, String fuelType, float quantity) {
 		this.orderID = orderID;
 		this.supplierId = supplierId;
 		this.stationID = stationID;
@@ -131,13 +131,13 @@ public class GasStationOrder  implements Serializable{
 
 
 
-	public Integer getQuantity() {
+	public float getQuantity() {
 		return quantity;
 	}
 
 
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(float quantity) {
 		this.quantity = quantity;
 	}
 
