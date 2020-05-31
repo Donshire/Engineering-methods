@@ -6,23 +6,29 @@ import java.sql.ResultSet;
 public class CompanyFuelController {
 
 	public static Object getMaxPrice(String type) {
-		PreparedStatement stm;
-		ResultSet res;
-		Double maxPrice = null;
-
+		//Float maxPrice = (float) 4.6;
+		
+		float maxPrice = -1;
+		
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select maxPrice from fuel where fuelType = ?");
+			PreparedStatement stm;
+			ResultSet res;
+
+			stm = ConnectionToDB.conn.prepareStatement("SELECT * FROM myfueldb.fuel where fuelType= ? ;");
 			stm.setString(1, type);
 			res = stm.executeQuery();
-			maxPrice = res.getDouble(1);
-					
-			stm.close();
+			
+			res.next();
+			maxPrice = res.getFloat(2);
+
 			res.close();
+			stm.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return maxPrice;
+		
 	}
 
 }

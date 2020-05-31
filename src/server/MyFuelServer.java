@@ -178,7 +178,7 @@ public class MyFuelServer extends AbstractServer {
 			
 		case GetMaxPrice:
 			try {
-				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.GetMaxPriceRes));
+				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.MaxPriceRes));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

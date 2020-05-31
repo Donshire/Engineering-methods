@@ -1,7 +1,12 @@
 package boundery;
 
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import Entity.GasOrder;
+import client.CustomerCC;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -28,7 +33,7 @@ public class GasHomeController implements Initializable {
 	double PricePerUnit;
 	String supplyDate;
 	double gasAmount;
-	double priceOfPurchase = 0;
+	float priceOfPurchase = 0;
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -63,30 +68,13 @@ public class GasHomeController implements Initializable {
 	@FXML
 	private Button buttonBuy;
 
-	@FXML
+/*	@FXML
 	private Spinner<?> spinnerAmount;
-
-	@FXML
-	void DragSlider(MouseEvent event) {
-		/*
-		 * textAmount.textProperty().bind( Bindings.format("%.0f",
-		 * sliderAmount.valueProperty()) );
-		 */
-		Double d = new Double(sliderAmount.getValue());
-		textAmount.setText(String.format("%.0f", d));
-//		gasAmount = Double.valueOf(textAmount.textProperty().getValue());
-		gasAmount = d;
-		settingDiscount();
-//		setPrice();
-	}
-
+	*/
 
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
-		
 		gasAmount = new Double(textAmount.getText());
-		// gasAmount = (double) spinnerAmount.getValue();
-		// sliderAmount.setValue(value);
 		settingDiscount();
 		setPrice();
 	}
@@ -106,7 +94,7 @@ public class GasHomeController implements Initializable {
 	private void setPrice() {
 		// double beforeDiscount = priceListPrice * gasAmount;
 		double beforeDiscount = 4.8 * gasAmount;
-		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
+		priceOfPurchase = (float) (beforeDiscount + (beforeDiscount / 100) * discount);
 		total.setText(String.format("%.2f", priceOfPurchase));
 	}
 
@@ -117,12 +105,16 @@ public class GasHomeController implements Initializable {
 
 	@FXML
 	void makePurchase(ActionEvent event) {
-		/*
-		 * GasOrder order = new GasOrder(purchaseID, custmoerId, "HOME GAS", supplyDate,
-		 * gasAmount, date, priceOfPurchase, urgent, status, saleID, currentPrice,
-		 * companyName) // Should we send for payment? if
-		 * (CustomerCC.creatNewOrder(order)) { // PopUp ""; }
-		 */
+		LocalDate date = filedSupplyDate.getValue();
+		String supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+		
+		LocalDate contemporaryDate = LocalDate.now();
+		String contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/" + contemporaryDate.getYear();
+		
+		GasOrder order = new GasOrder(-1, -1, "HOME GAS", supplyDate,
+		gasAmount, contemporaryDateStr, priceOfPurchase, !normalSupply.isSelected(), "processing", -1, currentPrice); // Should we send for payment? if
+		//(CustomerCC.creatNewOrder(order)) { // PopUp ""; }
+		 
 	}
 
 	
@@ -160,8 +152,8 @@ public class GasHomeController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//double plp = (double) ClientCC.getMaxPrice("HOME GAS");
-		priceList.setText("4.8");
+		Float plp = new Float((float) CustomerCC.getMaxPrice("HOME GAS"));
+		priceList.setText(plp.toString());
 		textDiscount.setText("0");
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {

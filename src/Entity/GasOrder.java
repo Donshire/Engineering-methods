@@ -1,16 +1,14 @@
 package Entity;
 
 import enums.OrderStatus;
+import sun.font.CreatedFontTracker;
 
 import java.io.Serializable;
 
 import enums.OrderStatus;
 
-public class GasOrder implements Serializable {
 
-	/**
-	 * 
-	 */
+public class GasOrder implements Serializable {
 	private static final long serialVersionUID = 2753012256812143843L;
 	private int purchaseID;
 	private String custmoerId;
@@ -26,6 +24,21 @@ public class GasOrder implements Serializable {
 	private float currentPrice;
 	private String companyName;
 
+	/**
+	 * 
+	 * @param purchaseID - Automatically created on DB.
+	 * @param custmoerId
+	 * @param fuelType
+	 * @param supplyDate
+	 * @param gasAmount
+	 * @param date
+	 * @param priceOfPurchase
+	 * @param urgent
+	 * @param status
+	 * @param saleID
+	 * @param currentPrice
+	 * @param companyName
+	 */
 	public GasOrder(int purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
 			float priceOfPurchase, boolean urgent, OrderStatus status, int saleID, float currentPrice,
 			String companyName) {

@@ -20,9 +20,9 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LogInController aFrame = new LogInController();
+	//	LogInController aFrame = new LogInController();
 		mainStage=primaryStage;
-	//	GasHomeController aFrame = new GasHomeController();
+		GasHomeController aFrame = new GasHomeController();
 	//	MyOrderConrtoller aFrame = new MyOrderConrtoller();
 		aFrame.start(primaryStage);
 

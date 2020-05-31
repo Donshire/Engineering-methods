@@ -22,5 +22,10 @@ public class CustomerCC {
 
 		return null;
 	}
+	
+	public static Object getMaxPrice(String str) {
+		ClientUI.client.accept(new Message(str, Commands.GetMaxPrice));
+		return (float)MyFuelClient.ServerRetObj;
+	}
 
 }
