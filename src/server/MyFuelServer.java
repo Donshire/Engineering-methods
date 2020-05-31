@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import Entity.Customer;
 import Entity.Employee;
+import Entity.GasStationOrder;
 import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
@@ -95,6 +96,20 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case updateGasOrdersStatus:
+			ArrayList<GasStationOrder> orders = (ArrayList<GasStationOrder>) message.getObj();
+			try {
+				boolean flag = true;
+				for (GasStationOrder order : orders) {
+					if(!GasStationControllerServer.updateOrderStatus(order))
+						flag=false;
+				}
+				client.sendToClient(new Message(flag, Commands.defaultRes));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			break;
 
 		case updateSale:
 			ArrayList<Sale> sales_updateSale = (ArrayList<Sale>) message.getObj();
@@ -175,6 +190,17 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+		case getAllOrdersByStatus:
+			ArrayList<Object> objs = (ArrayList<Object>) message.getObj();
+			String supplierId = (String)objs.get(0);
+			String status =(String) objs.get(1);
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.getAllOrdersByStatus(supplierId,status),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+			break;
+			
 			
 		case GetMaxPrice:
 			try {
@@ -229,7 +255,7 @@ public class MyFuelServer extends AbstractServer {
 	}
 	
 	protected void serverStarted() {
-		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
+		ConnectionToDB.connectToDB("myfueldb", "Qaws123123");
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
 		System.out.println("Server listening for connections on port " + getPort());

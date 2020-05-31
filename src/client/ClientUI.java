@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import boundery.GasHomeController;
 import boundery.LogInController;
+import boundery.SupplierController;
 import boundery.MyOrderConrtoller;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -25,6 +26,9 @@ public class ClientUI extends Application {
 	//	GasHomeController aFrame = new GasHomeController();
 	//	MyOrderConrtoller aFrame = new MyOrderConrtoller();
 		aFrame.start(primaryStage);
+		
+//		SupplierController aFrame = new SupplierController();
+//		aFrame.start(primaryStage);
 
 	}
 

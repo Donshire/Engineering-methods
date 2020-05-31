@@ -56,7 +56,16 @@ public class LogInController {
 				}
 			}
 			//
-			else if(obj instanceof Supplier) System.out.println("supplier");
+			else if(obj instanceof Supplier) {
+		System.out.println("supplier");
+		ClientUI.user=obj;
+		SupplierController supplier = new SupplierController();
+		try {
+			supplier.start(ClientUI.mainStage);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			}
 			else if(obj==null)System.out.println("not exist");
 			else if(obj.equals(Commands.UserAlreadyConnected))
 					System.out.println("already online");
