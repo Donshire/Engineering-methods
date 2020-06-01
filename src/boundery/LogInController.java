@@ -75,8 +75,18 @@ public class LogInController {
 
 		else {
 			Object obj = UserCC.login(username, password);
-			if (obj instanceof Customer)
+			if (obj instanceof Customer) {
 				System.out.println("customer");
+				GasHomeController aFrame = new GasHomeController();
+				aFrame.customer = (Customer)obj;
+				try {
+					aFrame.start(ClientUI.mainStage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
 			//
 			else if (obj instanceof Employee) {
 

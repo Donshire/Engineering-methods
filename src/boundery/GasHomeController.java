@@ -2,6 +2,8 @@ package boundery;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import Entity.Customer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,6 +26,7 @@ import javafx.stage.Stage;
 
 public class GasHomeController implements Initializable {
 
+	Customer customer;
 	Integer discount = 0;
 	double PricePerUnit;
 	String supplyDate;

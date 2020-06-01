@@ -234,7 +234,7 @@ public class MyFuelServer extends AbstractServer {
 		case getAllCompanyFuel:
 			String companyName1 = (String) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),Commands.defaultRes));
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
