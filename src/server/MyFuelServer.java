@@ -5,11 +5,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import Entity.Customer;
+import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.GasStationOrder;
+import Entity.FuelPurchase;
 import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
@@ -23,7 +28,8 @@ import ocsf.server.*;
 public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
-	
+	public static String schemaName, dbPassword;
+
 	public MyFuelServer(int port) {
 		super(port);
 	}
@@ -81,7 +87,39 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-
+		case fastFuelingLogIn:
+			String carNumber=(String)message.getObj();
+			try {
+				//
+				client.sendToClient(new Message(FastFuelController.fastFuelingLogIn(carNumber), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		case getAllCompanyFuelStationID:
+			String companyName=(String)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.getAllCompanyFuelStationID(companyName), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
+		case getPurchasePriceDetails:
+			ArrayList<Object> str =(ArrayList<Object>)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.priceCalculationAndPricingModel
+						((String)str.get(0),(CustomerModule)str.get(1),(int)str.get(2)), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
+		case commitFuelPurchase:
+			ArrayList<Object> str1 =(ArrayList<Object>)message.getObj();
+			try {
+				client.sendToClient(new Message(FastFuelController.commitFuelPurchase((String)str1.get(0),(String)str1.get(1),(FuelPurchase)str1.get(2)), Commands.defaultRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+            break;
 		case updateFuelRate:
 			ArrayList<Rates> rates = (ArrayList<Rates>) message.getObj();
 			try {
@@ -163,16 +201,38 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getSaleResponseReport:
-			int salID = (int) message.getObj();
+			ArrayList<String> array = (ArrayList<String>) message.getObj();
+			//salID,CompanyName 
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.doh(salID), Commands.defaultRes));
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+				Date date = new Date();
+
+				File file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFormat.format(date));
+				if(file!=null)
+				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+				else client.sendToClient(new Message("", Commands.ThereIsNoSale));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
+		case getPeriodicReport:
+			String companyName_getPeriodicReport = (String) message.getObj();
+			try {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+				Date date = new Date();
+
+				File file=CompanyFuelControllerServer.periodicReport(companyName_getPeriodicReport,dateFormat.format(date), timeFormat.format(date));
+				System.out.println("created the file");
+				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
 			
 		case getAllCompanyFuel:
-			String companyName = (String) message.getObj();
+			String companyName1 = (String) message.getObj();
 			try {
 				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),Commands.defaultRes));
 			} catch (IOException e) {
@@ -234,14 +294,11 @@ public class MyFuelServer extends AbstractServer {
 	 * @return
 	 */
 	
-	private MyFile convertFileToSeializable(String fileName,String filePath) {
-		MyFile msg = new MyFile(fileName);
-		String LocalfilePath = filePath+"\\"+fileName;
+	private MyFile convertFileToSeializable(File file) {
+		MyFile msg = new MyFile(file.getName());
 		try {
-			File newFile = new File(LocalfilePath);
-
-			byte[] mybytearray = new byte[(int) newFile.length()];
-			FileInputStream fis = new FileInputStream(newFile);
+			byte[] mybytearray = new byte[(int) file.length()];
+			FileInputStream fis = new FileInputStream(file);
 			BufferedInputStream bis = new BufferedInputStream(fis);
 
 			msg.initArray(mybytearray.length);
@@ -249,15 +306,17 @@ public class MyFuelServer extends AbstractServer {
 
 			bis.read(msg.getMybytearray(), 0, mybytearray.length);
 		} catch (Exception e) {
-			System.out.println("Error send (Files)msg) to Server");
+			System.out.println("Error send ((Files)msg) to Server");
 		}
+		System.out.println("file had been converted");
 		return msg;
 	}
 	
 	protected void serverStarted() {
-		ConnectionToDB.connectToDB("myfueldb", "Aa123456");
+		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
+		FileManagmentSys.createSystemWorkSpace();
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 

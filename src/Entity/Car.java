@@ -1,7 +1,13 @@
 package Entity;
 
-public class Car {
+import java.io.Serializable;
 
+public class Car implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3697082777987571143L;
 	private String carNumber;
 	private String fuelType;
 	private String CustomerID;

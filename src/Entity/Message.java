@@ -1,7 +1,6 @@
 package Entity;
 
 import java.io.Serializable;
-
 import enums.Commands;
 
 public class Message implements Serializable {

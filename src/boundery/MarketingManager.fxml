@@ -224,7 +224,7 @@
             <Button fx:id="deActivateSaleBtn" layoutX="124.0" layoutY="428.0" mnemonicParsing="false" onAction="#activateSale" text="de-Activate" />
          </children>
       </Pane>
-      <Pane fx:id="reportsPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
+      <Pane fx:id="reportsPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
          <children>
             <Text layoutX="24.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Report To Generate:">
                <font>

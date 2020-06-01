@@ -1,26 +1,23 @@
 package Entity;
 
 public class GenericReport {
-	private Integer reportId;
 	private String date;
 	private String time;
 	private String fileName;
 	private String reportType;
 
-	public GenericReport(Integer reportId, String date, String time, String fileName, String reportType) {
-		this.reportId = reportId;
+	/**
+	 * 
+	 * @param date String
+	 * @param time String
+	 * @param fileName String
+	 * @param reportType String
+	 */
+	public GenericReport(String date, String time, String fileName, String reportType) {
 		this.date = date;
 		this.time = time;
 		this.fileName = fileName;
 		this.reportType = reportType;
-	}
-
-	public int getReportId() {
-		return reportId;
-	}
-
-	public void setReportId(int reportId) {
-		this.reportId = reportId;
 	}
 
 	public String getDate() {
@@ -57,8 +54,8 @@ public class GenericReport {
 
 	@Override
 	public String toString() {
-		return "GenericReport [reportId=" + reportId + ", date=" + date + ", time=" + time + ", fileName=" + fileName
-				+ ", reportType=" + reportType + "]";
+		return "GenericReport [fileName=" + fileName+", reportType=" + reportType+", date=" + date + 
+				", time=" + time + "]";
 	}
 
 }

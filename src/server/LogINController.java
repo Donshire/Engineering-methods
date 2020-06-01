@@ -4,7 +4,9 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.Supplier;
@@ -13,7 +15,7 @@ import enums.Commands;
 public class LogINController {
 
 	private static PreparedStatement stm;
-
+	
 	public static Object LogIn(String userName, String password) {
 		ResultSet res;
 
@@ -27,8 +29,8 @@ public class LogINController {
 				res.close();
 				if (customer.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("customer", customer.getId(),1);
+//				else
+//					updateUserOnlineStatus("customer", customer.getId(),1);
 				return customer;
 			}
 
@@ -41,8 +43,8 @@ public class LogINController {
 				System.out.println(employee);
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("employee", employee.getId(),1);
+//				else
+//					updateUserOnlineStatus("employee", employee.getId(),1);
 				return employee;
 			}
 
@@ -53,8 +55,8 @@ public class LogINController {
 				res.close();
 				if (supplier.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-				else
-					updateUserOnlineStatus("supplier", supplier.getId(),1);
+//				else
+//					updateUserOnlineStatus("supplier", supplier.getId(),1);
 				return supplier;
 			}
 

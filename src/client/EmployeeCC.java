@@ -1,5 +1,6 @@
 package client;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import Entity.CompanyFuel;
@@ -39,8 +40,19 @@ public class EmployeeCC {
 		return (boolean) MyFuelClient.ServerRetObj;
 	}
 	
-	public static void createSaleResponseResport(int id) {
-		ClientUI.client.accept(new Message(id, Commands.getSaleResponseReport));
+	public static Object createSaleResponseResport(String id,String companyName) {
+		ArrayList<String> str = new ArrayList<String>();
+		str.add(id);
+		str.add(companyName);
+		
+		ClientUI.client.accept(new Message(str, Commands.getSaleResponseReport));
+		//return the sale details
+		return MyFuelClient.ServerRetObj;
+	}
+	
+	public static void createPeriodicResport(String companyName) {
+		ClientUI.client.accept(new Message(companyName, Commands.getPeriodicReport));
+		//return the Periodic Resport details
 	}
 	
 	public static ArrayList<String> getAllCompanyFuelTypes(String CompanyName){
