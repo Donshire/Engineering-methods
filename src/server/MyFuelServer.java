@@ -30,7 +30,7 @@ public class MyFuelServer extends AbstractServer {
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
 	public static String schemaName, dbPassword;
 
-	public MyFuelServer(int port) {
+	public MyFuelServer(int port) { 
 		super(port);
 	}
 
@@ -217,13 +217,15 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 		case getPeriodicReport:
-			String companyName_getPeriodicReport = (String) message.getObj();
+			ArrayList<String> periodicReportdetails = (ArrayList<String>) message.getObj();
 			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss");
 				Date date = new Date();
 
-				File file=CompanyFuelControllerServer.periodicReport(companyName_getPeriodicReport,dateFormat.format(date), timeFormat.format(date));
+				File file=CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0)
+						,periodicReportdetails.get(1),periodicReportdetails.get(2),
+						dateFormat.format(date), timeFormat.format(date));
 				System.out.println("created the file");
 				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
 			} catch (IOException e) {

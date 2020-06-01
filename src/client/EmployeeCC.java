@@ -50,9 +50,14 @@ public class EmployeeCC {
 		return MyFuelClient.ServerRetObj;
 	}
 	
-	public static void createPeriodicResport(String companyName) {
-		ClientUI.client.accept(new Message(companyName, Commands.getPeriodicReport));
+	public static Object createPeriodicResport(String companyName,String startDate,String endDate) {
+		ArrayList<String> periodicReportdetails =new ArrayList<String>();
+		periodicReportdetails.add(companyName);
+		periodicReportdetails.add(startDate);
+		periodicReportdetails.add(endDate);
+		ClientUI.client.accept(new Message(periodicReportdetails, Commands.getPeriodicReport));
 		//return the Periodic Resport details
+		return MyFuelClient.ServerRetObj;
 	}
 	
 	public static ArrayList<String> getAllCompanyFuelTypes(String CompanyName){

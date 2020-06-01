@@ -235,11 +235,11 @@ public class FileManagmentSys {
 
 			if (reportType.compareTo(periodicReport) == 0) {
 				int i=0;
-				String str=String.format("%-12s ", "CutomerID");
+				String str=String.format("%-12s", "CutomerID");
 				for(String strfor:companies)
-					str+=String.format("%-20s",strfor+" Rank");
+					str+=String.format("%-15s",strfor+" Rank(%)");
 		
-				myWriter.write(str+String.format("%-12s \n", "total_Purchases"));
+				myWriter.write(str+String.format("%15s\n", "total_Purchases"));
 			} else if (reportType.compareTo(responseReport) == 0) {
 				myWriter.write(String.format("Number of cutomers in the SALE %s\n", Integer.toString(numberOfCustomers)));
 				myWriter.write(
@@ -262,28 +262,37 @@ public class FileManagmentSys {
 	 * @param file
 	 * @return
 	 */
-	public static ArrayList<String> readMarkitingManagerReport(File file) {
+	public static ArrayList<String> readMarkitingManagerReport(File file,String reportType) {
 		FileReader fr;
 		ArrayList<String> resArray = new ArrayList<String>();
 		StringBuilder strBuilder = new StringBuilder();
+		String rest = null;
 		try {
 			fr = new FileReader(file);
 			// creates a buffering character input stream
 			BufferedReader br = new BufferedReader(fr); 
-			//response Report
-			String line1 = null, line2 = null, rest = null;
-			if ((line1 = br.readLine()) != null)
-				if ((line2 = br.readLine()) != null)
-					if((rest = br.readLine()) != null)
-					while ((rest = br.readLine()) != null)
-						strBuilder.append(rest + "\n");
+			if(reportType.compareTo(FileManagmentSys.responseReport)==0) {
+				//response Report
+				String line1 = null, line2 = null;
+				if ((line1 = br.readLine()) != null)
+					if ((line2 = br.readLine()) != null)
+						if((rest = br.readLine()) != null)
+						while ((rest = br.readLine()) != null)
+							strBuilder.append(rest + "\n");
+				
+				fr.close();
+				resArray.add(line1);
+				resArray.add(line2);
+				rest=strBuilder.toString();
+				System.out.println(rest.length());
+				resArray.add(rest.substring(29,rest.length()));
+			}
+			else if(reportType.compareTo(FileManagmentSys.periodicReport)==0){
+				while ((rest = br.readLine()) != null)
+					strBuilder.append(rest + "\n");
+				resArray.add(strBuilder.toString());
+			}
 			
-			fr.close();
-			resArray.add(line1);
-			resArray.add(line2);
-			rest=strBuilder.toString();
-			System.out.println(rest.length());
-			resArray.add(rest.substring(29,rest.length()));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} // reads the file
@@ -348,12 +357,12 @@ public class FileManagmentSys {
 	 * @return the string containing /n
 	 */
 	public static String periodicReportFileFormate(String CutomerID,float[] CustomerRank,int numOfComapnies,float totalPurchases) {
-		String str=String.format("%-12s ", CutomerID);
+		String str=String.format("%-12s", CutomerID);
 		StringBuilder strb = new StringBuilder(str); 
 		for(int i=0;i<numOfComapnies;i++) {
-			strb.append(String.format("%-20.2f", CustomerRank[i]));
+			strb.append(String.format("%-15.2f", CustomerRank[i]));
 		}
-		return strb.toString()+String.format("%-20.2f\n", totalPurchases);
+		return strb.toString()+String.format("%-15.2f\n", totalPurchases);
 	}
 	
 	/**

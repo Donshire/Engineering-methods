@@ -29,10 +29,10 @@ public class CompanyFuelControllerServer {
 	 * @param time String
 	 * @return
 	 */
-	public static File periodicReport(String companyName,String date, String time) {
+	public static File periodicReport(String companyName,String startDate,String endDate,String date, String time) {
 		File file = null;
-		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases();
-		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
+		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases(startDate,endDate);
+		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion(startDate,endDate);
 		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
 		
 		for(customerCompaniesDiversion cus:customerCompaniesDiversionArray)
@@ -95,8 +95,8 @@ public class CompanyFuelControllerServer {
 		return file;
 	}
 
-	public static ArrayList<customerTotalPurchase> customersTotalPurchases() {
-		Statement stm;
+	public static ArrayList<customerTotalPurchase> customersTotalPurchases(String start,String end) {
+		PreparedStatement stm;
 		ResultSet res;
 
 		ArrayList<customerTotalPurchase> result = new ArrayList<customerTotalPurchase>();
@@ -105,9 +105,12 @@ public class CompanyFuelControllerServer {
 			// calculate the totale prices
 			String query = "Select cus.id,sum(fu.priceOfPurchase) as countofpurchase "
 					+ "from myfueldb.customer as cus " + "left join myfueldb.car as car " + "on car.CustomerID=cus.id "
-					+ "left join myfueldb.fuelpurchase as fu " + "on fu.CarNumber=car.carNumber " + "group by cus.id";
-			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery(query);
+					+ "left join myfueldb.fuelpurchase as fu " + "on fu.CarNumber=car.carNumber " +
+					"where fu.date>=? and  fu.date<=?"+"group by cus.id";
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, start);
+			stm.setString(2, end);
+			res = stm.executeQuery();
 
 			// save the data in arrayList
 			while (res.next())
@@ -128,8 +131,8 @@ public class CompanyFuelControllerServer {
 	 * 
 	 * @return that ArrayList
 	 */
-	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion() {
-		Statement stm;
+	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion(String start,String end) {
+		PreparedStatement stm;
 		ResultSet res;
 
 		ArrayList<customerCompaniesDiversion> result = new ArrayList<customerCompaniesDiversion>();
@@ -144,9 +147,11 @@ public class CompanyFuelControllerServer {
 					+ "from myfueldb.customer as cu " + "left join myfueldb.car as ca " + "on cu.id=ca.CustomerID "
 					+ "left join myfueldb.fuelpurchase as fu " + "on ca.carNumber=fu.carNumber "
 					+ "left join myfueldb.gasstation as ga " + "on ga.stationId=fu.stationId "
-					+ "GROUP BY cu.id,ga.companyName " + "order by cu.id";
-			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery(query);
+					+"where fu.date>=? and  fu.date<=?"+ "GROUP BY cu.id,ga.companyName " + "order by cu.id";
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, start);
+			stm.setString(2, end);
+			res = stm.executeQuery();
 
 			// save the data in arrayList
 			if (res.next()) {

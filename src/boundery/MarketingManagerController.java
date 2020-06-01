@@ -1,9 +1,11 @@
 package boundery;
 
+import java.awt.List;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.ResourceBundle;
@@ -25,6 +27,7 @@ import enums.Commands;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,6 +42,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -164,6 +168,7 @@ public class MarketingManagerController implements Initializable {
 	private Pane saleResponseReportPane;
 	@FXML
 	private Pane saleDataPane;
+	//response report table
 	@FXML
 	private TableView<ResponseReportData> saleResponseReportTable;
 	@FXML
@@ -178,18 +183,27 @@ public class MarketingManagerController implements Initializable {
 	private Button PrevSaleDetailsBtn;
 	@FXML
 	private Button nextSaleDetailsBtn;
+	@FXML
+	private Text selectDateTxt;
+    @FXML
+    private DatePicker startDate;
+    @FXML
+    private DatePicker endDate;
 
 	@FXML
-	void selectReportType(ActionEvent event) {
+	void selectReportType(ActionEvent event) { 
 		if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
 			enterSaleTxt.setVisible(false);
 			reportsaleNumber.setVisible(false);
 
 			PeriodicReportPane.setVisible(true);
 			saleResponseReportPane.setVisible(false);
+			//the select data buttons
+			selectDateTxt.setVisible(true);
+		    startDate.setVisible(true);
+		    endDate.setVisible(true);
+			
 
-			generateReportBtn.setLayoutX(534);
-			generateReportBtn.setLayoutY(20);
 		}
 		if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
 			enterSaleTxt.setVisible(true);
@@ -197,9 +211,11 @@ public class MarketingManagerController implements Initializable {
 
 			PeriodicReportPane.setVisible(false);
 			saleResponseReportPane.setVisible(true);
-
-			generateReportBtn.setLayoutX(405);
-			generateReportBtn.setLayoutY(73);
+			//the select data buttons
+			selectDateTxt.setVisible(false);
+		    startDate.setVisible(false);
+		    endDate.setVisible(false);
+			
 		}
 	}
 
@@ -391,54 +407,117 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void generateReport(ActionEvent event) {
 		// get data from gui
-		String reportKind = reportKindCombo.getValue().toString();
 		String saleNumber = reportsaleNumber.getText();
-
-		if (reportKind.isEmpty() == true)
-			JOptionPane.showMessageDialog(null, "please Select report kind");
-		else {
+		
+		if(reportKindCombo.getSelectionModel() != null){
 			ObservableList<ResponseReportData> data = FXCollections.observableArrayList();
+			Object obj;
 			// call the server and get the data
 
 			if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
-				// use this to fill
-				EmployeeCC.createPeriodicResport(markitingManager.getCompanyName());
-
-			} else if (saleNumber.isEmpty() == true)
-				JOptionPane.showMessageDialog(null, "please enter sale number");
-			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
-
-				Object obj = EmployeeCC.createSaleResponseResport(saleNumber, markitingManager.getCompanyName());
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+				if(startDate.getValue()==null||endDate.getValue()==null) {
+					JOptionPane.showMessageDialog(null, "please select dates");
+					return;
+				}
+				String start=formatter.format(startDate.getValue());
+				String end=formatter.format(endDate.getValue());
+				
+				obj=EmployeeCC.createPeriodicResport(markitingManager.getCompanyName(),start,end);
 				if (obj instanceof Commands) {
 					JOptionPane.showMessageDialog(null, "there is no such sale with this ID");
 					return;
 				}
-				File file = (File) obj;
-				// build the table
-				customerIDResponseReport
-						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
-				amountOfPurchaseresponseReport
-						.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
-				// fill the data
-
-				ArrayList<String> resArray = FileManagmentSys.readMarkitingManagerReport(file);
-				// sprerate to lines
-				String[] lines = resArray.get(2).split("\\n");
-				// fill the data object
-				for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-					data.add(new ResponseReportData(lines[lineIndex].substring(0, 12).replaceAll("\\s+", ""),
-							lines[lineIndex].substring(12, lines[lineIndex].length()).replaceAll("\\s+", "")));
+				ArrayList<String> rows=FileManagmentSys.readMarkitingManagerReport((File)obj,FileManagmentSys.periodicReport);
+				String[] lines = rows.get(0).split("\\n");
+				buildPeriodicReportTable(data,lines);
+			} 
+			else if (reportKindCombo.getValue() == MarkitingManagerReport.saleResponseReport) {
+				if (saleNumber.isEmpty() == true) {
+					JOptionPane.showMessageDialog(null, "please enter sale number");
+					return;
 				}
-
-				saleResponseReportTable.getItems().setAll(data);
-				totaleNumberOfCustomersResponseReport.setText(resArray.get(0).substring(31, resArray.get(0).length()));
-				totalePurchasesResponseReport.setText(resArray.get(1).substring(40, resArray.get(1).length()));
+				obj = EmployeeCC.createSaleResponseResport(saleNumber, markitingManager.getCompanyName());
+				if (obj instanceof Commands) {
+					JOptionPane.showMessageDialog(null, "there is no such sale with this ID");
+					return;
+				}
+				
+				ArrayList<String> resArray = FileManagmentSys.readMarkitingManagerReport((File)obj,FileManagmentSys.responseReport);
+				filldataObjectFromFile(resArray,data);
+				// build the table
+				buildsaleResponseReportTable(data);
+				totaleNumberOfCustomersResponseReport.setText(resArray.get(0).replaceAll("[^0-9?!\\.]",""));
+				totalePurchasesResponseReport.setText(resArray.get(1).replaceAll("[^0-9?!\\.]",""));
 				//
 			}
 		}
+		else JOptionPane.showMessageDialog(null, "please Select report kind");
 
 	}
-
+	
+	private void buildPeriodicReportTable(ObservableList<ResponseReportData> data,String []strData) {
+		TableView<ObservableList<String>> tableView = new TableView<>();
+		 
+		ArrayList<String> columnNames=convertRowToArrayListPeriodicReport(strData[0]);
+		int i;
+		//add colomns
+		for (i = 0; i < columnNames.size(); i++) {
+		    final int finalIdx = i;
+		    TableColumn<ObservableList<String>, String> column = new TableColumn<>(
+		            columnNames.get(i)
+		    );
+		    column.setCellValueFactory(param ->
+		            new ReadOnlyObjectWrapper<>(param.getValue().get(finalIdx))
+		    );
+		    tableView.getColumns().add(column);
+		}
+		// add data
+        for (i = 1; i < strData.length; i++) {
+        	ArrayList<String> words = convertRowToArrayListPeriodicReport(strData[i]);;
+        	
+            tableView.getItems().add(
+                    FXCollections.observableArrayList(words));
+        }
+        tableView.setLayoutX(10);
+        tableView.setLayoutY(10);
+        //
+        tableView.setMinWidth(Math.min(600,columnNames.size()*120));
+        tableView.setMaxHeight(300);
+        
+        tableView.setEditable(false);
+        PeriodicReportPane.getChildren().add(tableView);
+	}
+	
+	private static ArrayList<String> convertRowToArrayListPeriodicReport(String str){
+		int i=0;
+		ArrayList<String> columnData = new ArrayList<String>();
+		while(i<str.length()) {
+			if(i==0)columnData.add(str.substring(i, (i=i+12)).replaceAll("\\s+", ""));
+			else columnData.add(str.substring(i, (i=i+15)).replaceAll("\\s+", ""));
+		}
+		return columnData;
+	}
+	
+	private void buildsaleResponseReportTable(ObservableList<ResponseReportData> data) {
+		customerIDResponseReport
+				.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
+		amountOfPurchaseresponseReport
+				.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
+		
+		saleResponseReportTable.getItems().setAll(data);
+	}
+	
+	private void filldataObjectFromFile(ArrayList<String> resArray,ObservableList<ResponseReportData> data) {
+		// sprerate to lines
+		String[] lines = resArray.get(2).split("\\n");
+		// fill the data object
+		for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
+			data.add(new ResponseReportData(lines[lineIndex].substring(0, 12).replaceAll("\\s+", ""),
+					lines[lineIndex].substring(12, lines[lineIndex].length()).replaceAll("\\s+", "")));
+		}
+	}
+	
 	@FXML
 	void openFuelRatesPane(ActionEvent event) {
 		switchPanes(fuelRatesPane);
