@@ -25,9 +25,8 @@ public class MyOrderConrtollerServer {
 			res = stm.executeQuery();
 
 			while(res.next() == true) {
-				GasOrder order = new GasOrder(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8),
-						(OrderStatus.valueOf(res.getString(9))), res.getInt(10), res.getFloat(11), res.getString(12));
+				GasOrder order = new GasOrder(res.getInt(1), res.getString(2), res.getString(3),
+						res.getFloat(4), res.getString(5), res.getFloat(6), res.getBoolean(7));
 				System.out.println(order);
 				orderList.add(order);
 			}

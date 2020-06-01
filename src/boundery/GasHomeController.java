@@ -1,7 +1,6 @@
 package boundery;
 
 import java.net.URL;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -32,8 +31,10 @@ public class GasHomeController implements Initializable {
 	Integer discount = 0;
 	double PricePerUnit;
 	String supplyDate;
-	double gasAmount;
+	float gasAmount;
 	float priceOfPurchase = 0;
+	String contemporaryDateStr;
+	
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -51,9 +52,6 @@ public class GasHomeController implements Initializable {
 	private DatePicker filedSupplyDate;
 
 	@FXML
-	private Slider sliderAmount;
-
-	@FXML
 	private TextField textAmount;
 
 	@FXML
@@ -68,13 +66,9 @@ public class GasHomeController implements Initializable {
 	@FXML
 	private Button buttonBuy;
 
-/*	@FXML
-	private Spinner<?> spinnerAmount;
-	*/
-
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
-		gasAmount = new Double(textAmount.getText());
+		gasAmount = new Float(textAmount.getText());
 		settingDiscount();
 		setPrice();
 	}
@@ -100,21 +94,19 @@ public class GasHomeController implements Initializable {
 
 	@FXML
 	void supplyDateSelected(ActionEvent event) {
-
+		LocalDate date = filedSupplyDate.getValue();
+		supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
 	}
 
 	@FXML
-	void makePurchase(ActionEvent event) {
-		LocalDate date = filedSupplyDate.getValue();
-		String supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+	void makePurchase(ActionEvent event) {	
+		if (!normalSupply.isSelected())
+			supplyDate = contemporaryDateStr;	
+		GasOrder order = new GasOrder(-1, "", supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+				!normalSupply.isSelected());
+		System.out.println(order.toString());
 		
-		LocalDate contemporaryDate = LocalDate.now();
-		String contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/" + contemporaryDate.getYear();
 		
-		GasOrder order = new GasOrder(-1, -1, "HOME GAS", supplyDate,
-		gasAmount, contemporaryDateStr, priceOfPurchase, !normalSupply.isSelected(), "processing", -1, currentPrice); // Should we send for payment? if
-		//(CustomerCC.creatNewOrder(order)) { // PopUp ""; }
-		 
 	}
 
 	
@@ -155,6 +147,9 @@ public class GasHomeController implements Initializable {
 		Float plp = new Float((float) CustomerCC.getMaxPrice("HOME GAS"));
 		priceList.setText(plp.toString());
 		textDiscount.setText("0");
+		
+		LocalDate contemporaryDate = LocalDate.now();
+		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/" + contemporaryDate.getYear();
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 		    @Override
@@ -162,7 +157,7 @@ public class GasHomeController implements Initializable {
 		            String oldValue, String newValue) {
 		    	
 		    	try {
-		    		gasAmount = Double.valueOf(newValue);
+		    		gasAmount = Float.valueOf(newValue);
 				} catch (Exception e) {
 					gasAmount = 0;
 					newValue="0.0";

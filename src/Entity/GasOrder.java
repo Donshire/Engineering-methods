@@ -1,59 +1,36 @@
 package Entity;
 
-import enums.OrderStatus;
-import sun.font.CreatedFontTracker;
-
 import java.io.Serializable;
-
-import enums.OrderStatus;
-
 
 public class GasOrder implements Serializable {
 	private static final long serialVersionUID = 2753012256812143843L;
 	private int purchaseID;
 	private String custmoerId;
-	private String fuelType;
 	private String supplyDate;
-	
 	private float gasAmount;
 	private String date;
 	private float priceOfPurchase;
 	private boolean urgent;
-	private OrderStatus status;
-	private int saleID;
-	private float currentPrice;
-	private String companyName;
 
 	/**
 	 * 
-	 * @param purchaseID - Automatically created on DB.
+	 * @param purchaseID      - Automatically created on DB.
 	 * @param custmoerId
-	 * @param fuelType
 	 * @param supplyDate
 	 * @param gasAmount
 	 * @param date
 	 * @param priceOfPurchase
 	 * @param urgent
-	 * @param status
-	 * @param saleID
-	 * @param currentPrice
-	 * @param companyName
 	 */
-	public GasOrder(int purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
-			float priceOfPurchase, boolean urgent, OrderStatus status, int saleID, float currentPrice,
-			String companyName) {
+	public GasOrder(int purchaseID, String custmoerId, String supplyDate, float gasAmount, String date,
+			float priceOfPurchase, boolean urgent) {
 		this.purchaseID = purchaseID;
 		this.custmoerId = custmoerId;
-		this.fuelType = fuelType;
 		this.supplyDate = supplyDate;
 		this.gasAmount = gasAmount;
 		this.date = date;
 		this.priceOfPurchase = priceOfPurchase;
 		this.urgent = urgent;
-		this.status = status;
-		this.saleID = saleID;
-		this.currentPrice = currentPrice;
-		this.companyName = companyName;
 	}
 
 	public int getPurchaseID() {
@@ -70,14 +47,6 @@ public class GasOrder implements Serializable {
 
 	public void setCustmoerId(String custmoerId) {
 		this.custmoerId = custmoerId;
-	}
-
-	public String getFuelType() {
-		return fuelType;
-	}
-
-	public void setFuelType(String fuelType) {
-		this.fuelType = fuelType;
 	}
 
 	public String getSupplyDate() {
@@ -120,44 +89,10 @@ public class GasOrder implements Serializable {
 		this.urgent = urgent;
 	}
 
-	public OrderStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(OrderStatus status) {
-		this.status = status;
-	}
-
-	public int getSaleID() {
-		return saleID;
-	}
-
-	public void setSaleID(int saleID) {
-		this.saleID = saleID;
-	}
-
-	public float getCurrentPrice() {
-		return currentPrice;
-	}
-
-	public void setCurrentPrice(float currentPrice) {
-		this.currentPrice = currentPrice;
-	}
-
-	public String getCompanyName() {
-		return companyName;
-	}
-
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-
 	@Override
 	public String toString() {
-		return "GasOrder [purchaseID=" + purchaseID + ", custmoerId=" + custmoerId + ", fuelType=" + fuelType
-				+ ", supplyDate=" + supplyDate + ", gasAmount=" + gasAmount + ", date=" + date + ", priceOfPurchase="
-				+ priceOfPurchase + ", urgent=" + urgent + ", status=" + status + ", saleID=" + saleID
-				+ ", currentPrice=" + currentPrice + ", companyName=" + companyName + "]";
+		return "GasOrder [purchaseID=" + purchaseID + ", custmoerId=" + custmoerId + ", supplyDate=" + supplyDate
+				+ ", gasAmount=" + gasAmount + ", date=" + date + ", priceOfPurchase=" + priceOfPurchase + ", urgent="
+				+ urgent + "]";
 	}
-
 }
