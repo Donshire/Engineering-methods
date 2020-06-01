@@ -26,7 +26,7 @@
             <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
          </children>
       </Pane>
-      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
+      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
             <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Fuel Rate">
                <font>
@@ -231,8 +231,8 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <ComboBox fx:id="reportKindCombo" layoutX="363.0" layoutY="20.0" prefWidth="150.0" />
-            <Text layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Sale ID/Number" />
+            <ComboBox fx:id="reportKindCombo" layoutX="363.0" layoutY="20.0" onAction="#selectReportType" prefWidth="150.0" />
+            <Text fx:id="enterSaleTxt" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Sale ID/Number" />
             <TextField fx:id="reportsaleNumber" layoutX="188.0" layoutY="74.0" />
             <Button fx:id="generateReportBtn" layoutX="405.0" layoutY="73.0" mnemonicParsing="false" onAction="#generateReport" text="Generate" />
             <Pane fx:id="PeriodicReportPane" layoutX="25.0" layoutY="120.0" prefHeight="370.0" prefWidth="620.0" visible="false">

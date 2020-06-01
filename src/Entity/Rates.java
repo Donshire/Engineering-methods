@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 import enums.RatesStatus;
 
+
+/*
+ * this must be deleted
+ * */
+
+
 public class Rates implements Serializable{
 	
 	/**

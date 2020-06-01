@@ -90,6 +90,8 @@ public class CompanyFuelControllerServer {
 		
 		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
 
+		// connecting to the db
+		createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
 		return file;
 	}
 
