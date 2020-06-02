@@ -104,8 +104,7 @@ public class GasHomeController implements Initializable {
 	void makePurchase(ActionEvent event) {	
 		if (!normalSupply.isSelected())
 			supplyDate = contemporaryDateStr;	
-		//customer.getId()
-		GasOrder order = new GasOrder(-1, "159753" , supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+		GasOrder order = new GasOrder(-1, customer.getId() , supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
 		if (CustomerCC.createNewOrder(order))
@@ -151,7 +150,7 @@ public class GasHomeController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Float plp = new Float((float) CustomerCC.getMaxPrice("HOME GAS"));
 		priceList.setText(plp.toString());
-		//customer = (Customer) ClientUI.user;
+		customer = (Customer) ClientUI.user;
 		textDiscount.setText("0");
 		
 		LocalDate contemporaryDate = LocalDate.now();

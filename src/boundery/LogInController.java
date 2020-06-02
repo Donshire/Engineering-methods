@@ -48,12 +48,27 @@ public class LogInController {
 
 		else {
 			Object obj = UserCC.login(username, password);
+			//
+			/*
+			else if (obj instanceof Supplier) {
+				System.out.println("supplier");
+				ClientUI.user = obj;
+				SupplierController supplier = new SupplierController();
+				try {
+					supplier.start(ClientUI.mainStage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			*/
+			//
 			if (obj instanceof Customer) {
 				System.out.println("customer");
-				GasHomeController aFrame = new GasHomeController();
-				aFrame.customer = (Customer) obj;
+				ClientUI.user = obj;
+				GasHomeController ghc = new GasHomeController();
+				//ghc.customer = (Customer) obj;
 				try {
-					aFrame.start(ClientUI.mainStage);
+					ghc.start(ClientUI.mainStage);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
