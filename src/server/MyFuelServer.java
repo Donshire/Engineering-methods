@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import Entity.Customer;
 import Entity.Employee;
+import Entity.GasOrder;
 import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
@@ -182,13 +183,22 @@ public class MyFuelServer extends AbstractServer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			break;
+			break; 
 
+		case CreateNewOrder: //*****
+			try {
+				Object	orderObj = GasStationController.createNewOrder((GasOrder) message.getObj());
+				Message msgToSend = new Message(orderObj, Commands.CreateNewOrderRes);
+				client.sendToClient(msgToSend);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break;
 			
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
 			try {
-				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
+				client.sendToClient(new Message(GasStationController.getOrders(s),Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

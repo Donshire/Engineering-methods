@@ -4,7 +4,10 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
+import Entity.Customer;
+import Entity.Employee;
 import Entity.GasOrder;
+import client.ClientUI;
 import client.CustomerCC;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,19 +24,18 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GasHomeController implements Initializable {
 
-	Integer discount = 0;
-	double PricePerUnit;
-	String supplyDate;
-	float gasAmount;
-	float priceOfPurchase = 0;
-	String contemporaryDateStr;
+	public Customer customer;
+	private Integer discount = 0;
+	private String supplyDate;
+	private float gasAmount;
+	private float priceOfPurchase = 0;
+	private String contemporaryDateStr;
 	
 
 	@FXML
@@ -102,10 +104,12 @@ public class GasHomeController implements Initializable {
 	void makePurchase(ActionEvent event) {	
 		if (!normalSupply.isSelected())
 			supplyDate = contemporaryDateStr;	
-		GasOrder order = new GasOrder(-1, "", supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+		//customer.getId()
+		GasOrder order = new GasOrder(-1, "159753" , supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
-		
+		if (CustomerCC.createNewOrder(order))
+			System.out.println("Invitation sent successfully!/n");
 		
 	}
 
@@ -116,7 +120,8 @@ public class GasHomeController implements Initializable {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("GasHome.fxml"));
-
+		customer = (Customer) ClientUI.user;	//
+		
 		mainPane = loader.load();
 		
 		// connect the scene to the file
@@ -146,6 +151,7 @@ public class GasHomeController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		Float plp = new Float((float) CustomerCC.getMaxPrice("HOME GAS"));
 		priceList.setText(plp.toString());
+		//customer = (Customer) ClientUI.user;
 		textDiscount.setText("0");
 		
 		LocalDate contemporaryDate = LocalDate.now();

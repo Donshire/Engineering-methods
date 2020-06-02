@@ -28,4 +28,9 @@ public class CustomerCC {
 		return (float)MyFuelClient.ServerRetObj;
 	}
 
+	public static boolean createNewOrder(GasOrder order) {
+		ClientUI.client.accept(new Message(order, Commands.CreateNewOrder));
+		return (Boolean)MyFuelClient.ServerRetObj;
+	}
+
 }

@@ -9,9 +9,10 @@ import enums.OrderStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class MyOrderConrtollerServer {
+public class GasStationController {
 
 	public static Object getOrders(String customerId) {
 
@@ -40,6 +41,28 @@ public class MyOrderConrtollerServer {
 
 		return orderList;
 
+	}
+
+	public static Object createNewOrder(GasOrder obj) {
+		PreparedStatement stm;
+		//ResultSet res;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, gasAmount, date, priceOfPurchase, urgent) " + 
+					"VALUES (?, ?, ?, ?, ?, ?); ");
+			stm.setString(1, obj.getCustmoerId());
+			stm.setString(2, obj.getSupplyDate());
+			stm.setFloat(3, obj.getGasAmount());
+			stm.setString(4, obj.getDate());
+			stm.setFloat(5, obj.getPriceOfPurchase());
+			stm.setBoolean(6, obj.isUrgent());
+			
+			stm.executeUpdate();
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}	
+		return true;
 	}
 
 }

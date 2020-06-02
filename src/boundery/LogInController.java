@@ -1,10 +1,10 @@
 package boundery;
 
-
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
-
+import Entity.Car;
 import Entity.Customer;
+import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.Supplier;
 import client.ClientUI;
@@ -29,6 +29,12 @@ public class LogInController {
 	private TextField usernametxt;
 
 	@FXML
+	private TextField carNumberInput;
+
+	@FXML
+	private Button fastFuelBtn;
+
+	@FXML
 	private Button loginbtb;
 
 	@FXML
@@ -42,12 +48,21 @@ public class LogInController {
 
 		else {
 			Object obj = UserCC.login(username, password);
-			if(obj instanceof Customer) System.out.println("customer");
-			//
-			else if(obj instanceof Employee) {
-				
+			if (obj instanceof Customer) {
+				System.out.println("customer");
+				GasHomeController aFrame = new GasHomeController();
+				aFrame.customer = (Customer) obj;
+				try {
+					aFrame.start(ClientUI.mainStage);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+			else if (obj instanceof Employee) {
+
 				System.out.println("employee");
-				ClientUI.user=obj;
+				ClientUI.user = obj;
 				MarketingManagerController marketingManager = new MarketingManagerController();
 				try {
 					marketingManager.start(ClientUI.mainStage);
@@ -56,10 +71,10 @@ public class LogInController {
 				}
 			}
 			//
-			else if(obj instanceof Supplier) System.out.println("supplier");
-			else if(obj==null)System.out.println("not exist");
-			else if(obj.equals(Commands.UserAlreadyConnected))
-					System.out.println("already online");
+			else if (obj == null)
+				System.out.println("not exist");
+			else if (obj.equals(Commands.UserAlreadyConnected))
+				System.out.println("already online");
 		}
 
 	}
