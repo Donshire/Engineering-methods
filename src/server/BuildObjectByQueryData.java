@@ -10,6 +10,7 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.PricingModule;
+import enums.RatesStatus;
 
 public class BuildObjectByQueryData {
 
@@ -100,6 +101,26 @@ public class BuildObjectByQueryData {
 		for(int i=0;i<words.length;i++)
 			sets.add(words[i]);
 		return sets;
+	}
+	
+	/**
+	 * Build Pricing Model Rates according to res 
+	 * @param res
+	 * @return arrayList of the object
+	 * there is three cases 1)ArrayList empty 2)ArrayList not empty 3)null in case of exeption
+	 */
+	public static ArrayList<PricingModule> BuildPricingModelRates(ResultSet res){
+		ArrayList<PricingModule> pricingModelRatesList = new ArrayList<PricingModule>();
+		try {
+			while (res.next() == true)
+				pricingModelRatesList.add(new PricingModule(res.getInt(1), res.getFloat(2)
+						, res.getString(3), RatesStatus.valueOf(res.getString(4))));
+				res.close();
+			return pricingModelRatesList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

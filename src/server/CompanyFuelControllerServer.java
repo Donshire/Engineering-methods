@@ -14,6 +14,7 @@ import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import Entity.CompanyFuel;
 import Entity.Fuel;
 import Entity.GenericReport;
+import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import enums.RatesStatus;
@@ -512,38 +513,43 @@ public class CompanyFuelControllerServer {
 
 	}
 
-	public static ArrayList<Rates> getAllCompanyRatesByStatus(String companyName, RatesStatus status) {
+	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(String companyName,RatesStatus status) {
 
 		PreparedStatement stm;
-		ResultSet res, res2;
-		ArrayList<Rates> rates = new ArrayList<Rates>();
+		ResultSet res;
 
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.rates where status = ? and company = ?");
-			stm.setString(1, status.toString());
-			stm.setString(2, companyName);
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.pricingmodule where company = ? and status = ?");
+			stm.setString(1, companyName);
+			stm.setString(2, status.toString());
 			res = stm.executeQuery();
 
-			while (res.next()) {
-
-				stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.fuel where fuelType = ?");
-				stm.setString(1, res.getString(3));
-				res2 = stm.executeQuery();
-				res2.next();
-				Fuel f = new Fuel(res2.getString(1), res.getFloat(2));
-
-				Rates rate = new Rates(res.getInt(1), res.getFloat(2), f, RatesStatus.valueOf(res.getString(4)),
-						res.getString(5), res.getString(6));
-
-				rates.add(rate);
-
-			}
-
+			return BuildObjectByQueryData.BuildPricingModelRates(res);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println();
-		return rates;
+		return null;
+	}
+	
+	public static ArrayList<PricingModule> getCompanyActivePricingRate(String companyName,int modelNumber) {
+
+		PreparedStatement stm;
+		ResultSet res;
+
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.pricingmodule where company = ? and modelNumber = ? and status = ?");
+			stm.setString(1, companyName);
+			stm.setInt(2, modelNumber);
+			stm.setString(3, RatesStatus.active.toString());
+			res = stm.executeQuery();
+
+			return BuildObjectByQueryData.BuildPricingModelRates(res);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static boolean saveRate(Rates rate) {

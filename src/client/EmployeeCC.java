@@ -5,9 +5,11 @@ import java.util.ArrayList;
 
 import Entity.CompanyFuel;
 import Entity.Message;
+import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import enums.Commands;
+import enums.CustomerRateTypes;
 
 public class EmployeeCC {
 
@@ -18,9 +20,9 @@ public class EmployeeCC {
 		return (boolean) MyFuelClient.ServerRetObj;
 	}
 
-	public static ArrayList<Rates> getAllCompanyRatesByStatus(Rates rate) {
-		ClientUI.client.accept(new Message(rate, Commands.getAllCompanyRatesByStatus));
-		return (ArrayList<Rates>) MyFuelClient.ServerRetObj;
+	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(PricingModule ratedata) {
+		ClientUI.client.accept(new Message(ratedata, Commands.getAllCompanyRatesByStatus));
+		return (ArrayList<PricingModule>) MyFuelClient.ServerRetObj;
 	}
 
 	public static boolean updateSale(ArrayList<Sale> sales) {
@@ -64,7 +66,7 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(CompanyName, Commands.getAllCompanyFuel));
 		return (ArrayList<String>) MyFuelClient.ServerRetObj;
 	}
-	
+	//this isn't used anyMore by rate
 	public static CompanyFuel getCompanyFuel(String CompanyName,String fuelType){
 		ArrayList<String> str =new ArrayList<String>(); 
 		str.add(CompanyName);
@@ -72,4 +74,10 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(str, Commands.getCompanyFuel));
 		return (CompanyFuel) MyFuelClient.ServerRetObj;
 	}
+	
+	public static PricingModule getCompanyActiveRateAccordingPriceModel(PricingModule ratedata){
+		ClientUI.client.accept(new Message(ratedata, Commands.getCompanyPricingRate));
+		return (PricingModule) MyFuelClient.ServerRetObj;
+	}
+	
 }

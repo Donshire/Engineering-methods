@@ -17,6 +17,7 @@ import Entity.GasStationOrder;
 import Entity.FuelPurchase;
 import Entity.Message;
 import Entity.MyFile;
+import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import Entity.Supplier;
@@ -38,6 +39,8 @@ public class MyFuelServer extends AbstractServer {
 
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Message message = (Message) msg;
+		PricingModule pricingModel;
+		ArrayList<PricingModule> result;
 
 		ServerController.writeToServerConsole(
 				"Message received: cmd " + message.getCmd() + " the object " + message.getObj() + " from " + client);
@@ -178,17 +181,18 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getAllCompanyRatesByStatus:
-			Rates rate_getAllCompanyRatesByStatus = (Rates) message.getObj();
-			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyRatesByStatus(
-						rate_getAllCompanyRatesByStatus.getCompanyName(), rate_getAllCompanyRatesByStatus.getStatus()),
-						Commands.defaultRes));
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			pricingModel = (PricingModule) message.getObj();
+			result = CompanyFuelControllerServer.getAllCompanyRatesByStatus(
+					pricingModel.getCompanyName(), pricingModel.getStatus());
+			sendToClientArrayList(result,client);
 			break;
 
+		case getCompanyPricingRate:
+			pricingModel = (PricingModule) message.getObj();
+			result = CompanyFuelControllerServer.getCompanyActivePricingRate(pricingModel.getCompanyName(), pricingModel.getModelNumber());
+			sendToClientObject(result,client);
+			break;
+			
 		case saveRate:
 			Rates rate_saveRate = (Rates) message.getObj();
 			try {
@@ -287,6 +291,48 @@ public class MyFuelServer extends AbstractServer {
 			System.out.println("default");
 		}
 
+	}
+	
+	/**
+	 * Generic function that send to client any arrayList
+	 * @param <T>
+	 * @param obj
+	 * @param client
+	 */
+	private <T> void sendToClientArrayList(ArrayList<T> obj,ConnectionToClient client) {
+		try {
+			if (obj != null) {
+				if(!obj.isEmpty())
+				client.sendToClient(new Message(obj, Commands.defaultRes));
+				else 
+					client.sendToClient(new Message(Commands.NoElementFound, Commands.NoElementFound));
+			}
+			client.sendToClient(new Message(Commands.ExceptionHappened, Commands.ExceptionHappened));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * sends to the client single object from the arrayList
+	 * @param <T>
+	 * @param obj
+	 * @param client
+	 */
+	private <T> void sendToClientObject(ArrayList<T> obj,ConnectionToClient client) {
+		try {
+			if (obj != null) {
+				if(!obj.isEmpty())
+				client.sendToClient(new Message(obj.get(0), Commands.defaultRes));
+				else 
+					client.sendToClient(new Message(Commands.NoElementFound, Commands.NoElementFound));
+			}
+			client.sendToClient(new Message(Commands.ExceptionHappened, Commands.ExceptionHappened));
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

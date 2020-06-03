@@ -17,6 +17,7 @@ import javax.swing.event.DocumentEvent.EventType;
 import Entity.CompanyFuel;
 import Entity.Employee;
 import Entity.Fuel;
+import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
@@ -24,6 +25,7 @@ import client.EmployeeCC;
 import client.MyFuelClient;
 import client.UserCC;
 import enums.Commands;
+import enums.CustomerRateTypes;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
@@ -107,7 +109,7 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private Pane fuelRatesPane;
 	@FXML
-	private ComboBox<String> fuelTypesRateCombo;
+	private ComboBox<CustomerRateTypes> fuelTypesRateCombo;
 	@FXML
 	private TextField newRatetxt;
 	@FXML
@@ -115,17 +117,15 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	private ComboBox<RatesStatus> rateTypeCombo;
 	@FXML
-	private TableView<Rates> fuelRatesTable;
+	private TableView<PricingModule> companyRatesTable;
 	@FXML
-	private TableColumn<Rates, Boolean> rateCheckBoxSelect;
+	private TableColumn<PricingModule, Boolean> rateCheckBoxSelect;
 	@FXML
-	private TableColumn<Rates, String> rateFuelType;
+	private TableColumn<PricingModule, String> modelNameRate;
 	@FXML
-	private TableColumn<Rates, String> rateIDrate;
+	private TableColumn<PricingModule, Float> rateNewRate;
 	@FXML
-	private TableColumn<Rates, Float> rateNewRate;
-	@FXML
-	private TableColumn<Rates, RatesStatus> rateStatus;
+	private TableColumn<PricingModule, RatesStatus> rateStatus;
 	@FXML
 	private Button updateRates;
 	@FXML
@@ -554,10 +554,10 @@ public class MarketingManagerController implements Initializable {
 //not done
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
-		String fuelType = fuelTypesRateCombo.getValue();
+		CustomerRateTypes rateType = fuelTypesRateCombo.getValue();
 
-		CompanyFuel fuel = EmployeeCC.getCompanyFuel(markitingManager.getCompanyName(), fuelType);
-		System.out.println(fuel);
+		PricingModule pricingModule = EmployeeCC.getCompanyActiveRateAccordingPriceModel(new PricingModule(rateType.ordinal(), 0, markitingManager.getCompanyName(), null));
+		
 		maxFuelPricetxt.setText(String.format("for Fuel %s : The Max Price is %.2f and the " + "current rate is %.2f",
 				fuelType, fuel.getFuel().getMaxPrice(), fuel.getFuel().getMaxPrice() - fuel.getCompanyPrice()));
 	}
@@ -570,71 +570,33 @@ public class MarketingManagerController implements Initializable {
 		else
 			updateRates.setVisible(false);
 
-		// sending partial rate
+		//get company pricing model rates
+		ObservableList<PricingModule> data = FXCollections.observableArrayList(EmployeeCC
+				.getAllCompanyRatesByStatus(new PricingModule(0,0, markitingManager.getCompanyName(),selected)));
+		//build the table and fill the data
+		buildCompanyRateTable(data);
 
-		ObservableList<Rates> data = FXCollections.observableArrayList(EmployeeCC
-				.getAllCompanyRatesByStatus(new Rates(null, 0, "", selected, "", markitingManager.getCompanyName())));
-
-		// perpare the table
-		/*
-		 * rateCheckBoxSelect.setCellValueFactory( new
-		 * PropertyValueFactory<Rates,Boolean>("check") );
-		 * rateCheckBoxSelect.setCellFactory( CheckBoxTableCell.forTableColumn(
-		 * rateCheckBoxSelect ) );
-		 */
-
-		// CheckBox
-
-		rateCheckBoxSelect
-				.setCellValueFactory(new Callback<CellDataFeatures<Rates, Boolean>, ObservableValue<Boolean>>() {
-					@Override
-					public ObservableValue<Boolean> call(CellDataFeatures<Rates, Boolean> param) {
-						Rates rate = param.getValue();
-						SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(rate.getCheck());
-
-						booleanProp.addListener(new ChangeListener<Boolean>() {
-							@Override
-							public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
-									Boolean newValue) {
-								if (newValue == true)
-									selectedRates.add(rate);
-								else
-									selectedRates.remove(rate);
-								rate.setCheck(newValue);
-							}
-						});
-						return booleanProp;
-					}
-				});
-
-		rateCheckBoxSelect.setCellFactory(new Callback<TableColumn<Rates, Boolean>, //
-				TableCell<Rates, Boolean>>() {
-			@Override
-			public TableCell<Rates, Boolean> call(TableColumn<Rates, Boolean> p) {
-				CheckBoxTableCell<Rates, Boolean> cell = new CheckBoxTableCell<Rates, Boolean>();
-				cell.setAlignment(Pos.CENTER);
-				return cell;
-			}
-		});
-		// End of checkBox
-		rateFuelType.setCellValueFactory(new PropertyValueFactory<Rates, String>("fuelType"));
-
-		rateIDrate.setCellValueFactory(new PropertyValueFactory<Rates, String>("rateId"));
-
-		rateNewRate.setCellValueFactory(new PropertyValueFactory<Rates, Float>("rateValue"));
-
-		rateStatus.setCellValueFactory(new PropertyValueFactory<Rates, RatesStatus>("status"));
-		// fill the table
-		fuelRatesTable.getItems().setAll(data);
-
-		// empety the selected row
 		selectedRates.clear();
 
+	}
+	
+	private void buildCompanyRateTable(ObservableList<PricingModule> data){
+		//create comboBOX
+		GUIBuiltParts.buildCheckBOXForTable(rateCheckBoxSelect,selectedRates);
+
+		modelNameRate.setCellValueFactory(new PropertyValueFactory<PricingModule, String>("modelname"));
+
+		rateNewRate.setCellValueFactory(new PropertyValueFactory<PricingModule, Float>("salePercent"));
+
+		rateStatus.setCellValueFactory(new PropertyValueFactory<PricingModule, RatesStatus>("status"));
+        // fill the table
+		companyRatesTable.getItems().setAll(data);
+		//companyRatesTable
 	}
 
 	private Pane currentPane;
 	public static Employee markitingManager;
-	private ArrayList<Rates> selectedRates = new ArrayList<Rates>();
+	private ArrayList<PricingModule> selectedRates = new ArrayList<PricingModule>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 	private ArrayList<CompanyFuel> companyFuel = new ArrayList<CompanyFuel>();
@@ -747,8 +709,8 @@ public class MarketingManagerController implements Initializable {
 
 		// loading RatesPane data
 		// call server and get fuel types from company
-		ObservableList<String> fuelTypes = FXCollections
-				.observableArrayList(EmployeeCC.getAllCompanyFuelTypes(markitingManager.getCompanyName()));
+		ObservableList<CustomerRateTypes> fuelTypes = FXCollections
+				.observableArrayList(CustomerRateTypes.values());
 		fuelTypesRateCombo.setItems(fuelTypes);
 
 		// initialize rateTypeCombo comboBox
