@@ -185,6 +185,7 @@ public class GasStationControllerServer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		sendMailToStationManager(stationID,fuelType);
 	}
 
 	public static Supplier getSupplierByFuelType (String fuelType) {
@@ -250,7 +251,7 @@ public class GasStationControllerServer {
 	}
 	
 	
-	private static void sendMailToStationManager(int stationID) {
+	private static void sendMailToStationManager(int stationID,String fuelType) {
 		
 		GasStation gasStation = getGasStation(stationID);
 		if(gasStation==null) {
@@ -259,45 +260,55 @@ public class GasStationControllerServer {
 		}
 		Employee employee = EmployeeController.getEmployeeByWorkerID(gasStation.getStationMangerWorkerID());
 		
-		// Recipient's email ID needs to be mentioned.
-	      String to = employee.getMail();
+		final String username = "myfuelltm2020@gmail.com";
+	      final String password = "hy3!Nf+4P_3b";
 
-	      // Sender's email ID needs to be mentioned
-	      String from = "iamme0ssa@gmail.com";
+	      Properties props = new Properties();
+	      props.put("mail.smtp.auth", true);
+	      props.put("mail.smtp.starttls.enable", true);
+	      props.put("mail.smtp.host", "smtp.gmail.com");
+	      props.put("mail.smtp.port", "587");
 
-	      // Assuming you are sending email from localhost
-	      String host = "localhost";
-
-	      // Get system properties
-	      Properties properties = System.getProperties();
-
-	      // Setup mail server
-	      properties.setProperty("mail.smtp.host", host);
-
-	      // Get the default Session object.
-	      Session session = Session.getDefaultInstance(properties);
+	      Session session = Session.getInstance(props,
+	              new javax.mail.Authenticator() {
+	                  protected PasswordAuthentication getPasswordAuthentication() {
+	                      return new PasswordAuthentication(username, password);
+	                  }
+	              });
 
 	      try {
-	         // Create a default MimeMessage object.
-	         MimeMessage message = new MimeMessage(session);
 
-	         // Set From: header field of the header.
-	         message.setFrom(new InternetAddress(from));
+	          Message message = new MimeMessage(session);
+	          message.setFrom(new InternetAddress("myfuelltm2020@gmail.com"));
+//	          message.setRecipients(Message.RecipientType.TO,
+//	                  InternetAddress.parse(employee.getMail()));
+	          message.setRecipients(Message.RecipientType.TO,
+	                  InternetAddress.parse("iamme0ssa@gmail.com"));
+	          message.setSubject(String.format("Fuel type %s reached minemum quantity !!!!", fuelType));
+	          message.setText("System created Fuel Order, Wainting you'r approvale");
 
-	         // Set To: header field of the header.
-	         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+//	          MimeBodyPart messageBodyPart = new MimeBodyPart();
+//
+//	          Multipart multipart = new MimeMultipart();
+//
+//	          messageBodyPart = new MimeBodyPart();
+//	          String file = "path of file to be attached";
+//	          String fileName = "attachmentName";
+//	          DataSource source = new FileDataSource(file);
+//	          messageBodyPart.setDataHandler(new DataHandler(source));
+//	          messageBodyPart.setFileName(fileName);
+//	          multipart.addBodyPart(messageBodyPart);
 
-	         // Set Subject: header field
-	         message.setSubject("This is the Subject Line!");
+//	          message.setContent(multipart);
 
-	         // Now set the actual message
-	         message.setText("This is actual message");
+	          System.out.println("Sending");
 
-	         // Send message
-	         Transport.send(message);
-	         System.out.println("Sent message successfully....");
-	      } catch (MessagingException mex) {
-	         mex.printStackTrace();
+	          Transport.send(message);
+
+	          System.out.println("Done");
+
+	      } catch (MessagingException e) {
+	          e.printStackTrace();
 	      }
 		
 	}
