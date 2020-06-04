@@ -61,6 +61,7 @@ public class MyFuelClient extends AbstractClient {
 	public void handleMessageFromClientUI(Object str) {
 		try {
 			awaitResponse = true;
+			openConnection();
 			sendToServer(str);
 			// wait for response
 			while (awaitResponse) {

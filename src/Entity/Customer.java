@@ -14,10 +14,12 @@ public class Customer extends User implements Serializable {
 	private int customerTypeAnaleticRank;
 	private int fuelingHourAnaleticRank;
 	private String visaNumber;
+	private String expDate;
+	private String CVV;
 
 	public Customer(String userName, String password, String firstName, String lastName, String mail, String id,
 			String phoneNumber, int online, String adress, int pricingModel, int customerTypeAnaleticRank,
-			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber) {
+			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber, online);
 		this.adress = adress;
 		this.pricingModel = pricingModel;
@@ -25,6 +27,8 @@ public class Customer extends User implements Serializable {
 		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
 		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
 		this.visaNumber = visaNumber;
+		this.expDate = expDate;
+		this.CVV = CVV;
 	}
 
 	public String getVisaNumber() {
@@ -59,12 +63,36 @@ public class Customer extends User implements Serializable {
 		this.purchaseModule = purchaseModule;
 	}
 
+	public String getExpDate() {
+		return expDate;
+	}
+
+	public void setExpDate(String expDate) {
+		this.expDate = expDate;
+	}
+
+	public String getCVV() {
+		return CVV;
+	}
+
+	public void setCVV(String cVV) {
+		CVV = cVV;
+	}
+
 	public int getCustomerTypeAnaleticRank() {
 		return customerTypeAnaleticRank;
 	}
 
 	public void setCustomerTypeAnaleticRank(int customerTypeAnaleticRank) {
 		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
+				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
+				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
+				+ "]";
 	}
 
 	public int getFuelingHourAnaleticRank() {
@@ -75,11 +103,5 @@ public class Customer extends User implements Serializable {
 		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
 	}
 
-	@Override
-	public String toString() {
-		return super.toString() + " Customer [visaNumber=" + visaNumber + ", adress=" + adress +"\n"+ ", pricingModel="
-				+ pricingModel + ", purchaseModule=" +"\n"+ purchaseModule + ", customerTypeAnaleticRank="
-				+ customerTypeAnaleticRank + "\n"+ ", fuelingHourAnaleticRank=" + fuelingHourAnaleticRank + "]";
-	}
 
 }
