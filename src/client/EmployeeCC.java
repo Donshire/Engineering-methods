@@ -3,7 +3,9 @@ package client;
 import java.io.File;
 import java.util.ArrayList;
 
+import Entity.Car;
 import Entity.CompanyFuel;
+import Entity.Customer;
 import Entity.Message;
 import Entity.Rates;
 import Entity.Sale;
@@ -67,4 +69,29 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(str, Commands.getCompanyFuel));
 		return (CompanyFuel) MyFuelClient.ServerRetObj;
 	}
+	
+	public static boolean AddNewCustomer(Customer customer) {
+		ClientUI.client.accept(new Message(customer,Commands.addNewCustomer));
+		return(boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static int checkIfExist(String id) {
+		ClientUI.client.accept(new Message(id,Commands.checkIfExist));
+		return(int)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean addNewCar(Car car) {
+		ClientUI.client.accept(new Message(car,Commands.addNewCar));
+		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean updateModels(String pricing, String purchase, String id) {
+		ArrayList<Object> objs = new ArrayList<Object>();
+		objs.add(pricing);
+		objs.add(purchase);
+		objs.add(id);
+		ClientUI.client.accept(new Message(objs,Commands.updateModels));
+		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
 }

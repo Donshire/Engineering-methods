@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.Employee;
@@ -281,6 +282,47 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 			
+		case addNewCustomer:
+			Customer cust = (Customer)(message.getObj());
+			try {
+				client.sendToClient(new Message(EmployeeController.addNewCustmer(cust),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		case checkIfExist:
+			String id = (String)(message.getObj());
+			try {
+				client.sendToClient(new Message(EmployeeController.checkIfExist(id),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+
+			}
+			break;
+			
+		case addNewCar:
+			Car car = (Car)(message.getObj());
+			try {
+				client.sendToClient(new Message(EmployeeController.addNewCar(car),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			
+		case updateModels:
+			ArrayList<Object> objlist = (ArrayList<Object>) message.getObj();
+			String pricing =(String)objlist.get(0);
+			String purchase =(String)objlist.get(1);
+			String cuId = (String)objlist.get(2);
+			try {
+				client.sendToClient(new Message(EmployeeController.updateModels(pricing, purchase, cuId),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
 		default:
 			System.out.println("default");
 		}
