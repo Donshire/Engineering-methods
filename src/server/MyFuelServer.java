@@ -97,7 +97,7 @@ public class MyFuelServer extends AbstractServer {
 			
 		case fastFuelingLogIn:
 			String carNumber=(String)message.getObj();
-			sendToClientObject(FastFuelController.fastFuelingLogIn(carNumber), client);
+			sendToClientArrayList(FastFuelController.fastFuelingLogIn(carNumber), client);
 			break;
 			
 		case getAllCompanyFuelStationID:
@@ -113,8 +113,11 @@ public class MyFuelServer extends AbstractServer {
             
 		case commitFuelPurchase:
 			str =(ArrayList<Object>)message.getObj();
+			FuelPurchase fuelPurchase = (FuelPurchase)str.get(2);
+			fuelPurchase.setTime(timeFormat.format(date));
+			fuelPurchase.setDate(dateFormat.format(date));
 			sendToClientObject(FastFuelController.commitFuelPurchase(
-					(String)str.get(0),(String)str.get(1),(FuelPurchase)str.get(2)),client);
+					(String)str.get(0),(String)str.get(1),fuelPurchase,(String)str.get(3)),client);
             break;
             
 		case updatePricingModel:

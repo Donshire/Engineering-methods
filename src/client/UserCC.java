@@ -24,8 +24,8 @@ public class UserCC {
 		ClientUI.client.accept(new Message(array, Commands.logOut));
 	}
 
-	public static Car fastFuelingLogIn(String catNumber) {
+	public static ArrayList<Object> fastFuelingLogIn(String catNumber) {
 		ClientUI.client.accept(new Message(catNumber, Commands.fastFuelingLogIn));
-		return (Car)MyFuelClient.ServerRetObj;
+		return (ArrayList<Object>) MyFuelClient.ServerRetObj;
 	}
 }

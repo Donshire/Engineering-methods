@@ -29,9 +29,9 @@ import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable {
 
-	public Car car;
-	public Customer customer;
-	public CustomerModule customerModule;
+	public static Car car;
+	public static Customer customer;
+	public static CustomerModule customerModule;
 	// usable
 	private String companyName;
 	private int stationID;
@@ -99,21 +99,26 @@ public class FastFuelingController implements Initializable {
 		// create FyelPurchase Object
 		// acording to use and how we wnat to save sales
 		int sales = 0;
+		int result=-3;
 		if (!salesID.isEmpty())
 			sales = salesID.get(0);
-		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice, "", "",
-				sales, currentPrice, customer.getId());
+		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice*amount, "", "",
+				sales, currentPrice*amount, customer.getId());
 
 		if (visaRadio.isSelected())
-			if (CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase))
-				JOptionPane.showMessageDialog(null, "purchase succeded");
-			else
-				JOptionPane.showMessageDialog(null, "purchase ub-succeded");
+			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());
+
 		else if (cashRadio.isSelected())
-			if (CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase))
-				JOptionPane.showMessageDialog(null, "purchase succeded");
-			else
-				JOptionPane.showMessageDialog(null, "purchase ub-succeded");
+			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
+		
+		if(result==-1)//succeded
+			JOptionPane.showMessageDialog(null, "Purchase succeded");
+		if(result==-2)
+			JOptionPane.showMessageDialog(null, "Purchase un-succeded");
+		if(result>=0)
+			JOptionPane.showMessageDialog(null, String.format(
+					"Order excede station max qauntity\nthe max quantity is %d", result));
+		
 	}
 
 	@FXML
@@ -138,17 +143,19 @@ public class FastFuelingController implements Initializable {
 		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName, customerModule,
 				customer.getPricingModel());
 		customerPrice = resDetails.get(0);
+		currentPrice=resDetails.get(1);
 		// get all sales ID
 		int i = 4;
-		while (i <= resDetails.size())
+		while (i < resDetails.size()) {
 			salesID.add(resDetails.get(i).intValue());
-
+			i++;
+		}
 		//
 		dataPane.setVisible(false);
 		paymentPane.setVisible(true);
 
 		// set the price
-		totalPrice.setText(Float.toString(amount * customerPrice));
+		totalPrice.setText(String.format("%.2f",amount * customerPrice));
 	}
 
 	@FXML
@@ -195,13 +202,11 @@ public class FastFuelingController implements Initializable {
 		// set the data for the customer
 		carNumberTxt.setText(car.getCarNumber());
 		fuelTypeTxt.setText(car.getFuelType());
-		//pricingModelTxt.setText(Integer.toString(customer.getPricingModel()));
+		pricingModelTxt.setText(Integer.toString(customer.getPricingModel()));
 
 		// fill the combo with companies Names
-		// call server
 		// Set value of companiesCombo
-		//temp------------------------------------------------------------------------
-		//fillcompaniesCombo();
+		fillcompaniesCombo();
 	}
 
 	private void fillcompaniesCombo() {

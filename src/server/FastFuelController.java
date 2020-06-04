@@ -20,13 +20,13 @@ public class FastFuelController {
 	 * @param carNumber
 	 * @return ArrayList of Objects containig  objects car,customer,cutomer model,purchase model
 	 */
-	public static Car fastFuelingLogIn(String carNumber) {
-//		ArrayList<Object> results = new ArrayList<Object>();
+	public static ArrayList<Object> fastFuelingLogIn(String carNumber) {
+		ArrayList<Object> results = new ArrayList<Object>();
 		
 		//adding car to the result
-		return EmployeeController.getCarByNumber(carNumber);
-		//results.add(car);
-		/*
+		Car car = EmployeeController.getCarByNumber(carNumber);
+		results.add(car);
+		
 		//adding customer to the result
 		Customer customer=EmployeeController.getCutomerByCarNumber(car.getCarCustomerId());
 		if(customer==null)return null;
@@ -38,7 +38,7 @@ public class FastFuelController {
 		results.add(customerModule);
 		
 		return results;
-		*/
+		
 		
 	}
 	/**
@@ -72,17 +72,34 @@ public class FastFuelController {
 	
 	/**
 	 * call payment method and save the purchase details
+	 * check station fuel quantity, if there is no enough.<br>
+	 * it will return the max amount for purchase <br>
+	 * else it will updates the station fuel
+	 * and check for a need for gas Station Order
 	 * @param customerId String
 	 * @param paymentOption if visa must contain visa number if cash "cash"
 	 * @param purchase FuelPurchase
-	 * @return
+	 * @return -1 if succeded -2 if un-succeded 
 	 */
-	public static boolean commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase) {
+	public static int commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase,String fuelType) {
+		//check if station contain the amount needed
+		float amountInStation = GasStationControllerServer.getStationFuelQuantity(purchase.getStationId(), fuelType);
+		if(amountInStation<purchase.getFuelQuantity()) 
+			return (int) amountInStation;//there is no enought amount
+		
+		//update station Inventory
+		amountInStation=amountInStation-purchase.getFuelQuantity();
+		GasStationControllerServer.updateFuelQuantity(amountInStation, purchase.getStationId(), fuelType);
+		
+		//Check fuel Quantity
+		GasStationControllerServer.ReachedMinemumQuantityHandler(purchase.getStationId(),fuelType,amountInStation);
+		
 		//call paymentMethod
 		if(payment(customerId, paymentOption,purchase.getPriceOfPurchase()))
 		//save purchase details
-		return savePurchaseDetails(purchase);
-		return false;
+		if(savePurchaseDetails(purchase))
+		return -1;
+		return -2;
 	}
 	
 	/**

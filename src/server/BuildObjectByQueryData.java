@@ -9,7 +9,9 @@ import java.util.Set;
 import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
+import Entity.GasStationOrder;
 import Entity.PricingModule;
+import Entity.Supplier;
 import enums.RatesStatus;
 
 public class BuildObjectByQueryData {
@@ -122,5 +124,35 @@ public class BuildObjectByQueryData {
 		}
 		return null;
 	}
+	
+	public static ArrayList<Supplier> BuildSupplier(ResultSet res){
+		ArrayList<Supplier> supplierList = new ArrayList<Supplier>();
+		try {
+			while (res.next() == true)
+				supplierList.add(new Supplier(res.getString(1), res.getString(2),
+						res.getString(3), res.getString(4), res.getString(5),
+						res.getString(6), res.getString(8), res.getInt(9), res.getString(7)));
+				res.close();
+			return supplierList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
+	public static ArrayList<GasStationOrder> BuildGasStationOrder(ResultSet res){
+		ArrayList<GasStationOrder> orders = new ArrayList<GasStationOrder>();
+		try {
+			while (res.next() == true)
+				orders.add(new GasStationOrder(res.getInt(1), res.getString(2), res.getInt(3),
+						res.getString(4), res.getString(5), res.getString(6), res.getString(7), res.getFloat(8)));
+				
+				res.close();
+			return orders;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
