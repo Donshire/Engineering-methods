@@ -3,15 +3,49 @@ package Entity;
 public class StationFuel {
 
 	private Fuel fuel;
+	private String fuelType; 
 	private GasStation station;
+	private int stationID;
 	private float amount;
 	private float minQuantity;
+	private int tankSize;
 
-	public StationFuel(Fuel fuel, GasStation station, float amount, float minQuantity) {
+	public StationFuel(Fuel fuel, GasStation station, float amount, float minQuantity, int tankSize) {
 		this.fuel = fuel;
 		this.station = station;
 		this.amount = amount;
 		this.minQuantity = minQuantity;
+		this.tankSize = tankSize;
+		
+		fuelType=fuel.getFuelType();
+		stationID=station.getStationID();
+	}
+	
+	public StationFuel(String fuelType, int stationID, float amount, float minQuantity, int tankSize) {
+		this.fuelType = fuelType;
+		this.stationID = stationID;
+		this.amount = amount;
+		this.minQuantity = minQuantity;
+		this.tankSize = tankSize;
+		
+		station=null;
+		fuel=null;
+	}
+
+	public String getFuelType() {
+		return fuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		this.fuelType = fuelType;
+	}
+
+	public int getStationID() {
+		return stationID;
+	}
+
+	public void setStationID(int stationID) {
+		this.stationID = stationID;
 	}
 
 	public Fuel getFuel() {
@@ -46,10 +80,18 @@ public class StationFuel {
 		this.minQuantity = minQuantity;
 	}
 
+	public int getTankSize() {
+		return tankSize;
+	}
+
+	public void setTankSize(int tankSize) {
+		this.tankSize = tankSize;
+	}
+
 	@Override
 	public String toString() {
 		return "StationFuel [fuel=" + fuel + ", station=" + station + ", amount=" + amount + ", minQuantity="
-				+ minQuantity + "]";
+				+ minQuantity + ", tankSize=" + tankSize + "]";
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import Entity.Car;
 import Entity.Customer;
+import Entity.Employee;
 
 public class EmployeeController {
 
@@ -32,7 +33,7 @@ public class EmployeeController {
 			
 			stm.close();
 			
-			if(car==null)return null;
+			if(car==null||car.isEmpty())return null;
 			return car.get(0);
 			
 		} catch (SQLException e) {
@@ -64,7 +65,7 @@ public class EmployeeController {
 			
 			stm.close();
 			
-			if(customer==null)return null;
+			if(customer==null||customer.isEmpty())return null;
 			return customer.get(0);
 			
 		} catch (SQLException e) {
@@ -72,4 +73,29 @@ public class EmployeeController {
 		}
 		return null;
 	}
+	
+	
+	public static Employee getEmployeeByWorkerID(int workerId) {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<Employee> employee;
+		String query="select * from myfueldb.employee where workerId = ?";
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setInt(1, workerId);
+			res=stm.executeQuery();
+			//create car object
+			employee=BuildObjectByQueryData.BuildEmployee(res);
+			
+			stm.close();
+			
+			if(employee==null||employee.isEmpty())return null;
+			return employee.get(0);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
