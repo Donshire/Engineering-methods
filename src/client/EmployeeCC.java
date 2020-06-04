@@ -13,33 +13,30 @@ import enums.CustomerRateTypes;
 
 public class EmployeeCC {
 
-	public static boolean updateFuelRate(ArrayList<Rates> rates) {
-
-		ClientUI.client.accept(new Message(rates, Commands.updateFuelRate));
-
-		return (boolean) MyFuelClient.ServerRetObj;
+	public static Message updatePricingModel(ArrayList<PricingModule> rates) { 
+		ClientUI.client.accept(new Message(rates, Commands.updatePricingModel));
+		return (Message) MyFuelClient.ServerRetObj;
 	}
 
 	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(PricingModule ratedata) {
 		ClientUI.client.accept(new Message(ratedata, Commands.getAllCompanyRatesByStatus));
-		return (ArrayList<PricingModule>) MyFuelClient.ServerRetObj;
+		return (ArrayList<PricingModule>)MyFuelClient.ServerRetObj;
 	}
 
-	public static boolean updateSale(ArrayList<Sale> sales) {
+	public static Message updateSale(ArrayList<Sale> sales) {
 		ClientUI.client.accept(new Message(sales, Commands.updateSale));
-		// may Cause some problems
-		return (boolean) MyFuelClient.ServerRetObj;
+		return (Message) MyFuelClient.ServerRetObj;
 	}
 
 	public static ArrayList<Sale> getCompanySalesByStatus(Sale sale) {
 		ClientUI.client.accept(new Message(sale, Commands.getAllCompanySalesByStatus));
 
-		return (ArrayList<Sale>) MyFuelClient.ServerRetObj;
+		return (ArrayList<Sale>)MyFuelClient.ServerRetObj;
 	}
 
-	public static boolean craeteNewRate(Rates rate) {
-		ClientUI.client.accept(new Message(rate, Commands.saveRate));
-		return (boolean) MyFuelClient.ServerRetObj;
+	public static Message craeteNewPricingModel(PricingModule pricingModel) {
+		ClientUI.client.accept(new Message(pricingModel, Commands.savePricingModel));
+		return (Message) MyFuelClient.ServerRetObj;
 	}
 	
 	public static Object createSaleResponseResport(String id,String companyName) {
@@ -66,6 +63,7 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(CompanyName, Commands.getAllCompanyFuel));
 		return (ArrayList<String>) MyFuelClient.ServerRetObj;
 	}
+	
 	//this isn't used anyMore by rate
 	public static CompanyFuel getCompanyFuel(String CompanyName,String fuelType){
 		ArrayList<String> str =new ArrayList<String>(); 

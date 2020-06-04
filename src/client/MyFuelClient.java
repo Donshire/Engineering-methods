@@ -35,9 +35,15 @@ public class MyFuelClient extends AbstractClient {
 			Message message = (Message) msg;
 
 			switch (message.getCmd()) {
-
-				case defaultRes:// receive from server ArrayList<employee>
-					ServerRetObj = message.getObj();
+				case defaultRes:
+					if(message.getObj() instanceof Boolean)
+						ServerRetObj = message;
+					else ServerRetObj = message.getObj();
+					break;
+				case NoElementFound:
+					if(message.getObj() instanceof Boolean)
+						ServerRetObj = message;
+					else ServerRetObj = message.getObj();
 					break;
 				case CustomerOrderListRes:
 					ServerRetObj = message.getObj();
@@ -54,7 +60,7 @@ public class MyFuelClient extends AbstractClient {
 					break;
 			}
 		}
-		
+		else System.out.println("NULL RECIEVED FROM THE SERVER !!");
 		awaitResponse = false;
 	}
 

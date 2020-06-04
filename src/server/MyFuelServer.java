@@ -41,143 +41,119 @@ public class MyFuelServer extends AbstractServer {
 		Message message = (Message) msg;
 		PricingModule pricingModel;
 		ArrayList<PricingModule> result;
-
+		
+		File file;
+		Object resltObject;
+		
+		ArrayList<String> arr;
+		ArrayList<Object> str;
+		
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss");
+		
+		boolean flag;
+		
+		
 		ServerController.writeToServerConsole(
 				"Message received: cmd " + message.getCmd() + " the object " + message.getObj() + " from " + client);
 
 		switch (message.getCmd()) {
 		case Login:
-			try {
-				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				Object resltObject=LogINController.LogIn(arr.get(0), arr.get(1));
-				//founded a user
-				if(resltObject!=null) {
-					if(resltObject instanceof Supplier) {
-						Supplier supplier= (Supplier)resltObject;
-						ServerController.onlineUserTableCont(supplier.getId(),"supplier");
-						client.sendToClient(new Message(supplier, Commands.defaultRes));
-					}
-					if(resltObject instanceof Customer) {
-						Customer customer= (Customer)resltObject;
-						ServerController.onlineUserTableCont(customer.getId(),"customer");
-						client.sendToClient(new Message(customer, Commands.defaultRes));
-					}
-					if(resltObject instanceof Employee) {
-						Employee employee= (Employee)resltObject;
-						ServerController.onlineUserTableCont(employee.getId(),employee.getRole());
-						client.sendToClient(new Message(employee, Commands.defaultRes));
-					}
+			arr = (ArrayList<String>) (message.getObj());
+			resltObject = LogINController.LogIn(arr.get(0), arr.get(1));
+			// founded a user
+			if (resltObject != null) {
+				if (resltObject instanceof Supplier) {
+					Supplier supplier = (Supplier) resltObject;
+					ServerController.onlineUserTableCont(supplier.getId(), "supplier");
+					sendToClientObject(supplier, client);
 				}
-				client.sendToClient(new Message(resltObject, Commands.defaultRes));
-				
-			} catch (IOException e) {
-				e.printStackTrace();
+				if (resltObject instanceof Customer) {
+					Customer customer = (Customer) resltObject;
+					ServerController.onlineUserTableCont(customer.getId(), "customer");
+					sendToClientObject(customer, client);
+				}
+				if (resltObject instanceof Employee) {
+					Employee employee = (Employee) resltObject;
+					ServerController.onlineUserTableCont(employee.getId(), employee.getRole());
+					sendToClientObject(employee, client);
+				}
 			}
+			sendToClientObject(resltObject, client);
 			break;
 
 		case logOut:
+			arr = (ArrayList<String>) (message.getObj());
+			String tableName = arr.get(1).toLowerCase().substring(13, arr.get(1).length());
 			try {
-				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				String tableName=arr.get(1).toLowerCase().substring(13, arr.get(1).length());
-				LogINController.updateUserOnlineStatus(tableName,arr.get(0), 0);
-				ServerController.onlineUserTableCont(arr.get(0),"");
-				try {
-					client.sendToClient(new Message(null, Commands.defaultRes));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				LogINController.updateUserOnlineStatus(tableName, arr.get(0), 0);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			ServerController.onlineUserTableCont(arr.get(0), "");
+			sendToClientObject("No Thing", client);
 			break;
+			
 		case fastFuelingLogIn:
 			String carNumber=(String)message.getObj();
-			try {
-				//
-				client.sendToClient(new Message(FastFuelController.fastFuelingLogIn(carNumber), Commands.defaultRes));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendToClientObject(FastFuelController.fastFuelingLogIn(carNumber), client);
+			break;
+			
 		case getAllCompanyFuelStationID:
 			String companyName=(String)message.getObj();
-			try {
-				client.sendToClient(new Message(FastFuelController.getAllCompanyFuelStationID(companyName), Commands.defaultRes));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				sendToClientArrayList(FastFuelController.getAllCompanyFuelStationID(companyName), client);
             break;
+            
 		case getPurchasePriceDetails:
-			ArrayList<Object> str =(ArrayList<Object>)message.getObj();
-			try {
-				client.sendToClient(new Message(FastFuelController.priceCalculationAndPricingModel
-						((String)str.get(0),(CustomerModule)str.get(1),(int)str.get(2)), Commands.defaultRes));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			str =(ArrayList<Object>)message.getObj();
+				sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
+						((String)str.get(0),(CustomerModule)str.get(1),(int)str.get(2)), client);
             break;
+            
 		case commitFuelPurchase:
-			ArrayList<Object> str1 =(ArrayList<Object>)message.getObj();
-			try {
-				client.sendToClient(new Message(FastFuelController.commitFuelPurchase((String)str1.get(0),(String)str1.get(1),(FuelPurchase)str1.get(2)), Commands.defaultRes));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			str =(ArrayList<Object>)message.getObj();
+			sendToClientObject(FastFuelController.commitFuelPurchase(
+					(String)str.get(0),(String)str.get(1),(FuelPurchase)str.get(2)),client);
             break;
-		case updateFuelRate:
-			ArrayList<Rates> rates = (ArrayList<Rates>) message.getObj();
-			try {
-				boolean flag = true;
-				for (Rates rate : rates) {
-					if (!CompanyFuelControllerServer.updateRateStatus(rate))
-						flag = false;
-				}
-				client.sendToClient(new Message(flag, Commands.defaultRes));
-
-			} catch (IOException e) {
-				e.printStackTrace();
+            
+		case updatePricingModel:
+			ArrayList<PricingModule> pricingModules = (ArrayList<PricingModule>) message.getObj();
+			flag = true;
+			for (PricingModule pricingModule : pricingModules) {
+				if (!CompanyFuelControllerServer.updatePricingModelStatus(pricingModule))
+					flag = false;
 			}
+			sendToClientObject(flag, client);
 			break;
 			
 		case updateGasOrdersStatus:
 			ArrayList<GasStationOrder> orders = (ArrayList<GasStationOrder>) message.getObj();
-			try {
-				boolean flag = true;
-				for (GasStationOrder order : orders) {
-					if(!GasStationControllerServer.updateOrderStatus(order))
-						flag=false;
-				}
-				client.sendToClient(new Message(flag, Commands.defaultRes));
-			} catch(IOException e) {
-				e.printStackTrace();
+			flag = true;
+			for (GasStationOrder order : orders) {
+				if (!GasStationControllerServer.updateOrderStatus(order))
+					flag = false;
 			}
+			sendToClientObject(flag, client);
 			break;
 
 		case updateSale:
 			ArrayList<Sale> sales_updateSale = (ArrayList<Sale>) message.getObj();
-			try {
-				boolean flag = true;
-				for (Sale sale : sales_updateSale) {
-					if (!CompanyFuelControllerServer.updateSale(sale))
-						flag = false;
-				}
-				client.sendToClient(new Message(flag, Commands.defaultRes));
-
-			} catch (IOException e) {
-				e.printStackTrace();
+			flag = true;
+			for (Sale sale : sales_updateSale) {
+				if (!CompanyFuelControllerServer.updateSale(sale))
+					flag = false;
 			}
+			sendToClientObject(flag, client);
 			break;
 
 		case getAllCompanySalesByStatus:
 			Sale salesPartialData = (Sale) message.getObj();
 			// partial means that not all the data are filled
-			try {
 				ArrayList<Sale> sales_getAllCompanySalesByStatus = CompanyFuelControllerServer
 						.getAllCompanySalesByStatus(salesPartialData.getCompanyName(), salesPartialData.getStatus());
-				client.sendToClient(new Message(sales_getAllCompanySalesByStatus, Commands.defaultRes));
+				sendToClientArrayList(sales_getAllCompanySalesByStatus,client);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			break;
 
 		case getAllCompanyRatesByStatus:
@@ -189,102 +165,64 @@ public class MyFuelServer extends AbstractServer {
 
 		case getCompanyPricingRate:
 			pricingModel = (PricingModule) message.getObj();
-			result = CompanyFuelControllerServer.getCompanyActivePricingRate(pricingModel.getCompanyName(), pricingModel.getModelNumber());
-			sendToClientObject(result,client);
+			sendToClientObject(CompanyFuelControllerServer.getCompanyActivePricingRate(pricingModel.getCompanyName(), pricingModel.getModelNumber()),client);
 			break;
 			
-		case saveRate:
-			Rates rate_saveRate = (Rates) message.getObj();
-			try {
-				client.sendToClient(
-						new Message(CompanyFuelControllerServer.saveRate(rate_saveRate), Commands.defaultRes));
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		case savePricingModel:
+			pricingModel = (PricingModule) message.getObj();
+			sendToClientObject(CompanyFuelControllerServer.savePricingModel(pricingModel),client);
 			break;
 
 		case getSaleResponseReport:
 			ArrayList<String> array = (ArrayList<String>) message.getObj();
 			//salID,CompanyName 
-			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-				DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-				Date date = new Date();
-
-				File file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFormat.format(date));
-				if(file!=null)
-				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
-				else client.sendToClient(new Message("", Commands.ThereIsNoSale));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFormat.format(date));
+			if(file!=null)
+				try {
+					client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			else sendToClientObject(null, client);
 			break;
 		case getPeriodicReport:
 			ArrayList<String> periodicReportdetails = (ArrayList<String>) message.getObj();
-			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss");
-				Date date = new Date();
-
-				File file=CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0)
+			file=CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0)
 						,periodicReportdetails.get(1),periodicReportdetails.get(2),
 						dateFormat.format(date), timeFormat.format(date));
-				System.out.println("created the file");
+			if(file!=null)
+			try {
 				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			else sendToClientObject(null, client);
 			break;
 			
 		case getAllCompanyFuel:
 			String companyName1 = (String) message.getObj();
-			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),Commands.defaultRes));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			sendToClientArrayList(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),client);
 			break;
 			
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
-			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),Commands.defaultRes));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			sendToClientObject(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),client);
 			break;
+			
 		case getAllOrdersByStatus:
 			ArrayList<Object> objs = (ArrayList<Object>) message.getObj();
 			String supplierId = (String)objs.get(0);
 			String status =(String) objs.get(1);
-			try {
-				client.sendToClient(new Message(GasStationControllerServer.getAllOrdersByStatus(supplierId,status),Commands.defaultRes));
-			}catch (Exception e) {
-				// TODO: handle exception
-			}
+		    sendToClientArrayList(GasStationControllerServer.getAllOrdersByStatus(supplierId,status),client);
 			break;
-			
 			
 		case GetMaxPrice:
-			try {
-				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.GetMaxPriceRes));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			sendToClientObject(CompanyFuelController.getMaxPrice((String) message.getObj()),client);
 			break;
-
 			
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
-			try {
-				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			sendToClientArrayList(MyOrderConrtollerServer.getOrders(s),client);
 			break;
 			
 		default:
@@ -305,35 +243,32 @@ public class MyFuelServer extends AbstractServer {
 				if(!obj.isEmpty())
 				client.sendToClient(new Message(obj, Commands.defaultRes));
 				else 
-					client.sendToClient(new Message(Commands.NoElementFound, Commands.NoElementFound));
+					client.sendToClient(new Message(obj, Commands.NoElementFound));
 			}
-			client.sendToClient(new Message(Commands.ExceptionHappened, Commands.ExceptionHappened));
+			//there was an expetion on the server that must be handeled 
+			else client.sendToClient(new Message(null, Commands.NoElementFound));
 
 		} catch (IOException e) {
+			System.out.println("Cloud not send to client:"+client);
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * sends to the client single object from the arrayList
 	 * @param <T>
 	 * @param obj
 	 * @param client
 	 */
-	private <T> void sendToClientObject(ArrayList<T> obj,ConnectionToClient client) {
+	private <T> void sendToClientObject(T obj,ConnectionToClient client) {
 		try {
-			if (obj != null) {
-				if(!obj.isEmpty())
-				client.sendToClient(new Message(obj.get(0), Commands.defaultRes));
-				else 
-					client.sendToClient(new Message(Commands.NoElementFound, Commands.NoElementFound));
-			}
-			client.sendToClient(new Message(Commands.ExceptionHappened, Commands.ExceptionHappened));
-
+			if (obj != null)
+				client.sendToClient(new Message(obj, Commands.defaultRes));
+			else
+				client.sendToClient(new Message(null, Commands.NoElementFound));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}	
 
 	/**
 	 * convert File To Seializable
@@ -341,7 +276,6 @@ public class MyFuelServer extends AbstractServer {
 	 * @param filePath
 	 * @return
 	 */
-	
 	private MyFile convertFileToSeializable(File file) {
 		MyFile msg = new MyFile(file.getName());
 		try {

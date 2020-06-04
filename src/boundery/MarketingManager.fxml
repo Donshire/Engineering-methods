@@ -34,16 +34,16 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Text>
-            <ComboBox fx:id="fuelTypesRateCombo" layoutX="120.0" layoutY="60.0" onAction="#chooseFuelTypeForNewRate" prefHeight="31.0" prefWidth="373.0" promptText="Rate Type" />
+            <ComboBox fx:id="rateType" layoutX="120.0" layoutY="60.0" onAction="#chooseFuelTypeForNewRate" prefHeight="31.0" prefWidth="322.0" promptText="Rate Type" />
             <Text layoutX="23.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rate Types" />
             <Text layoutX="23.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Rate" />
             <TextField fx:id="newRatetxt" layoutX="120.0" layoutY="108.0" promptText="0.00" />
-            <Text fx:id="maxFuelPricetxt" layoutX="501.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The old rate was" />
+            <Text fx:id="maxFuelPricetxt" layoutX="449.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The old rate was" />
             <ComboBox fx:id="rateTypeCombo" layoutX="483.0" layoutY="175.0" onAction="#chooserateType" prefWidth="150.0" promptText="Rate Status" />
-            <TableView fx:id="companyRatesTable" editable="true" layoutX="55.0" layoutY="226.0" prefHeight="200.0" prefWidth="500.0">
+            <TableView fx:id="companyRatesTable" editable="true" layoutX="55.0" layoutY="226.0" prefHeight="200.0" prefWidth="550.0">
               <columns>
-                  <TableColumn fx:id="rateCheckBoxSelect" minWidth="100.0" prefWidth="75.0" text="Select Rates" />
-                <TableColumn fx:id="modelNameRate" minWidth="200.0" prefWidth="75.0" text="Model Name" />
+                  <TableColumn fx:id="rateCheckBoxSelect" minWidth="-1.0" prefWidth="100.0" text="Select Rates" />
+                <TableColumn fx:id="modelNameRate" minWidth="250.0" prefWidth="75.0" text="Model Name" />
                   <TableColumn fx:id="rateNewRate" minWidth="100.0" prefWidth="75.0" text="Rate" />
                   <TableColumn fx:id="rateStatus" minWidth="100.0" prefWidth="75.0" text="Status" />
               </columns>

@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 
 public class CompanyFuelController {
 
-	public static Object getMaxPrice(String type) {
+	public static Double getMaxPrice(String type) {
 		PreparedStatement stm;
 		ResultSet res;
 		Double maxPrice = null;

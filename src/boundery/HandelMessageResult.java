@@ -5,6 +5,10 @@ import javax.swing.JOptionPane;
 import Entity.Message;
 
 public class HandelMessageResult {
+	
+	public static final String noItemFound= "There no item found";
+	public static final String succes= "Succeded";
+	
 /**
  * this function will handle the result been sent by the server
  * according to the result send by the server
@@ -17,7 +21,7 @@ public class HandelMessageResult {
  * @param exprtion
  * @return the wanted object if defaultRes else null
  */
-	public static <T> T handelMessage(Message message,String succes,String noItemFound,String exprtion) {
+	public static <T> T handelMessage(Message message,String succes,String noItemFound) {
 		switch(message.getCmd()) {
 		case defaultRes:
 			if(!succes.isEmpty())
@@ -26,10 +30,6 @@ public class HandelMessageResult {
 		case NoElementFound:
 			if(!noItemFound.isEmpty())
 				JOptionPane.showMessageDialog(null, noItemFound);
-			return null;
-		case ExceptionHappened:
-			if(!exprtion.isEmpty())
-				JOptionPane.showMessageDialog(null, exprtion);
 			return null;
 		}
 		return null;
