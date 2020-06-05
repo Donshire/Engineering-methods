@@ -11,7 +11,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
    <children>
-      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0">
+      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0" visible="false">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="205.0" layoutX="22.0" layoutY="167.0" stroke="#dddddd" strokeType="INSIDE" width="557.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#969696" height="120.0" layoutX="77.0" layoutY="21.0" stroke="#969696" strokeType="INSIDE" width="411.0" />
@@ -43,12 +43,12 @@
             <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" onAction="#backToLogInPage" text="Back" />
          </children>
       </Pane>
-      <Pane fx:id="paymentPane" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="paymentPane" prefHeight="400.0" prefWidth="600.0">
          <children>
             <Text layoutX="74.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total price" />
             <Text layoutX="76.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose payment method" />
-            <RadioButton fx:id="visaRadio" layoutX="80.0" layoutY="139.0" mnemonicParsing="false" text="VISA" />
-            <RadioButton fx:id="cashRadio" layoutX="80.0" layoutY="174.0" mnemonicParsing="false" text="CASH" />
+            <RadioButton fx:id="visaRadio" layoutX="80.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleRadioSelect" text="VISA" />
+            <RadioButton fx:id="cashRadio" layoutX="80.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleRadioSelect" text="CASH" />
             <Text layoutX="47.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payment">
                <font>
                   <Font name="System Bold" size="30.0" />

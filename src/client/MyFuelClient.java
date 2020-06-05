@@ -71,7 +71,7 @@ public class MyFuelClient extends AbstractClient {
 			// wait for response
 			while (awaitResponse) {
 				try {
-					Thread.sleep(100);
+					Thread.sleep(250);
 					System.out.println("still waiting");
 				} catch (InterruptedException e) {
 					e.printStackTrace();

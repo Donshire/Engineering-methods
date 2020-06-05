@@ -49,6 +49,36 @@ public class GasStationControllerServer {
 
 		return orders;
 	}
+	
+	
+	public static int getAllAlreadyCreatedOrder(int stationId, String fuelType) {
+		PreparedStatement stm;
+		ResultSet res;
+		int count=0;
+
+		try {
+			stm = ConnectionToDB.conn
+					.prepareStatement("select count(*) from myfueldb.gasstationorder " + 
+							"where (status = ? or status = ?) and gasStationID = ?"
+							+ " and fuelType = ?");
+			stm.setString(1, SupplierOrderStatus.created.toString());
+			stm.setString(2, SupplierOrderStatus.confirmed.toString());
+			stm.setInt(3, stationId);
+			stm.setString(4, fuelType);
+			res = stm.executeQuery();
+
+			if(res.next())count=res.getInt(1);
+
+			res.close();
+			stm.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+	
 
 	//update the order status and the fuel inventory according to the order
 	public static boolean updateOrderStatus(GasStationOrder orders) {
@@ -127,7 +157,9 @@ public class GasStationControllerServer {
 	
 	public static void ReachedMinemumQuantityHandler(int stationID,String fuelType,float stationCurrInventory) {
 		float stationMinQuantity = getStationMinQuantityForFuel(stationID, fuelType);
-		if(stationMinQuantity>=stationCurrInventory)
+		//check if there is already order created
+		if (getAllAlreadyCreatedOrder(stationID, fuelType) == 0)
+			if (stationMinQuantity >= stationCurrInventory)
 				createOrder(stationID, fuelType);
 	}
 	
@@ -178,7 +210,7 @@ public class GasStationControllerServer {
 			stm.setString(4, dateFormat.format(date));
 			stm.setFloat(5, 0);//orderPrice
 			stm.setString(6, fuelType);
-			stm.setString(6, Float.toString(amountNeeded));
+			stm.setString(7, Float.toString(amountNeeded));
 			
 			stm.executeUpdate();
 			stm.close();
@@ -215,7 +247,8 @@ public class GasStationControllerServer {
 		try {
 			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.stationfuel"+
 		          " where stationId = ? AND fuelType=?");
-			stm.setString(1, fuelType);
+			stm.setInt(1, stationID);
+			stm.setString(2, fuelType);
 			
 			res = stm.executeQuery();
 			stationFuel=BuildObjectByQueryData.BuildStationfuel(res,true);
@@ -259,6 +292,10 @@ public class GasStationControllerServer {
 			return;
 		}
 		Employee employee = EmployeeController.getEmployeeByWorkerID(gasStation.getStationMangerWorkerID());
+		if(employee==null) {
+			System.out.println("cloud not found station manager to create order");
+			return;
+		}
 		
 		final String username = "myfuelltm2020@gmail.com";
 	      final String password = "hy3!Nf+4P_3b";
@@ -285,8 +322,14 @@ public class GasStationControllerServer {
 	          message.setRecipients(Message.RecipientType.TO,
 	                  InternetAddress.parse("iamme0ssa@gmail.com"));
 	          message.setSubject(String.format("Fuel type %s reached minemum quantity !!!!", fuelType));
-	          message.setText("System created Fuel Order, Wainting you'r approvale");
+	          message.setText(String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
+	          		+ " reached minemum quantity\n"
+	          		+ "The system created the Fuel Order, and it is Waiting you'r approvale."
+	          		+ "\n\nMYFUEL 2020 LTM",
+	          		employee.getFirstName(),employee.getLastName(),fuelType,stationID));
 
+	          //for attaching files if needed
+	          
 //	          MimeBodyPart messageBodyPart = new MimeBodyPart();
 //
 //	          Multipart multipart = new MimeMultipart();

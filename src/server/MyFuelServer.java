@@ -50,7 +50,8 @@ public class MyFuelServer extends AbstractServer {
 		
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		DateFormat timeFormat = new SimpleDateFormat("HH-mm-ss");
+		DateFormat timeFileFormat = new SimpleDateFormat("HH-mm-ss");
+		DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
 		
 		boolean flag;
 		
@@ -114,7 +115,7 @@ public class MyFuelServer extends AbstractServer {
 		case commitFuelPurchase:
 			str =(ArrayList<Object>)message.getObj();
 			FuelPurchase fuelPurchase = (FuelPurchase)str.get(2);
-			fuelPurchase.setTime(timeFormat.format(date));
+			fuelPurchase.setTime(timeDBFormat.format(date));
 			fuelPurchase.setDate(dateFormat.format(date));
 			sendToClientObject(FastFuelController.commitFuelPurchase(
 					(String)str.get(0),(String)str.get(1),fuelPurchase,(String)str.get(3)),client);
@@ -179,7 +180,7 @@ public class MyFuelServer extends AbstractServer {
 		case getSaleResponseReport:
 			ArrayList<String> array = (ArrayList<String>) message.getObj();
 			//salID,CompanyName 
-			file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFormat.format(date));
+			file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFileFormat.format(date));
 			if(file!=null)
 				try {
 					client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
@@ -192,7 +193,7 @@ public class MyFuelServer extends AbstractServer {
 			ArrayList<String> periodicReportdetails = (ArrayList<String>) message.getObj();
 			file=CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0)
 						,periodicReportdetails.get(1),periodicReportdetails.get(2),
-						dateFormat.format(date), timeFormat.format(date));
+						dateFormat.format(date), timeFileFormat.format(date));
 			if(file!=null)
 			try {
 				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));

@@ -244,10 +244,10 @@ public class SupplierController implements Initializable {
 			order.setStatus(SupplierOrderStatus.supplied.toString());
 		}
 		//show the suitable message
-		if(SupplierCC.updateGasOrdersStatus(selectedOrders))
-			JOptionPane.showMessageDialog(null, "Update succeded!");
-		else
-			JOptionPane.showMessageDialog(null, "Update un-succeded one or more of the data didn't update");	
+		HandelMessageResult.handelMessage(SupplierCC.updateGasOrdersStatus(selectedOrders)
+				, "Update succeded!",
+				"Update un-succeded one or more of the data didn't update");
+		
 		//move the order from the table
 		OrdersTbl.setItems(getOrders(supplier.getId(), SupplierOrderStatus.confirmed.toString()));
 	}

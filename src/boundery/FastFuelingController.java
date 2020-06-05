@@ -18,17 +18,27 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable {
 
+	//for the popup
+	Stage savedStage;
+	
 	public static Car car;
 	public static Customer customer;
 	public static CustomerModule customerModule;
@@ -95,9 +105,16 @@ public class FastFuelingController implements Initializable {
 	}
 
 	@FXML
+	void handleRadioSelect(ActionEvent event) {
+		if(event.getSource().equals(cashRadio))
+			visaRadio.setSelected(false);
+		else cashRadio.setSelected(false);
+	}
+	
+	@FXML
 	void procedPayment(ActionEvent event) {
 		// create FyelPurchase Object
-		// acording to use and how we wnat to save sales
+		// acording to use and how we want to save sales
 		int sales = 0;
 		int result=-3;
 		if (!salesID.isEmpty())
@@ -105,11 +122,17 @@ public class FastFuelingController implements Initializable {
 		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice*amount, "", "",
 				sales, currentPrice*amount, customer.getId());
 
+		Stage stg=workInProgres();
+		stg.show();
+		
 		if (visaRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());
 
 		else if (cashRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
+		
+		//there is bug where this show just after the JOptionPane
+		stg.hide();
 		
 		if(result==-1)//succeded
 			JOptionPane.showMessageDialog(null, "Purchase succeded");
@@ -124,18 +147,22 @@ public class FastFuelingController implements Initializable {
 	@FXML
 	void nextToPayment(ActionEvent event) {
 		companyName = companiesCombo.getValue();
-		stationID = stationsIDCombo.getValue();
-		amount = 0;
 
+		if(companyName==null){
+			JOptionPane.showMessageDialog(null, "Select company Firts");
+			return;
+		}
+		
+		if (stationsIDCombo.getValue()==null) {
+			JOptionPane.showMessageDialog(null, "Select station id first");
+			return;
+		}
+		stationID = stationsIDCombo.getValue();
+		
 		try {
 			amount = Float.parseFloat(fuelAmount.getText());
 		} catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(null, "please fill numbers");
-			return;
-		}
-
-		if (companyName.isEmpty() || amount == 0 || stationID == 0) {
-			JOptionPane.showMessageDialog(null, "fill details first");
 			return;
 		}
 
@@ -179,6 +206,8 @@ public class FastFuelingController implements Initializable {
 		Pane mainPane;
 		Scene s;
 
+		savedStage=primaryStage;
+		
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("FastFueling.fxml"));
 		mainPane = loader.load();
@@ -186,9 +215,9 @@ public class FastFuelingController implements Initializable {
 		// connect the scene to the file
 		s = new Scene(mainPane);
 
-		primaryStage.setTitle("MyFuel ltm");
-		primaryStage.setScene(s);
-		primaryStage.show();
+		savedStage.setTitle("MyFuel ltm");
+		savedStage.setScene(s);
+		savedStage.show();
 
 	}
 
@@ -225,6 +254,27 @@ public class FastFuelingController implements Initializable {
 			stationsID.add(id);
 
 		stationsIDCombo.setItems(stationsID);
+	}
+	
+	private Stage workInProgres() {
+		final Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(savedStage);
+        VBox dialogVbox = new VBox(20);
+        //text
+        Text txt=new Text("Procecing Paiment");
+        txt.setFill(Color.BLUE);
+        txt.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+        dialogVbox.getChildren().add(txt);
+        //progres circle
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        dialogVbox.getChildren().add(progressIndicator);
+        
+        dialogVbox.setAlignment(Pos.CENTER);
+        Scene dialogScene = new Scene(dialogVbox, 300, 150);
+        dialog.setScene(dialogScene);
+        
+        return dialog;
 	}
 
 }
