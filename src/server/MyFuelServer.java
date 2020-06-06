@@ -309,6 +309,14 @@ public class MyFuelServer extends AbstractServer {
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
+		try {
+			ConnectionToDB.conn.commit();
+			ConnectionToDB.conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		System.out.println("Server has stopped listening for connections.");
 		//log out all the users
 		/*
