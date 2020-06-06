@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,24 +20,30 @@ import Entity.GasStationOrder;
 import enums.SupplierOrderStatus;
 
 public class AnalticData extends Thread {
-
-	public LocalDateTime  serverAwakeTime;
-	public SleepTime timeIntervale;
+	
+	private ScheduledExecutorService ses;
+	private int index =0;
+	
+	public AnalticData() {
+		threadSleep();
+	}
 	
 	public void run() 
     { 
-		calculatefuelTypeAnaleticRank();
+		//calculatefuelTypeAnaleticRank();
+		System.out.println(index++);
+		if(index>10)shutDownThread();
     } 
 	
 	private void threadSleep() {
-		SleepTime time=calculateTimeToSleep();
-		
-		ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+		ses = Executors.newScheduledThreadPool(1);
 		//run this task after X seconds
-        ses.schedule(this, time.getTimeInSec(), TimeUnit.SECONDS);
+        ses.schedule(this, calculateTimeToSleep(), TimeUnit.SECONDS);
 		
-        ses.shutdown();
-		
+	}
+	
+	public void shutDownThread() {
+		ses.shutdown();
 	}
 	
 	public static ArrayList<String> getAllCustomersID(){
@@ -144,57 +152,14 @@ public class AnalticData extends Thread {
 		return true;
 	}
 	
-	private SleepTime calculateTimeToSleep() {
-		//serverAwakeTime+7 days - current date
-		//just for the first time
-		LocalDate nextFriday=calcNextFriday(LocalDate.now());
-		
-		return null;
-	}
-	
-	private LocalDate calcNextFriday(LocalDate d) {
-		return d.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
-	}
-	
-	public static class SleepTime{
-		int days,houres,minutes,seconds;
-
-		public SleepTime(int days, int houres, int minutes, int seconds) {
-			this.days = days;
-			this.houres = houres;
-			this.minutes = minutes;
-			this.seconds = seconds;
-		}
-		
-		public SleepTime() {}
-
-		public int getDays() {
-			return days;
-		}
-		public int getHoures() {
-			return houres;
-		}
-		public int getMinutes() {
-			return minutes;
-		}
-		public int getSeconds() {
-			return seconds;
-		}
-		public int getTimeInSec() {
-			//Max int is approxemitly 68 years
-			return (((((days*24)+houres)*60+minutes)*60)+seconds);
-		}
-		public SleepTime converSecToSleepTime(int time) {
-			SleepTime result = new SleepTime();
-			result.seconds=time%60;
-			time/=60;
-			result.minutes=time%60;
-			time/=60;
-			result.houres=time%24;
-			time/=24;
-			result.days=time;
-			return result;
-		}
+	private long calculateTimeToSleep() {
+		LocalDate nextFriday=LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+		Duration duration = Duration.between(LocalDateTime.now(),
+				LocalDateTime.of(nextFriday.getYear(), nextFriday.getMonth(),
+						nextFriday.getDayOfMonth(), 18, 0));
+		//return duration.getSeconds();
+		//for testing
+		return 1;
 	}
 	
 }
