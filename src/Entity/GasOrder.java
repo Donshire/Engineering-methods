@@ -1,9 +1,15 @@
 package Entity;
 
+import java.io.Serializable;
+
 import enums.OrderStatus;
 
-public class GasOrder {
+public class GasOrder implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7930841922331982180L;
 	private Integer purchaseID;
 	private String custmoerId;
 	private String fuelType;

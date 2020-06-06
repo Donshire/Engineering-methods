@@ -1,6 +1,12 @@
 package Entity;
 
-public class GenericReport {
+import java.io.Serializable;
+
+public class GenericReport implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5679960090887730645L;
 	private Integer reportId;
 	private String date;
 	private String time;

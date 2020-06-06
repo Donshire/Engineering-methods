@@ -9,20 +9,23 @@ import java.util.ArrayList;
 
 import Entity.Customer;
 import Entity.Employee;
+import Entity.GasStationOrder;
 import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
 import Entity.Sale;
+import Entity.StationFuel;
 import Entity.Supplier;
 import boundery.ServerController;
 import client.EmployeeCC;
 import enums.Commands;
+import enums.StationManagerReportsTypes;
 import ocsf.server.*;
 
 public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
-	
+
 	public MyFuelServer(int port) {
 		super(port);
 	}
@@ -39,27 +42,27 @@ public class MyFuelServer extends AbstractServer {
 		case Login:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				Object resltObject=LogINController.LogIn(arr.get(0), arr.get(1));
-				//founded a user
-				if(resltObject!=null) {
-					if(resltObject instanceof Supplier) {
-						Supplier supplier= (Supplier)resltObject;
-						ServerController.onlineUserTableCont(supplier.getId(),"supplier");
+				Object resltObject = LogINController.LogIn(arr.get(0), arr.get(1));
+				// founded a user
+				if (resltObject != null) {
+					if (resltObject instanceof Supplier) {
+						Supplier supplier = (Supplier) resltObject;
+						ServerController.onlineUserTableCont(supplier.getId(), "supplier");
 						client.sendToClient(new Message(supplier, Commands.defaultRes));
 					}
-					if(resltObject instanceof Customer) {
-						Customer customer= (Customer)resltObject;
-						ServerController.onlineUserTableCont(customer.getId(),"customer");
+					if (resltObject instanceof Customer) {
+						Customer customer = (Customer) resltObject;
+						ServerController.onlineUserTableCont(customer.getId(), "customer");
 						client.sendToClient(new Message(customer, Commands.defaultRes));
 					}
-					if(resltObject instanceof Employee) {
-						Employee employee= (Employee)resltObject;
-						ServerController.onlineUserTableCont(employee.getId(),employee.getRole());
+					if (resltObject instanceof Employee) {
+						Employee employee = (Employee) resltObject;
+						ServerController.onlineUserTableCont(employee.getId(), employee.getRole());
 						client.sendToClient(new Message(employee, Commands.defaultRes));
 					}
 				}
 				client.sendToClient(new Message(resltObject, Commands.defaultRes));
-				
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -68,9 +71,9 @@ public class MyFuelServer extends AbstractServer {
 		case logOut:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				String tableName=arr.get(1).toLowerCase().substring(13, arr.get(1).length());
-				LogINController.updateUserOnlineStatus(tableName,arr.get(0), 0);
-				ServerController.onlineUserTableCont(arr.get(0),"");
+				String tableName = arr.get(1).toLowerCase().substring(13, arr.get(1).length());
+				LogINController.updateUserOnlineStatus(tableName, arr.get(0), 0);
+				ServerController.onlineUserTableCont(arr.get(0), "");
 				try {
 					client.sendToClient(new Message(null, Commands.defaultRes));
 				} catch (IOException e) {
@@ -155,11 +158,12 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case getAllCompanyFuel:
 			String companyName = (String) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),Commands.defaultRes));
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName),
+						Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -168,13 +172,89 @@ public class MyFuelServer extends AbstractServer {
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
 			try {
-				client.sendToClient(new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),Commands.defaultRes));
+				client.sendToClient(
+						new Message(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),
+								Commands.defaultRes));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
+
+		case getAllstationOrdersBystatus:
+			ArrayList<Object> o = (ArrayList<Object>) message.getObj();
+			int stationid = (int) o.get(0);
+			String status = (String) o.get(1);
+
+			try {
+				client.sendToClient(new Message(GasStationController.getAllstationOrdersByStatus(stationid, status),
+						Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case approveOrders:
+
+			ArrayList<GasStationOrder> orders = (ArrayList<GasStationOrder>) message.getObj();
+
+			try {
+				client.sendToClient(new Message(GasStationController.changeOrdersStatus(orders), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case getAllStationFuelById:
+
+			int stationId = (Integer) message.getObj();
+			try {
+				client.sendToClient(
+						new Message(GasStationController.getAllStationFuel(stationId), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case updateFuelMinQuantitybyType:
+			ArrayList<Object> k = (ArrayList<Object>) message.getObj();
+
+			try {
+				client.sendToClient(new Message(GasStationController.updateFuelMinQuantitybyType((int) k.get(0),
+						(String) k.get(1), (float) k.get(2)), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case createFuelStationIncmomeReport:
+
+			int st_id = (int) message.getObj();
+			try {
+				client.sendToClient(
+				new Message(GasStationController.createFuelStationIncmomeReport(st_id), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
 			
+			
+			case createFuelStationPurchasesReport:
+				
+				int st_id1 = (int) message.getObj();
+				
+				try {
+					client.sendToClient(
+					new Message(GasStationController.createFuelStationPurchasesReport(st_id1), Commands.defaultRes));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			break;
+			
+
 		default:
 			System.out.println("default");
 		}
@@ -183,14 +263,15 @@ public class MyFuelServer extends AbstractServer {
 
 	/**
 	 * convert File To Seializable
+	 * 
 	 * @param fileName
 	 * @param filePath
 	 * @return
 	 */
-	
-	private MyFile convertFileToSeializable(String fileName,String filePath) {
+
+	private MyFile convertFileToSeializable(String fileName, String filePath) {
 		MyFile msg = new MyFile(fileName);
-		String LocalfilePath = filePath+"\\"+fileName;
+		String LocalfilePath = filePath + "\\" + fileName;
 		try {
 			File newFile = new File(LocalfilePath);
 
@@ -207,7 +288,7 @@ public class MyFuelServer extends AbstractServer {
 		}
 		return msg;
 	}
-	
+
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB("myfueldb", "1611");
 		// ServerController.writeToServerConsole("Server listening for connections on
@@ -219,78 +300,80 @@ public class MyFuelServer extends AbstractServer {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
-		//log out all the users
+		// log out all the users
 		/*
-		for(UserOnline user : usersOnline) {
-				try {
-					if(user.userType.compareTo("customer")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					if(user.userType.compareTo("supplier")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					else 
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			ServerController.onlineUserTableCont(user.getUserID(),"");
-		}
-		*/
+		 * for(UserOnline user : usersOnline) { try {
+		 * if(user.userType.compareTo("customer")==0)
+		 * LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * 
+		 * if(user.userType.compareTo("supplier")==0)
+		 * LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * 
+		 * else LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
+		 * } catch (SQLException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 * ServerController.onlineUserTableCont(user.getUserID(),""); }
+		 */
 	}
-	
-	//just to show in the GUI
+
+	// just to show in the GUI
 	/**
 	 * String UserID ,String userType
+	 * 
 	 * @author iamme
 	 *
 	 */
-		public static class UserOnline{
-			String UserID;
-			String userType;
-			/**
-			 * 
-			 * @param userID
-			 * @param userType
-			 */
-			public UserOnline(String userID, String userType) {
-				UserID = userID;
-				this.userType = userType;
-			}
-			public String getUserID() {
-				return UserID;
-			}
-			public void setUserID(String userID) {
-				UserID = userID;
-			}
-			public String getUserType() {
-				return userType;
-			}
-			public void setUserType(String userType) {
-				this.userType = userType;
-			}
-			
-			@Override
-			public boolean equals(Object obj) {
-				if (this == obj)
-					return true;
-				if (obj == null)
-					return false;
-				if (getClass() != obj.getClass())
-					return false;
-				UserOnline other = (UserOnline) obj;
-				if (UserID == null) {
-					if (other.UserID != null)
-						return false;
-				} else if (!UserID.equals(other.UserID))
-					return false;
-				return true;
-			}
-			@Override
-			public String toString() {
-				return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
-			}
-			
+	public static class UserOnline {
+		String UserID;
+		String userType;
+
+		/**
+		 * 
+		 * @param userID
+		 * @param userType
+		 */
+		public UserOnline(String userID, String userType) {
+			UserID = userID;
+			this.userType = userType;
 		}
+
+		public String getUserID() {
+			return UserID;
+		}
+
+		public void setUserID(String userID) {
+			UserID = userID;
+		}
+
+		public String getUserType() {
+			return userType;
+		}
+
+		public void setUserType(String userType) {
+			this.userType = userType;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			UserOnline other = (UserOnline) obj;
+			if (UserID == null) {
+				if (other.UserID != null)
+					return false;
+			} else if (!UserID.equals(other.UserID))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
+		}
+
+	}
 }

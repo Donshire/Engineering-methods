@@ -1,7 +1,13 @@
 package Entity;
 
-public class FuelPurchase {
+import java.io.Serializable;
 
+public class FuelPurchase implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2106310498999584856L;
 	private Integer purchaseID;
 	private int stationId;
 	private String CarNumber;

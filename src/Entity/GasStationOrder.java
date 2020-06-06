@@ -1,14 +1,23 @@
 package Entity;
 
-public class GasStationOrder {
+import java.io.Serializable;
 
+public class GasStationOrder implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4620061761961585382L;
 	private Integer orderID;
 	private Supplier supplier;
 	private GasStation station;
+	private String supplierId;
+	private int stationId;
 	private String status;
 	private String date;
 	private float orderPrice;
 	private String fuelType;
+	private boolean select;
 
 	public GasStationOrder(Integer orderID, Supplier supplier, GasStation station, String status, String date,
 			float orderPrice, String fuelType) {
@@ -20,6 +29,36 @@ public class GasStationOrder {
 		this.orderPrice = orderPrice;
 		this.fuelType = fuelType;
 	}
+	
+	
+	
+
+	public boolean getSelect() {
+		return select;
+	}
+
+
+
+
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
+
+
+
+
+	public GasStationOrder(Integer orderID, String supplierId, int stationId, String status, String date,
+			float orderPrice, String fuelType) {
+		this.orderID = orderID;
+		this.supplierId = supplierId;
+		this.stationId = stationId;
+		this.status = status;
+		this.date = date;
+		this.orderPrice = orderPrice;
+		this.fuelType = fuelType;
+	}
+
+
 
 	public int getOrderID() {
 		return orderID;

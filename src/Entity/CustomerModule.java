@@ -1,13 +1,18 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 //Date might be changed to String
 
-public class CustomerModule {
+public class CustomerModule implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5536017888440251636L;
 	private String id;
 	private int modelNumber;
 
