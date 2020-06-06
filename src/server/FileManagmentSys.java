@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -169,9 +170,14 @@ public class FileManagmentSys {
 
 	public static boolean writeToQuarterReport(File file, String data, String QuarterData) {
 		FileWriter myWriter;
+		BufferedWriter br;
 		try {
-			myWriter = new FileWriter(file);
-			myWriter.write(String.format("%-20s_%s\n", QuarterData, data));
+			myWriter = new FileWriter(file, true);
+			br = new BufferedWriter(myWriter);
+			
+			br.write(String.format("%-20s_%s\n", QuarterData, data));
+			
+			br.close();
 			myWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();

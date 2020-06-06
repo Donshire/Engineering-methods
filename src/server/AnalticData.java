@@ -24,6 +24,9 @@ public class AnalticData extends Thread {
 	private ScheduledExecutorService ses;
 	private int index =0;
 	
+	private LocalDate before;
+	private LocalDate after;
+	
 	public AnalticData() {
 		threadSleep();
 	}
@@ -31,8 +34,12 @@ public class AnalticData extends Thread {
 	public void run() 
     { 
 		//calculatefuelTypeAnaleticRank();
+		calculateCustomerTypeAnaleticRank();
 		System.out.println(index++);
 		if(index>10)shutDownThread();
+		//
+		before=LocalDate.now();
+		after =LocalDate.now().minusDays(7);
     } 
 	
 	private void threadSleep() {
@@ -76,24 +83,34 @@ public class AnalticData extends Thread {
 	 * 4 -> 10<br>
 	 * @return
 	 */
-	private static ArrayList<Integer> calculatefuelTypeAnaleticRank() {
-		Statement stm;
+	private ArrayList<Integer> calculatefuelTypeAnaleticRank() {
+		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<Integer> countOfGasStationFuelsPurchased= new ArrayList<Integer>();
 		int index=0;
+		
 		try {
 			//gasStationFuels
-			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery("Select count(distinct(fuelType)) from myfueldb.customer as cus " + 
+			stm = ConnectionToDB.conn.prepareStatement("Select count(distinct(fuelType)) from myfueldb.customer as cus " + 
 					"left join myfueldb.car on cus.id=car.CustomerID " + 
 					"left join myfueldb.fuelpurchase as pur on car.carNumber = pur.CarNumber " + 
-					"GROUP BY cus.id order by cus.id");
+					"where pur.date>= ? and pur.date<= ? GROUP BY cus.id order by cus.id");
+			
+			stm.setString(1,after.toString());
+			stm.setString(2,before.toString());
+			res = stm.executeQuery();
+			
 			while(res.next())countOfGasStationFuelsPurchased.add(res.getInt(1));
 			
 			//homeGasFuel 1/0
-			res = stm.executeQuery("Select count(distinct(customerID)) from myfueldb.customer as cus " + 
+			stm = ConnectionToDB.conn.prepareStatement("Select count(distinct(customerID)) from myfueldb.customer as cus " + 
 					"left join myfueldb.gasorder as ord on cus.id = ord.customerID " + 
-					"GROUP BY cus.id order by cus.id");
+					"where pur.date>= ? and pur.date<= ? GROUP BY cus.id order by cus.id");
+			
+			stm.setString(1,after.toString());
+			stm.setString(2,before.toString());
+			res = stm.executeQuery();
+			
 			while(res.next()) {
 				countOfGasStationFuelsPurchased.set(index,
 				countOfGasStationFuelsPurchased.get(index)+res.getInt(1));
@@ -110,9 +127,20 @@ public class AnalticData extends Thread {
 		return countOfGasStationFuelsPurchased;
 	}
 
-	private static int calculateCustomerTypeAnaleticRank() {
+	/**
+	 * the is according to how many cars customer have <br>
+	 * Like: 1-3   cars 3  points <br>
+	 * 		 4-7   cars 5  points <br>
+	 * 		 7-12  cars 7  points <br>
+	 * 		 12-20 cars 9  points <br>
+	 * 		 21+   cars 10 points
+	 * @return
+	 */
+	private ArrayList<Integer> calculateCustomerTypeAnaleticRank() {
 		
-		return 0;
+		
+		
+		return null;
 	}
 
 	/**

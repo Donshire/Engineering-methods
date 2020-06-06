@@ -92,7 +92,7 @@ public class CompanyFuelControllerServer {
 		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
 
 		// connecting to the db
-		createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
+		createGenericReport(new GenericReport(date, time, file.getAbsolutePath(), FileManagmentSys.periodicReport));
 		return file;
 	}
 
@@ -377,7 +377,7 @@ public class CompanyFuelControllerServer {
 					Integer.valueOf(strRes1), Float.valueOf(strRes2), null);
 
 			// connecting to the db
-			createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
+			createGenericReport(new GenericReport(date, time, file.getAbsolutePath(), FileManagmentSys.responseReport));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
