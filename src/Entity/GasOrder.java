@@ -9,9 +9,12 @@ import enums.OrderStatus;
 public class GasOrder implements Serializable {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7930841922331982180L;
+	/*
 	 * delete fuelType,saleID,currentPrice,companyName
 	 */
-	private static final long serialVersionUID = 2753012256812143843L;
 	private int purchaseID;
 	private String custmoerId;
 	private String fuelType;

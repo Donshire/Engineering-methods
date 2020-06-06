@@ -1,7 +1,13 @@
 package Entity;
 
-public class StationManager extends Employee {
+import java.io.Serializable;
 
+public class StationManager extends Employee implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1210489266470434112L;
 	private int stationID;
 
 	/**

@@ -4,12 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 
 import Entity.Car;
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import Entity.CompanyFuel;
 import Entity.Customer;
+import Entity.GasStationOrder;
+import Entity.GenericReport;
 import Entity.Message;
 import Entity.Rates;
 import Entity.Sale;
+import Entity.StationFuel;
 import enums.Commands;
+import enums.StationManagerReportsTypes;
 
 public class EmployeeCC {
 
@@ -94,4 +100,59 @@ public class EmployeeCC {
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 	
+
+	public static ArrayList<GasStationOrder> getAllstationOrders(int stationId, String status) {
+
+		ArrayList<Object> o = new ArrayList<Object>();
+		o.add(stationId);
+		o.add(status);
+
+		ClientUI.client.accept(new Message(o, Commands.getAllstationOrdersBystatus));
+		return (ArrayList<GasStationOrder>) MyFuelClient.ServerRetObj;
+
+	}
+
+	public static Boolean ApproveOrders(ArrayList<GasStationOrder> orders) {
+
+		ClientUI.client.accept(new Message(orders, Commands.approveOrders));
+		return (Boolean) MyFuelClient.ServerRetObj;
+	}
+
+	public static ArrayList<StationFuel> getAllStationFuelById(int stationId) {
+
+		ClientUI.client.accept(new Message(stationId, Commands.getAllStationFuelById));
+
+		return (ArrayList<StationFuel>) MyFuelClient.ServerRetObj;
+
+	}
+
+	public static Boolean updateFuelMinQuantitybyType(int stationid, String fueltype, float minQuantity) {
+
+		ArrayList<Object> o = new ArrayList<Object>();
+		o.add(stationid);
+		o.add(fueltype);
+		o.add(minQuantity);
+
+		ClientUI.client.accept(new Message(o, Commands.updateFuelMinQuantitybyType));
+
+		return (Boolean) MyFuelClient.ServerRetObj;
+
+	}
+
+	public static Boolean createFuelStationReports(int stationId, StationManagerReportsTypes reportType) {
+
+		switch (reportType) {
+		case income:
+			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationIncmomeReport));
+			break;
+		case purchases:
+			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationPurchasesReport));
+			break;
+		case inventory:
+			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationInventoryReport));
+			break;
+		}
+		
+		return (Boolean) MyFuelClient.ServerRetObj;
+	}
 }

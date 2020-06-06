@@ -20,17 +20,23 @@ import Entity.Message;
 import Entity.MyFile;
 import Entity.Rates;
 import Entity.Sale;
+import Entity.StationFuel;
 import Entity.Supplier;
 import boundery.ServerController;
 import client.EmployeeCC;
 import enums.Commands;
+import enums.StationManagerReportsTypes;
 import ocsf.server.*;
+import server.GasStationControllerServer;
 
 public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
 	public static String schemaName, dbPassword;
-
+	
+	ArrayList<GasStationOrder> orders;
+	String status;
+	
 	public MyFuelServer(int port) {
 		super(port);
 	}
@@ -47,22 +53,22 @@ public class MyFuelServer extends AbstractServer {
 		case Login:
 			try {
 				ArrayList<String> arr = (ArrayList<String>) (message.getObj());
-				Object resltObject=LogINController.LogIn(arr.get(0), arr.get(1));
-				//founded a user
-				if(resltObject!=null) {
-					if(resltObject instanceof Supplier) {
-						Supplier supplier= (Supplier)resltObject;
-						ServerController.onlineUserTableCont(supplier.getId(),"supplier");
+				Object resltObject = LogINController.LogIn(arr.get(0), arr.get(1));
+				// founded a user
+				if (resltObject != null) {
+					if (resltObject instanceof Supplier) {
+						Supplier supplier = (Supplier) resltObject;
+						ServerController.onlineUserTableCont(supplier.getId(), "supplier");
 						client.sendToClient(new Message(supplier, Commands.defaultRes));
 					}
-					if(resltObject instanceof Customer) {
-						Customer customer= (Customer)resltObject;
-						ServerController.onlineUserTableCont(customer.getId(),"customer");
+					if (resltObject instanceof Customer) {
+						Customer customer = (Customer) resltObject;
+						ServerController.onlineUserTableCont(customer.getId(), "customer");
 						client.sendToClient(new Message(customer, Commands.defaultRes));
 					}
-					if(resltObject instanceof Employee) {
-						Employee employee= (Employee)resltObject;
-						ServerController.onlineUserTableCont(employee.getId(),employee.getRole());
+					if (resltObject instanceof Employee) {
+						Employee employee = (Employee) resltObject;
+						ServerController.onlineUserTableCont(employee.getId(), employee.getRole());
 						client.sendToClient(new Message(employee, Commands.defaultRes));
 					}
 				}
@@ -277,7 +283,6 @@ public class MyFuelServer extends AbstractServer {
 			try {
 				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
@@ -287,7 +292,6 @@ public class MyFuelServer extends AbstractServer {
 			try {
 				client.sendToClient(new Message(EmployeeController.addNewCustmer(cust),Commands.defaultRes));
 			}catch (Exception e) {
-				// TODO: handle exception
 				e.printStackTrace();
 			}
 			break;
@@ -323,6 +327,80 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+		case getAllstationOrdersBystatus:
+			ArrayList<Object> o = (ArrayList<Object>) message.getObj();
+			int stationid = (int) o.get(0);
+			status = (String) o.get(1);
+
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.getAllstationOrdersByStatus(stationid, status),
+						Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case approveOrders:
+
+			orders = (ArrayList<GasStationOrder>) message.getObj();
+
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.changeOrdersStatus(orders), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case getAllStationFuelById:
+
+			int stationId = (Integer) message.getObj();
+			try {
+				client.sendToClient(
+						new Message(GasStationControllerServer.getAllStationFuel(stationId), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case updateFuelMinQuantitybyType:
+			ArrayList<Object> k = (ArrayList<Object>) message.getObj();
+
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.updateFuelMinQuantitybyType((int) k.get(0),
+						(String) k.get(1), (float) k.get(2)), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case createFuelStationIncmomeReport:
+
+			int st_id = (int) message.getObj();
+			try {
+				client.sendToClient(
+				new Message(GasStationControllerServer.createFuelStationIncmomeReport(st_id), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+			
+			
+			case createFuelStationPurchasesReport:
+				
+				int st_id1 = (int) message.getObj();
+				
+				try {
+					client.sendToClient(
+					new Message(GasStationControllerServer.createFuelStationPurchasesReport(st_id1), Commands.defaultRes));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			break;
+			
+
 		default:
 			System.out.println("default");
 		}

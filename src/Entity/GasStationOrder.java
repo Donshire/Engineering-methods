@@ -21,8 +21,6 @@ public class GasStationOrder  implements Serializable{
 	private float quantity;
 	private Boolean select;
 
-	
-
 	public GasStationOrder(Integer orderID, String supplierId, Integer stationID, String status, String date,
 			String orderPrice, String fuelType, float quantity) {
 		this.orderID = orderID;
@@ -140,9 +138,6 @@ public class GasStationOrder  implements Serializable{
 	public void setQuantity(float quantity) {
 		this.quantity = quantity;
 	}
-
-
-	
 
 }
 

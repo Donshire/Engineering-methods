@@ -92,9 +92,33 @@ public class LogInController {
 
 				System.out.println("employee");
 				ClientUI.user = obj;
-				MarketingManagerController marketingManager = new MarketingManagerController();
+				Employee employee =(Employee) obj;
 				try {
-					marketingManager.start(ClientUI.mainStage);
+					switch (employee.getRole().toLowerCase()) {
+					
+					case "marketing manager":
+						MarketingManagerController marketingManager = new MarketingManagerController();
+						marketingManager.markitingManager=employee;
+						marketingManager.start(ClientUI.mainStage);
+						break;
+
+					case "ceo":
+						//still un-emplemented
+						System.out.println("still un-emplemented");
+						break;
+
+					case "station manager":
+						ClientUI.user = obj;
+						StationManagerController stationManager = new StationManagerController();
+						stationManager.start(ClientUI.mainStage);
+						break;
+
+					case "markitig employee":
+						//still un-emplemented
+						System.out.println("still un-emplemented");
+						break;
+
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

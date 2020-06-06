@@ -1,10 +1,15 @@
 package Entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class GasStation {
+public class GasStation implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5343787255377018218L;
 	private String companyName;
 	private Integer stationID;
 	private String cityName;
@@ -75,6 +80,6 @@ public class GasStation {
 		return "GasStation [companyName=" + companyName + ", stationID=" + stationID + ", cityName=" + cityName
 				+ ", areaName=" + areaName + ", manger=" + manger + ", stationFuel=" + stationFuel + "]";
 	}
-
+	
 }
 

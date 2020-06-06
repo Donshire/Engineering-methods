@@ -1,7 +1,13 @@
 package Entity;
 
-public class PurchaseModule {
+import java.io.Serializable;
 
+public class PurchaseModule implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7173683030345152292L;
 	private int modelNumber;
 	private float salePercent;
 	

@@ -9,6 +9,7 @@ import java.util.Set;
 import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
+import Entity.GasStationOrder;
 import Entity.PricingModule;
 
 public class BuildObjectByQueryData {
@@ -102,4 +103,18 @@ public class BuildObjectByQueryData {
 		return sets;
 	}
 
+	public static ArrayList<GasStationOrder> BuildGasStationOrder(ResultSet res) {
+		ArrayList<GasStationOrder> gasStationOrder = new ArrayList<GasStationOrder>();
+		try {
+			while (res.next() == true)
+				gasStationOrder.add(new GasStationOrder(res.getInt(1), res.getString(2), res.getInt(3),
+							res.getString(4), res.getString(5), res.getString(6), res.getString(7), res.getFloat(8)));
+			res.close();
+			return gasStationOrder;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
