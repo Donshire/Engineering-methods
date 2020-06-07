@@ -16,7 +16,7 @@
             <Font size="96.0" />
          </font>
       </Text>
-      <RadioButton fx:id="radioImmediat" layoutX="314.0" layoutY="215.0" mnemonicParsing="false" onAction="#radioSelected" text="Immediate">
+      <RadioButton fx:id="radioImmediat" layoutX="314.0" layoutY="215.0" mnemonicParsing="false" onAction="#radioSelected" selected="true" text="Immediate">
          <toggleGroup>
             <ToggleGroup fx:id="DeliveryDateRadio" />
          </toggleGroup></RadioButton>

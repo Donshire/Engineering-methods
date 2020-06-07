@@ -29,14 +29,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GasHomeController implements Initializable {
-
 	public Customer customer;
 	private Integer discount = 0;
 	private String supplyDate;
 	private float gasAmount;
 	private float priceOfPurchase = 0;
+	private float pricePerUnit = 0;
 	private String contemporaryDateStr;
-	
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -69,6 +68,10 @@ public class GasHomeController implements Initializable {
 	private Button buttonBuy;
 
 	@FXML
+	/**
+	 * Changing the parameter "gasAmount" and update display of the components that
+	 * belongs has.
+	 */
 	void TextAmountChanged(InputMethodEvent event) {
 		gasAmount = new Float(textAmount.getText());
 		settingDiscount();
@@ -78,7 +81,7 @@ public class GasHomeController implements Initializable {
 	@FXML
 	/**
 	 * Displays or hides the option to select a date according to the selected radio
-	 * button
+	 * button.
 	 */
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
@@ -87,51 +90,42 @@ public class GasHomeController implements Initializable {
 		setPrice();
 	}
 
-	private void setPrice() {
-		// double beforeDiscount = priceListPrice * gasAmount;
-		double beforeDiscount = 4.8 * gasAmount;
-		priceOfPurchase = (float) (beforeDiscount + (beforeDiscount / 100) * discount);
-		total.setText(String.format("%.2f", priceOfPurchase));
-	}
-
 	@FXML
+	/**
+	 * Converting a date to a string and save it.
+	 */
 	void supplyDateSelected(ActionEvent event) {
 		LocalDate date = filedSupplyDate.getValue();
 		supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
 	}
 
 	@FXML
-	void makePurchase(ActionEvent event) {	
+	/**
+	 * Sending the purchase order to server.
+	 */
+	void makePurchase(ActionEvent event) {
 		if (!normalSupply.isSelected())
-			supplyDate = contemporaryDateStr;	
-		GasOrder order = new GasOrder(-1, customer.getId() , supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+			supplyDate = contemporaryDateStr;
+		GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
 		if (CustomerCC.createNewOrder(order))
 			System.out.println("Invitation sent successfully!/n");
-		
+
 	}
 
+	/**
+	 * Setting final price.
+	 */
+	private void setPrice() {
+		float beforeDiscount = pricePerUnit * gasAmount;
+		priceOfPurchase = (float) (beforeDiscount + ((beforeDiscount / 100) * discount));
+		total.setText(String.format("%.2f", priceOfPurchase));
+	}
 	
-	public void start(Stage primaryStage) throws Exception {
-		Pane mainPane;
-		Scene s;
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("GasHome.fxml"));
-		customer = (Customer) ClientUI.user;	//
-		
-		mainPane = loader.load();
-		
-		// connect the scene to the file
-		s = new Scene(mainPane);
-
-		primaryStage.setTitle("Order Gas Home");
-		primaryStage.setScene(s);
-		primaryStage.show();
-
-	}
-
+	/**
+	 * Set discount by order quantity.
+	 */
 	void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
@@ -146,35 +140,55 @@ public class GasHomeController implements Initializable {
 		textDiscount.setText(discount.toString());
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		Float plp = new Float((float) CustomerCC.getMaxPrice("HOME GAS"));
-		priceList.setText(plp.toString());
-		customer = (Customer) ClientUI.user;
-		textDiscount.setText("0");
-		
-		LocalDate contemporaryDate = LocalDate.now();
-		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/" + contemporaryDate.getYear();
+	public void start(Stage primaryStage) throws Exception {
+		Pane mainPane;
+		Scene s;
 
-		textAmount.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable,
-		            String oldValue, String newValue) {
-		    	
-		    	try {
-		    		gasAmount = Float.valueOf(newValue);
-				} catch (Exception e) {
-					gasAmount = 0;
-					newValue="0.0";
-				}
-		    	 System.out.println("textfield changed from " + oldValue + " to " + newValue);
-		    	 
-		    	 settingDiscount();
-		    	 setPrice();
-		    }
-		});
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("GasHome.fxml"));
+		customer = (Customer) ClientUI.user; //
 
+		mainPane = loader.load();
 
+		// connect the scene to the file
+		s = new Scene(mainPane);
+
+		primaryStage.setTitle("Order Gas Home");
+		primaryStage.setScene(s);
+		primaryStage.show();
 	}
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// Loading the price of per unit.
+		pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		priceList.setText(Float.toString(pricePerUnit));
+		
+		customer = (Customer) ClientUI.user;
+		
+		textDiscount.setText("0");
+
+		// Loading the today's date
+		LocalDate contemporaryDate = LocalDate.now();
+		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/"
+				+ contemporaryDate.getYear();
+
+		textAmount.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				try {
+					gasAmount = Float.valueOf(newValue);
+				} catch (Exception e) {
+					gasAmount = 0;
+					newValue = "0.0";
+				}
+				System.out.println("textfield changed from " + oldValue + " to " + newValue);
+
+				settingDiscount();
+				setPrice();
+			}
+		});
+	}
+	
 }
