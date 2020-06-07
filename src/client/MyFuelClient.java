@@ -39,9 +39,12 @@ public class MyFuelClient extends AbstractClient {
 				case defaultRes:// receive from server ArrayList<employee>
 					ServerRetObj = message.getObj();
 					break;
-				case CustomerOrderListRes:
+				case CustomerOrderListRes: // receive from server ArrayList<employee>
 					ServerRetObj = message.getObj();
 					break;
+				case CreateNewOrderRes:
+					ServerRetObj = message.getObj();
+					break;	
 				case GetMaxPriceRes: // receive from server ArrayList<employee>
 					ServerRetObj = message.getObj();
 					break;

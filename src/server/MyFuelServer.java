@@ -14,6 +14,7 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.Employee;
+import Entity.GasOrder;
 import Entity.GasStationOrder;
 import Entity.FuelPurchase;
 import Entity.Message;
@@ -271,18 +272,28 @@ public class MyFuelServer extends AbstractServer {
 			
 		case GetMaxPrice:
 			try {
-				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.GetMaxPriceRes));
+				client.sendToClient(new Message(CompanyFuelController.getMaxPrice((String) message.getObj()), Commands.MaxPriceRes));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			break; 
+
+		case CreateNewOrder: //*****
+			try {
+				Object	orderObj = GasStationController.createNewOrder((GasOrder) message.getObj());
+				Message msgToSend = new Message(orderObj, Commands.CreateNewOrderRes);
+				client.sendToClient(msgToSend);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			break;
-
 			
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
 			try {
-				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s),Commands.defaultRes));
+				client.sendToClient(new Message(GasStationController.getOrders(s),Commands.defaultRes));
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;

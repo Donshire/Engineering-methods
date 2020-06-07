@@ -1,10 +1,7 @@
 package Entity;
 
 import enums.OrderStatus;
-
 import java.io.Serializable;
-
-import enums.OrderStatus;
 
 public class GasOrder implements Serializable {
 
@@ -29,21 +26,25 @@ public class GasOrder implements Serializable {
 	private float currentPrice;
 	private String companyName;
 
-	public GasOrder(int purchaseID, String custmoerId, String fuelType, String supplyDate, float gasAmount, String date,
-			float priceOfPurchase, boolean urgent, OrderStatus status, int saleID, float currentPrice,
-			String companyName) {
+	/**
+	 * 
+	 * @param purchaseID      - Automatically created on DB.
+	 * @param custmoerId
+	 * @param supplyDate
+	 * @param gasAmount
+	 * @param date
+	 * @param priceOfPurchase
+	 * @param urgent
+	 */
+	public GasOrder(int purchaseID, String custmoerId, String supplyDate, float gasAmount, String date,
+			float priceOfPurchase, boolean urgent) {
 		this.purchaseID = purchaseID;
 		this.custmoerId = custmoerId;
-		this.fuelType = fuelType;
 		this.supplyDate = supplyDate;
 		this.gasAmount = gasAmount;
 		this.date = date;
 		this.priceOfPurchase = priceOfPurchase;
 		this.urgent = urgent;
-		this.status = status;
-		this.saleID = saleID;
-		this.currentPrice = currentPrice;
-		this.companyName = companyName;
 	}
 
 	public int getPurchaseID() {

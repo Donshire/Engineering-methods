@@ -27,10 +27,10 @@ public class LogInController {
 
 	@FXML
 	private TextField usernametxt;
-	
+
 	@FXML
 	private TextField carNumberInput;
-	
+
 	@FXML
 	private Button fastFuelBtn;
 
@@ -38,24 +38,23 @@ public class LogInController {
 	private Button loginbtb;
 
 	@FXML
+
 	void fastFuel(ActionEvent event) {
 		String carNumber = carNumberInput.getText();
-		if(carNumber.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
+		if (carNumber.isEmpty())
+			JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
-			//call the server and get the car details 
-			Car car =UserCC.fastFuelingLogIn(carNumber);
-			if(car==null) {
+			// call the server and get the car details
+			Car car = UserCC.fastFuelingLogIn(carNumber);
+			if (car == null) {
 				JOptionPane.showMessageDialog(null, "Car wasn't found");
 				return;
 			}
 			FastFuelingController fastFueling = new FastFuelingController();
-			
-			fastFueling.car= car;
-			
+			fastFueling.car = car;
 //			fastFueling.car=(Car)result.get(0);
 //			fastFueling.customer=(Customer)result.get(1);
 //			fastFueling.customerModule=(CustomerModule)result.get(2);
-			
 			try {
 				fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
@@ -63,47 +62,40 @@ public class LogInController {
 			}
 		}
 	}
-	
+
 	@FXML
 	void login(ActionEvent event) {
-
 		String username = usernametxt.getText();
 		String password = passtxt.getText();
 
 		if (password.isEmpty() == true || username.isEmpty() == true)
 			JOptionPane.showMessageDialog(null, "username or password are missing");
-
 		else {
 			Object obj = UserCC.login(username, password);
 			if (obj instanceof Customer) {
 				System.out.println("customer");
-				GasHomeController aFrame = new GasHomeController();
-				aFrame.customer = (Customer)obj;
+				ClientUI.user = obj;
+				GasHomeController ghc = new GasHomeController();
+				// ghc.customer = (Customer) obj;
 				try {
-					aFrame.start(ClientUI.mainStage);
+					ghc.start(ClientUI.mainStage);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-			}
-			
-			//
-			else if (obj instanceof Employee) {
-
+			} else if (obj instanceof Employee) {
 				System.out.println("employee");
 				ClientUI.user = obj;
-				Employee employee =(Employee) obj;
+				Employee employee = (Employee) obj;
 				try {
 					switch (employee.getRole().toLowerCase()) {
-					
 					case "marketing manager":
 						MarketingManagerController marketingManager = new MarketingManagerController();
-						marketingManager.markitingManager=employee;
+						marketingManager.markitingManager = employee;
 						marketingManager.start(ClientUI.mainStage);
 						break;
 
 					case "ceo":
-						//still un-emplemented
+						// still un-emplemented
 						System.out.println("still un-emplemented");
 						break;
 
@@ -114,16 +106,17 @@ public class LogInController {
 						break;
 
 					case "markitig employee":
-						//still un-emplemented
+						// still un-emplemented
 						System.out.println("still un-emplemented");
 						break;
-
 					}
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			//
+
+
 			else if (obj instanceof Supplier) {
 				System.out.println("supplier");
 				ClientUI.user = obj;
@@ -138,24 +131,18 @@ public class LogInController {
 			else if (obj.equals(Commands.UserAlreadyConnected))
 				System.out.println("already online");
 		}
-
 	}
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
-
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("LogIn.fxml"));
 		mainPane = loader.load();
-
 		// connect the scene to the file
 		s = new Scene(mainPane);
-
 		primaryStage.setTitle("MyFuel ltm");
 		primaryStage.setScene(s);
 		primaryStage.show();
-
 	}
-
 }

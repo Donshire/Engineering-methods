@@ -56,5 +56,25 @@ public class CustomerCC {
 		}
 		return null;
 	}
+	
+	/**
+	 * Request from the server for a maximum price for a product unitõ
+	 * @param str - Name of product
+	 * @return - price max.
+	 */
+	public static Object getMaxPrice(String str) {
+		ClientUI.client.accept(new Message(str, Commands.GetMaxPrice));
+		return (float)MyFuelClient.ServerRetObj;
+	}
+
+	/**
+	 * Request from the server to create new purchase of gas to home.
+	 * @param order - order to create.
+	 * @return true - if the purchase was successful.
+	 */
+	public static boolean createNewOrder(GasOrder order) {
+		ClientUI.client.accept(new Message(order, Commands.CreateNewOrder));
+		return (Boolean)MyFuelClient.ServerRetObj;
+	}
 
 }

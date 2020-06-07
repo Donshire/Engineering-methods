@@ -9,14 +9,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseDragged="#DragSlider" prefHeight="875.0" prefWidth="1289.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.GasHomeController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="875.0" prefWidth="1289.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.GasHomeController">
    <children>
       <Text layoutX="396.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gas Home" textAlignment="CENTER">
          <font>
             <Font size="96.0" />
          </font>
       </Text>
-      <RadioButton fx:id="radioImmediat" layoutX="314.0" layoutY="215.0" mnemonicParsing="false" onAction="#radioSelected" text="Immediate">
+      <RadioButton fx:id="radioImmediat" layoutX="314.0" layoutY="215.0" mnemonicParsing="false" onAction="#radioSelected" selected="true" text="Immediate">
          <toggleGroup>
             <ToggleGroup fx:id="DeliveryDateRadio" />
          </toggleGroup></RadioButton>

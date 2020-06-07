@@ -1,9 +1,13 @@
 package boundery;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
-
 import Entity.Customer;
+import Entity.Employee;
+import Entity.GasOrder;
+import client.ClientUI;
+import client.CustomerCC;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -25,13 +29,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GasHomeController implements Initializable {
-
-	Customer customer;
-	Integer discount = 0;
-	double PricePerUnit;
-	String supplyDate;
-	double gasAmount;
-	double priceOfPurchase = 0;
+	public Customer customer;
+	private Integer discount = 0;
+	private String supplyDate;
+	private float gasAmount;
+	private float priceOfPurchase = 0;
+	private float pricePerUnit = 0;
+	private String contemporaryDateStr;
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -49,9 +53,6 @@ public class GasHomeController implements Initializable {
 	private DatePicker filedSupplyDate;
 
 	@FXML
-	private Slider sliderAmount;
-
-	@FXML
 	private TextField textAmount;
 
 	@FXML
@@ -65,31 +66,13 @@ public class GasHomeController implements Initializable {
 
 	@FXML
 	private Button buttonBuy;
-
-	@FXML
-	private Spinner<?> spinnerAmount;
-
-	@FXML
-	void DragSlider(MouseEvent event) {
-		/*
-		 * textAmount.textProperty().bind( Bindings.format("%.0f",
-		 * sliderAmount.valueProperty()) );
-		 */
-		Double d = new Double(sliderAmount.getValue());
-		textAmount.setText(String.format("%.0f", d));
-//		gasAmount = Double.valueOf(textAmount.textProperty().getValue());
-		gasAmount = d;
-		settingDiscount();
-//		setPrice();
-	}
-
-
-	@FXML
+	
+	/**
+	 * Changing the parameter "gasAmount" and update display of the components that
+	 * belongs has.
+	 */
 	void TextAmountChanged(InputMethodEvent event) {
-		
-		gasAmount = new Double(textAmount.getText());
-		// gasAmount = (double) spinnerAmount.getValue();
-		// sliderAmount.setValue(value);
+		gasAmount = new Float(textAmount.getText());
 		settingDiscount();
 		setPrice();
 	}
@@ -97,7 +80,7 @@ public class GasHomeController implements Initializable {
 	@FXML
 	/**
 	 * Displays or hides the option to select a date according to the selected radio
-	 * button
+	 * button.
 	 */
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
@@ -106,47 +89,42 @@ public class GasHomeController implements Initializable {
 		setPrice();
 	}
 
+	@FXML
+	/**
+	 * Converting a date to a string and save it.
+	 */
+	void supplyDateSelected(ActionEvent event) {
+		LocalDate date = filedSupplyDate.getValue();
+		supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+	}
+
+	@FXML
+	/**
+	 * Sending the purchase order to server.
+	 */
+	void makePurchase(ActionEvent event) {
+		if (!normalSupply.isSelected())
+			supplyDate = contemporaryDateStr;
+		GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+				!normalSupply.isSelected());
+		System.out.println(order.toString());
+		if (CustomerCC.createNewOrder(order))
+			System.out.println("Invitation sent successfully!/n");
+
+	}
+
+	/**
+	 * Setting final price.
+	 */
 	private void setPrice() {
-		// double beforeDiscount = priceListPrice * gasAmount;
-		double beforeDiscount = 4.8 * gasAmount;
-		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
+		float beforeDiscount = pricePerUnit * gasAmount;
+		priceOfPurchase = (float) (beforeDiscount + ((beforeDiscount / 100) * discount));
 		total.setText(String.format("%.2f", priceOfPurchase));
 	}
-
-	@FXML
-	void supplyDateSelected(ActionEvent event) {
-
-	}
-
-	@FXML
-	void makePurchase(ActionEvent event) {
-		/*
-		 * GasOrder order = new GasOrder(purchaseID, custmoerId, "HOME GAS", supplyDate,
-		 * gasAmount, date, priceOfPurchase, urgent, status, saleID, currentPrice,
-		 * companyName) // Should we send for payment? if
-		 * (CustomerCC.creatNewOrder(order)) { // PopUp ""; }
-		 */
-	}
-
 	
-	public void start(Stage primaryStage) throws Exception {
-		Pane mainPane;
-		Scene s;
-
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("GasHome.fxml"));
-
-		mainPane = loader.load();
-		
-		// connect the scene to the file
-		s = new Scene(mainPane);
-
-		primaryStage.setTitle("Order Gas Home");
-		primaryStage.setScene(s);
-		primaryStage.show();
-
-	}
-
+	/**
+	 * Set discount by order quantity.
+	 */
 	void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
@@ -161,22 +139,49 @@ public class GasHomeController implements Initializable {
 		textDiscount.setText(discount.toString());
 	}
 
+
+	public void start(Stage primaryStage) throws Exception {
+		Pane mainPane;
+		Scene s;
+
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("GasHome.fxml"));
+		customer = (Customer) ClientUI.user;
+
+		mainPane = loader.load();
+		
+		// connect the scene to the file
+		s = new Scene(mainPane);
+
+		primaryStage.setTitle("Order Gas Home");
+		primaryStage.setScene(s);
+		primaryStage.show();
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		//double plp = (double) ClientCC.getMaxPrice("HOME GAS");
-		priceList.setText("4.8");
+		// Loading the price of per unit.
+		pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		priceList.setText(Float.toString(pricePerUnit));
+		
+		customer = (Customer) ClientUI.user;
+		
 		textDiscount.setText("0");
 
+		// Loading the today's date
+		LocalDate contemporaryDate = LocalDate.now();
+		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/"
+				+ contemporaryDate.getYear();
+
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
-		    @Override
-		    public void changed(ObservableValue<? extends String> observable,
-		            String oldValue, String newValue) {
-		    	
-		    	try {
-		    		gasAmount = Double.valueOf(newValue);
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+				try {
+					gasAmount = Float.valueOf(newValue);
 				} catch (Exception e) {
 					gasAmount = 0;
-					newValue="0.0";
+					newValue = "0.0";
 				}
 		    	 System.out.println("textfield changed from " + oldValue + " to " + newValue);
 		    	 
@@ -184,8 +189,6 @@ public class GasHomeController implements Initializable {
 		    	 setPrice();
 		    }
 		});
-
-
 	}
-
+	
 }
