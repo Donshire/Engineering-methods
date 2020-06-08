@@ -5,4 +5,4 @@ public enum Commands {
 	,getAllCompanyRatesByStatusRes,saveRate,saveRateRes,updateSale,getAllCompanyFuel,
 	addNewSale,addNewSaleRes,deleteSale,deleteSaleRes,getAllCompanySalesByStatusRes,
 	getAllCompanySalesByStatus,getSaleResponseReport,sendFile,reciveFile,getCompanyFuel,CustomerOrderList,CustomerOrderListRes,ConvertionFaild, GetMaxPrice, GetMaxPriceRes,getAllOrdersByStatus,updateGasOrdersStatus,
-	getPeriodicReport,ThereIsNoSale,getAllCompanies, addNewCustomer,checkIfExist,addNewCar,updateModels};
+	getPeriodicReport,ThereIsNoSale,getAllCompanies, addNewCustomer,checkIfExist,addNewCar,updateModels,getCustomerDetails, updateCustomerDetails,getAllSales,deleteSales,addNewSaleTemp};

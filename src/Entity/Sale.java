@@ -40,20 +40,12 @@ public class Sale implements Serializable{
 		this.saleDays = saleDays;
 		select=false;
 	}
-	
-	public boolean getSelect() {
-		return select;
-	}
-	public void setSelect(boolean select) {
-		this.select = select;
-	}
 
-
-	public int getSaleID() {
+	public Integer getSaleID() {
 		return saleID;
 	}
 
-	public void setSaleID(int saleID) {
+	public void setSaleID(Integer saleID) {
 		this.saleID = saleID;
 	}
 
@@ -137,13 +129,23 @@ public class Sale implements Serializable{
 		this.saleDays = saleDays;
 	}
 
+	public boolean getSelect() {
+		return select;
+	}
+
+	public void setSelect(boolean select) {
+		this.select = select;
+	}
+
 	@Override
 	public String toString() {
 		return "Sale [saleID=" + saleID + ", status=" + status + ", companyName=" + companyName + ", fuelType="
 				+ fuelType + ", purchaseModule=" + purchaseModule + ", salePercent=" + salePercent + ", startTime="
 				+ startTime + ", endTime=" + endTime + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", saleDays=" + saleDays + "]";
+				+ ", saleDays=" + saleDays + ", select=" + select + "]";
 	}
+	
+
 
 }
 

@@ -94,4 +94,29 @@ public class EmployeeCC {
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 	
+	public static Customer getCustomerDetails(String id) {
+		ClientUI.client.accept(new Message(id,Commands.getCustomerDetails));
+		return (Customer)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean updateCustomerDetails(ArrayList<String> upCutomer) {
+		ClientUI.client.accept(new Message(upCutomer,Commands.updateCustomerDetails));
+		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static ArrayList<Sale> getAllSales(){
+		ClientUI.client.accept(new Message(null, Commands.getAllSales));
+		return(ArrayList<Sale>)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean deleteSales(ArrayList<Sale> sales) {
+		ClientUI.client.accept(new Message(sales, Commands.deleteSales));
+		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean addNewSaleTemp(Sale sale) {
+		ClientUI.client.accept(new Message(sale,Commands.addNewSaleTemp));
+		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
 }

@@ -18,7 +18,6 @@ public class GasStationControllerServer {
 		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<GasStationOrder> orders = new ArrayList<GasStationOrder>();
-
 		try {
 			stm = ConnectionToDB.conn
 					.prepareStatement("select * from myfueldb.gasstationorder where status = ? and supplierid = ?");
