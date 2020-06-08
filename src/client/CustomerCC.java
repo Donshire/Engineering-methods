@@ -74,9 +74,9 @@ public class CustomerCC {
 	 * @param order - order to create.
 	 * @return true - if the purchase was successful.
 	 */
-	public static boolean createNewOrder(GasOrder order) {
+	public static Message createNewOrder(GasOrder order) {
 		ClientUI.client.accept(new Message(order, Commands.CreateNewOrder));
-		return (Boolean)MyFuelClient.ServerRetObj;
+		return (Message)MyFuelClient.ServerRetObj;
 	}
 
 }

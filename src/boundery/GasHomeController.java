@@ -108,8 +108,9 @@ public class GasHomeController implements Initializable {
 		GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
-		if (CustomerCC.createNewOrder(order))
-			System.out.println("Invitation sent successfully!/n");
+		HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order),
+				"Order created succesfully",
+				"clouldn't create order");
 
 	}
 

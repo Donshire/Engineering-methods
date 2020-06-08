@@ -48,7 +48,7 @@ public class CustomerGasOrderController {
 	 * @param obj - order to create.
 	 * @return true - if the purchase was successful.
 	 */
-	public static Object createNewOrder(GasOrder obj) {
+	public static boolean createNewOrder(GasOrder obj) {
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, gasAmount, date, priceOfPurchase, urgent) " + 

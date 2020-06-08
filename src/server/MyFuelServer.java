@@ -238,13 +238,8 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case CreateNewOrder:
-			try {
-				Object	orderObj = CustomerGasOrderController.createNewOrder((GasOrder) message.getObj());
-				Message msgToSend = new Message(orderObj, Commands.CreateNewOrderRes);
-				client.sendToClient(msgToSend);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				boolean	orderObj = CustomerGasOrderController.createNewOrder((GasOrder) message.getObj());
+				sendToClientObject(orderObj, client);
 			break;
 			
 		case addNewCustomer:
