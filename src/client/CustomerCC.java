@@ -58,13 +58,14 @@ public class CustomerCC {
 	}
 	
 	/**
-	 * Request from the server for a maximum price for a product unitõ
+	 * Request from the server for a maximum price for a product unit.
 	 * @param str - Name of product
 	 * @return - price max.
 	 */
 	public static Object getMaxPrice(String str) {
 		ClientUI.client.accept(new Message(str, Commands.GetMaxPrice));
 		return (float)MyFuelClient.ServerRetObj;
+		//return (float)4.8;
 	}
 
 	/**
