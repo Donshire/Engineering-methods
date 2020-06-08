@@ -131,17 +131,29 @@ public class FastFuelingController implements Initializable {
 		else if (cashRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
 		
-		//there is bug where this show just after the JOptionPane
-		stg.hide();
-		
-		if(result==-1)//succeded
-			JOptionPane.showMessageDialog(null, "Purchase succeded");
-		if(result==-2)
-			JOptionPane.showMessageDialog(null, "Purchase un-succeded");
-		if(result>=0)
-			JOptionPane.showMessageDialog(null, String.format(
-					"Order excede station max qauntity\nthe max quantity is %d", result));
-		
+		//stg.hide();
+		String resValue = "";
+		//hide the others 
+		stg.getScene().getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
+		stg.getScene().getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
+		//
+		Text txt = (Text) stg.getScene().getRoot().getChildrenUnmodifiable().get(2);
+		txt.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		if (result == -1) {
+			resValue = "Purchase succeded";
+			txt.setFill(Color.GREEN);
+		}
+		else if (result == -2) {
+			resValue = "Purchase un-succeded";
+			txt.setFill(Color.RED);
+		}
+			
+		else if (result >= 0) {
+			resValue = String.format("Order excede station max qauntity\nthe max quantity is %d", result);
+			txt.setFill(Color.BLUE);
+		}
+		//
+		txt.setText(resValue);
 	}
 
 	@FXML
@@ -269,6 +281,9 @@ public class FastFuelingController implements Initializable {
         //progres circle
         ProgressIndicator progressIndicator = new ProgressIndicator();
         dialogVbox.getChildren().add(progressIndicator);
+        //result of purchase
+        Text resTxt=new Text("");
+        dialogVbox.getChildren().add(resTxt);
         
         dialogVbox.setAlignment(Pos.CENTER);
         Scene dialogScene = new Scene(dialogVbox, 300, 150);

@@ -217,7 +217,25 @@ public class GasStationControllerServer {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		sendMailToStationManager(stationID,fuelType);
+		//
+		GasStation gasStation = getGasStation(stationID);
+		if(gasStation==null) {
+			System.out.println("cloud not found station by id to create order");
+			return;
+		}
+		Employee employee = EmployeeController.getEmployeeByWorkerID(gasStation.getStationMangerWorkerID());
+		if(employee==null) {
+			System.out.println("cloud not found station manager to create order");
+			return;
+		}
+		//
+		sendMailToStationManager(stationID,fuelType,employee.getMail(),
+				String.format("Fuel type %s reached minemum quantity !!!!", fuelType),
+				String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
+		          		+ " reached minemum quantity\n"
+		          		+ "The system created the Fuel Order, and it is Waiting you'r approvale."
+		          		+ "\n\nMYFUEL 2020 LTM",
+		          		employee.getFirstName(),employee.getLastName(),fuelType,stationID));
 	}
 
 	public static Supplier getSupplierByFuelType (String fuelType) {
@@ -284,18 +302,7 @@ public class GasStationControllerServer {
 	}
 	
 	
-	private static void sendMailToStationManager(int stationID,String fuelType) {
-		
-		GasStation gasStation = getGasStation(stationID);
-		if(gasStation==null) {
-			System.out.println("cloud not found station by id to create order");
-			return;
-		}
-		Employee employee = EmployeeController.getEmployeeByWorkerID(gasStation.getStationMangerWorkerID());
-		if(employee==null) {
-			System.out.println("cloud not found station manager to create order");
-			return;
-		}
+	private static void sendMailToStationManager(int stationID,String fuelType,String mail,String messageHeader,String messageContent) {
 		
 		final String username = "myfuelltm2020@gmail.com";
 	      final String password = "hy3!Nf+4P_3b";
@@ -318,16 +325,12 @@ public class GasStationControllerServer {
 	          Message message = new MimeMessage(session);
 	          message.setFrom(new InternetAddress("myfuelltm2020@gmail.com"));
 //	          message.setRecipients(Message.RecipientType.TO,
-//	                  InternetAddress.parse(employee.getMail()));
+//	                  InternetAddress.parse(mail));
 	          message.setRecipients(Message.RecipientType.TO,
 	                  InternetAddress.parse("iamme0ssa@gmail.com"));
-	          message.setSubject(String.format("Fuel type %s reached minemum quantity !!!!", fuelType));
-	          message.setText(String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
-	          		+ " reached minemum quantity\n"
-	          		+ "The system created the Fuel Order, and it is Waiting you'r approvale."
-	          		+ "\n\nMYFUEL 2020 LTM",
-	          		employee.getFirstName(),employee.getLastName(),fuelType,stationID));
-
+	          message.setSubject(messageHeader);
+	          message.setText(messageContent);
+	          
 	          //for attaching files if needed
 	          
 //	          MimeBodyPart messageBodyPart = new MimeBodyPart();
