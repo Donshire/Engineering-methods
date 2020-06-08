@@ -27,30 +27,35 @@ public class AnalticData extends Thread {
 	private LocalDate before;
 	private LocalDate after;
 	
-	public AnalticData() {
-		threadSleep();
-	}
-	
 	public void run() 
     { 
+		if(index>10) {
+			ses.shutdown();
+			return;
+		}
+		threadSleep();
 		//calculatefuelTypeAnaleticRank();
-		calculateCustomerTypeAnaleticRank();
+		//calculateCustomerTypeAnaleticRank();
 		System.out.println(index++);
-		if(index>10)shutDownThread();
+		
 		//
 		before=LocalDate.now();
 		after =LocalDate.now().minusDays(7);
+		System.out.println("before "+before+" after "+after);
+		
+		
     } 
 	
 	private void threadSleep() {
 		ses = Executors.newScheduledThreadPool(1);
 		//run this task after X seconds
-        ses.schedule(this, calculateTimeToSleep(), TimeUnit.SECONDS);
-		
+        ses.schedule(this, calculateTimeToSleep(), TimeUnit.MILLISECONDS);
+        
+        ses.shutdown();
 	}
 	
 	public void shutDownThread() {
-		ses.shutdown();
+		 ses.shutdown();
 	}
 	
 	public static ArrayList<String> getAllCustomersID(){
@@ -187,7 +192,7 @@ public class AnalticData extends Thread {
 						nextFriday.getDayOfMonth(), 18, 0));
 		//return duration.getSeconds();
 		//for testing
-		return 1;
+		return 10;
 	}
 	
 }
