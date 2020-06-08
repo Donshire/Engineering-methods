@@ -39,7 +39,7 @@
       <PasswordField fx:id="passtxt" layoutX="409.0" layoutY="190.0" promptText="Password" text="123" />
       <TextField fx:id="usernametxt" layoutX="409.0" layoutY="129.0" promptText="user name" text="jos" />
       <Button fx:id="loginbtb" layoutX="474.0" layoutY="266.0" mnemonicParsing="false" onAction="#login" text="LogIn" />
-      <TextField fx:id="carNumberInput" layoutX="445.0" layoutY="335.0" />
+      <TextField fx:id="carNumberInput" layoutX="445.0" layoutY="335.0" text="2355255214" />
       <Button fx:id="fastFuelBtn" layoutX="643.0" layoutY="335.0" mnemonicParsing="false" onAction="#fastFuel" text="Fast Fuel" />
    </children>
 </AnchorPane>

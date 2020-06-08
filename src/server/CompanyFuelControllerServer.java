@@ -14,6 +14,7 @@ import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import Entity.CompanyFuel;
 import Entity.Fuel;
 import Entity.GenericReport;
+import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import enums.RatesStatus;
@@ -29,10 +30,10 @@ public class CompanyFuelControllerServer {
 	 * @param time String
 	 * @return
 	 */
-	public static File periodicReport(String companyName,String date, String time) {
+	public static File periodicReport(String companyName,String startDate,String endDate,String date, String time) {
 		File file = null;
-		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases();
-		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
+		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases(startDate,endDate);
+		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion(startDate,endDate);
 		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
 		
 		for(customerCompaniesDiversion cus:customerCompaniesDiversionArray)
@@ -95,8 +96,8 @@ public class CompanyFuelControllerServer {
 		return file;
 	}
 
-	public static ArrayList<customerTotalPurchase> customersTotalPurchases() {
-		Statement stm;
+	public static ArrayList<customerTotalPurchase> customersTotalPurchases(String start,String end) {
+		PreparedStatement stm;
 		ResultSet res;
 
 		ArrayList<customerTotalPurchase> result = new ArrayList<customerTotalPurchase>();
@@ -105,9 +106,12 @@ public class CompanyFuelControllerServer {
 			// calculate the totale prices
 			String query = "Select cus.id,sum(fu.priceOfPurchase) as countofpurchase "
 					+ "from myfueldb.customer as cus " + "left join myfueldb.car as car " + "on car.CustomerID=cus.id "
-					+ "left join myfueldb.fuelpurchase as fu " + "on fu.CarNumber=car.carNumber " + "group by cus.id";
-			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery(query);
+					+ "left join myfueldb.fuelpurchase as fu " + "on fu.CarNumber=car.carNumber " +
+					"where fu.date>=? and  fu.date<=?"+"group by cus.id";
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, start);
+			stm.setString(2, end);
+			res = stm.executeQuery();
 
 			// save the data in arrayList
 			while (res.next())
@@ -128,8 +132,8 @@ public class CompanyFuelControllerServer {
 	 * 
 	 * @return that ArrayList
 	 */
-	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion() {
-		Statement stm;
+	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion(String start,String end) {
+		PreparedStatement stm;
 		ResultSet res;
 
 		ArrayList<customerCompaniesDiversion> result = new ArrayList<customerCompaniesDiversion>();
@@ -144,9 +148,11 @@ public class CompanyFuelControllerServer {
 					+ "from myfueldb.customer as cu " + "left join myfueldb.car as ca " + "on cu.id=ca.CustomerID "
 					+ "left join myfueldb.fuelpurchase as fu " + "on ca.carNumber=fu.carNumber "
 					+ "left join myfueldb.gasstation as ga " + "on ga.stationId=fu.stationId "
-					+ "GROUP BY cu.id,ga.companyName " + "order by cu.id";
-			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery(query);
+					+"where fu.date>=? and  fu.date<=?"+ "GROUP BY cu.id,ga.companyName " + "order by cu.id";
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, start);
+			stm.setString(2, end);
+			res = stm.executeQuery();
 
 			// save the data in arrayList
 			if (res.next()) {
@@ -451,19 +457,24 @@ public class CompanyFuelControllerServer {
 		return str;
 	}
 
-	public static boolean updateRateStatus(Rates rate) {
+	public static boolean updatePricingModelStatus(PricingModule pricingModule) {
 
 		PreparedStatement stm;
 
-		switch (rate.getStatus()) {
+		switch (pricingModule.getStatus()) {
 
 		// ceo chage rate status to confirmed
 		case confirmed:
 
 			try {
-				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.rates set status = ? where rateID = ?");
-				stm.setString(1, rate.getStatus().toString());
-				stm.setInt(2, rate.getRateId());
+				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.pricingmodule set status = ? "+
+			"where modelNumber = ? and company = ? and salePercent = ?");
+				stm.setString(1, pricingModule.getStatus().toString());
+				//Key
+				stm.setInt(2, pricingModule.getModelNumber());
+				stm.setString(3, pricingModule.getCompanyName());
+				stm.setFloat(4, pricingModule.getSalePercent());
+				
 				stm.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -476,24 +487,31 @@ public class CompanyFuelControllerServer {
 			try {
 				// delete the old rate
 				stm = ConnectionToDB.conn
-						.prepareStatement("DELETE FROM myfueldb.rates WHERE status = ? AND company = ?");
+						.prepareStatement("DELETE FROM myfueldb.pricingmodule WHERE status = ? "+
+				"AND company = ? AND modelNumber = ?");
 				stm.setString(1, RatesStatus.active.toString());
-				stm.setString(2, rate.getCompanyName());
+				stm.setString(2, pricingModule.getCompanyName());
+				stm.setInt(3, pricingModule.getModelNumber());
 				stm.executeUpdate();
 
 				// update the new rate status
-				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.rates set status=? where rateID = ?");
-				stm.setString(1, rate.getStatus().toString());
-				stm.setInt(2, rate.getRateId());
+				stm = ConnectionToDB.conn.prepareStatement("update myfueldb.pricingmodule set status=? "+
+				"where modelNumber = ? and company = ? and salePercent = ?");
+				stm.setString(1, pricingModule.getStatus().toString());
+				//Key
+				stm.setInt(2, pricingModule.getModelNumber());
+				stm.setString(3, pricingModule.getCompanyName());
+				stm.setFloat(4, pricingModule.getSalePercent());
+				
 				stm.executeUpdate();
 
 				// update the current price in the company
-				stm = ConnectionToDB.conn.prepareStatement(
-						"update myfueldb.company set currentPrice=? where companyName = ? AND fuelType = ?");
-				stm.setString(1, String.valueOf(rate.getFuel().getMaxPrice() + rate.getRateValue()));
-				stm.setString(2, rate.getCompanyName());
-				stm.setString(3, rate.getFuelType());
-				stm.executeUpdate();
+//				stm = ConnectionToDB.conn.prepareStatement(
+//						"update myfueldb.company set currentPrice=? where companyName = ? AND fuelType = ?");
+//				stm.setString(1, String.valueOf(rate.getFuel().getMaxPrice() + rate.getRateValue()));
+//				stm.setString(2, rate.getCompanyName());
+//				stm.setString(3, rate.getFuelType());
+//				stm.executeUpdate();
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -507,59 +525,63 @@ public class CompanyFuelControllerServer {
 
 	}
 
-	public static ArrayList<Rates> getAllCompanyRatesByStatus(String companyName, RatesStatus status) {
+	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(String companyName,RatesStatus status) {
 
 		PreparedStatement stm;
-		ResultSet res, res2;
-		ArrayList<Rates> rates = new ArrayList<Rates>();
+		ResultSet res;
 
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.rates where status = ? and company = ?");
-			stm.setString(1, status.toString());
-			stm.setString(2, companyName);
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.pricingmodule where company = ? and status = ?");
+			stm.setString(1, companyName);
+			stm.setString(2, status.toString());
 			res = stm.executeQuery();
 
-			while (res.next()) {
-
-				stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.fuel where fuelType = ?");
-				stm.setString(1, res.getString(3));
-				res2 = stm.executeQuery();
-				res2.next();
-				Fuel f = new Fuel(res2.getString(1), res.getFloat(2));
-
-				Rates rate = new Rates(res.getInt(1), res.getFloat(2), f, RatesStatus.valueOf(res.getString(4)),
-						res.getString(5), res.getString(6));
-
-				rates.add(rate);
-
-			}
-
+			return BuildObjectByQueryData.BuildPricingModelRates(res);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println();
-		return rates;
+		return null;
+	}
+	
+	public static PricingModule getCompanyActivePricingRate(String companyName,int modelNumber) {
+
+		PreparedStatement stm;
+		ResultSet res;
+
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.pricingmodule where company = ? and modelNumber = ? and status = ?");
+			stm.setString(1, companyName);
+			stm.setInt(2, modelNumber);
+			stm.setString(3, RatesStatus.active.toString());
+			res = stm.executeQuery();
+
+			ArrayList<PricingModule> result=BuildObjectByQueryData.BuildPricingModelRates(res);
+			if(result.isEmpty())return null;
+			else return result.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public static boolean saveRate(Rates rate) {
-		String query = "insert into rates (rateValue,fuelType,status,date,company) " + "values (?,?,?,?,?)";
+	public static boolean savePricingModel(PricingModule pricingModel) {
+		String query = "insert into pricingmodule (modelNumber,salePercent,company,status) " + "values (?,?,?,?)";
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
-			stm.setFloat(1, rate.getRateValue());
-			stm.setString(2, rate.getFuelType());
-			stm.setString(3, rate.getStatus().toString());
-			stm.setString(4, rate.getDate());
-			stm.setString(5, rate.getCompanyName());
-
+			stm.setInt(1, pricingModel.getModelNumber());
+			stm.setFloat(2, pricingModel.getSalePercent());
+			stm.setString(3, pricingModel.getCompanyName());
+			stm.setString(4, pricingModel.getStatus().toString());
+			
 			stm.executeUpdate();
 			stm.close();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-
-		return true;
 	}
 
 	public static boolean updateSale(Sale sale) {

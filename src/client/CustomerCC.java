@@ -34,13 +34,14 @@ public class CustomerCC {
 		return (ArrayList<Float>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static boolean commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase) {
+	public static int commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase,String fuelType) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(customerId);
 		str.add(paymentOption);
 		str.add(purchase);
+		str.add(fuelType);
 		ClientUI.client.accept(new Message(str, Commands.commitFuelPurchase));
-		return (boolean) MyFuelClient.ServerRetObj;
+		return (int) MyFuelClient.ServerRetObj;
 	}
 	
 

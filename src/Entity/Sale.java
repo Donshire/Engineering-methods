@@ -4,8 +4,9 @@ package Entity;
 import java.io.Serializable;
 
 import enums.SaleStatus;
+import helpinigStructForGUI.CheckBoxImplementation;
 
-public class Sale implements Serializable{
+public class Sale extends CheckBoxImplementation implements Serializable{
 	
 	/**
 	 * 
@@ -23,7 +24,6 @@ public class Sale implements Serializable{
 	private String startDate;
 	private String endDate;
 	private String saleDays;
-	private boolean select;
 
 	public Sale(Integer saleID, String status, String companyName, String fuelType, String purchaseModule,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
@@ -38,16 +38,7 @@ public class Sale implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.saleDays = saleDays;
-		select=false;
 	}
-	
-	public boolean getSelect() {
-		return select;
-	}
-	public void setSelect(boolean select) {
-		this.select = select;
-	}
-
 
 	public int getSaleID() {
 		return saleID;

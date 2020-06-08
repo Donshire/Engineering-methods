@@ -21,43 +21,51 @@ public class LogINController {
 
 		try {
 			res = logIn("customer", userName, password);
-
-			if (res.next() == true) {
-				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),res.getString(15),res.getString(16));
-				res.close();
+			ArrayList<Customer> customers = BuildObjectByQueryData.BuildCustomer(res);
+			Customer customer = null; 
+			
+			if (customers != null) {
+				if(!customers.isEmpty()) {
+					customer = customers.get(0);
 				if (customer.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-//				else
-//					updateUserOnlineStatus("customer", customer.getId(),1);
+//					else
+//						updateUserOnlineStatus("customer", customer.getId(),1);
+				res.close();
 				return customer;
+				}
 			}
 
 			res = logIn("employee", userName, password);
-			if (res.next() == true) {
-				Employee employee = new Employee(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getString(12));
-				res.close();
-				System.out.println(employee);
+			ArrayList<Employee> employees = BuildObjectByQueryData.BuildEmployee(res);
+			Employee employee = null;
+
+			if (employees != null) {
+				if(!employees.isEmpty()) {
+				employee = employees.get(0);
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-//				else
-//					updateUserOnlineStatus("employee", employee.getId(),1);
+//					else
+//						updateUserOnlineStatus("employee", employee.getId(),1);
+				res.close();
 				return employee;
+				}
 			}
 
 			res = logIn("supplier", userName, password);
-			if (res.next() == true) {
-				Supplier supplier = new Supplier(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9));
-				res.close();
-				if (supplier.getOnline() == 1)
-					return Commands.UserAlreadyConnected;
-//				else
-//					updateUserOnlineStatus("supplier", supplier.getId(),1);
-				return supplier;
+			ArrayList<Supplier> suppliers = BuildObjectByQueryData.BuildSupplier(res);
+				Supplier supplier = null;
+				
+			if (suppliers != null) {
+				if (!suppliers.isEmpty()) {
+					supplier = suppliers.get(0);
+					if (supplier.getOnline() == 1)
+						return Commands.UserAlreadyConnected;
+//						else
+//							updateUserOnlineStatus("supplier", supplier.getId(),1);
+					res.close();
+					return supplier;
+				}
 			}
 
 		} catch (Exception e) {
@@ -83,4 +91,3 @@ public class LogINController {
 	}
 
 }
-

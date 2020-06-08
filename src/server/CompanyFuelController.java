@@ -5,9 +5,10 @@ import java.sql.ResultSet;
 
 public class CompanyFuelController {
 
+
 	public static Object getMaxPrice(String type) {
 		float maxPrice = -1;
-		
+
 		try {
 			PreparedStatement stm;
 			ResultSet res;

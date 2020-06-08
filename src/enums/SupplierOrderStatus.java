@@ -2,5 +2,5 @@ package enums;
 
 public enum SupplierOrderStatus {
 	
-	supplied,confirmed;
+	created,supplied,confirmed;
 }

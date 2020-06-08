@@ -15,6 +15,7 @@ public class GasStation implements Serializable {
 	private String cityName;
 	private String areaName;
 	private StationManager manger;
+	private int stationMangerWorkerID;
 	private Set<StationFuel> stationFuel = new HashSet<StationFuel>();
 
 	public GasStation(String companyName, Integer stationID, String cityName, String areaName, StationManager manger,
@@ -25,6 +26,32 @@ public class GasStation implements Serializable {
 		this.areaName = areaName;
 		this.manger = manger;
 		this.stationFuel = stationFuel;
+		
+		stationMangerWorkerID=0;
+	}
+	
+	public GasStation(String companyName, Integer stationID, String cityName, String areaName, int stationMangerWorkerID) {
+		this.companyName = companyName;
+		this.stationID = stationID;
+		this.cityName = cityName;
+		this.areaName = areaName;
+		this.stationMangerWorkerID=stationMangerWorkerID;
+		
+		this.manger = null;
+		this.stationFuel = null;
+	}
+
+	
+	public int getStationMangerWorkerID() {
+		return stationMangerWorkerID;
+	}
+
+	public void setStationMangerWorkerID(int stationMangerWorkerID) {
+		this.stationMangerWorkerID = stationMangerWorkerID;
+	}
+
+	public void setStationID(Integer stationID) {
+		this.stationID = stationID;
 	}
 
 	public String getCompanyName() {

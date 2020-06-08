@@ -35,9 +35,15 @@ public class MyFuelClient extends AbstractClient {
 			Message message = (Message) msg;
 
 			switch (message.getCmd()) {
-
-				case defaultRes:// receive from server ArrayList<employee>
-					ServerRetObj = message.getObj();
+				case defaultRes:
+					if(message.getObj() instanceof Boolean)
+						ServerRetObj = message;
+					else ServerRetObj = message.getObj();
+					break;
+				case NoElementFound:
+					if(message.getObj() instanceof Boolean)
+						ServerRetObj = message;
+					else ServerRetObj = message.getObj();
 					break;
 				case CustomerOrderListRes: // receive from server ArrayList<employee>
 					ServerRetObj = message.getObj();
@@ -57,7 +63,7 @@ public class MyFuelClient extends AbstractClient {
 					break;
 			}
 		}
-		
+		else System.out.println("NULL RECIEVED FROM THE SERVER !!");
 		awaitResponse = false;
 	}
 
@@ -69,7 +75,7 @@ public class MyFuelClient extends AbstractClient {
 			// wait for response
 			while (awaitResponse) {
 				try {
-					Thread.sleep(100);
+					Thread.sleep(250);
 					System.out.println("still waiting");
 				} catch (InterruptedException e) {
 					e.printStackTrace();

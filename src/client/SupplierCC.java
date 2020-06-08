@@ -18,11 +18,11 @@ public class SupplierCC {
 		return(ArrayList<GasStationOrder>)MyFuelClient.ServerRetObj;
 	}
 	
-	public static boolean updateGasOrdersStatus(ArrayList<GasStationOrder> orders) {
+	public static Message updateGasOrdersStatus(ArrayList<GasStationOrder> orders) {
 		ArrayList<Object> objs = new ArrayList<Object>();
 
 		ClientUI.client.accept(new Message(orders, Commands.updateGasOrdersStatus));
-		return (boolean) MyFuelClient.ServerRetObj;
+		return (Message) MyFuelClient.ServerRetObj;
 	}
 	
 }

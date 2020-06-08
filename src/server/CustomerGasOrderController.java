@@ -12,9 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class GasStationController {
+public class CustomerGasOrderController {
 
-	public static Object getOrders(String customerId) {
+	public static ArrayList<GasOrder> getOrders(String customerId) {
 
 		PreparedStatement stm;
 		ResultSet res;

@@ -9,27 +9,53 @@ public class StationFuel implements Serializable {
 	 */
 	private static final long serialVersionUID = -9210850340007841186L;
 	private Fuel fuel;
+	private String fuelType; 
 	private GasStation station;
 
-	private int stationId;
+	private int stationID;
 	private String fueltype;
 	private float amount;
 	private float minQuantity;
+	private int tankSize;
 
 	boolean selectMinQuantity;
 
-	public StationFuel(Fuel fuel, GasStation station, float amount, float minQuantity) {
+	public StationFuel(Fuel fuel, GasStation station, float amount, float minQuantity, int tankSize) {
 		this.fuel = fuel;
 		this.station = station;
 		this.amount = amount;
 		this.minQuantity = minQuantity;
+		this.tankSize = tankSize;
+		
+		fuelType=fuel.getFuelType();
+		stationID=station.getStationID();
 	}
-
-	public StationFuel(int stationId, String fueltype, float amount, float minQuantity) {
-		this.stationId = stationId;
-		this.fueltype = fueltype;
+	
+	public StationFuel(String fuelType, int stationID, float amount, float minQuantity, int tankSize) {
+		this.fuelType = fuelType;
+		this.stationID = stationID;
 		this.amount = amount;
 		this.minQuantity = minQuantity;
+		this.tankSize = tankSize;
+		
+		station=null;
+		fuel=null;
+	}
+
+	public String getFuelType() {
+		return fuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		this.fuelType = fuelType;
+	}
+
+	public int getStationID() {
+		return stationID;
+	}
+
+	public void setStationID(int stationID) {
+		this.stationID = stationID;
 	}
 
 	public Fuel getFuel() {
@@ -64,10 +90,18 @@ public class StationFuel implements Serializable {
 		this.minQuantity = minQuantity;
 	}
 
+	public int getTankSize() {
+		return tankSize;
+	}
+
+	public void setTankSize(int tankSize) {
+		this.tankSize = tankSize;
+	}
+
 	@Override
 	public String toString() {
-		return "StationFuel [stationId=" + stationId + ", fueltype=" + fueltype + ", amount=" + amount
-				+ ", minQuantity=" + minQuantity + "]";
+		return "StationFuel [fuel=" + fuel + ", station=" + station + ", amount=" + amount + ", minQuantity="
+				+ minQuantity + ", tankSize=" + tankSize + "]";
 	}
 
 	public String getFueltype() {
