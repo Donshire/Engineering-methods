@@ -3,6 +3,7 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.xml.crypto.KeySelector.Purpose;
@@ -12,6 +13,7 @@ import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.FuelPurchase;
 import Entity.PricingModule;
+import client.EmployeeCC;
 
 public class FastFuelController {
 
@@ -28,7 +30,7 @@ public class FastFuelController {
 		results.add(car);
 		
 		//adding customer to the result
-		Customer customer=EmployeeController.getCutomerByCarNumber(car.getCarCustomerId());
+		Customer customer=EmployeeController.getCutomerByCustomerID(car.getCarCustomerId());
 		if(customer==null)return null;
 		results.add(customer);
 		//Must he have puchase model ??,adding CustomerModule to the result
@@ -95,7 +97,7 @@ public class FastFuelController {
 		GasStationControllerServer.ReachedMinemumQuantityHandler(purchase.getStationId(),fuelType,amountInStation);
 		
 		//call paymentMethod
-		if(payment(customerId, paymentOption,purchase.getPriceOfPurchase()))
+		if(payment(customerId, paymentOption,purchase.getPriceOfPurchase(),purchase.getDate()))
 		//save purchase details
 		if(savePurchaseDetails(purchase)) return -1;
 		
@@ -141,7 +143,7 @@ public class FastFuelController {
 	public static PricingModule getPricingModule(String company,int modelNumber) {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<PricingModule> pricingModule;
+		ArrayList<PricingModule> pricingModule=null;
 		String query="Select * " + 
 				"From myfueldb.pricingmodule as price " + 
 				"where price.company = ? and " + 
@@ -156,13 +158,11 @@ public class FastFuelController {
 			
 			stm.close();
 			
-			if(pricingModule==null)return null;
-			return pricingModule.get(0);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		if(pricingModule==null||pricingModule.isEmpty())return null;
+		return pricingModule.get(0);
 	}
 	
 	/**
@@ -188,13 +188,11 @@ public class FastFuelController {
 			res.close();
 			stm.close();
 			
-			if(CompanyFuelStationsID.isEmpty())return null;
-			return CompanyFuelStationsID;
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		if(CompanyFuelStationsID.isEmpty())return null;
+		return CompanyFuelStationsID;
 	}
 	
 	/**
@@ -225,8 +223,12 @@ public class FastFuelController {
 		return false;
 	}
 	
-	public static boolean payment(String customerId,String paymentOption,float priceOfPurchase) {
-		return true;
+	public static boolean payment(String customerId,String paymentOption,float priceOfPurchase,String currentDate) {
+		Customer customer=EmployeeController.getCutomerByCustomerID(customerId);
+		if(customer!=null) {
+			if(customer.getExpDate().compareTo(currentDate)>0) return true;
+		}
+		return false;
 	}
 	
 }

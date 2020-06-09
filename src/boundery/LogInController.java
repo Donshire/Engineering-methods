@@ -44,6 +44,10 @@ public class LogInController {
 		if (carNumber.isEmpty())
 			JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
+			if(carNumber.replaceAll("[^0-9?!\\.]","").compareTo(carNumber)!=0) {
+				JOptionPane.showMessageDialog(null, "Please enter just numbers");
+				return;
+			}
 			// call the server and get the car details
 			ArrayList<Object> result = UserCC.fastFuelingLogIn(carNumber);
 			if (result == null) {

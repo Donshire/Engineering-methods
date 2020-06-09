@@ -35,9 +35,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable {
-
-	//for the popup
-	Stage savedStage;
 	
 	public static Car car;
 	public static Customer customer;
@@ -121,43 +118,26 @@ public class FastFuelingController implements Initializable {
 			sales = salesID.get(0);
 		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice*amount, "", "",
 				sales, currentPrice*amount, customer.getId());
-
-		Stage stg=workInProgres();
-		stg.show();
 		
 		if (visaRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());
 
 		else if (cashRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
-		
-		//stg.hide();
-		String resValue = "";
-		//hide the others 
-		stg.getScene().getRoot().getChildrenUnmodifiable().get(0).setVisible(false);
-		stg.getScene().getRoot().getChildrenUnmodifiable().get(1).setVisible(false);
-		//
-		Text txt = (Text) stg.getScene().getRoot().getChildrenUnmodifiable().get(2);
-		txt.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-		if (result == -1) {
-			resValue = "Purchase succeded";
-			txt.setFill(Color.GREEN);
+		else {
+			JOptionPane.showMessageDialog(null,"please select payment method");
+			return;
 		}
-		else if (result == -2) {
-			resValue = "Purchase un-succeded";
-			txt.setFill(Color.RED);
-		}
-			
-		else if (result >= 0) {
-			resValue = String.format("Order excede station max qauntity\nthe max quantity is %d", result);
-			txt.setFill(Color.BLUE);
-		}
-		//
-		txt.setText(resValue);
+
+		if (result == -1) JOptionPane.showMessageDialog(null,"Purchase succeded");
+		else if (result == -2) JOptionPane.showMessageDialog(null,"Purchase un-succeded");	
+		else if (result >= 0)
+			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %d", result));
+
 	}
 
 	@FXML
-	void nextToPayment(ActionEvent event) {
+	void nextToPayment(ActionEvent event) { 
 		companyName = companiesCombo.getValue();
 
 		if(companyName==null){
@@ -217,8 +197,6 @@ public class FastFuelingController implements Initializable {
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
-
-		savedStage=primaryStage;
 		
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("FastFueling.fxml"));
@@ -227,9 +205,9 @@ public class FastFuelingController implements Initializable {
 		// connect the scene to the file
 		s = new Scene(mainPane);
 
-		savedStage.setTitle("MyFuel ltm");
-		savedStage.setScene(s);
-		savedStage.show();
+		primaryStage.setTitle("MyFuel ltm");
+		primaryStage.setScene(s);
+		primaryStage.show();
 
 	}
 
@@ -268,6 +246,7 @@ public class FastFuelingController implements Initializable {
 		stationsIDCombo.setItems(stationsID);
 	}
 	
+	/*
 	private Stage workInProgres() {
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
@@ -291,5 +270,6 @@ public class FastFuelingController implements Initializable {
         
         return dialog;
 	}
+	*/
 
 }

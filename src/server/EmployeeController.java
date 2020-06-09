@@ -46,12 +46,13 @@ public class EmployeeController {
 
 	/**
 	 * to check if customer exist
+	 * changed the name-saleem
 	 * 
 	 * @param customerId
 	 * @return customer object if exist ,else return null in case of exeption or car
 	 *         wasn't found
 	 */
-	public static Customer getCutomerByCarNumber(String customerId) {
+	public static Customer getCutomerByCustomerID(String customerId) {
 		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<Customer> customer;
