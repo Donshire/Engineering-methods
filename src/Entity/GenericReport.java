@@ -2,7 +2,7 @@ package Entity;
 
 import java.io.Serializable;
 
-public class GenericReport implements Serializable{
+public class GenericReport implements Serializable {
 	/**
 	 * 
 	 */
@@ -11,19 +11,23 @@ public class GenericReport implements Serializable{
 	private String time;
 	private String fileName;
 	private String reportType;
+	private String companyName;
 
 	/**
 	 * 
-	 * @param date String
-	 * @param time String
-	 * @param fileName String
-	 * @param reportType String
+	 * @param date
+	 * @param time
+	 * @param fileName
+	 * @param reportType
+	 * @param companyName
 	 */
-	public GenericReport(String date, String time, String fileName, String reportType) {
+
+	public GenericReport(String date, String time, String fileName, String reportType, String companyName) {
 		this.date = date;
 		this.time = time;
 		this.fileName = fileName;
 		this.reportType = reportType;
+		this.companyName = companyName;
 	}
 
 	public String getDate() {
@@ -58,10 +62,22 @@ public class GenericReport implements Serializable{
 		this.reportType = reportType;
 	}
 
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
-		return "GenericReport [fileName=" + fileName+", reportType=" + reportType+", date=" + date + 
-				", time=" + time + "]";
+		return "GenericReport [date=" + date + ", time=" + time + ", fileName=" + fileName + ", reportType="
+				+ reportType + ", companyName=" + companyName + "]";
 	}
 
 }

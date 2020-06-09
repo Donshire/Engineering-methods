@@ -29,71 +29,71 @@ public class CompanyFuelControllerServer {
 	 * @param time String
 	 * @return
 	 */
-	public static File periodicReport(String companyName,String date, String time) {
-		File file = null;
-		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases();
-		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
-		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
-		
-		for(customerCompaniesDiversion cus:customerCompaniesDiversionArray)
-			System.out.println(cus.numOfPurchaeseByCompanies+","+customerCompaniesDiversion.calculateRank(cus));
-		
-		//sort
-		Collections.sort(customerTotalPurchaseArray);
-		Collections.sort(customerCompaniesDiversionArray);
-		
-		customerTotalPurchase customerTotalPurchasearray[];
-		customerCompaniesDiversion customerCompaniesDiversionarray[];
-		
-		//Merge
-		try {
-			//convert customerTotalPurchaseArray to array
-			customerTotalPurchasearray=new customerTotalPurchase[customerTotalPurchaseArray.size()];
-			customerTotalPurchaseArray.toArray(customerTotalPurchasearray);
-			//convert customerTotalPurchaseArray to array
-			customerCompaniesDiversionarray=new customerCompaniesDiversion[customerCompaniesDiversionArray.size()];
-			customerCompaniesDiversionArray.toArray(customerCompaniesDiversionarray);	
-		}catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-		
-		int j,i;
-		
-		for(i=0;i<customerTotalPurchasearray.length;i++) {
-			for(j=0;j<customerCompaniesDiversionarray.length;j++) {
-				if(customerTotalPurchasearray[i].customerId.compareTo(customerCompaniesDiversionarray[j].customerId)==0)
-					break;
-			}
-			rankedcustomerArray.add(new rankedcustomer(customerTotalPurchasearray[i],customerCompaniesDiversionarray[j],i,j));
-		}
-		
-		//Sort the merged Arrays
-		Collections.sort(rankedcustomerArray);
-		//Conver to array
-		rankedcustomer rankedcustomerarray[]=new rankedcustomer[rankedcustomerArray.size()];
-		rankedcustomerArray.toArray(rankedcustomerarray);
-		//Write to the result file
-		file=FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
-				FileManagmentSys.marketingManagerReports,FileManagmentSys.periodicReport),
-				FileManagmentSys.periodicReport,0);
-		
-		StringBuilder data = new StringBuilder("");
-		
-		for(i=0;i<rankedcustomerarray.length;i++) {
-			data.append(FileManagmentSys.periodicReportFileFormate(rankedcustomerarray[i].companies.customerId,
-					customerCompaniesDiversion.getPurchasePercent(rankedcustomerarray[i].companies.numOfPurchaeseByCompanies,
-							rankedcustomerarray[i].companies.totalNumOfPurchaese),
-					rankedcustomerarray[i].companies.numOfPurchaeseByCompanies.length,
-					rankedcustomerarray[i].purchas.totalPurchase));
-		}
-		
-		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
-
-		// connecting to the db
-		createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
-		return file;
-	}
+//	public static File periodicReport(String companyName,String date, String time) {
+//		File file = null;
+//		ArrayList<customerTotalPurchase> customerTotalPurchaseArray = customersTotalPurchases();
+//		ArrayList<customerCompaniesDiversion> customerCompaniesDiversionArray = customerCompaniesDiversion();
+//		ArrayList<rankedcustomer> rankedcustomerArray = new ArrayList<rankedcustomer>();
+//		
+//		for(customerCompaniesDiversion cus:customerCompaniesDiversionArray)
+//			System.out.println(cus.numOfPurchaeseByCompanies+","+customerCompaniesDiversion.calculateRank(cus));
+//		
+//		//sort
+//		Collections.sort(customerTotalPurchaseArray);
+//		Collections.sort(customerCompaniesDiversionArray);
+//		
+//		customerTotalPurchase customerTotalPurchasearray[];
+//		customerCompaniesDiversion customerCompaniesDiversionarray[];
+//		
+//		//Merge
+//		try {
+//			//convert customerTotalPurchaseArray to array
+//			customerTotalPurchasearray=new customerTotalPurchase[customerTotalPurchaseArray.size()];
+//			customerTotalPurchaseArray.toArray(customerTotalPurchasearray);
+//			//convert customerTotalPurchaseArray to array
+//			customerCompaniesDiversionarray=new customerCompaniesDiversion[customerCompaniesDiversionArray.size()];
+//			customerCompaniesDiversionArray.toArray(customerCompaniesDiversionarray);	
+//		}catch (Exception e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//		
+//		int j,i;
+//		
+//		for(i=0;i<customerTotalPurchasearray.length;i++) {
+//			for(j=0;j<customerCompaniesDiversionarray.length;j++) {
+//				if(customerTotalPurchasearray[i].customerId.compareTo(customerCompaniesDiversionarray[j].customerId)==0)
+//					break;
+//			}
+//			rankedcustomerArray.add(new rankedcustomer(customerTotalPurchasearray[i],customerCompaniesDiversionarray[j],i,j));
+//		}
+//		
+//		//Sort the merged Arrays
+//		Collections.sort(rankedcustomerArray);
+//		//Conver to array
+//		rankedcustomer rankedcustomerarray[]=new rankedcustomer[rankedcustomerArray.size()];
+//		rankedcustomerArray.toArray(rankedcustomerarray);
+//		//Write to the result file
+//		file=FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
+//				FileManagmentSys.marketingManagerReports,FileManagmentSys.periodicReport),
+//				FileManagmentSys.periodicReport,0);
+//		
+//		StringBuilder data = new StringBuilder("");
+//		
+//		for(i=0;i<rankedcustomerarray.length;i++) {
+//			data.append(FileManagmentSys.periodicReportFileFormate(rankedcustomerarray[i].companies.customerId,
+//					customerCompaniesDiversion.getPurchasePercent(rankedcustomerarray[i].companies.numOfPurchaeseByCompanies,
+//							rankedcustomerarray[i].companies.totalNumOfPurchaese),
+//					rankedcustomerarray[i].companies.numOfPurchaeseByCompanies.length,
+//					rankedcustomerarray[i].purchas.totalPurchase));
+//		}
+//		
+//		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
+//
+//		// connecting to the db
+//		createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
+//		return file;
+//	}
 
 	public static ArrayList<customerTotalPurchase> customersTotalPurchases() {
 		Statement stm;
@@ -371,7 +371,7 @@ public class CompanyFuelControllerServer {
 					Integer.valueOf(strRes1), Float.valueOf(strRes2), null);
 
 			// connecting to the db
-			createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
+			//createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -381,7 +381,7 @@ public class CompanyFuelControllerServer {
 	}
 
 	public static boolean createGenericReport(GenericReport report) {
-		String query = "insert into genericreport (date,time,Filename,reportType) " + "values (?,?,?,?)";
+		String query = "insert into genericreport (date,time,Filename,reportType,companyname) " + "values (?,?,?,?,?)";
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
@@ -389,7 +389,7 @@ public class CompanyFuelControllerServer {
 			stm.setString(2, report.getTime());
 			stm.setString(3, report.getFileName());
 			stm.setString(4, report.getReportType());
-
+			stm.setString(5,report.getCompanyName());
 			stm.executeUpdate();
 			stm.close();
 		} catch (Exception e) {

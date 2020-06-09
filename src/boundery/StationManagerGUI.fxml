@@ -32,6 +32,10 @@
                         <Font size="19.0" />
                      </font>
                   </Button>
+                  <Text fx:id="nametxt" fill="WHITE" layoutX="307.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="100.6708984375">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Text>
                </children>
             </Pane>
             <VBox prefHeight="757.0" prefWidth="239.0" style="-fx-background-color: #3F2B63;">
@@ -124,13 +128,12 @@
             </AnchorPane>
             <AnchorPane fx:id="StationReportsView" minHeight="-Infinity" minWidth="-Infinity" prefHeight="534.0" prefWidth="791.0" style="-fx-background-color: white;">
                <children>
-                  <TableView layoutX="86.0" layoutY="214.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="750.0">
+                  <TableView fx:id="ReportTable" layoutX="154.0" layoutY="226.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="295.0" prefWidth="600.0">
                      <columns>
-                        <TableColumn fx:id="ReportID" prefWidth="150.0" text="Report ID" />
+                        <TableColumn fx:id="ReportType" prefWidth="150.0" text="Report Type" />
                         <TableColumn fx:id="ReportDate" prefWidth="150.0" text="Date" />
                         <TableColumn fx:id="ReportTime" prefWidth="150.0" text="Time" />
-                        <TableColumn fx:id="ReportFileName" prefWidth="150.0" text="File Name" />
-                        <TableColumn fx:id="ReportType" prefWidth="150.0" text="Report Type" />
+                        <TableColumn fx:id="companyNamecol" prefWidth="150.0" text="Company Name" />
                      </columns>
                   </TableView>
                   <Text layoutX="96.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year :">
@@ -139,7 +142,7 @@
                      </font>
                   </Text>
                   <TextField fx:id="enterYeartxt" layoutX="233.0" layoutY="172.0" />
-                  <Button fx:id="chooseYearbtn" layoutX="452.0" layoutY="168.0" mnemonicParsing="false" text="show" />
+                  <Button fx:id="chooseYearbtn" layoutX="452.0" layoutY="168.0" mnemonicParsing="false" onAction="#getAllReportByYear" text="show" />
                   <Text layoutX="86.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Report :">
                      <font>
                         <Font size="29.0" />
@@ -161,5 +164,7 @@
             </AnchorPane>
          </children>
       </StackPane>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
    </children>
 </AnchorPane>

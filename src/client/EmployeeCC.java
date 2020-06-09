@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import Entity.Car;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
+
 import Entity.CompanyFuel;
 import Entity.Customer;
 import Entity.GasStationOrder;
 import Entity.GenericReport;
 import Entity.Message;
+import Entity.MyFile;
 import Entity.Rates;
 import Entity.Sale;
 import Entity.StationFuel;
@@ -67,7 +70,7 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(CompanyName, Commands.getAllCompanyFuel));
 		return (ArrayList<String>) MyFuelClient.ServerRetObj;
 	}
-	
+	 
 	public static CompanyFuel getCompanyFuel(String CompanyName,String fuelType){
 		ArrayList<String> str =new ArrayList<String>(); 
 		str.add(CompanyName);
@@ -139,20 +142,36 @@ public class EmployeeCC {
 
 	}
 
-	public static Boolean createFuelStationReports(int stationId, StationManagerReportsTypes reportType) {
-
+	public static File createFuelStationReports(int stationId,String companyName,StationManagerReportsTypes reportType) {
+		ArrayList<Object> params = new ArrayList<Object>();
+		File f;
+		params.add(stationId);
+		params.add(companyName);
 		switch (reportType) {
 		case income:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationIncmomeReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationIncmomeReport));
 			break;
 		case purchases:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationPurchasesReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationPurchasesReport));
 			break;
 		case inventory:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationInventoryReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationInventoryReport));
 			break;
 		}
 		
-		return (Boolean) MyFuelClient.ServerRetObj;
+		 if(MyFuelClient.ServerRetObj == null) return null;
+		
+		return (File) MyFuelClient.ServerRetObj;
+	}
+	
+	public static ArrayList<GenericReport> getAllReportByYear(String year){
+		
+		ClientUI.client.accept(new Message(year, Commands.getAllReportByYear));
+		return (ArrayList<GenericReport>) MyFuelClient.ServerRetObj;
+	}
+	
+	public static File getFile(GenericReport r) {
+		ClientUI.client.accept(new Message(r, Commands.getFileToclient));
+		return (File) MyFuelClient.ServerRetObj;
 	}
 }
