@@ -20,15 +20,20 @@ public class CustomerCC {
 		return (ArrayList<String>) MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * 
+	 * @param companyName
+	 * @return purchasePrice,currentPrice,SalePercent,RatePercent,SaleID 
+	 */
 	public static ArrayList<Integer> getAllCompanyFuelStationID(String companyName) {
 		ClientUI.client.accept(new Message(companyName, Commands.getAllCompanyFuelStationID));
 		return (ArrayList<Integer>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<Float> getPurchasePriceDetails(String companyName,CustomerModule model,int prcingModelNumber) {
+	public static ArrayList<Float> getPurchasePriceDetails(String companyName,String fuelType,int prcingModelNumber) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(companyName);
-		str.add(model);
+		str.add(fuelType);
 		str.add(prcingModelNumber);
 		ClientUI.client.accept(new Message(str, Commands.getPurchasePriceDetails));
 		return (ArrayList<Float>) MyFuelClient.ServerRetObj;

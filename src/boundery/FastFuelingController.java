@@ -53,7 +53,11 @@ public class FastFuelingController implements Initializable {
 	private Pane paymentPane;
 	@FXML
 	private Text carNumberTxt;
-
+	@FXML
+	private Text pricingModelSaleTxt;
+	@FXML
+	private Text salIDTxt;
+	
 	@FXML
 	private Text fuelTypeTxt;
 
@@ -141,7 +145,7 @@ public class FastFuelingController implements Initializable {
 		companyName = companiesCombo.getValue();
 
 		if(companyName==null){
-			JOptionPane.showMessageDialog(null, "Select company Firts");
+			JOptionPane.showMessageDialog(null, "Select company Firsts");
 			return;
 		}
 		
@@ -159,7 +163,7 @@ public class FastFuelingController implements Initializable {
 		}
 
 		// call server and calculate totale price
-		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName, customerModule,
+		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
 				customer.getPricingModel());
 		customerPrice = resDetails.get(0);
 		currentPrice=resDetails.get(1);
@@ -181,17 +185,26 @@ public class FastFuelingController implements Initializable {
 	void selectCompany(ActionEvent event) {
 		companyName = companiesCombo.getValue();
 		// get all company stations
+		// get the pricing data
+				ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
+						customer.getPricingModel());
+		// the calculated price
+		if(pricingRes==null) {
+			JOptionPane.showMessageDialog(null,"System bug the data for this company still not finished");
+			return;
+		}
+		
 		// set value of StationsIDCombo
 		fillstationsIDCombo(CustomerCC.getAllCompanyFuelStationID(companyName));
-		// get the pricing data
-		ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, customerModule,
-				customer.getPricingModel());
-		// the calculated price
 		customerPriceTxt.setText(pricingRes.get(0).toString());
 		// company cur price
 		fuelPricePL.setText(pricingRes.get(1).toString());
 		// company sales
 		salePercentTxt.setText(pricingRes.get(2).toString());
+		//RatePercent
+		pricingModelSaleTxt.setText(pricingRes.get(3).toString());
+		//SaleID
+		salIDTxt.setText(pricingRes.get(4).toString());
 	}
 
 	public void start(Stage primaryStage) throws Exception {

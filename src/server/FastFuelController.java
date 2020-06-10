@@ -1,10 +1,19 @@
 package server;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.xml.crypto.KeySelector.Purpose;
 
@@ -13,14 +22,16 @@ import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.FuelPurchase;
 import Entity.PricingModule;
+import Entity.Sale;
 import client.EmployeeCC;
+import enums.SaleStatus;
 
 public class FastFuelController {
 
 	/**
 	 * 
 	 * @param carNumber
-	 * @return ArrayList of Objects containig  objects car,customer,cutomer model,purchase model
+	 * @return ArrayList of Objects containig  objects car,customer,cutomer purchase model
 	 */
 	public static ArrayList<Object> fastFuelingLogIn(String carNumber) {
 		ArrayList<Object> results = new ArrayList<Object>();
@@ -54,22 +65,126 @@ public class FastFuelController {
 	 * @param amount float
 	 * @return
 	 */
-	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,CustomerModule model,int prcingModelNumber) {
+	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,String fuelType,int prcingModelNumber,String date,String time) {
 		//the ArrayList contains purchasePrice,currentPrice,SalePercent
 		ArrayList<Float> result= new ArrayList<Float>();
 		
-		PricingModule rate=getPricingModule(companyName,prcingModelNumber);
-		//get the current price of company
+		PricingModule rate = getPricingModule(companyName,prcingModelNumber);
+		if(rate==null) {
+			System.out.println("rate has not been created");
+			return null;
+		}
+		Sale sale = getCurentsSale(companyName,fuelType, date, time);
+		float maxPrice=getMaxPrice(companyName, fuelType);
 		
-		//call method that calculate the price for the customer
+		DecimalFormat df = new DecimalFormat("0.00");
+		float purchasePrice=maxPrice,salePercent=0,saleID=0;
+		//user must have pricing model
+		purchasePrice=purchasePrice*(1-rate.getSalePercent());
+		if(sale!=null) {
+			purchasePrice=purchasePrice*(1-sale.getSalePercent());
+			salePercent=sale.getSalePercent();
+			saleID=sale.getSaleID();
+		}
 		
-		result.add(10.2f);//purchasePrice
-		result.add(15.3f);//currentPrice
-		result.add(0.1f);//SalePercent
-		result.add(0.04f);//RatePercent
-		result.add(1f);//Sale ID cloud be many
+		result.add(roundTwoDecimals(purchasePrice));//purchasePrice
+		result.add(maxPrice);//currentPrice
+		result.add(salePercent);//SalePercent
+		result.add(rate.getSalePercent());//RatePercent
+		result.add(saleID);//Sale ID 
 		
 		return result;
+	}
+	
+	public static float roundTwoDecimals(float d) {
+		  DecimalFormat twoDForm = new DecimalFormat("#.##");
+		  return Float.valueOf(twoDForm.format(d));
+		}
+	
+	
+	public static float getMaxPrice(String companyName,String fuelType) {
+		PreparedStatement stm;
+		ResultSet res;
+		float result=0;
+		String query="Select currentPrice " + 
+				"from myfueldb.company " + 
+				"where companyName = ? and fuelType = ?";
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, companyName);
+			stm.setString(2, fuelType);
+			
+			res=stm.executeQuery();
+			if(res.next())result= res.getFloat(1);
+			
+			res.close();
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * get active sale in the current time if there is more than one <br>
+	 * return the max sale percent  
+	 * @param companyName
+	 * @param fuelType
+	 * @param dateS in the formate of yyyy-MM-dd
+	 * @param time in the fornmate of HH:mm:ss
+	 * @return
+	 */
+	public static Sale getCurentsSale(String companyName,String fuelType,String dateS,String time) {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<Sale> sales=null;
+		String query="Select * From myfueldb.sale " + 
+				"where companyName = ? And fueltype = ? " + 
+				"and status = ? AND startTime<=? and endTime>=? " + 
+				"and startDate<=? and endDate >= ?";
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, companyName);
+			stm.setString(2, fuelType);
+			stm.setString(3, SaleStatus.activated.toString());
+			stm.setString(4, time);
+			stm.setString(5, time);
+			stm.setString(6, dateS);
+			stm.setString(7, dateS);
+			
+			res=stm.executeQuery();
+			sales=BuildObjectByQueryData.BuildSale(res);
+			
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(sales==null||sales.isEmpty())return null;
+		//check the days
+		Date date;
+		String dayOfWeek;
+		 try {
+				date=new SimpleDateFormat("yyyy-MM-dd").parse(dateS);
+				dayOfWeek = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date);
+			} catch (ParseException e) {
+				e.printStackTrace();
+				return null;
+			}
+		 Set<String> days = new HashSet<String>();
+			 for(Sale sale:sales) {
+				 days=BuildObjectByQueryData.converStringToSet(sale.getSaleDays());
+				 if(!days.contains(dayOfWeek.toUpperCase())) sales.remove(sale);
+			 }
+			 
+		//get the max sale percent
+		int i,maxSaleIndex=0;
+		float maxSale=0;
+		for(i=0;i<sales.size();i++)
+			if(sales.get(i).getSalePercent()>maxSale) {
+				maxSale=sales.get(i).getSalePercent();
+				maxSaleIndex=i;
+			}
+		return sales.get(maxSaleIndex);
 	}
 	
 	/**
@@ -112,7 +227,7 @@ public class FastFuelController {
 	public static CustomerModule getCutomerModel(String customerId) {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<CustomerModule> customerModule;
+		ArrayList<CustomerModule> customerModule=null;
 		String query="Select * " + 
 				"From myfueldb.customermodule as cusm " + 
 				"where cusm.CustomerID = ?";
@@ -124,14 +239,11 @@ public class FastFuelController {
 			customerModule=BuildObjectByQueryData.BuildCustomerModule(res);
 			
 			stm.close();
-			
-			if(customerModule==null)return null;
-			return customerModule.get(0);
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		if(customerModule==null||customerModule.isEmpty())return null;
+		return customerModule.get(0);
 	}
 	
 	/**

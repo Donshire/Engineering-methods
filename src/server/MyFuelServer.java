@@ -117,7 +117,7 @@ public class MyFuelServer extends AbstractServer {
 		case getPurchasePriceDetails:
 			str =(ArrayList<Object>)message.getObj();
 				sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
-						((String)str.get(0),(CustomerModule)str.get(1),(int)str.get(2)), client);
+						((String)str.get(0),(String)str.get(1),(int)str.get(2),dateFormat.format(date),timeDBFormat.format(date)), client);
             break;
             
 		case commitFuelPurchase:

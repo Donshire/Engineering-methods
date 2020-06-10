@@ -14,6 +14,7 @@ import Entity.Employee;
 import Entity.GasStation;
 import Entity.GasStationOrder;
 import Entity.PricingModule;
+import Entity.Sale;
 import Entity.StationFuel;
 import Entity.Supplier;
 import enums.RatesStatus;
@@ -89,7 +90,7 @@ public class BuildObjectByQueryData {
 		try {
 			while (res.next() == true)
 				customerModuleList.add(new CustomerModule(res.getString(1),
-						res.getInt(2), converCompaniesToSet(res.getString(3)),
+						res.getInt(2), converStringToSet(res.getString(3)),
 						res.getString(4), res.getString(5)));
 				res.close();
 			return customerModuleList;
@@ -105,11 +106,11 @@ public class BuildObjectByQueryData {
 	 * @param companies
 	 * @return
 	 */
-	private static Set<String> converCompaniesToSet (String companies){
+	public static Set<String> converStringToSet (String str){
 		Set<String> sets = new HashSet<String>();
-		String[] words=companies.split(",");
+		String[] words=str.split(",");
 		for(int i=0;i<words.length;i++)
-			sets.add(words[i]);
+			sets.add(words[i].toUpperCase());
 		return sets;
 	}
 	
@@ -249,4 +250,27 @@ public class BuildObjectByQueryData {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * build Sale object
+	 * @param res
+	 * @return
+	 */
+	public static ArrayList<Sale> BuildSale(ResultSet res){
+		ArrayList<Sale> sales = new ArrayList<Sale>();
+		try {
+			while (res.next() == true)
+				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
+						res.getString(10), res.getString(11)));
+				
+				res.close();
+			return sales;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
