@@ -34,8 +34,8 @@ public class AnalticData extends Thread {
 			return;
 		}
 		threadSleep();
-		//calculatefuelTypeAnaleticRank();
-		//calculateCustomerTypeAnaleticRank();
+		calculatefuelTypeAnaleticRank();
+		calculateCustomerTypeAnaleticRank();
 		System.out.println(index++);
 		
 		//
@@ -133,12 +133,18 @@ public class AnalticData extends Thread {
 	}
 
 	/**
-	 * the is according to how many cars customer have <br>
+	 * 1 the is according to how many cars customer have <br>
 	 * Like: 1-3   cars 3  points <br>
-	 * 		 4-7   cars 5  points <br>
+	 *       4-7   cars 5  points <br>
 	 * 		 7-12  cars 7  points <br>
 	 * 		 12-20 cars 9  points <br>
-	 * 		 21+   cars 10 points
+	 * 		 21+   cars 10 points<br>
+	 * and 2 according total purchase<br>
+	 * Like: 1000<=   shekel   3  points<br>
+	 *       10000<=  shekel   6  points<br>
+	 *       100000<= shekel   8  points<br>
+	 *       100000+  shekel   10  points<br>
+	 *       and the calculation is 1,2 divided by 2
 	 * @return
 	 */
 	private ArrayList<Integer> calculateCustomerTypeAnaleticRank() {
