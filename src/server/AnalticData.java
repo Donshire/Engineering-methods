@@ -11,11 +11,13 @@ import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import Entity.CompanyFuel;
 import Entity.GasStationOrder;
 import enums.SupplierOrderStatus;
 
@@ -27,6 +29,8 @@ public class AnalticData extends Thread {
 	private LocalDate before;
 	private LocalDate after;
 	
+	private static ArrayList<String> currentCustomers;
+	
 	public void run() 
     { 
 		if(index>10) {
@@ -34,6 +38,8 @@ public class AnalticData extends Thread {
 			return;
 		}
 		threadSleep();
+		currentCustomers=getAllCustomersID();
+		
 		calculatefuelTypeAnaleticRank();
 		calculateCustomerTypeAnaleticRank();
 		System.out.println(index++);
@@ -81,11 +87,7 @@ public class AnalticData extends Thread {
 	
 	/**
 	 * This func will count for each customer how many fuel type he puchased<br>
-	 * 0 -> 1<br>
-	 * 1 -> 3<br>
-	 * 2 -> 5<br>
-	 * 3 -> 7<br>
-	 * 4 -> 10<br>
+	 * as fuel price is higher rank is higher
 	 * @return
 	 */
 	private ArrayList<Integer> calculatefuelTypeAnaleticRank() {
@@ -93,33 +95,94 @@ public class AnalticData extends Thread {
 		ResultSet res;
 		ArrayList<Integer> countOfGasStationFuelsPurchased= new ArrayList<Integer>();
 		int index=0;
-		
+		//get all system fuels
+		ArrayList<String> companies = getAllCompanies();
+		ArrayList<CompanyFuel> fuels = new ArrayList<CompanyFuel>();
+		for(String company : companies)
+			fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
+		//sort the fuels prices
+		 Collections.sort(fuels);
+		 ArrayList<FuelplusPrice> rankedFuels = new ArrayList<FuelplusPrice>();
+		 
+		 for(int i=0;i<fuels.size();i++) {
+			 if(rankedFuels.contains(fuels.get(i).getFuelType())) {
+				 rankedFuels.add(new FuelplusPrice(fuels.get(i).getFuelType(),i));
+			 }
+			 index=rankedFuels.indexOf(fuels.get(i).getFuelType());
+			 rankedFuels.set(index, new FuelplusPrice(rankedFuels.get(index).getFuelsName()
+					 ,rankedFuels.get(index).getRankArray()+i));
+		 }
+		 //sort the result
+		 Collections.sort(rankedFuels);
+		 //give for each fuel rank
+		 //exp. 5 => sumto 10 => 5/15 4/15 3/15 2/15 1/15
+		 int lower=sumto(rankedFuels.size()),uper=rankedFuels.size();
+		 
+		 for(FuelplusPrice current:rankedFuels) {
+			 current.rankArray=(int)(10*(float)(uper/lower));
+			 uper--;
+		 }
+		 
 		try {
 			//gasStationFuels
-			stm = ConnectionToDB.conn.prepareStatement("Select count(distinct(fuelType)) from myfueldb.customer as cus " + 
+			stm = ConnectionToDB.conn.prepareStatement("Select id,car.fuelType " + 
+					"from myfueldb.customer as cus " + 
 					"left join myfueldb.car on cus.id=car.CustomerID " + 
 					"left join myfueldb.fuelpurchase as pur on car.carNumber = pur.CarNumber " + 
-					"where pur.date>= ? and pur.date<= ? GROUP BY cus.id order by cus.id");
+					"where pur.date>= ? and pur.date<= ? group by car.carNumber order by cus.id");
 			
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
 			res = stm.executeQuery();
 			
-			while(res.next())countOfGasStationFuelsPurchased.add(res.getInt(1));
+			index=0;
+			int customersIndex=0;
+			String currentCustomer="";
+			
+			if(res.next()) {
+				currentCustomer=res.getString(1);
+				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {
+					countOfGasStationFuelsPurchased.add(1);
+				}
+				//found the first non zero fuel purchase
+				countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
+			}
+			while(res.next()) {
+				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {
+					countOfGasStationFuelsPurchased.add(1);
+				}
+				if(currentCustomer.compareTo(res.getString(1))==0)
+					countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
+							rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
+				else {
+					countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
+					index++;
+				}
+			}
 			
 			//homeGasFuel 1/0
-			stm = ConnectionToDB.conn.prepareStatement("Select count(distinct(customerID)) from myfueldb.customer as cus " + 
+			stm = ConnectionToDB.conn.prepareStatement("Select id " + 
+					"from myfueldb.customer as cus  " + 
 					"left join myfueldb.gasorder as ord on cus.id = ord.customerID " + 
-					"where pur.date>= ? and pur.date<= ? GROUP BY cus.id order by cus.id");
+					"where ord.date>= ? and ord.date<= ? GROUP BY cus.id order by cus.id");
 			
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
 			res = stm.executeQuery();
+			int homeGasRank=rankedFuels.get(rankedFuels.indexOf("HOME GAS")).rankArray;
 			
+			//
+			index=0;
 			while(res.next()) {
-				countOfGasStationFuelsPurchased.set(index,
-				countOfGasStationFuelsPurchased.get(index)+res.getInt(1));
-				index++;
+				currentCustomer=res.getString(1);
+				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {}
+				if(currentCustomer.compareTo(res.getString(1))==0)
+					countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
+							homeGasRank);
+				else {
+					countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
+					index++;
+				}
 			}
 			
 			res.close();
@@ -131,7 +194,79 @@ public class AnalticData extends Thread {
 
 		return countOfGasStationFuelsPurchased;
 	}
+	
+	private static int sumto(int num) {
+		return (int)((num+1)*(num/2f));
+	}
 
+	//for sorting fuels prices
+	private static class FuelplusPrice implements Comparable<FuelplusPrice>{
+		 String fuelsName;
+		 int rankArray;
+		public FuelplusPrice(String fuelsName, int rankArray) {
+			this.fuelsName = fuelsName;
+			this.rankArray = rankArray;
+		}
+		public String getFuelsName() {
+			return fuelsName;
+		}
+		public void setFuelsName(String fuelsName) {
+			this.fuelsName = fuelsName;
+		}
+		public int getRankArray() {
+			return rankArray;
+		}
+		public void setRankArray(int rankArray) {
+			this.rankArray = rankArray;
+		}
+		@Override
+		public int compareTo(FuelplusPrice o) {
+			if(this.rankArray>o.rankArray)return 1;
+			if(this.rankArray<o.rankArray)return 1;
+			return 0;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			FuelplusPrice other = (FuelplusPrice) obj;
+			if (fuelsName == null) {
+				if (other.fuelsName != null)
+					return false;
+			} else if (!fuelsName.equals(other.fuelsName))
+				return false;
+			return true;
+		}
+		 
+	}
+	
+	public static ArrayList<String> getAllCompanies(){
+		ArrayList<String> companies = new ArrayList<String>();
+		Statement stm;
+		ResultSet res;
+		
+		try {
+			//gasStationFuels
+			stm = ConnectionToDB.conn.createStatement();
+
+			res = stm.executeQuery("Select distinct(companyName) from myfueldb.company");
+			
+			while(res.next())companies.add(res.getString(1));
+			
+			res.close();
+			stm.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return companies;
+	}
+	
 	/**
 	 * 1 the is according to how many cars customer have <br>
 	 * Like: 1-3   cars 3  points <br>
@@ -149,7 +284,7 @@ public class AnalticData extends Thread {
 	 */
 	private ArrayList<Integer> calculateCustomerTypeAnaleticRank() {
 		
-		
+		//CompanyFuelControllerServer.customersTotalPurchases(start, end)
 		
 		return null;
 	}
