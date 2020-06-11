@@ -343,7 +343,8 @@ public class StationManagerController implements Initializable {
 
 		// station order table start
 		OrdersOrderIDCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("orderID"));
-		OrdersSupplierIDCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
+		OrdersSupplierIDCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("supplierId"));
+		System.out.println("check me StationManagerController line 347 !!!!!!!!! was fuelType");
 		OrdersStatusCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("status"));
 		OrdersDateCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
 		OrdersOrderPriceCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Float>("orderPrice"));
@@ -372,7 +373,7 @@ public class StationManagerController implements Initializable {
 //		});
 
 		// quantity table start -------------
-		fuelTypecol.setCellValueFactory(new PropertyValueFactory<StationFuel, String>("fueltype"));
+		fuelTypecol.setCellValueFactory(new PropertyValueFactory<StationFuel, String>("fuelType"));
 		Amountcol.setCellValueFactory(new PropertyValueFactory<StationFuel, Float>("amount"));
 		minQuantitycol.setCellValueFactory(new PropertyValueFactory<StationFuel, Float>("minQuantity"));
 
@@ -383,7 +384,7 @@ public class StationManagerController implements Initializable {
 		ObservableList<String> fueltypes = FXCollections.observableArrayList();
 
 		while (itr.hasNext()) {
-			fueltypes.add(itr.next().getFueltype());
+			fueltypes.add(itr.next().getFuelType());
 		}
 
 		ChooseFuelType.setItems(fueltypes);

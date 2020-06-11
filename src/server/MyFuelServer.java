@@ -311,7 +311,7 @@ public class MyFuelServer extends AbstractServer {
 
 		case getAllStationFuelById:
 			int stationId = (Integer) message.getObj();
-			sendToClientObject(GasStationControllerServer.getAllStationFuel(stationId),client);
+			sendToClientArrayList(GasStationControllerServer.getAllStationFuel(stationId),client);
 			break;
 
 		case updateFuelMinQuantitybyType:

@@ -13,7 +13,6 @@ public class StationFuel implements Serializable {
 	private GasStation station;
 
 	private int stationID;
-	private String fueltype;
 	private float amount;
 	private float minQuantity;
 	private int tankSize;
@@ -102,14 +101,6 @@ public class StationFuel implements Serializable {
 	public String toString() {
 		return "StationFuel [fuel=" + fuel + ", station=" + station + ", amount=" + amount + ", minQuantity="
 				+ minQuantity + ", tankSize=" + tankSize + "]";
-	}
-
-	public String getFueltype() {
-		return fueltype;
-	}
-
-	public void setFueltype(String fueltype) {
-		this.fueltype = fueltype;
 	}
 
 	public boolean isSelectMinQuantity() {
