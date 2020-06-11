@@ -32,7 +32,7 @@ public class MyFuelServer extends AbstractServer {
 	public static String schemaName, dbPassword;
 
 	private AnalticData analticData;
-	
+	private Thread thread;
 	public MyFuelServer(int port) { 
 		super(port);
 	}
@@ -306,20 +306,30 @@ public class MyFuelServer extends AbstractServer {
 		// port " + getPort());
 		FileManagmentSys.createSystemWorkSpace();
 		analticData = new AnalticData(); 
-		analticData.start(); 
+		thread = new Thread(analticData);
+		thread.start();
+		
 		System.out.println("Server listening for connections on port " + getPort());
 	}
 
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
-		// connections.");
+	    // connections.");
+		analticData.continueThread=false;
+		try {
+			thread.interrupt();
+			thread.join(1000);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {
 			ConnectionToDB.conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		analticData.shutDownThread();
+		
 		System.out.println("Server has stopped listening for connections.");
 		//log out all the users
 		/*

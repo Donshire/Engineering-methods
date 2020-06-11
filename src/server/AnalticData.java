@@ -13,18 +13,23 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import com.oracle.xmlns.internal.webservices.jaxws_databinding.ExistingAnnotationsType;
 
 import Entity.CompanyFuel;
 import Entity.GasStationOrder;
 import enums.SupplierOrderStatus;
 
-public class AnalticData extends Thread {
+public class AnalticData implements Runnable {
 	
 	private ScheduledExecutorService ses;
-	private int index =0;
+	
+	public boolean continueThread = true;
 	
 	private LocalDate before;
 	private LocalDate after;
@@ -33,35 +38,32 @@ public class AnalticData extends Thread {
 	
 	public void run() 
     { 
-		if(index>10) {
-			ses.shutdown();
-			return;
+		while(continueThread) {
+			 do{
+				before=LocalDate.now();
+				after =LocalDate.now().minusDays(7);
+				System.out.println("before "+before+" after "+after);
+				
+		        currentCustomers=getAllCustomersID();
+				
+				calculatefuelTypeAnaleticRank();
+				//calculateCustomerTypeAnaleticRank();
+			}while(threadSleep());
+			//
 		}
-		threadSleep();
-		currentCustomers=getAllCustomersID();
-		
-		calculatefuelTypeAnaleticRank();
-		calculateCustomerTypeAnaleticRank();
-		System.out.println(index++);
-		
-		//
-		before=LocalDate.now();
-		after =LocalDate.now().minusDays(7);
-		System.out.println("before "+before+" after "+after);
-		
-		
     } 
 	
-	private void threadSleep() {
-		ses = Executors.newScheduledThreadPool(1);
-		//run this task after X seconds
-        ses.schedule(this, calculateTimeToSleep(), TimeUnit.MILLISECONDS);
-        
-        ses.shutdown();
-	}
-	
-	public void shutDownThread() {
-		 ses.shutdown();
+	private boolean threadSleep() {
+		boolean flag=false;//didn't finish
+		while(continueThread&&!flag)
+			try {
+			    TimeUnit.SECONDS.sleep(calculateTimeToSleep());
+			    flag=true;
+			    return true;
+			} catch (InterruptedException ie) {
+			    Thread.currentThread().interrupt();
+			}
+		return false;
 	}
 	
 	public static ArrayList<String> getAllCustomersID(){
@@ -71,7 +73,7 @@ public class AnalticData extends Thread {
 
 		try {
 			stm = ConnectionToDB.conn.createStatement();
-			res = stm.executeQuery("select id from myfueldb.gasstationorder order by cus.id");
+			res = stm.executeQuery("select id from myfueldb.customer order by id");
 
 			while(res.next())customersID.add(res.getString(1));
 
@@ -102,24 +104,38 @@ public class AnalticData extends Thread {
 			fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
 		//sort the fuels prices
 		 Collections.sort(fuels);
-		 ArrayList<FuelplusPrice> rankedFuels = new ArrayList<FuelplusPrice>();
+
+		 int count=0,currRank;
+		 String currFuel;
+		 Set<String> fuelNames = new HashSet<String>();
+		 ArrayList<FuelplusRank> rankedFuels= new ArrayList<FuelplusRank>();
 		 
-		 for(int i=0;i<fuels.size();i++) {
-			 if(rankedFuels.contains(fuels.get(i).getFuelType())) {
-				 rankedFuels.add(new FuelplusPrice(fuels.get(i).getFuelType(),i));
+		 while(count<fuels.size()) {
+			 currFuel=fuels.get(count).getFuelType();
+			 if(!fuelNames.contains(currFuel)) {
+				 fuelNames.add(currFuel);
+				 currRank=count;//initialize the rank
+				 index=0;
+				 
+				 while(index<fuels.size()) {//matching fuel types
+					 if(currFuel.compareTo(fuels.get(index).getFuelType())==0)
+						 currRank+=index+1;
+					 index++;
+				 }
+				 rankedFuels.add(new FuelplusRank(currFuel, currRank));
 			 }
-			 index=rankedFuels.indexOf(fuels.get(i).getFuelType());
-			 rankedFuels.set(index, new FuelplusPrice(rankedFuels.get(index).getFuelsName()
-					 ,rankedFuels.get(index).getRankArray()+i));
+			 //skip if already exist
+			 count++;
 		 }
+
 		 //sort the result
 		 Collections.sort(rankedFuels);
 		 //give for each fuel rank
-		 //exp. 5 => sumto 10 => 5/15 4/15 3/15 2/15 1/15
+		 //exp. 5 => sumto 15 => 5/15 4/15 3/15 2/15 1/15
 		 int lower=sumto(rankedFuels.size()),uper=rankedFuels.size();
 		 
-		 for(FuelplusPrice current:rankedFuels) {
-			 current.rankArray=(int)(10*(float)(uper/lower));
+		 for(FuelplusRank current:rankedFuels) {
+			 current.rankArray=(int)(9*((float)uper/lower));
 			 uper--;
 		 }
 		 
@@ -145,19 +161,16 @@ public class AnalticData extends Thread {
 					countOfGasStationFuelsPurchased.add(1);
 				}
 				//found the first non zero fuel purchase
-				countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
+				countOfGasStationFuelsPurchased.add(rankedFuels.get(FuelplusRank.indexOfFuel(res.getString(2),rankedFuels)).rankArray);
 			}
 			while(res.next()) {
-				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {
+				while(customersIndex<currentCustomers.size() && currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0) {
 					countOfGasStationFuelsPurchased.add(1);
 				}
-				if(currentCustomer.compareTo(res.getString(1))==0)
-					countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
-							rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
-				else {
-					countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
-					index++;
-				}
+				if(currentCustomer.compareTo(res.getString(1))!=0)index++;
+				
+				countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
+							rankedFuels.get(FuelplusRank.indexOfFuel(res.getString(2),rankedFuels)).rankArray);
 			}
 			
 			//homeGasFuel 1/0
@@ -169,20 +182,16 @@ public class AnalticData extends Thread {
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
 			res = stm.executeQuery();
-			int homeGasRank=rankedFuels.get(rankedFuels.indexOf("HOME GAS")).rankArray;
+			int homeGasRank=rankedFuels.get(FuelplusRank.indexOfFuel("HOME GAS",rankedFuels)).rankArray;
 			
 			//
 			index=0;
 			while(res.next()) {
 				currentCustomer=res.getString(1);
-				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {}
-				if(currentCustomer.compareTo(res.getString(1))==0)
-					countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
-							homeGasRank);
-				else {
-					countOfGasStationFuelsPurchased.add(rankedFuels.get(rankedFuels.indexOf(res.getString(2))).rankArray);
-					index++;
-				}
+				while(customersIndex<currentCustomers.size() && currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0) {}
+				if(currentCustomer.compareTo(res.getString(1))!=0)index++;
+				
+				countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+homeGasRank);
 			}
 			
 			res.close();
@@ -200,10 +209,10 @@ public class AnalticData extends Thread {
 	}
 
 	//for sorting fuels prices
-	private static class FuelplusPrice implements Comparable<FuelplusPrice>{
+	private static class FuelplusRank implements Comparable<FuelplusRank>{
 		 String fuelsName;
 		 int rankArray;
-		public FuelplusPrice(String fuelsName, int rankArray) {
+		public FuelplusRank(String fuelsName, int rankArray) {
 			this.fuelsName = fuelsName;
 			this.rankArray = rankArray;
 		}
@@ -220,29 +229,17 @@ public class AnalticData extends Thread {
 			this.rankArray = rankArray;
 		}
 		@Override
-		public int compareTo(FuelplusPrice o) {
-			if(this.rankArray>o.rankArray)return 1;
+		public int compareTo(FuelplusRank o) {
+			if(this.rankArray>o.rankArray)return -1;
 			if(this.rankArray<o.rankArray)return 1;
 			return 0;
 		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			FuelplusPrice other = (FuelplusPrice) obj;
-			if (fuelsName == null) {
-				if (other.fuelsName != null)
-					return false;
-			} else if (!fuelsName.equals(other.fuelsName))
-				return false;
-			return true;
+		public static int indexOfFuel(String fuel,ArrayList<FuelplusRank> fuels) {
+			for(int i=0;i<fuels.size();i++)
+				if(fuels.get(i).getFuelsName().compareTo(fuel)==0)
+					return i;
+			return -1;
 		}
-		 
 	}
 	
 	public static ArrayList<String> getAllCompanies(){
@@ -333,7 +330,7 @@ public class AnalticData extends Thread {
 						nextFriday.getDayOfMonth(), 18, 0));
 		//return duration.getSeconds();
 		//for testing
-		return 10;
+		return 10000;
 	}
 	
 }
