@@ -542,7 +542,8 @@ public class AnalticData implements Runnable {
 			//
 			String currentCustomer="",purchaseTime;
 			float customerRank = 0;
-			int index=0,indexOfRank=0,counter=0;
+			int index=0,indexOfRank=0;
+			Set<Integer> selectedHoures = new HashSet<Integer>();
 			
 			if(res.next()) {
 				currentCustomer=res.getString(1);
@@ -551,7 +552,7 @@ public class AnalticData implements Runnable {
 					customerRank=0.1f;
 				else {
 					indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
-					counter++;
+					selectedHoures.add(indexOfRank);
 					customerRank=startHourRank.get(indexOfRank).rank;
 				}
 				customerTypeAnaleticRank.add(customerRank);
@@ -561,14 +562,15 @@ public class AnalticData implements Runnable {
 				if(currentCustomer.compareTo(res.getString(1))==0) {
 					//the same customer
 					indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
-					customerRank=startHourRank.get(indexOfRank).rank;
-					customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)+customerRank);
-					counter++;
+					if(selectedHoures.add(indexOfRank)) {
+						customerRank=startHourRank.get(indexOfRank).rank;
+						customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)+customerRank);
+						
+					}
 				}
 				else {
 					//
-					customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)/counter);
-					counter=0;
+					selectedHoures.clear();
 					//
 					index++;
 					currentCustomer=res.getString(1);
