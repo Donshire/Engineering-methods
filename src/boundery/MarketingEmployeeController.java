@@ -1,6 +1,7 @@
 package boundery;
 
 import java.net.URL;
+import java.sql.Time;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import client.ClientUI;
 import client.EmployeeCC;
 import client.SupplierCC;
 import client.UserCC;
+import enums.Days;
 import enums.PricingModel;
 import enums.PurchaseModel;
 import enums.SaleStatus;
@@ -35,6 +37,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -362,8 +365,26 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private Label daysLbl;
 
-	@FXML
-	private TextField daysTxt;
+    @FXML
+    private CheckBox sunday;
+
+    @FXML
+    private CheckBox monday;
+
+    @FXML
+    private CheckBox tuesday;
+
+    @FXML
+    private CheckBox wednesday;
+
+    @FXML
+    private CheckBox thuesday;
+
+    @FXML
+    private CheckBox friday;
+
+    @FXML
+    private CheckBox saturday;
 
 	@FXML
 	private Button saveSaleBtn;
@@ -499,6 +520,8 @@ public class MarketingEmployeeController implements Initializable {
 
 		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
 		FuelTypeCombox.setItems(fuelType);
+
+
 	}
 
 	// this method is for new client registration
@@ -716,6 +739,7 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		});
 
+	 
 		
 		// column define
 		SaleIDColumn.setCellValueFactory(new PropertyValueFactory<Sale, Integer>("saleID"));
@@ -754,8 +778,10 @@ public class MarketingEmployeeController implements Initializable {
 	// this method if for creating new sale in DB
 	@FXML
 	void createNewSale(ActionEvent event) {
-		String compantName, fuelType, startTime, endTime, startDate, endDate, days, purchaseNum = null;
+		String compantName, fuelType, startTime, endTime, startDate, endDate, purchaseNum = null;
 		PurchaseModel purchaseM;
+		Days days;
+		Time time;
 		float percent;
 
 		compantName = companyNameTxt.getText();
@@ -769,7 +795,7 @@ public class MarketingEmployeeController implements Initializable {
 		}
 		startDate = formatter.format(startDatePicker.getValue());
 		endDate = formatter.format(endDatePicker.getValue());
-		days = daysTxt.getText();
+
 		purchaseM = salePurchaseCombox.getValue();
 		percent = Float.parseFloat(salePercentTxt.getText());
 
@@ -787,12 +813,13 @@ public class MarketingEmployeeController implements Initializable {
 			purchaseNum = "4";
 			break;
 		}
-		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), compantName, fuelType, purchaseNum, percent,
-				startTime, endTime, startDate, endDate, days);
-		if (EmployeeCC.addNewSaleTemp(newSale))
-			JOptionPane.showMessageDialog(null, "Sale added successfully!");
-		else
-			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
+//		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), compantName, fuelType, purchaseNum, percent,
+//				startTime, endTime, startDate, endDate, days.toString());
+//		if (EmployeeCC.addNewSaleTemp(newSale))
+//			JOptionPane.showMessageDialog(null, "Sale added successfully!");
+//		else
+//			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 
 	}
 }
+
