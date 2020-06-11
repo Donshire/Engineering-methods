@@ -8,6 +8,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
@@ -46,7 +47,9 @@ public class AnalticData implements Runnable {
 				
 		        currentCustomers=getAllCustomersID();
 				
-				calculatefuelTypeAnaleticRank();
+		        System.out.println(calculatefuelingHourAnaleticRank());
+		        //calculateCustomerTypeAnaleticRank();
+				//calculatefuelTypeAnaleticRank();
 				//calculateCustomerTypeAnaleticRank();
 			}while(threadSleep());
 			//
@@ -87,15 +90,18 @@ public class AnalticData implements Runnable {
 		return customersID;
 	}
 	
+	
 	/**
-	 * This func will count for each customer how many fuel type he puchased<br>
-	 * as fuel price is higher rank is higher
+	 * for each fuel type rank is given by the price, the rank is calculated by 9*index/(sum of index-to 1)
+	 * index is after sorting the fuel types by price every one has his index as the smallest number is 1
+	 * and the largest is the amount of fuel type.<br>
+	 * for each customer a rank will be given according to which fuel types he purchased 
 	 * @return
 	 */
-	private ArrayList<Integer> calculatefuelTypeAnaleticRank() {
+	private ArrayList<Float> calculatefuelTypeAnaleticRank() {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<Integer> countOfGasStationFuelsPurchased= new ArrayList<Integer>();
+		ArrayList<Float> countOfGasStationFuelsPurchased= new ArrayList<Float>();
 		int index=0;
 		//get all system fuels
 		ArrayList<String> companies = getAllCompanies();
@@ -106,9 +112,11 @@ public class AnalticData implements Runnable {
 		 Collections.sort(fuels);
 
 		 int count=0,currRank;
-		 String currFuel;
+		 String currFuel,fuelType="";
+		 
+		 //------------------------------------------------------------------------------
 		 Set<String> fuelNames = new HashSet<String>();
-		 ArrayList<FuelplusRank> rankedFuels= new ArrayList<FuelplusRank>();
+		 ArrayList<KeyplusRank> rankedFuels= new ArrayList<KeyplusRank>();
 		 
 		 while(count<fuels.size()) {
 			 currFuel=fuels.get(count).getFuelType();
@@ -122,7 +130,7 @@ public class AnalticData implements Runnable {
 						 currRank+=index+1;
 					 index++;
 				 }
-				 rankedFuels.add(new FuelplusRank(currFuel, currRank));
+				 rankedFuels.add(new KeyplusRank(currFuel, currRank));
 			 }
 			 //skip if already exist
 			 count++;
@@ -131,67 +139,79 @@ public class AnalticData implements Runnable {
 		 //sort the result
 		 Collections.sort(rankedFuels);
 		 //give for each fuel rank
-		 //exp. 5 => sumto 15 => 5/15 4/15 3/15 2/15 1/15
+		 //exp. 4 => sumto 10 => 4/10 3/10 2/10 1/10
 		 int lower=sumto(rankedFuels.size()),uper=rankedFuels.size();
 		 
-		 for(FuelplusRank current:rankedFuels) {
-			 current.rankArray=(int)(9*((float)uper/lower));
+		 for(KeyplusRank current:rankedFuels) {
+			 current.rank=((float)uper)/lower;
 			 uper--;
 		 }
 		 
+		 
+		 //-----------------------------------------------------------------------------------
 		try {
 			//gasStationFuels
-			stm = ConnectionToDB.conn.prepareStatement("Select id,car.fuelType " + 
-					"from myfueldb.customer as cus " + 
-					"left join myfueldb.car on cus.id=car.CustomerID " + 
-					"left join myfueldb.fuelpurchase as pur on car.carNumber = pur.CarNumber " + 
-					"where pur.date>= ? and pur.date<= ? group by car.carNumber order by cus.id");
+			stm = ConnectionToDB.conn.prepareStatement("Select id,car.fuelType from myfueldb.customer as cus "
+					+ "left join myfueldb.car " + 
+					"on cus.id = car.CustomerID left join (SELECT pur.CarNumber FROM " + 
+					"myfueldb.fuelpurchase as pur where pur.date >= ? and pur.date <= " + 
+					"? ) as par on car.carNumber = par.CarNumber group by car.carNumber " + 
+					"order by cus.id");
 			
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
 			res = stm.executeQuery();
 			
 			index=0;
-			int customersIndex=0;
+			float rankPercent;
 			String currentCustomer="";
 			
 			if(res.next()) {
 				currentCustomer=res.getString(1);
-				while(currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0 && customersIndex<currentCustomers.size()) {
-					countOfGasStationFuelsPurchased.add(1);
-				}
-				//found the first non zero fuel purchase
-				countOfGasStationFuelsPurchased.add(rankedFuels.get(FuelplusRank.indexOfFuel(res.getString(2),rankedFuels)).rankArray);
-			}
-			while(res.next()) {
-				while(customersIndex<currentCustomers.size() && currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0) {
-					countOfGasStationFuelsPurchased.add(1);
-				}
-				if(currentCustomer.compareTo(res.getString(1))!=0)index++;
-				
-				countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+
-							rankedFuels.get(FuelplusRank.indexOfFuel(res.getString(2),rankedFuels)).rankArray);
+				fuelType=res.getString(2);
+				if(fuelType==null)
+					rankPercent=1f/lower;
+				else rankPercent=rankedFuels.get(KeyplusRank.indexOf(res.getString(2),rankedFuels)).rank;
+				countOfGasStationFuelsPurchased.add(rankPercent);
 			}
 			
+			while(res.next()) {
+				if(currentCustomer.compareTo(res.getString(1))==0) {
+					//the same customer
+					rankPercent=rankedFuels.get(KeyplusRank.indexOf(res.getString(2),rankedFuels)).rank;
+					countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+rankPercent);
+				}
+				else {
+					index++;
+					currentCustomer=res.getString(1);
+					fuelType=res.getString(2);
+					if(fuelType==null)
+						rankPercent=1f/lower;
+					else rankPercent=rankedFuels.get(KeyplusRank.indexOf(res.getString(2),rankedFuels)).rank;
+					countOfGasStationFuelsPurchased.add(rankPercent);
+				}
+			}
+			
+			
 			//homeGasFuel 1/0
-			stm = ConnectionToDB.conn.prepareStatement("Select id " + 
-					"from myfueldb.customer as cus  " + 
-					"left join myfueldb.gasorder as ord on cus.id = ord.customerID " + 
-					"where ord.date>= ? and ord.date<= ? GROUP BY cus.id order by cus.id");
+			stm = ConnectionToDB.conn.prepareStatement("Select id,count(customerID) from myfueldb.customer as cus left join (SELECT "+
+					 "ord.customerID FROM myfueldb.gasorder as ord where ord.date >= ? "+
+					 "and ord.date <= ? ) as par on cus.id = par.customerID GROUP BY "+
+					 "cus.id order by cus.id");
 			
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
 			res = stm.executeQuery();
-			int homeGasRank=rankedFuels.get(FuelplusRank.indexOfFuel("HOME GAS",rankedFuels)).rankArray;
 			
 			//
+			float homeGasRank=rankedFuels.get(KeyplusRank.indexOf("HOME GAS",rankedFuels)).rank;
+			
 			index=0;
 			while(res.next()) {
-				currentCustomer=res.getString(1);
-				while(customersIndex<currentCustomers.size() && currentCustomer.compareTo(currentCustomers.get(customersIndex++))!=0) {}
-				if(currentCustomer.compareTo(res.getString(1))!=0)index++;
-				
-				countOfGasStationFuelsPurchased.set(index,countOfGasStationFuelsPurchased.get(index)+homeGasRank);
+				if(res.getInt(2)>0)
+					countOfGasStationFuelsPurchased.set
+					(index,countOfGasStationFuelsPurchased.get(index)+homeGasRank);
+				index++;
 			}
 			
 			res.close();
@@ -209,38 +229,64 @@ public class AnalticData implements Runnable {
 	}
 
 	//for sorting fuels prices
-	private static class FuelplusRank implements Comparable<FuelplusRank>{
-		 String fuelsName;
-		 int rankArray;
-		public FuelplusRank(String fuelsName, int rankArray) {
-			this.fuelsName = fuelsName;
-			this.rankArray = rankArray;
+	private static class KeyplusRank implements Comparable<KeyplusRank>{
+		 String key;
+		 float rank;
+        //
+		public KeyplusRank(String key, float rank) {
+			this.key = key;
+			this.rank = rank;
 		}
-		public String getFuelsName() {
-			return fuelsName;
+		//
+		public String getKey() {
+			return key;
 		}
-		public void setFuelsName(String fuelsName) {
-			this.fuelsName = fuelsName;
+		public void setKey(String key) {
+			this.key = key;
 		}
-		public int getRankArray() {
-			return rankArray;
+		public float getRank() {
+			return rank;
 		}
-		public void setRankArray(int rankArray) {
-			this.rankArray = rankArray;
+		public void setRank(float rank) {
+			this.rank = rank;
 		}
+		//
 		@Override
-		public int compareTo(FuelplusRank o) {
-			if(this.rankArray>o.rankArray)return -1;
-			if(this.rankArray<o.rankArray)return 1;
+		public int compareTo(KeyplusRank o) {
+			if(this.rank>o.rank)return -1;
+			if(this.rank>o.rank)return 1;
 			return 0;
 		}
-		public static int indexOfFuel(String fuel,ArrayList<FuelplusRank> fuels) {
-			for(int i=0;i<fuels.size();i++)
-				if(fuels.get(i).getFuelsName().compareTo(fuel)==0)
+		//
+		public static int indexOf(String key,ArrayList<KeyplusRank> keys) {
+			for(int i=0;i<keys.size();i++)
+				if(keys.get(i).getKey().compareTo(key)==0)
 					return i;
 			return -1;
 		}
+		public static int indexOfRang(int key,ArrayList<KeyplusRank> keys) {
+			for(int i=0;i<keys.size();i++)
+				if(Float.valueOf(keys.get(i).getKey())-key>=0)
+					return i;
+			return keys.size()-1;
+		}
+		
+		public static int indexOfHouers(String key,ArrayList<KeyplusRank> before , ArrayList<KeyplusRank> after) {
+			//after<key<before
+			for(int i=0;i<before.size();i++)
+				if(before.get(i).key.compareTo(after.get(i).key)<0) {
+					//next day
+					if((before.get(i).key.compareTo(key)>=0&&"00:00:00".compareTo(key)<=0)||
+							(after.get(i).key.compareTo(key)<=0&&"23:59:59".compareTo(key)>=0))
+						return i;
+				}
+				else if(before.get(i).key.compareTo(key)>=0&&after.get(i).key.compareTo(key)<=0)
+					return i;
+			return -1;
+		}
+		
 	}
+	
 	
 	public static ArrayList<String> getAllCompanies(){
 		ArrayList<String> companies = new ArrayList<String>();
@@ -266,34 +312,279 @@ public class AnalticData implements Runnable {
 	
 	/**
 	 * 1 the is according to how many cars customer have <br>
-	 * Like: 1-3   cars 3  points <br>
-	 *       4-7   cars 5  points <br>
-	 * 		 7-12  cars 7  points <br>
-	 * 		 12-20 cars 9  points <br>
-	 * 		 21+   cars 10 points<br>
+	 * Like: 3<=   cars 1  points <br>
+	 *       6<=   cars 2  points <br>
+	 * 		 13<=  cars 3  points <br>
+	 * 		 17<= cars 4  points <br>
+	 * 		 21+   cars 5 points<br>
 	 * and 2 according total purchase<br>
-	 * Like: 1000<=   shekel   3  points<br>
-	 *       10000<=  shekel   6  points<br>
-	 *       100000<= shekel   8  points<br>
-	 *       100000+  shekel   10  points<br>
+	 * Like: 1000<=   shekel   1  points<br>
+	 *       5000<=   shekel   2  points<br>
+	 *       10000<=  shekel   3  points<br>
+	 *       50000<=  shekel   4  points<br>
+	 *       100000+  shekel   5  points<br>
 	 *       and the calculation is 1,2 divided by 2
 	 * @return
 	 */
 	private ArrayList<Integer> calculateCustomerTypeAnaleticRank() {
 		
-		//CompanyFuelControllerServer.customersTotalPurchases(start, end)
+		PreparedStatement stm;
+		Statement statment;
+		ResultSet res;
+		ArrayList<Integer> customerTypeAnaleticRank= new ArrayList<Integer>();
 		
-		return null;
+		try {
+			//Totale purchases
+			String query = "Select cus.id,sum(par.priceOfPurchase) as countofpurchase\r\n" + 
+					"from myfueldb.customer as cus \r\n" + 
+					"left join myfueldb.car as car\r\n" + 
+					"on car.CustomerID=cus.id\r\n" + 
+					"left join\r\n" + 
+					"  (SELECT pur.CarNumber,pur.priceOfPurchase\r\n" + 
+					"  FROM myfueldb.fuelpurchase as pur\r\n" + 
+					"    where pur.date >= ?\r\n" + 
+					"      and pur.date <= ?\r\n" + 
+					"  ) as par \r\n" + 
+					"on car.carNumber = par.CarNumber\r\n" + 
+					"group by cus.id  order by cus.id";
+			
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, after.toString());
+			stm.setString(2, before.toString());
+			res = stm.executeQuery();
+			
+			
+			//ranking eatch customer
+			int index=0,rankPercent;
+			
+			//perpare the ranking array
+			ArrayList<KeyplusRank> rankedFuels =new ArrayList<KeyplusRank>();
+			float purchase=1000;
+			for(index=0;index<5;index++) {
+				rankedFuels.add(new KeyplusRank(Float.toString(purchase), index+1));
+				if(index%2==0)purchase*=5;
+				else purchase*=2;
+			}
+			//--------------------------------------------------------------------------
+			//
+			Integer price;
+			
+			while(res.next()) {
+				price=res.getInt(2);
+				if(price!=null) rankPercent=1;
+				rankPercent=(int) rankedFuels.get(KeyplusRank.indexOfRang(price,rankedFuels)).rank;
+				customerTypeAnaleticRank.add(rankPercent);
+			}
+			
+			//---------------------------------------------------------------------------
+			
+			//Number of cars
+			ArrayList<KeyplusRank> rankedCarsNum =new ArrayList<KeyplusRank>();
+			rankedFuels.add(new KeyplusRank("3", 1));
+			rankedFuels.add(new KeyplusRank("9", 2));
+			rankedFuels.add(new KeyplusRank("15", 3));
+			rankedFuels.add(new KeyplusRank("21", 4));
+			
+			
+			
+			statment = ConnectionToDB.conn.createStatement();
+			res = statment.executeQuery("Select cus.id,count(carNumber) from myfueldb.customer as cus " + 
+					"left join myfueldb.car as car on car.CustomerID=cus.id " + 
+					"group by cus.id order by cus.id");
+			
+			int carNumber;
+			index=0;
+			while(res.next()) {
+				carNumber=res.getInt(2);
+				if(carNumber>0)
+					customerTypeAnaleticRank.set(index,(int) (customerTypeAnaleticRank.get(index)+
+							rankedFuels.get(KeyplusRank.indexOfRang(carNumber,rankedFuels)).rank));
+					index++;
+			}
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return customerTypeAnaleticRank;
 	}
+	
+	
 
 	/**
 	 * for each customer a rank will be given by number of different hours purchased<br>
-	 * 
+	 * for each two houres there is a counter expet 23:00 - 03:00 and 03:00 - 07:00 <br>
 	 * @return
 	 */
-	private static int calculatefuelingHourAnaleticRank() {
+	private ArrayList<Float> calculatefuelingHourAnaleticRank() {
+		PreparedStatement stm;
+		Statement statment;
+		ResultSet res;
+		ArrayList<Float> customerTypeAnaleticRank= new ArrayList<Float>();
 		
-		return 0;
+		//create time stamps
+		int hour=7,i;
+		ArrayList<KeyplusRank> fuelingHourAnaleticRank =new ArrayList<KeyplusRank>();
+		//
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(1, 0).toString(), 0));
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(3, 0).toString(), 1));
+		//03-07
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(3, 0).toString(), 0));
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(7, 0).toString(), 3));
+		//
+		for(i=0;i<7;i++) {
+			fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(hour, 0).toString(), 0));
+			fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(hour+2, 0).toString(), hour));
+			hour+=2;
+		}
+		//23-03
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(23, 0).toString(), 0));
+		fuelingHourAnaleticRank.add(new KeyplusRank(LocalTime.of(3, 0).toString(), 23));
+		
+		
+		//
+		try {
+			//getPurchasesHoures
+			for(i=1;i<18;i+=2) {
+				String query = "Select count(*)\r\n" + 
+						"from myfueldb.customer as cus \r\n" + 
+						"left join myfueldb.car as car\r\n" + 
+						"on car.CustomerID=cus.id\r\n" + 
+						"left join myfueldb.fuelpurchase as par\r\n" + 
+						"on car.carNumber = par.CarNumber\r\n" + 
+						"where par.date >= ?\r\n" + 
+						"and par.date <= ?\r\n" + 
+						"and par.time<=? and par.time>=?\r\n" + 
+						"order by par.time  ";
+				
+				stm = ConnectionToDB.conn.prepareStatement(query);
+				stm.setString(1, after.toString());
+				stm.setString(2, before.toString());
+				stm.setString(3, fuelingHourAnaleticRank.get(i-1).key);
+				stm.setString(4, fuelingHourAnaleticRank.get(i).key);
+				//fuelingHourAnaleticRank
+				res = stm.executeQuery();
+				res.next();
+				
+				fuelingHourAnaleticRank.get(i-1).rank=res.getInt(1);
+			}
+			//the cros day houres
+			String query = "Select count(*)\r\n" + 
+					"from myfueldb.customer as cus \r\n" + 
+					"left join myfueldb.car as car\r\n" + 
+					"on car.CustomerID=cus.id\r\n" + 
+					"left join myfueldb.fuelpurchase as par\r\n" + 
+					"on car.carNumber = par.CarNumber\r\n" + 
+					"where par.date >= ?\r\n" + 
+					"and par.date <= ?\r\n" + 
+					"and (( par.time<='24:00' and par.time>=?) or\r\n" + 
+					"(par.time<=? and par.time>='00:00'))\r\n" + 
+					"order by par.time    ";
+			
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, after.toString());
+			stm.setString(2, before.toString());
+			stm.setString(3, fuelingHourAnaleticRank.get(18).key);
+			stm.setString(4, fuelingHourAnaleticRank.get(19).key);
+			//fuelingHourAnaleticRank
+			res = stm.executeQuery();
+			res.next();
+			fuelingHourAnaleticRank.get(18).rank=res.getInt(1);
+			
+			//----------------------------------------------------------------
+			//claculate houres rank
+			
+			//sort houres by rank
+			ArrayList<KeyplusRank> startHourRank =new ArrayList<KeyplusRank>();
+			for(i=0;i<20;i+=2) {
+				startHourRank.add(fuelingHourAnaleticRank.get(i));
+			}
+			Collections.sort(startHourRank);
+			ArrayList<KeyplusRank> endHoursRank =new ArrayList<KeyplusRank>();
+			//
+			int countRank=11;
+			float down=sumto(countRank);
+			for(KeyplusRank keyP : startHourRank) {
+				keyP.rank=countRank/down;
+				//find before
+				for(i=0;i<10;i++) {
+					if((LocalTime.of((int) fuelingHourAnaleticRank.get(i*2+1).rank, 0)).toString()
+							.compareTo(keyP.key)==0) {
+						endHoursRank.add(fuelingHourAnaleticRank.get(i*2+1));//found the before
+					break;	
+					}
+				}
+				countRank--;
+			}
+			//free
+			fuelingHourAnaleticRank=null;
+			
+			//------------------------------------
+			//
+			query = "Select cus.id,par.time\r\n" + 
+					"from myfueldb.customer as cus \r\n" + 
+					"left join myfueldb.car as car\r\n" + 
+					"on car.CustomerID=cus.id\r\n" + 
+					"left join\r\n" + 
+					"  (SELECT pur.CarNumber,pur.time\r\n" + 
+					"  FROM myfueldb.fuelpurchase as pur\r\n" + 
+					"    where pur.date >= ?\r\n" + 
+					"      and pur.date <= ?\r\n" + 
+					"  ) as par \r\n" + 
+					"on car.carNumber = par.CarNumber\r\n" + 
+					"order by cus.id ";
+			
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, after.toString());
+			stm.setString(2, before.toString());
+			res = stm.executeQuery();
+			
+			//
+			String currentCustomer="",purchaseTime;
+			float customerRank = 0;
+			int index=0,indexOfRank=0,counter=0;
+			
+			if(res.next()) {
+				currentCustomer=res.getString(1);
+				purchaseTime=res.getString(2);
+				if(purchaseTime==null)
+					customerRank=0.1f;
+				else {
+					indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
+					counter++;
+					customerRank=startHourRank.get(indexOfRank).rank;
+				}
+				customerTypeAnaleticRank.add(customerRank);
+			}
+			
+			while(res.next()) {
+				if(currentCustomer.compareTo(res.getString(1))==0) {
+					//the same customer
+					indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
+					customerRank=startHourRank.get(indexOfRank).rank;
+					customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)+customerRank);
+					counter++;
+				}
+				else {
+					//
+					customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)/counter);
+					counter=0;
+					//
+					index++;
+					currentCustomer=res.getString(1);
+					purchaseTime=res.getString(2);
+					if(purchaseTime==null)
+						customerRank=0.1f;
+					else customerRank=startHourRank.get(KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank)).rank;
+					customerTypeAnaleticRank.add(customerRank);
+				}
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return customerTypeAnaleticRank;
 	}
 	
 	private static boolean updateCutomersAnaliticdata(ArrayList<String> customersID,
