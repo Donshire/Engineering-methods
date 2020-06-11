@@ -19,9 +19,9 @@ import enums.CustomerRateTypes;
 
 public class EmployeeCC {
 
-	public static Message updatePricingModel(ArrayList<PricingModule> rates) { 
+	public static boolean updatePricingModel(ArrayList<PricingModule> rates) { 
 		ClientUI.client.accept(new Message(rates, Commands.updatePricingModel));
-		return (Message) MyFuelClient.ServerRetObj;
+		return (boolean) MyFuelClient.ServerRetObj;
 	}
 
 	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(PricingModule ratedata) {
@@ -29,9 +29,9 @@ public class EmployeeCC {
 		return (ArrayList<PricingModule>)MyFuelClient.ServerRetObj;
 	}
 
-	public static Message updateSale(ArrayList<Sale> sales) {
+	public static boolean updateSale(ArrayList<Sale> sales) {
 		ClientUI.client.accept(new Message(sales, Commands.updateSale));
-		return (Message) MyFuelClient.ServerRetObj;
+		return (boolean) MyFuelClient.ServerRetObj;
 	}
 
 	public static ArrayList<Sale> getCompanySalesByStatus(Sale sale) {
@@ -40,9 +40,9 @@ public class EmployeeCC {
 		return (ArrayList<Sale>)MyFuelClient.ServerRetObj;
 	}
 
-	public static Message craeteNewPricingModel(PricingModule pricingModel) {
+	public static boolean craeteNewPricingModel(PricingModule pricingModel) {
 		ClientUI.client.accept(new Message(pricingModel, Commands.savePricingModel));
-		return (Message) MyFuelClient.ServerRetObj;
+		return (boolean) MyFuelClient.ServerRetObj;
 	}
 	
 	public static Object createSaleResponseResport(String id,String companyName) {

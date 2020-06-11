@@ -3,6 +3,9 @@ package boundery;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import Entity.Customer;
 import Entity.Employee;
 import Entity.GasOrder;
@@ -108,9 +111,10 @@ public class GasHomeController implements Initializable {
 		GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
-		HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order),
-				"Order created succesfully",
-				"clouldn't create order");
+		
+		if (CustomerCC.createNewOrder(order)) 
+			JOptionPane.showMessageDialog(null,"Order created succesfully");
+		else  JOptionPane.showMessageDialog(null,"clouldn't create order");	
 
 	}
 

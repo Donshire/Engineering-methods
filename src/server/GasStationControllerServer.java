@@ -152,7 +152,7 @@ public class GasStationControllerServer {
 	}
 	
 
-	public static Object changeOrdersStatus(ArrayList<GasStationOrder> orders) {
+	public static boolean changeOrdersStatus(ArrayList<GasStationOrder> orders) {
 
 		PreparedStatement stm;
 
@@ -170,10 +170,10 @@ public class GasStationControllerServer {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 
 		return true;
-
 	}
 
 	public static ArrayList<StationFuel> getAllStationFuel(int stationId) {

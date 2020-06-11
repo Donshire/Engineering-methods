@@ -36,30 +36,14 @@ public class MyFuelClient extends AbstractClient {
 
 			switch (message.getCmd()) {
 				case defaultRes:
-					if(message.getObj() instanceof Boolean)
-						ServerRetObj = message;
-					else ServerRetObj = message.getObj();
+					ServerRetObj = message.getObj();
 					break;
 				case NoElementFound:
-					if(message.getObj() instanceof Boolean)
-						ServerRetObj = message;
-					else ServerRetObj = message.getObj();
-					break;
-				case CustomerOrderListRes: // receive from server ArrayList<employee>
-					ServerRetObj = message.getObj();
-					break;
-				case CreateNewOrderRes:
-					ServerRetObj = message.getObj();
-					break;	
-				case MaxPriceRes:
 					ServerRetObj = message.getObj();
 					break;
 				case reciveFile:
 					MyFile myFile = (MyFile) message.getObj();
 					ServerRetObj = saveFile(myFile);
-					break;
-				case ThereIsNoSale:
-					ServerRetObj = Commands.ThereIsNoSale;
 					break;
 			}
 		}

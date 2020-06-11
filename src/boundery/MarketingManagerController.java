@@ -21,6 +21,7 @@ import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
 import client.ClientUI;
+import client.CustomerCC;
 import client.EmployeeCC;
 import client.MyFuelClient;
 import client.UserCC;
@@ -286,8 +287,10 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "can't choose the same fuel type twice");
 			return;
 		}
-		HandelMessageResult.handelMessage(EmployeeCC.updatePricingModel(selectedRates),
-				"upate succeded", "update un-succeded one or more of the data didn't update");
+		
+		if (EmployeeCC.updatePricingModel(selectedRates)) 
+			JOptionPane.showMessageDialog(null,"upate succeded");
+		else  JOptionPane.showMessageDialog(null,"update un-succeded one or more of the data didn't update");	
 		//refresh the table
 		chooserateType(null);
 	}
@@ -304,9 +307,11 @@ public class MarketingManagerController implements Initializable {
 				for (Sale sale : selectedSales)
 					sale.setStatus(SaleStatus.not_Activated);
 			}
-			HandelMessageResult.handelMessage(EmployeeCC.updateSale(selectedSales),
-					"upadting succeded",
-					"upadting un-succeded one or more of the data didn't upadte");
+			
+			if (EmployeeCC.updateSale(selectedSales)) 
+				JOptionPane.showMessageDialog(null,"upadting succeded");
+			else  JOptionPane.showMessageDialog(null,"upadting un-succeded one or more of the data didn't upadte");	
+			
 			//update the table
 			chooseSaleType(null);
 		}
@@ -365,10 +370,11 @@ public class MarketingManagerController implements Initializable {
 			if (fFuelNewRate <= 0)
 				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
 			else {
-				HandelMessageResult.handelMessage(EmployeeCC.craeteNewPricingModel(new PricingModule(rateType.getValue().ordinal(),
-						fFuelNewRate, markitingManager.getCompanyName(), RatesStatus.created)),
-						"Creating New Rate done succesfully",
-						"Creating New Rate un-succesfull");
+				
+				if (EmployeeCC.craeteNewPricingModel(new PricingModule(rateType.getValue().ordinal(),
+						fFuelNewRate, markitingManager.getCompanyName(), RatesStatus.created))) 
+					JOptionPane.showMessageDialog(null,"Creating New Rate done succesfully");
+				else  JOptionPane.showMessageDialog(null,"Creating New Rate un-succesfull");	
 			}
 		}
 	}

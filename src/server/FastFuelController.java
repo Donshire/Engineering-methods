@@ -106,7 +106,7 @@ public class FastFuelController {
 		PreparedStatement stm;
 		ResultSet res;
 		float result=0;
-		String query="Select currentPrice " + 
+		String query="Select maxPrice " + 
 				"from myfueldb.company " + 
 				"where companyName = ? and fuelType = ?";
 		try {

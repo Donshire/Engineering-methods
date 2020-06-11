@@ -7,10 +7,13 @@ import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
 
 import Entity.GasStationOrder;
+import Entity.PricingModule;
 import Entity.Supplier;
 import client.ClientUI;
+import client.EmployeeCC;
 import client.SupplierCC;
 import client.UserCC;
+import enums.RatesStatus;
 import enums.SupplierOrderStatus;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -244,9 +247,9 @@ public class SupplierController implements Initializable {
 			order.setStatus(SupplierOrderStatus.supplied.toString());
 		}
 		//show the suitable message
-		HandelMessageResult.handelMessage(SupplierCC.updateGasOrdersStatus(selectedOrders)
-				, "Update succeded!",
-				"Update un-succeded one or more of the data didn't update");
+		if (SupplierCC.updateGasOrdersStatus(selectedOrders)) 
+			JOptionPane.showMessageDialog(null,"Update succeded!");
+		else  JOptionPane.showMessageDialog(null,"Update un-succeded one or more of the data didn't update");
 		
 		//move the order from the table
 		OrdersTbl.setItems(getOrders(supplier.getId(), SupplierOrderStatus.confirmed.toString()));

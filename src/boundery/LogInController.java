@@ -111,8 +111,9 @@ public class LogInController {
 						break;
 
 					case "markitig employee":
-						// still un-emplemented
-						System.out.println("still un-emplemented");
+						ClientUI.user = obj;
+						MarketingEmployeeController markitingManager = new MarketingEmployeeController();
+						markitingManager.start(ClientUI.mainStage);
 						break;
 					}
 

@@ -245,163 +245,89 @@ public class MyFuelServer extends AbstractServer {
 			
 		case addNewCustomer:
 			Customer cust = (Customer)(message.getObj());
-			try {
-				client.sendToClient(new Message(EmployeeController.addNewCustmer(cust),Commands.defaultRes));
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
+			sendToClientObject(EmployeeController.addNewCustmer(cust),client);
 			break;
 			
 		case checkIfExist:
 			String id = (String)(message.getObj());
-			try {
-				client.sendToClient(new Message(EmployeeController.checkIfExist(id),Commands.defaultRes));
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-
-			}
+			sendToClientObject(EmployeeController.checkIfExist(id),client);
 			break;
 			
 		case addNewCar:
 			Car car = (Car)(message.getObj());
-			try {
-				client.sendToClient(new Message(EmployeeController.addNewCar(car),Commands.defaultRes));
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			sendToClientObject(EmployeeController.addNewCar(car),client);
+			break;
 			
 		case updateModels:
 			ArrayList<Object> objlist = (ArrayList<Object>) message.getObj();
 			String pricing =(String)objlist.get(0);
 			String purchase =(String)objlist.get(1);
 			String cuId = (String)objlist.get(2);
-			try {
-				client.sendToClient(new Message(EmployeeController.updateModels(pricing, purchase, cuId),Commands.defaultRes));
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			
+			sendToClientObject(EmployeeController.updateModels(pricing, purchase, cuId),client);
 			break;
 			
 		case getCustomerDetails:
 			String upid = (String) (message.getObj());
-			try {
-				client.sendToClient(new Message(EmployeeController.getCustomerDetails(upid), Commands.defaultRes));
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			sendToClientObject(EmployeeController.getCustomerDetails(upid),client);
 			break;
 
 		case updateCustomerDetails:
 			ArrayList<String> update = (ArrayList<String>) (message.getObj());
-			try {
-				client.sendToClient(new Message(EmployeeController.updateCustomerDetails(update), Commands.defaultRes));
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			sendToClientObject(EmployeeController.updateCustomerDetails(update),client);
 			break;
+			
 		case getAllSales:
-			try {
-				client.sendToClient(new Message(EmployeeController.getAllSales(), Commands.defaultRes));
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			sendToClientArrayList(EmployeeController.getAllSales(),client);
 			break;
+			
 		case deleteSales:
 			ArrayList<Sale> sales = (ArrayList<Sale>)message.getObj();
-			try {
-				flag = true;
-				for (Sale sale : sales) {
-					if (!EmployeeController.deleteSales(sale))
-						flag = false;
-				}
-				client.sendToClient(new Message(flag, Commands.defaultRes));
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
+			flag = true;
+			for (Sale sale : sales) {
+				if (!EmployeeController.deleteSales(sale))
+					flag = false;
 			}
+			
+			sendToClientObject(flag, client);
 			break;
+			
 		case addNewSaleTemp:
 			Sale sale = (Sale)message.getObj();
-			try {
-				client.sendToClient(new Message(EmployeeController.addNewSaleTemp(sale), Commands.defaultRes));
-			}catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
+			sendToClientObject(EmployeeController.addNewSaleTemp(sale),client);
 			break;
 			
 		case getAllstationOrdersBystatus:
 			ArrayList<Object> o = (ArrayList<Object>) message.getObj();
 			int stationid = (int) o.get(0);
 			status = (String) o.get(1);
-
-			try {
-				client.sendToClient(new Message(GasStationControllerServer.getAllstationOrdersByStatus(stationid, status),
-						Commands.defaultRes));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			sendToClientArrayList(GasStationControllerServer.getAllstationOrdersByStatus(stationid, status),client);
 			break;
 
 		case approveOrders:
 			orders = (ArrayList<GasStationOrder>) message.getObj();
-
-			try {
-				client.sendToClient(new Message(GasStationControllerServer.changeOrdersStatus(orders), Commands.defaultRes));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			sendToClientObject(GasStationControllerServer.changeOrdersStatus(orders),client);
 			break;
 
 		case getAllStationFuelById:
 			int stationId = (Integer) message.getObj();
-			try {
-				client.sendToClient(
-						new Message(GasStationControllerServer.getAllStationFuel(stationId), Commands.defaultRes));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			sendToClientObject(GasStationControllerServer.getAllStationFuel(stationId),client);
 			break;
 
 		case updateFuelMinQuantitybyType:
 			ArrayList<Object> k = (ArrayList<Object>) message.getObj();
-
-			try {
-				client.sendToClient(new Message(GasStationControllerServer.updateFuelMinQuantitybyType((int) k.get(0),
-						(String) k.get(1), (float) k.get(2)), Commands.defaultRes));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
+			sendToClientObject(GasStationControllerServer.updateFuelMinQuantitybyType((int) k.get(0),
+					(String) k.get(1), (float) k.get(2)),client);
 			break;
 
 		case createFuelStationIncmomeReport:
 			int st_id = (int) message.getObj();
-			try {
-				client.sendToClient(
-				new Message(GasStationControllerServer.createFuelStationIncmomeReport(st_id), Commands.defaultRes));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			sendToClientObject(GasStationControllerServer.createFuelStationIncmomeReport(st_id),client);
 			break;	
 			
 			case createFuelStationPurchasesReport:
 				int st_id1 = (int) message.getObj();
-				
-				try {
-					client.sendToClient(
-					new Message(GasStationControllerServer.createFuelStationPurchasesReport(st_id1), Commands.defaultRes));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				sendToClientObject(GasStationControllerServer.createFuelStationPurchasesReport(st_id1),client);
 			break;
 
 		default:
