@@ -25,6 +25,7 @@ import Entity.Sale;
 import Entity.StationFuel;
 import Entity.Supplier;
 import boundery.ServerController;
+import boundery.SupplierController;
 import client.EmployeeCC;
 import enums.Commands;
 import enums.StationManagerReportsTypes;
@@ -278,6 +279,57 @@ public class MyFuelServer extends AbstractServer {
 			String cuId = (String)objlist.get(2);
 			try {
 				client.sendToClient(new Message(EmployeeController.updateModels(pricing, purchase, cuId),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+			
+		case getCustomerDetails:
+			String upid = (String) (message.getObj());
+			try {
+				client.sendToClient(new Message(EmployeeController.getCustomerDetails(upid), Commands.defaultRes));
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+
+		case updateCustomerDetails:
+			ArrayList<String> update = (ArrayList<String>) (message.getObj());
+			try {
+				client.sendToClient(new Message(EmployeeController.updateCustomerDetails(update), Commands.defaultRes));
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		case getAllSales:
+			try {
+				client.sendToClient(new Message(EmployeeController.getAllSales(), Commands.defaultRes));
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		case deleteSales:
+			ArrayList<Sale> sales = (ArrayList<Sale>)message.getObj();
+			try {
+				flag = true;
+				for (Sale sale : sales) {
+					if (!EmployeeController.deleteSales(sale))
+						flag = false;
+				}
+				client.sendToClient(new Message(flag, Commands.defaultRes));
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		case addNewSaleTemp:
+			Sale sale = (Sale)message.getObj();
+			try {
+				client.sendToClient(new Message(EmployeeController.addNewSaleTemp(sale), Commands.defaultRes));
 			}catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();

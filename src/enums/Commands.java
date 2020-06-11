@@ -7,4 +7,5 @@ public enum Commands {
 	getAllCompanySalesByStatus,getSaleResponseReport,sendFile,reciveFile,getCompanyFuel,CustomerOrderList,CustomerOrderListRes,ConvertionFaild, GetMaxPrice, GetMaxPriceRes,getAllOrdersByStatus,updateGasOrdersStatus,
 	getPeriodicReport,ThereIsNoSale,getAllCompanies, addNewCustomer,checkIfExist,addNewCar,updateModels,
 	getAllstationOrdersBystatus,approveOrders,getAllStationFuelById,updateFuelMinQuantitybyType
-	,createFuelStationIncmomeReport,createFuelStationPurchasesReport,createFuelStationInventoryReport,MaxPriceRes, CreateNewOrder, CreateNewOrderRes, updatePricingModel}
+	,createFuelStationIncmomeReport,createFuelStationPurchasesReport,createFuelStationInventoryReport,MaxPriceRes, CreateNewOrder, CreateNewOrderRes, updatePricingModel, getCustomerDetails, updateCustomerDetails, getAllSales, deleteSales, addNewSaleTemp}
+

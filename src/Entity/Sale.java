@@ -25,6 +25,7 @@ public class Sale extends CheckBoxImplementation implements Serializable{
 	private String endDate;
 	private String saleDays;
 
+private Boolean select;
 	public Sale(Integer saleID, String status, String companyName, String fuelType, String purchaseModule,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
 		this.saleID = saleID;
@@ -38,13 +39,15 @@ public class Sale extends CheckBoxImplementation implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.saleDays = saleDays;
+		this.select = false;
 	}
+
 
 	public int getSaleID() {
 		return saleID;
 	}
 
-	public void setSaleID(int saleID) {
+	public void setSaleID(Integer saleID) {
 		this.saleID = saleID;
 	}
 
@@ -128,13 +131,27 @@ public class Sale extends CheckBoxImplementation implements Serializable{
 		this.saleDays = saleDays;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Sale [saleID=" + saleID + ", status=" + status + ", companyName=" + companyName + ", fuelType="
 				+ fuelType + ", purchaseModule=" + purchaseModule + ", salePercent=" + salePercent + ", startTime="
 				+ startTime + ", endTime=" + endTime + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", saleDays=" + saleDays + "]";
+				+ ", saleDays=" + saleDays + ", select=" + select + "]";
 	}
+
+
+	public Boolean getSelect() {
+		return select;
+	}
+
+
+	public void setSelect(Boolean select) {
+		this.select = select;
+	}
+
+
+
 
 }
 

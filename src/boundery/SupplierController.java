@@ -190,7 +190,6 @@ public class SupplierController implements Initializable {
 		ArrayList<GasStationOrder> newOrders = SupplierCC.getAllOrdersByStatus(supplierId, orderType);
 
 		ObservableList<GasStationOrder> orders = FXCollections.observableArrayList(newOrders);
-		// System.out.println(newOrders.get(0).toString());
 		return orders;
 	}
 
@@ -206,6 +205,7 @@ public class SupplierController implements Initializable {
 		currentPane.setVisible(true);
 	}
 
+	
 	// switch to the main pane
 	@FXML
 	void openMainPane(ActionEvent event) {

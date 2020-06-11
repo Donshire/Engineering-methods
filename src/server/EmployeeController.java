@@ -1,8 +1,10 @@
 package server;
 
 import java.sql.PreparedStatement;
+import enums.Commands;
 import enums.PricingModel;
 import enums.PurchaseModel;
+import sun.security.action.GetIntegerAction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
+import Entity.Sale;
 
 public class EmployeeController {
 
@@ -208,5 +211,116 @@ public class EmployeeController {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	
+	public static Customer getCustomerDetails(String id) {
+		PreparedStatement stm;
+		ResultSet res;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.customer where id = ?");
+			stm.setString(1, id);
+			res = stm.executeQuery();
+			if (res.next()) {
+				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
+						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
+						res.getString(15), res.getString(16));
+				return customer;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+		return null;
+	}
+
+	public static boolean updateCustomerDetails(ArrayList<String> update) {
+		PreparedStatement stm;
+		System.out.println(update);
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(
+					"update myfueldb.customer set firstName = ? , lastName = ?, mail = ? ,phoneNumber = ?, adress = ? ,visanumber = ? , expDate = ? , CVV = ? where id = ?");
+			stm.setString(1, update.get(1));
+			stm.setString(2, update.get(2));
+			stm.setString(3, update.get(3));
+			stm.setString(4, update.get(7));
+			stm.setString(5, update.get(8));
+			stm.setString(6, update.get(4));
+			stm.setString(7, update.get(5));
+			stm.setString(8, update.get(6));
+			stm.setString(9, update.get(0));
+			stm.executeUpdate();
+			stm.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public static ArrayList<Sale> getAllSales() {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<Sale> sales = new ArrayList<Sale>();
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.sale");
+			res = stm.executeQuery();
+			while (res.next() == true) {
+				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
+						res.getString(10), res.getString(11));
+				sales.add(sale);
+			}
+			res.close();
+			stm.close();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return sales;
+	}
+
+	public static boolean deleteSales(Sale sale) {
+		PreparedStatement stm;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("delete from myfueldb.sale where saleID = ?");
+			stm.setInt(1, sale.getSaleID());
+			stm.executeUpdate();
+			stm.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean addNewSaleTemp(Sale sale) {
+		PreparedStatement stm;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(
+					"insert into myfueldb.sale (status,companyName,fuelType,purchaseModule,salePercent,startTime,endTime,startDate,endDate,days) "
+							+ "values (?,?,?,?,?,?,?,?,?,?)");
+			stm.setString(1, sale.getStatus().toString());
+			stm.setString(2, sale.getCompanyName());
+			stm.setString(3, sale.getFuelType());
+			stm.setString(4, sale.getPurchaseModule());
+			stm.setFloat(5, sale.getSalePercent());
+			stm.setString(6, sale.getStartTime());
+			stm.setString(7, sale.getEndTime());
+			stm.setString(8, sale.getStartDate());
+			stm.setString(9, sale.getEndDate());
+			stm.setString(10, sale.getSaleDays());
+			stm.executeUpdate();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
