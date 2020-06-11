@@ -330,7 +330,7 @@ public class AnalticData implements Runnable {
 						nextFriday.getDayOfMonth(), 18, 0));
 		//return duration.getSeconds();
 		//for testing
-		return 10000;
+		return 100;
 	}
 	
 }
