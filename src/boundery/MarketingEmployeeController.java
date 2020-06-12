@@ -1,29 +1,27 @@
 package boundery;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import com.sun.deploy.uitoolkit.impl.fx.ui.FXConsole;
-
 import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
-import Entity.GasStationOrder;
 import Entity.Sale;
-import Entity.Supplier;
 import client.ClientUI;
 import client.EmployeeCC;
-import client.SupplierCC;
 import client.UserCC;
 import enums.PricingModel;
 import enums.PurchaseModel;
 import enums.SaleStatus;
-import enums.SupplierOrderStatus;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -310,6 +308,18 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private Pane createNewSalePane;
 
+    @FXML
+    private Label customerTypeLbl;
+
+    @FXML
+    private ComboBox<?> customerTypeCombox;
+
+    @FXML
+    private Label customercompanyNameLbl;
+
+    @FXML
+    private TextField customercompanyNameTxt;
+
 	@FXML
 	private Label newSaleLbl;
 
@@ -355,35 +365,38 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private Label endDateLbl;
 
-    @FXML
-    private DatePicker startDatePicker;
+	@FXML
+	private DatePicker startDatePicker;
 
-    @FXML
-    private DatePicker endDatePicker;
-	
+	@FXML
+	private DatePicker endDatePicker;
+
 	@FXML
 	private Label daysLbl;
 
-    @FXML
-    private CheckBox sunday;
+	@FXML
+	private CheckBox sunday;
 
-    @FXML
-    private CheckBox monday;
+	@FXML
+	private CheckBox monday;
 
-    @FXML
-    private CheckBox tuesday;
+	@FXML
+	private CheckBox tuesday;
 
-    @FXML
-    private CheckBox wednesday;
+	@FXML
+	private CheckBox wednesday;
 
-    @FXML
-    private CheckBox thuesday;
+	@FXML
+	private CheckBox thuesday;
 
-    @FXML
-    private CheckBox friday;
+	@FXML
+	private CheckBox friday;
 
-    @FXML
-    private CheckBox saturday;
+	@FXML
+	private CheckBox saturday;
+
+	@FXML
+	private CheckBox allCheckBox;
 
 	@FXML
 	private Button saveSaleBtn;
@@ -399,7 +412,8 @@ public class MarketingEmployeeController implements Initializable {
 
 	private Pane currentPane;
 	public static Employee markem;
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateFormat timeFormatter = new SimpleDateFormat("hh:mm");
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 
@@ -519,7 +533,6 @@ public class MarketingEmployeeController implements Initializable {
 
 		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
 		FuelTypeCombox.setItems(fuelType);
-
 
 	}
 
@@ -701,8 +714,8 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error ! could not update customer, try again");
 	}
 
-	
-	// this method is for uploading all the sales templates that exist in the DB to the gui table
+	// this method is for uploading all the sales templates that exist in the DB to
+	// the gui table
 	@FXML
 	void uploadSalesToTable() {
 		// checkBox initializing
@@ -738,8 +751,6 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		});
 
-	 
-		
 		// column define
 		SaleIDColumn.setCellValueFactory(new PropertyValueFactory<Sale, Integer>("saleID"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("status"));
@@ -773,27 +784,28 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error! sales could not be deleted, try again");
 	}
 
-	
 	// this method if for creating new sale in DB
 	@FXML
-	void createNewSale(ActionEvent event) {
+	void createNewSale(ActionEvent event) throws ParseException {
 		String compantName, fuelType, startTime, endTime, startDate, endDate, purchaseNum = null;
 		PurchaseModel purchaseM;
-		Time time;
+		Date startTimetime, endTimetime;
 		float percent;
-
+		
 		compantName = companyNameTxt.getText();
-
-		fuelType = fuelTypeTxt.getText();
 		startTime = startTimeTxt.getText();
 		endTime = endTimeTxt.getText();
-		if(startDatePicker.getValue()==null||endDatePicker.getValue()==null) {
+		fuelType = fuelTypeTxt.getText();
+		//startTime = startTimeTxt.getText();
+	//	endTime = endTimeTxt.getText();
+		if (startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
 			JOptionPane.showMessageDialog(null, "please select dates");
 			return;
 		}
-		startDate = formatter.format(startDatePicker.getValue());
-		endDate = formatter.format(endDatePicker.getValue());
-
+		startDate = dateFormatter.format(startDatePicker.getValue());
+		endDate = dateFormatter.format(endDatePicker.getValue());
+//		startTimetime = (Date) timeFormatter.parse(startTime);
+//		endTimetime = (Date) timeFormatter.parse(endTime);
 		purchaseM = salePurchaseCombox.getValue();
 		percent = Float.parseFloat(salePercentTxt.getText());
 
@@ -811,13 +823,31 @@ public class MarketingEmployeeController implements Initializable {
 			purchaseNum = "4";
 			break;
 		}
-//		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), compantName, fuelType, purchaseNum, percent,
-//				startTime, endTime, startDate, endDate, days.toString());
-//		if (EmployeeCC.addNewSaleTemp(newSale))
-//			JOptionPane.showMessageDialog(null, "Sale added successfully!");
-//		else
-//			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
+		StringBuilder days = new StringBuilder();
 
+		if (sunday.isSelected())
+			days.append("Sunday,");
+		if (monday.isSelected())
+			days.append("Monday,");
+		if (tuesday.isSelected())
+			days.append("Tuesday,");
+		if (wednesday.isSelected())
+			days.append("Wednesday ");
+		if (thuesday.isSelected())
+			days.append("Thuesday,");
+		if (friday.isSelected())
+			days.append("Friday,");
+		if (saturday.isSelected())
+			days.append("Saturday,");
+		if (allCheckBox.isSelected()) {
+			days.delete(0, days.length());
+			days.append("All");
+		}
+		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), compantName, fuelType, purchaseNum, percent,
+				startTime, endTime, startDate, endDate, days.toString());
+		if (EmployeeCC.addNewSaleTemp(newSale))
+			JOptionPane.showMessageDialog(null, "Sale added successfully!");
+		else
+			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 	}
 }
-
