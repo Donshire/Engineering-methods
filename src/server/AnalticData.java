@@ -36,6 +36,9 @@ public class AnalticData implements Runnable {
 	private LocalDate after;
 	
 	private static ArrayList<String> currentCustomers;
+	private static ArrayList<Float> fuelingHourRanks;
+	private static ArrayList<Integer> customerTypeRanks;
+	private static ArrayList<Float> fuelTypeRanks;
 	
 	public void run() 
     { 
@@ -46,10 +49,19 @@ public class AnalticData implements Runnable {
 				System.out.println("before "+before+" after "+after);
 				
 		        currentCustomers=getAllCustomersID();
-				
-		        System.out.println(calculatefuelingHourAnaleticRank());
-		        //calculateCustomerTypeAnaleticRank();
-				//calculatefuelTypeAnaleticRank();
+		        fuelingHourRanks=calculatefuelingHourAnaleticRank();
+		        customerTypeRanks=calculateCustomerTypeAnaleticRank();
+		        fuelTypeRanks=calculatefuelTypeAnaleticRank();
+		        
+		        
+		        System.out.println("Houers: "+fuelingHourRanks);
+		        System.out.println("CustomerType: "+customerTypeRanks);
+		        System.out.println("fuelType: "+fuelTypeRanks);
+		        
+		        updateCutomersAnaliticdata(currentCustomers,
+		        		fuelTypeRanks, fuelingHourRanks,
+		        		customerTypeRanks);
+		        
 				//calculateCustomerTypeAnaleticRank();
 			}while(threadSleep());
 			//
@@ -139,8 +151,8 @@ public class AnalticData implements Runnable {
 		 //sort the result
 		 Collections.sort(rankedFuels);
 		 //give for each fuel rank
-		 //exp. 4 => sumto 10 => 4/10 3/10 2/10 1/10
-		 int lower=sumto(rankedFuels.size()),uper=rankedFuels.size();
+		 //exp. 4 => sumto 10+1 => 4/11 3/11 2/11 1/11
+		 int lower=sumto(rankedFuels.size())+1,uper=rankedFuels.size();
 		 
 		 for(KeyplusRank current:rankedFuels) {
 			 current.rank=((float)uper)/lower;
@@ -172,7 +184,7 @@ public class AnalticData implements Runnable {
 				if(fuelType==null)
 					rankPercent=1f/lower;
 				else rankPercent=rankedFuels.get(KeyplusRank.indexOf(res.getString(2),rankedFuels)).rank;
-				countOfGasStationFuelsPurchased.add(rankPercent);
+				countOfGasStationFuelsPurchased.add(rankPercent+1f/lower);
 			}
 			
 			while(res.next()) {
@@ -188,7 +200,7 @@ public class AnalticData implements Runnable {
 					if(fuelType==null)
 						rankPercent=1f/lower;
 					else rankPercent=rankedFuels.get(KeyplusRank.indexOf(res.getString(2),rankedFuels)).rank;
-					countOfGasStationFuelsPurchased.add(rankPercent);
+					countOfGasStationFuelsPurchased.add(rankPercent+1f/lower);
 				}
 			}
 			
@@ -204,13 +216,17 @@ public class AnalticData implements Runnable {
 			res = stm.executeQuery();
 			
 			//
-			float homeGasRank=rankedFuels.get(KeyplusRank.indexOf("HOME GAS",rankedFuels)).rank;
+			float homeGasRank=rankedFuels.get(KeyplusRank.indexOf("HOME GAS",rankedFuels)).rank,calculatedRank;
 			
 			index=0;
 			while(res.next()) {
 				if(res.getInt(2)>0)
+					calculatedRank=homeGasRank;
+				else 
+					calculatedRank=0;
+				
 					countOfGasStationFuelsPurchased.set
-					(index,countOfGasStationFuelsPurchased.get(index)+homeGasRank);
+					(index,(Math.max(1,(countOfGasStationFuelsPurchased.get(index)+calculatedRank)*10)));
 				index++;
 			}
 			
@@ -228,7 +244,7 @@ public class AnalticData implements Runnable {
 		return (int)((num+1)*(num/2f));
 	}
 
-	//for sorting fuels prices
+	//for sorting customers ranks
 	private static class KeyplusRank implements Comparable<KeyplusRank>{
 		 String key;
 		 float rank;
@@ -413,7 +429,12 @@ public class AnalticData implements Runnable {
 
 	/**
 	 * for each customer a rank will be given by number of different hours purchased<br>
-	 * for each two houres there is a counter expet 23:00 - 03:00 and 03:00 - 07:00 <br>
+	 * for each two houres there is a counter expet 23:00 - 03:00 and 03:00 - 07:00
+	 * <h3>
+	 * the rank is calculated accurding to the formela <br>
+	 * index==count of houres , down = sumto(index)+1, each range of houres will get index/down<br>
+	 * index will decrese in a loop min rank is 1/down and max is 1<br>
+	 * <h6>the range is bettwen 10 cause rank is muliplied by 10, and 1 by caculating 10/down ~ 1
 	 * @return
 	 */
 	private ArrayList<Float> calculatefuelingHourAnaleticRank() {
@@ -502,8 +523,8 @@ public class AnalticData implements Runnable {
 			Collections.sort(startHourRank);
 			ArrayList<KeyplusRank> endHoursRank =new ArrayList<KeyplusRank>();
 			//
-			int countRank=11;
-			float down=sumto(countRank);
+			int countRank=1;
+			float down=sumto(11);
 			for(KeyplusRank keyP : startHourRank) {
 				keyP.rank=countRank/down;
 				//find before
@@ -514,11 +535,13 @@ public class AnalticData implements Runnable {
 					break;	
 					}
 				}
-				countRank--;
+				countRank++;
 			}
 			//free
 			fuelingHourAnaleticRank=null;
 			
+			//ranks are ranged from 1/(countRank+1) to 1 so max will be 10 and min countRank/(countRank+1)~1
+			countRank=10;
 			//------------------------------------
 			//
 			query = "Select cus.id,par.time\r\n" + 
@@ -555,7 +578,7 @@ public class AnalticData implements Runnable {
 					selectedHoures.add(indexOfRank);
 					customerRank=startHourRank.get(indexOfRank).rank;
 				}
-				customerTypeAnaleticRank.add(customerRank);
+				customerTypeAnaleticRank.add(customerRank+0.1f);
 			}
 			
 			while(res.next()) {
@@ -570,6 +593,7 @@ public class AnalticData implements Runnable {
 				}
 				else {
 					//
+					customerTypeAnaleticRank.set(index,Math.max(1,customerTypeAnaleticRank.get(index)*countRank));
 					selectedHoures.clear();
 					//
 					index++;
@@ -577,10 +601,16 @@ public class AnalticData implements Runnable {
 					purchaseTime=res.getString(2);
 					if(purchaseTime==null)
 						customerRank=0.1f;
-					else customerRank=startHourRank.get(KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank)).rank;
-					customerTypeAnaleticRank.add(customerRank);
+					else {
+						indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
+						selectedHoures.add(indexOfRank);
+						customerRank=startHourRank.get(indexOfRank).rank;
+					}
+					customerTypeAnaleticRank.add(customerRank+0.1f);
 				}
 			}
+			//the last one
+			customerTypeAnaleticRank.set(index,Math.max(1,customerTypeAnaleticRank.get(index)*countRank));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -589,8 +619,17 @@ public class AnalticData implements Runnable {
 		return customerTypeAnaleticRank;
 	}
 	
+	
+	/**
+	 * update cutomers ranks
+	 * @param customersID
+	 * @param fuelTypeRanks
+	 * @param fuelingHourRanks
+	 * @param customerTypeRank
+	 * @return
+	 */
 	private static boolean updateCutomersAnaliticdata(ArrayList<String> customersID,
-			ArrayList<Integer> fuelTypeRank,ArrayList<Integer> houresRank,
+			ArrayList<Float> fuelTypeRanks,ArrayList<Float> fuelingHourRanks,
 			ArrayList<Integer> customerTypeRank) {
 		PreparedStatement stm;
 		int index=0;
@@ -601,10 +640,11 @@ public class AnalticData implements Runnable {
 			
 			while(index<customersID.size()) {
 				stm.setInt(1, customerTypeRank.get(index));
-				stm.setInt(2, houresRank.get(index));
-				stm.setInt(3, fuelTypeRank.get(index));
+				stm.setInt(2, Math.round(fuelingHourRanks.get(index)));
+				stm.setInt(3, Math.round(fuelTypeRanks.get(index)));
 				stm.setString(4, customersID.get(index));
 				stm.addBatch();
+				index++;
 			}
 			
 			stm.executeBatch();
@@ -623,7 +663,7 @@ public class AnalticData implements Runnable {
 						nextFriday.getDayOfMonth(), 18, 0));
 		//return duration.getSeconds();
 		//for testing
-		return 100;
+		return 60;
 	}
 	
 }
