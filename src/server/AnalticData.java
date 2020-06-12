@@ -163,12 +163,19 @@ public class AnalticData implements Runnable {
 		 //-----------------------------------------------------------------------------------
 		try {
 			//gasStationFuels
-			stm = ConnectionToDB.conn.prepareStatement("Select id,car.fuelType from myfueldb.customer as cus "
-					+ "left join myfueldb.car " + 
-					"on cus.id = car.CustomerID left join (SELECT pur.CarNumber FROM " + 
-					"myfueldb.fuelpurchase as pur where pur.date >= ? and pur.date <= " + 
-					"? ) as par on car.carNumber = par.CarNumber group by car.carNumber " + 
-					"order by cus.id");
+			stm = ConnectionToDB.conn.prepareStatement("Select cus.id,cc.carNumber,cc.fuelType\r\n" + 
+					"from myfueldb.customer as cus\r\n" + 
+					"left join \r\n" + 
+					"(SELECT CustomerID,car.fuelType,car.carNumber\r\n" + 
+					"FROM  myfueldb.car) as cc \r\n" + 
+					"on cus.id = cc.CustomerID\r\n" + 
+					"left join \r\n" + 
+					"(SELECT pur.CarNumber FROM \r\n" + 
+					"myfueldb.fuelpurchase as pur where pur.date >= ? and pur.date <=\r\n" + 
+					"? ) as par\r\n" + 
+					"on cc.carNumber = par.CarNumber \r\n" + 
+					"group by par.CarNumber,cus.id \r\n" + 
+					"order by cus.id ");
 			
 			stm.setString(1,after.toString());
 			stm.setString(2,before.toString());
@@ -663,7 +670,7 @@ public class AnalticData implements Runnable {
 						nextFriday.getDayOfMonth(), 18, 0));
 		//return duration.getSeconds();
 		//for testing
-		return 60;
+		return 10;
 	}
 	
 }
