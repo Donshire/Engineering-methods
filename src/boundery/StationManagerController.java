@@ -17,7 +17,10 @@ import Entity.Employee;
 import Entity.GasStationOrder;
 
 import Entity.StationFuel;
+import Entity.StationManager;
+import client.ClientUI;
 import client.EmployeeCC;
+import client.UserCC;
 import enums.GasStationOrderFromSupplier;
 import enums.StationManagerReportsTypes;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -50,7 +53,7 @@ import javafx.util.Callback;
 
 public class StationManagerController implements Initializable {
 	
-	public static Employee stationManager; 
+	public static StationManager stationManager; 
 
 	private ArrayList<GasStationOrder> selectedOrders = new ArrayList<GasStationOrder>();
 
@@ -158,6 +161,16 @@ public class StationManagerController implements Initializable {
 	@FXML
 	private Button createReportbtn;
 
+	@FXML
+	void LogOut(ActionEvent event) {
+		//markiting manager
+		//UserCC.logOut(markem.getId(), markem.getClass().toString());
+		
+		//logOut
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
+	}
+	
 	@FXML
 	void ChooseOrdersStatus(ActionEvent event) {
 
@@ -431,6 +444,9 @@ public class StationManagerController implements Initializable {
 		initializeOrderTable();
 		initializeMinQuantityTable();
 		initializeReportTable();
+		//Yossi added part for the log in must be deleted in the next merge
+		//because stationManager is already set 
+		
 	}
 
 }

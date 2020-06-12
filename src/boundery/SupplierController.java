@@ -199,6 +199,10 @@ public class SupplierController implements Initializable {
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(supplier.getId(), supplier.getClass().toString());
+		
+		//logOut
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 	// Switching Pans - hide the other
@@ -227,7 +231,6 @@ public class SupplierController implements Initializable {
 
 		// loading the main window data
 		System.out.println("hello");
-		supplier = (Supplier) ClientUI.user;
 		System.out.println(supplier);
 		// set the current pane as the main
 		currentPane = SupplierMainPane;

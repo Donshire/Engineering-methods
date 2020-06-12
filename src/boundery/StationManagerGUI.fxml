@@ -27,7 +27,7 @@
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <Button fx:id="LogOut" layoutX="1075.0" layoutY="115.0" mnemonicParsing="false" prefWidth="113.0" style="-fx-background-color: #8F2B63;" stylesheets="@fullpackstyling.css" text="Log Out" textFill="WHITE">
+                  <Button fx:id="LogOut" layoutX="1075.0" layoutY="115.0" mnemonicParsing="false" onAction="#LogOut" prefWidth="113.0" style="-fx-background-color: #8F2B63;" stylesheets="@fullpackstyling.css" text="Log Out" textFill="WHITE">
                      <font>
                         <Font size="19.0" />
                      </font>

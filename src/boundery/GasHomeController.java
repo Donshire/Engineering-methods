@@ -32,7 +32,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GasHomeController implements Initializable {
-	public Customer customer;
+	public static Customer customer;
 	private Integer discount = 0;
 	private String supplyDate;
 	private float gasAmount;

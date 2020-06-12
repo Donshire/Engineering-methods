@@ -525,7 +525,10 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markitingManager.getId(), markitingManager.getClass().toString());
-
+		
+		//return to login
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 //not done

@@ -10,6 +10,7 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.FuelPurchase;
+import client.ClientUI;
 import client.CustomerCC;
 import client.UserCC;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -102,7 +104,8 @@ public class FastFuelingController implements Initializable {
 
 	@FXML
 	void backToLogInPage(ActionEvent event) {
-		// like the log Out
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 	@FXML
@@ -137,7 +140,10 @@ public class FastFuelingController implements Initializable {
 		else if (result == -2) JOptionPane.showMessageDialog(null,"Purchase un-succeded");	
 		else if (result >= 0)
 			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %d", result));
-
+		
+		//back to fastFuiling page
+		MasterGUIController.getMasterGUIController().
+		switchWindows("FastFueling.fxml");
 	}
 
 	@FXML

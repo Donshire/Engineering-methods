@@ -413,7 +413,6 @@ public class MyFuelServer extends AbstractServer {
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
 		//log out all the users
-		/*
 		for(UserOnline user : usersOnline) {
 				try {
 					if(user.userType.compareTo("customer")==0)
@@ -430,7 +429,6 @@ public class MyFuelServer extends AbstractServer {
 				}
 			ServerController.onlineUserTableCont(user.getUserID(),"");
 		}
-		*/
 	}
 	
 	//just to show in the GUI
