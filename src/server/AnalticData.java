@@ -163,7 +163,7 @@ public class AnalticData implements Runnable {
 		 //-----------------------------------------------------------------------------------
 		try {
 			//gasStationFuels
-			stm = ConnectionToDB.conn.prepareStatement("Select cus.id,cc.carNumber,cc.fuelType\r\n" + 
+			stm = ConnectionToDB.conn.prepareStatement("Select cus.id,cc.fuelType\r\n" + 
 					"from myfueldb.customer as cus\r\n" + 
 					"left join \r\n" + 
 					"(SELECT CustomerID,car.fuelType,car.carNumber\r\n" + 
