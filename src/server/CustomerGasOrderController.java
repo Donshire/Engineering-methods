@@ -27,7 +27,7 @@ public class CustomerGasOrderController {
 
 			while(res.next() == true) {
 				GasOrder order = new GasOrder(res.getInt(1), res.getString(2), res.getString(3),
-						res.getFloat(4), res.getString(5), res.getFloat(6), res.getBoolean(7));
+						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8));
 				System.out.println(order);
 				orderList.add(order);
 			}
@@ -51,14 +51,15 @@ public class CustomerGasOrderController {
 	public static boolean createNewOrder(GasOrder obj) {
 		PreparedStatement stm;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, gasAmount, date, priceOfPurchase, urgent) " + 
-					"VALUES (?, ?, ?, ?, ?, ?); ");
+			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, time, gasAmount, date, priceOfPurchase, urgent) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?); ");
 			stm.setString(1, obj.getCustmoerId());
 			stm.setString(2, obj.getSupplyDate());
-			stm.setFloat(3, obj.getGasAmount());
-			stm.setString(4, obj.getDate());
-			stm.setFloat(5, obj.getPriceOfPurchase());
-			stm.setBoolean(6, obj.isUrgent());
+			stm.setString(3, obj.getTime());
+			stm.setFloat(4, obj.getGasAmount());
+			stm.setString(5, obj.getDate());
+			stm.setFloat(6, obj.getPriceOfPurchase());
+			stm.setBoolean(7, obj.isUrgent());
 			
 			stm.executeUpdate();
 			stm.close();

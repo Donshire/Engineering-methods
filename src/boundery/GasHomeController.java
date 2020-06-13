@@ -2,9 +2,9 @@ package boundery;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import Entity.Customer;
-import Entity.Employee;
 import Entity.GasOrder;
 import client.ClientUI;
 import client.CustomerCC;
@@ -18,12 +18,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -35,7 +32,7 @@ public class GasHomeController implements Initializable {
 	private float gasAmount;
 	private float priceOfPurchase = 0;
 	private float pricePerUnit = 0;
-	private String contemporaryDateStr;
+	private String dateNowStr;
 	private LocalDate contemporaryDate;
 
 	@FXML
@@ -108,7 +105,7 @@ public class GasHomeController implements Initializable {
 	 */
 	void supplyDateSelected(ActionEvent event) {
 		LocalDate date = filedSupplyDate.getValue();
-		supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+		supplyDate = "" + date.getYear() + "-" + date.getDayOfMonth() + "-" + date.getMonthValue();
 	}
 
 	@FXML
@@ -118,8 +115,8 @@ public class GasHomeController implements Initializable {
 	void makePurchase(ActionEvent event) {
 		if (isInputCorrect()) {
 			if (!normalSupply.isSelected())
-				supplyDate = contemporaryDateStr;
-			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
+				supplyDate = dateNowStr;
+			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, LocalTime.now().toString(), gasAmount, dateNowStr, priceOfPurchase,
 					!normalSupply.isSelected());
 			System.out.println(order.toString());
 			HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order), "Order created succesfully",
@@ -220,8 +217,7 @@ public class GasHomeController implements Initializable {
 
 		// Loading the today's date
 		contemporaryDate = LocalDate.now();
-		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/"
-				+ contemporaryDate.getYear();
+		dateNowStr = "" + contemporaryDate.getYear() + "-" + contemporaryDate.getMonthValue() + "-" + contemporaryDate.getDayOfMonth();
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 			@Override
