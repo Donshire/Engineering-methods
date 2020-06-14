@@ -83,6 +83,12 @@ public class CustomerCC {
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 
-	
+	public static float checkStationInventory(int stationID,String FuelType) {
+		ArrayList<Object> array = new ArrayList<Object>();
+		array.add(stationID);
+		array.add(FuelType);
+		ClientUI.client.accept(new Message(array, Commands.GetStationInventory));
+		return (float) MyFuelClient.ServerRetObj;
+	}
 
 }

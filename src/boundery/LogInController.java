@@ -60,7 +60,9 @@ public class LogInController {
 			fastFueling.customer = (Customer) result.get(1);
 			fastFueling.customerModule = (CustomerModule) result.get(2);
 			try {
-				fastFueling.start(ClientUI.mainStage);
+				MasterGUIController.getMasterGUIController().
+				switchWindows("FastFueling.fxml");
+				//fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -76,17 +78,14 @@ public class LogInController {
 			JOptionPane.showMessageDialog(null, "username or password are missing");
 		else {
 			Object obj = UserCC.login(username, password);
+			
 			if (obj instanceof Customer) {
-				System.out.println("customer");
-				ClientUI.user = obj;
-				GasHomeController ghc = new GasHomeController();
-				// ghc.customer = (Customer) obj;
-				try {
-					ghc.start(ClientUI.mainStage);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-
+				//
+				CustomerGuiController.customer=(Customer) obj;
+				//
+				MasterGUIController.getMasterGUIController().
+				switchWindows("CustomerGUI.fxml");
+				//
 			} else if (obj instanceof Employee) {
 				System.out.println("employee");
 				ClientUI.user = obj;
@@ -94,20 +93,34 @@ public class LogInController {
 				try {
 					switch (employee.getRole().toLowerCase()) {
 					case "marketing manager":
-						MarketingManagerController marketingManager = new MarketingManagerController();
-						marketingManager.markitingManager = employee;
-						marketingManager.start(ClientUI.mainStage);
+						MarketingManagerController.markitingManager = employee;
+						//
+						MasterGUIController.getMasterGUIController().
+						switchWindows("MarketingManager.fxml");
 						break;
 
 					case "ceo":
 						// still un-emplemented
+						/*
+						 *Controller.markitingManager = employee;
+						 *MasterGUIController.getMasterGUIController().
+						 *switchWindows("GUIfileName.fxml");
+						 */
 						System.out.println("still un-emplemented");
 						break;
 
+					case "station manager":
+						StationManagerController.stationManager=(StationManager) obj;
+						//
+						MasterGUIController.getMasterGUIController().
+						switchWindows("StationManagerGUI.fxml");
+						break;
+
 					case "markitig employee":
-						ClientUI.user = obj;
-						MarketingEmployeeController markitingManager = new MarketingEmployeeController();
-						markitingManager.start(ClientUI.mainStage);
+						MarketingEmployeeController.markem=(Employee) obj;
+						//
+						MasterGUIController.getMasterGUIController().
+						switchWindows("MarketingEmployee.fxml");
 						break;
 					}
 
@@ -128,23 +141,17 @@ public class LogInController {
 
 			}
 
-			else if (obj == null)
+			else if (obj == null) {
+				//
+				SupplierController.supplier=(Supplier) obj;
+				//
+				MasterGUIController.getMasterGUIController().
+				switchWindows("SupplierBoundary.fxml");
+				//
+			} else if (obj == null)
 				System.out.println("not exist");
 			else if (obj.equals(Commands.UserAlreadyConnected))
 				System.out.println("already online");
 		}
-	}
-
-	public void start(Stage primaryStage) throws Exception {
-		Pane mainPane;
-		Scene s;
-		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("LogIn.fxml"));
-		mainPane = loader.load();
-		// connect the scene to the file
-		s = new Scene(mainPane);
-		primaryStage.setTitle("MyFuel ltm");
-		primaryStage.setScene(s);
-		primaryStage.show();
 	}
 }

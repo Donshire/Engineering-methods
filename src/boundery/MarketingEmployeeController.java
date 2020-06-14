@@ -436,6 +436,9 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markem.getId(), markem.getClass().toString());
+		//return to login
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 	// Switching Pans - hide the other

@@ -11,6 +11,7 @@ import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.GasStationOrder;
 import Entity.Employee;
+import Entity.GasOrder;
 import Entity.GasStation;
 import Entity.GasStationOrder;
 import Entity.PricingModule;
@@ -264,6 +265,21 @@ public class BuildObjectByQueryData {
 				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
 						res.getString(10), res.getString(11)));
+				
+				res.close();
+			return sales;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static ArrayList<GasOrder> BuildGasOrder(ResultSet res){
+		ArrayList<GasOrder> sales = new ArrayList<GasOrder>();
+		try {
+			while (res.next() == true)
+				sales.add(new GasOrder(res.getInt(1), res.getString(2), res.getString(3),
+						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8)));
 				
 				res.close();
 			return sales;

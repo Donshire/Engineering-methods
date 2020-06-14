@@ -77,7 +77,9 @@ public class CompanyFuelControllerServer {
 		//Write to the result file
 		file=FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
 				FileManagmentSys.marketingManagerReports,FileManagmentSys.periodicReport),
-				FileManagmentSys.periodicReport,0);
+				FileManagmentSys.periodicReport,0,null,null);
+		
+		if(file==null)return null;
 		
 		StringBuilder data = new StringBuilder("");
 		
@@ -92,7 +94,7 @@ public class CompanyFuelControllerServer {
 		FileManagmentSys.writeToMarkitingManagerReport(file, data.toString(), FileManagmentSys.periodicReport, 0, 0, getAllCompanies());
 
 		// connecting to the db
-		createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
+		//createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.periodicReport));
 		return file;
 	}
 
@@ -371,13 +373,15 @@ public class CompanyFuelControllerServer {
 			// creating the file and saving it in the server system
 			file = FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
 					FileManagmentSys.marketingManagerReports, FileManagmentSys.responseReport),
-					FileManagmentSys.responseReport, 0);
+					FileManagmentSys.responseReport, 0,null,null);
+			//
+			if(file==null)return null;
 			// fill the file with the details
 			FileManagmentSys.writeToMarkitingManagerReport(file, strBRes3.toString(), FileManagmentSys.responseReport,
 					Integer.valueOf(strRes1), Float.valueOf(strRes2), null);
 
 			// connecting to the db
-			createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
+			//createGenericReport(new GenericReport(date, time, file.getName(), FileManagmentSys.responseReport));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

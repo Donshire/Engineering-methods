@@ -10,6 +10,7 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.FuelPurchase;
+import client.ClientUI;
 import client.CustomerCC;
 import client.UserCC;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -102,7 +104,8 @@ public class FastFuelingController implements Initializable {
 
 	@FXML
 	void backToLogInPage(ActionEvent event) {
-		// like the log Out
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 	@FXML
@@ -135,9 +138,13 @@ public class FastFuelingController implements Initializable {
 
 		if (result == -1) JOptionPane.showMessageDialog(null,"Purchase succeded");
 		else if (result == -2) JOptionPane.showMessageDialog(null,"Purchase un-succeded");	
+		//isn't needed
 		else if (result >= 0)
 			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %d", result));
-
+		
+		//back to fastFuiling page
+		MasterGUIController.getMasterGUIController().
+		switchWindows("FastFueling.fxml");
 	}
 
 	@FXML
@@ -157,6 +164,10 @@ public class FastFuelingController implements Initializable {
 		
 		try {
 			amount = Float.parseFloat(fuelAmount.getText());
+			if(amount<=0) {
+				JOptionPane.showMessageDialog(null, "please valid numbers above 0");
+				return;
+			}
 		} catch (NumberFormatException nfe) {
 			JOptionPane.showMessageDialog(null, "please fill numbers");
 			return;
@@ -172,6 +183,12 @@ public class FastFuelingController implements Initializable {
 		while (i < resDetails.size()) {
 			salesID.add(resDetails.get(i).intValue());
 			i++;
+		}
+		//check if there is enough amount in the station
+		float res = CustomerCC.checkStationInventory(stationID,car.getFuelType());
+		if(res-amount<0) {
+			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %.2f", res));
+			return;
 		}
 		//
 		dataPane.setVisible(false);

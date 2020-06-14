@@ -379,7 +379,7 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
-	// not done
+	
 	@FXML
 	void generateReport(ActionEvent event) {
 		// get data from gui
@@ -398,6 +398,12 @@ public class MarketingManagerController implements Initializable {
 				}
 				String start=formatter.format(startDate.getValue());
 				String end=formatter.format(endDate.getValue());
+				
+				//start<end
+				if(start.compareTo(end)>=0) {
+					JOptionPane.showMessageDialog(null, "Please select end date bigger than start date");
+					return;
+				}
 				
 				obj=EmployeeCC.createPeriodicResport(markitingManager.getCompanyName(),start,end);
 				if (obj instanceof Commands) {
@@ -525,7 +531,10 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markitingManager.getId(), markitingManager.getClass().toString());
-
+		
+		//return to login
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
 	}
 
 //not done

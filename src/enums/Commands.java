@@ -8,6 +8,6 @@ public enum Commands {
 	getPeriodicReport,ThereIsNoSale,getAllCompanies, addNewCustomer,checkIfExist,addNewCar,updateModels,
 	getAllstationOrdersBystatus,approveOrders,getAllStationFuelById,updateFuelMinQuantitybyType
 	,createFuelStationIncmomeReport,createFuelStationPurchasesReport,createFuelStationInventoryReport
-	,getAllReportByYearandStationId,getFileToclient, updatePricingModel, getCustomerDetails, updateCustomerDetails, getAllSales, deleteSales, addNewSaleTemp, CreateNewOrder};
+	,getAllReportByYearandStationId,getFileToclient, updatePricingModel, getCustomerDetails, updateCustomerDetails, getAllSales, deleteSales, addNewSaleTemp, CreateNewOrder, GetStationInventory};
 
 

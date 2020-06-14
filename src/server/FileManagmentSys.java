@@ -89,16 +89,38 @@ public class FileManagmentSys {
 	 */
 	public static File createFile(String loc, String fileType, int stationID, String quarter, String year) {
 
+		String fileName = createFileName(fileType, stationID, quarter, year);
+		File file;
+		
+		boolean flage=false;
+
+		file = new File(loc + "\\" + fileName + ".txt");
+		try {
+			if (!file.createNewFile()) {
+				if(!(fileType.compareTo(FileManagmentSys.periodicReport)==0 || fileType.compareTo(FileManagmentSys.responseReport)==0))
+				file = null;
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			System.out.println("System clould not create the file");
+			e.printStackTrace();
+		}
+
+		return file;
+
+	}
+	
+	public static String createFileName(String fileType,int stationID, String quarter, String year) {
+		String fileName = "";
+		
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 		LocalDateTime now = LocalDateTime.now();
-		String fileName = "";
-		File file;
-
+		
 		switch (fileType) {
 		case (responseReport):
 		case (periodicReport):
 			// ReportType-dateTime
-			fileName = String.format("%s-%s", fileType, dtf.format(now));
+			fileName = String.format("%s", fileType);
 			break;
 		case (incomeReport):
 		case (purchasesReport):
@@ -110,22 +132,9 @@ public class FileManagmentSys {
 			// analiticData-Date
 			fileName = String.format("%s-%s", fileType, dtf.format(now));
 			break;
-
 		}
-
-		file = new File(loc + "\\" + fileName + ".txt");
-		try {
-			if (!file.createNewFile()) {
-				file = null;
-				System.out.println("File already exists.");
-			}
-		} catch (IOException e) {
-			System.out.println("System clould not create the file");
-			e.printStackTrace();
-		}
-
-		return file;
-
+		
+		return fileName;
 	}
 
 	/**

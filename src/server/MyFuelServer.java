@@ -65,6 +65,7 @@ public class MyFuelServer extends AbstractServer {
 		DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
 		
 		boolean flag;
+		int stationID;
 		
 		
 		ServerController.writeToServerConsole(
@@ -421,7 +422,10 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 			
-			
+		case GetStationInventory:
+			str =  (ArrayList<Object>) message.getObj();
+			sendToClientObject(GasStationControllerServer.getStationFuelQuantity((int)str.get(0),(String)str.get(1)), client);
+			break;
 
 		default:
 			System.out.println("default");
@@ -506,7 +510,6 @@ public class MyFuelServer extends AbstractServer {
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
 		//log out all the users
-		/*
 		for(UserOnline user : usersOnline) {
 				try {
 					if(user.userType.compareTo("customer")==0)
@@ -523,7 +526,6 @@ public class MyFuelServer extends AbstractServer {
 				}
 			ServerController.onlineUserTableCont(user.getUserID(),"");
 		}
-		*/
 	}
 	
 	//just to show in the GUI

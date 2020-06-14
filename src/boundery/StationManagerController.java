@@ -1,6 +1,7 @@
 package boundery;
 
-
+import java.awt.TextArea;
+import java.awt.TextComponent;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ import Entity.StationManager;
 import client.ClientUI;
 import client.EmployeeCC;
 import enums.Commands;
+import client.UserCC;
 import enums.GasStationOrderFromSupplier;
 import enums.Quarter;
 import enums.StationManagerReportsTypes;
@@ -200,6 +202,16 @@ public class StationManagerController implements Initializable {
 		}
 	}
 
+	@FXML
+	void LogOut(ActionEvent event) {
+		//markiting manager
+		//UserCC.logOut(markem.getId(), markem.getClass().toString());
+		
+		//logOut
+		MasterGUIController.getMasterGUIController().
+		switchWindows("LogIn.fxml");
+	}
+	
 	@FXML
 	void ChooseOrdersStatus(ActionEvent event) {
 

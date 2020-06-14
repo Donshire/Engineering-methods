@@ -1,7 +1,15 @@
 package boundery;
 
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
 
 import Entity.Customer;
 import Entity.GasOrder;
@@ -37,11 +45,15 @@ import javafx.stage.Stage;
 public class CustomerGuiController implements Initializable {
 
 	public static Customer customer;
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
+	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
 	Integer discount = 0;
-	double PricePerUnit;
+	float PricePerUnit;
 	String supplyDate;
-	double gasAmount;
-	double priceOfPurchase = 0;
+	float gasAmount;
+	float priceOfPurchase = 0;
 
 	@FXML
 	private Pane CustomerMainPane;
@@ -74,10 +86,7 @@ public class CustomerGuiController implements Initializable {
 	private TableColumn<GasOrder, Boolean> urgentcol;
 
 	@FXML
-	private TableColumn<GasOrder, OrderStatus> statuscol;
-
-	@FXML
-	private TableColumn<GasOrder,String> companyNamecol;
+	private TableColumn<GasOrder,String> PurchaseTimecol;
 
 	@FXML
 	private TableColumn<GasOrder, Float> PurchasePricecol;
@@ -86,6 +95,12 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	private Text hellotxt;
+	
+	@FXML
+	private Text noteAmount;
+	
+	@FXML
+	private Text noteDate;
 
 	@FXML
 	private Button orderGasbtn;
@@ -129,7 +144,7 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
 
-		gasAmount = new Double(textAmount.getText());
+		gasAmount = new Float(textAmount.getText());
 		// gasAmount = (double) spinnerAmount.getValue();
 		// sliderAmount.setValue(value);
 		settingDiscount();
@@ -144,37 +159,49 @@ public class CustomerGuiController implements Initializable {
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
 		filedSupplyDate.setVisible(normalSupply.isSelected());
+		if(radioImmediat.isSelected()) noteDate.setVisible(false);
 		settingDiscount();
 		setPrice();
 	}
 
 	private void setPrice() {
 		// double beforeDiscount = priceListPrice * gasAmount;
-		double beforeDiscount = 4.8 * gasAmount;
+		float beforeDiscount = 4.8f * gasAmount;
 		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
 		total.setText(String.format("%.2f", priceOfPurchase));
 	}
 
 	@FXML
+	void logOut(ActionEvent event) {
+		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
+	}
+	
+	@FXML
 	void supplyDateSelected(ActionEvent event) {
-
+		supplyDate=formatter.format(filedSupplyDate.getValue());
+		System.out.println(supplyDate);
 	}
 
 	@FXML
 	void makePurchase(ActionEvent event) {
-		
-		Button btn = (Button) event.getSource();
-		
-		if(btn.equals(buttonBuy)) {
+		Date date = new Date();
+		String currentDate = dateFormat.format(date);
+		String currentTime = timeDBFormat.format(date);
+		//
+		if (isInputCorrect()) {
+			if (!normalSupply.isSelected())
+				supplyDate = currentDate;
+			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, currentTime, gasAmount, currentDate, priceOfPurchase,
+					!normalSupply.isSelected());
 			
-			System.out.println("orya lox");
+			System.out.println(order.toString());
+			
+			if (CustomerCC.createNewOrder(order)) 
+			JOptionPane.showMessageDialog(null,"Order created succesfully");
+		else  JOptionPane.showMessageDialog(null,"clouldn't create order");	
+			// HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order), "Order created succesfully",
+			//		"clouldn't create order");
 		}
-		/*
-		 * GasOrder order = new GasOrder(purchaseID, custmoerId, "HOME GAS", supplyDate,
-		 * gasAmount, date, priceOfPurchase, urgent, status, saleID, currentPrice,
-		 * companyName) // Should we send for payment? if
-		 * (CustomerCC.creatNewOrder(order)) { // PopUp ""; }
-		 */
 	}
 
 	@FXML
@@ -216,7 +243,50 @@ public class CustomerGuiController implements Initializable {
 		primaryStage.show();
 
 	}
+	
+	
+	public boolean isInputCorrect() {
+		boolean proper = true;
+		
+		noteDate.setVisible(false);
+		noteAmount.setVisible(false);
 
+		if (normalSupply.isSelected()) {
+			if (filedSupplyDate.getValue() == null) {
+				noteDate.setText("Delivery date must be set.");
+				noteDate.setVisible(true);
+				proper = false;
+			} else if (filedSupplyDate.getValue().isBefore(LocalDate.now())) {
+				noteDate.setText("Must be set a future date.");
+				noteDate.setVisible(true);
+				proper = false;
+			}
+		}
+
+		if (!amountIsNumber()) {
+			noteAmount.setText("Must be Number");
+			noteAmount.setVisible(true);
+			proper = false;
+		}
+
+		return proper;
+	}
+	
+
+	private boolean amountIsNumber() {
+		String amountStr = textAmount.getText();
+		
+		try {
+			@SuppressWarnings("unused")
+			Float amountNum = new Float(amountStr);
+			if(amountNum<=0)return false;
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 	void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
@@ -232,7 +302,7 @@ public class CustomerGuiController implements Initializable {
 	}
 
 	public void orderHomeGasInitialize() {
-		priceList.setText("0");
+		priceList.setText("4.6");
 		textDiscount.setText("0");
 		
 
@@ -241,13 +311,20 @@ public class CustomerGuiController implements Initializable {
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
 				try {
-					gasAmount = Double.valueOf(newValue);
+					gasAmount = Float.valueOf(newValue);
+					if(gasAmount>0) noteAmount.setVisible(false);
+					else {
+						gasAmount = 0;
+						newValue = "0.0";
+						noteAmount.setText("Must be Number");
+						noteAmount.setVisible(true);
+					}
 				} catch (Exception e) {
 					gasAmount = 0;
 					newValue = "0.0";
+					noteAmount.setText("Must be Number");
+					noteAmount.setVisible(true);
 				}
-				System.out.println("textfield changed from " + oldValue + " to " + newValue);
-
 				settingDiscount();
 				setPrice();
 			}
@@ -261,8 +338,7 @@ public class CustomerGuiController implements Initializable {
 		PurchaseDatecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("date"));
 		gasAmountcol.setCellValueFactory(new PropertyValueFactory<GasOrder, Float>("gasAmount"));
 		urgentcol.setCellValueFactory(new PropertyValueFactory<GasOrder, Boolean>("urgent"));
-		statuscol.setCellValueFactory(new PropertyValueFactory<GasOrder, OrderStatus>("status"));
-		companyNamecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("companyName"));
+		PurchaseTimecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("time"));
 		PurchasePricecol.setCellValueFactory(new PropertyValueFactory<GasOrder, Float>("priceOfPurchase"));
 
 	}
@@ -284,6 +360,7 @@ public class CustomerGuiController implements Initializable {
 		hellotxt.setText("Hello " + customer.getFirstName());
 		orderHomeGasInitialize();
 		myOrdersInitialize();
+		//
 
 	}
 

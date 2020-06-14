@@ -8,6 +8,7 @@ import boundery.CustomerGuiController;
 import boundery.LogInController;
 import boundery.MarketingEmployeeController;
 import boundery.MarketingManagerController;
+import boundery.MasterGUIController;
 import boundery.SupplierController;
 import boundery.StationManagerController;
 import javafx.application.Application;
@@ -25,16 +26,8 @@ public class ClientUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		LogInController aFrame = new LogInController();
-		mainStage=primaryStage;
-	//	GasHomeController aFrame = new GasHomeController();
-	//	MyOrderConrtoller aFrame = new MyOrderConrtoller();
-	//	MarketingEmployeeController aFrame = new MarketingEmployeeController();
-		aFrame.start(primaryStage);
-
-		// SupplierController aFrame = new SupplierController();
-		// aFrame.start(primaryStage);
-
+		MasterGUIController.getMasterGUIController().setMainStage(primaryStage, "LogIn.fxml");
+		MasterGUIController.getMasterGUIController().BeginMainWindow();
 	}
 
 }
