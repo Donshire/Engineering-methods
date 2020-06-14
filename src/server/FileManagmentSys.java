@@ -1,6 +1,7 @@
 package server;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,7 +9,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -82,7 +87,7 @@ public class FileManagmentSys {
 	 * @param stationID int
 	 * @return the created File
 	 */
-	public static File createFile(String loc, String fileType, int stationID) {
+	public static File createFile(String loc, String fileType, int stationID, String quarter, String year) {
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -99,7 +104,7 @@ public class FileManagmentSys {
 		case (purchasesReport):
 		case (inventoryReport):
 			// ReportType-stationID
-			fileName = String.format("%s-%d", fileType, stationID);
+			fileName = String.format("st_id-%d-%s-%s", stationID, year, quarter);
 			break;
 		case (analiticData):
 			// analiticData-Date
@@ -167,11 +172,17 @@ public class FileManagmentSys {
 		
 	}
 
-	public static boolean writeToQuarterReport(File file, String data, String QuarterData) {
+	public static boolean writeToQuarterReport(File file, String data) {
 		FileWriter myWriter;
+		BufferedWriter br;
+
 		try {
-			myWriter = new FileWriter(file);
-			myWriter.write(String.format("%-20s_%s\n", QuarterData, data));
+			myWriter = new FileWriter(file, true);
+			br = new BufferedWriter(myWriter);
+
+			br.write(String.format("%s", data));
+
+			br.close();
 			myWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -189,9 +200,10 @@ public class FileManagmentSys {
 	 * @param QuarterData
 	 * @return
 	 */
-	public static String readQuarterReport(File file, String QuarterData) {
-
+	public static String readQuarterReport(File file) {
+		StringBuilder s = new StringBuilder();
 		FileReader fr;
+
 		try {
 			fr = new FileReader(file);
 			BufferedReader br = new BufferedReader(fr); // creates a buffering character input stream
@@ -199,10 +211,7 @@ public class FileManagmentSys {
 			// characters
 			String line;
 			while ((line = br.readLine()) != null) {
-				// sb.append(line); //appends line to string buffer
-				// sb.append("\n"); //line feed
-				line.substring(0, 20).replaceAll("\\s+", "").compareTo(QuarterData);
-				return line.substring(21, line.length());
+				s.append(line + "\n"); // appends line to string buffer
 			}
 			fr.close();
 		} catch (FileNotFoundException e) {
@@ -211,7 +220,7 @@ public class FileManagmentSys {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return s.toString();
 	}
 
 	/**
@@ -371,18 +380,46 @@ public class FileManagmentSys {
 	 * @param totalePurchases
 	 * @return the string containing /n
 	 */
-	public static String responseReportFileFormate(String CutomerID,String totalePurchases) {
-		return String.format("%-12s %s", CutomerID, totalePurchases)+"\n";
+	public static String responseReportFileFormate(String CutomerID, String totalePurchases) {
+		return String.format("%-12s %s", CutomerID, totalePurchases) + "\n";
 	}
-	
-	/**
-	 * build string according to the file formate
-	 * @param QuarterData
-	 * @param data
-	 * @return the string containing /n
-	 */
-	public static String quatrerFileFormate(String QuarterData,String data) {
-		return String.format("%-20s_%s\n", QuarterData, data);
+
+	public static String buildHeader(String year, String stationId, String reportType, String quarter) {
+
+		return String.format("%s %s %s Quarter station_id : %-4s\n\n", reportType, year, quarter, stationId);
+	}
+
+	public static String incomeReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, incomeReport, quarter);
+		return String.format("%sthe income is = %.2f\n_____________________________________________\n", format,
+				res.getFloat(1));
+	}
+
+	public static String purchaseReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, purchasesReport, quarter);
+
+		format += String.format("%-20s%-15s\n", "Fuel Type", "total purchases");
+
+		do {
+			format += String.format("%-24s%-15.2f\n", res.getString(1), res.getFloat(2));
+		} while (res.next());
+
+		return format;
+	}
+		
+	public static String inventoryReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, inventoryReport, quarter);
+
+		format += String.format("%-20s%-15s\n", "Fuel Type", "Quantity");
+
+		do {
+			format += String.format("%-24s%-15.2f\n", res.getString(1), res.getFloat(2));
+		} while (res.next());
+
+		return format;
 	}
 
 }

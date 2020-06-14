@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
+import Entity.StationManager;
 import Entity.Supplier;
 import enums.Commands;
 
@@ -48,6 +49,10 @@ public class LogINController {
 //					else
 //						updateUserOnlineStatus("employee", employee.getId(),1);
 				res.close();
+				if (employee.getRole().toLowerCase().compareTo("station manager") == 0) {
+					return getStationManagerById(employee);
+				}
+
 				return employee;
 				}
 			}
@@ -82,8 +87,22 @@ public class LogINController {
 		return stm.executeQuery();
 	}
 
-	public static void updateUserOnlineStatus(String tableName, String userID,int status) throws SQLException {
-		stm = ConnectionToDB.conn.prepareStatement("update "+tableName +" set online = ? where id = ?");
+	private static StationManager getStationManagerById(Employee emp) throws SQLException {
+		ResultSet res;
+		stm = ConnectionToDB.conn.prepareStatement("select stationId from stationmanager " + "where workerId = ?");
+		stm.setInt(1, emp.getWorkerID());
+		res = stm.executeQuery();
+
+		if (res.next())
+			return new StationManager(emp.getUserName(), emp.getPassword(), emp.getFirstName(), emp.getLastName(),
+					emp.getMail(), emp.getId(), emp.getPhoneNumber(), emp.getDepartment(), emp.getRole(),
+					emp.getOnline(), emp.getWorkerID(), emp.getCompanyName(), res.getInt(1));
+
+		return null;
+	}
+
+	public static void updateUserOnlineStatus(String tableName, String userID, int status) throws SQLException {
+		stm = ConnectionToDB.conn.prepareStatement("update " + tableName + " set online = ? where id = ?");
 		stm.setInt(1, status);
 		stm.setString(2, userID);
 		stm.executeUpdate();

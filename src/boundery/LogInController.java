@@ -6,6 +6,7 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.Employee;
+import Entity.StationManager;
 import Entity.Supplier;
 import client.ClientUI;
 import client.UserCC;
@@ -55,11 +56,9 @@ public class LogInController {
 				return;
 			}
 			FastFuelingController fastFueling = new FastFuelingController();
-			
 			fastFueling.car = (Car) result.get(0);
 			fastFueling.customer = (Customer) result.get(1);
 			fastFueling.customerModule = (CustomerModule) result.get(2);
-			
 			try {
 				fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
@@ -87,6 +86,7 @@ public class LogInController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
 			} else if (obj instanceof Employee) {
 				System.out.println("employee");
 				ClientUI.user = obj;
@@ -102,12 +102,6 @@ public class LogInController {
 					case "ceo":
 						// still un-emplemented
 						System.out.println("still un-emplemented");
-						break;
-
-					case "station manager":
-						ClientUI.user = obj;
-						StationManagerController stationManager = new StationManagerController();
-						stationManager.start(ClientUI.mainStage);
 						break;
 
 					case "markitig employee":
@@ -131,7 +125,10 @@ public class LogInController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else if (obj == null)
+
+			}
+
+			else if (obj == null)
 				System.out.println("not exist");
 			else if (obj.equals(Commands.UserAlreadyConnected))
 				System.out.println("already online");

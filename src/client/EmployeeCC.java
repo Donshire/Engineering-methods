@@ -16,6 +16,7 @@ import Entity.StationFuel;
 import enums.Commands;
 import enums.StationManagerReportsTypes;
 import enums.CustomerRateTypes;
+import enums.Quarter;
 
 public class EmployeeCC {
 
@@ -147,21 +148,41 @@ public class EmployeeCC {
 
 	}
 
-	public static Boolean createFuelStationReports(int stationId, StationManagerReportsTypes reportType) {
-
+	public static File createFuelStationReports(int stationId,String companyName,StationManagerReportsTypes reportType,Quarter quarter,String year) {
+		ArrayList<Object> params = new ArrayList<Object>();
+		File f;
+		params.add(stationId);
+		params.add(companyName);
+		params.add(quarter);
+		params.add(year);
 		switch (reportType) {
 		case income:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationIncmomeReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationIncmomeReport));
 			break;
 		case purchases:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationPurchasesReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationPurchasesReport));
 			break;
 		case inventory:
-			ClientUI.client.accept(new Message(stationId, Commands.createFuelStationInventoryReport));
+			ClientUI.client.accept(new Message(params, Commands.createFuelStationInventoryReport));
 			break;
 		}
 		
-		return (Boolean) MyFuelClient.ServerRetObj;
+		 if(MyFuelClient.ServerRetObj == null) return null;
+		
+		return (File) MyFuelClient.ServerRetObj;
+	}
+	
+	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year,int stationId){
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.add(year);
+		parameters.add(stationId);
+		ClientUI.client.accept(new Message(parameters, Commands.getAllReportByYearandStationId));
+		return (ArrayList<GenericReport>) MyFuelClient.ServerRetObj;
+	}
+	
+	public static File getFile(GenericReport r) {
+		ClientUI.client.accept(new Message(r, Commands.getFileToclient));
+		return (File) MyFuelClient.ServerRetObj;
 	}
 	
 	public static Customer getCustomerDetails(String id) {

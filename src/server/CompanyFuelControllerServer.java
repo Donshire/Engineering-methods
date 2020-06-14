@@ -387,15 +387,16 @@ public class CompanyFuelControllerServer {
 	}
 
 	public static boolean createGenericReport(GenericReport report) {
-		String query = "insert into genericreport (date,time,Filename,reportType) " + "values (?,?,?,?)";
+		String query = "insert into genericreport (year,quarter,Filename,reportType,companyname,stationId) " + "values (?,?,?,?,?,?)";
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
-			stm.setString(1, report.getDate());
-			stm.setString(2, report.getTime());
+			stm.setString(1, report.getYear());
+			stm.setString(2, report.getQuarter());
 			stm.setString(3, report.getFileName());
 			stm.setString(4, report.getReportType());
-
+			stm.setString(5,report.getCompanyName());
+			stm.setInt(6, report.getStationId());
 			stm.executeUpdate();
 			stm.close();
 		} catch (Exception e) {

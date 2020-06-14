@@ -83,4 +83,6 @@ public class CustomerCC {
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 
+	
+
 }

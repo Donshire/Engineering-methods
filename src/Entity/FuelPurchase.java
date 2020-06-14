@@ -39,7 +39,7 @@ public class FuelPurchase implements Serializable {
 
 	public void setCustomerID(String customerID) {
 		this.customerID = customerID;
-	}
+	} 
 
 	public void setPurchaseID(Integer purchaseID) {
 		this.purchaseID = purchaseID;

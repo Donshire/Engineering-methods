@@ -16,6 +16,7 @@ import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.GasOrder;
 import Entity.GasStationOrder;
+import Entity.GenericReport;
 import Entity.FuelPurchase;
 import Entity.Message;
 import Entity.MyFile;
@@ -28,6 +29,7 @@ import boundery.ServerController;
 import boundery.SupplierController;
 import client.EmployeeCC;
 import enums.Commands;
+import enums.Quarter;
 import enums.StationManagerReportsTypes;
 import ocsf.server.*;
 import server.GasStationControllerServer;
@@ -310,25 +312,116 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getAllStationFuelById:
+			
 			int stationId = (Integer) message.getObj();
-			sendToClientArrayList(GasStationControllerServer.getAllStationFuel(stationId),client);
+			try {
+				client.sendToClient(
+						new Message(GasStationControllerServer.getAllStationFuel(stationId), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			break;
 
 		case updateFuelMinQuantitybyType:
 			ArrayList<Object> k = (ArrayList<Object>) message.getObj();
-			sendToClientObject(GasStationControllerServer.updateFuelMinQuantitybyType((int) k.get(0),
-					(String) k.get(1), (float) k.get(2)),client);
+
+			try {
+				client.sendToClient(new Message(GasStationControllerServer.updateFuelMinQuantitybyType((int) k.get(0),
+						(String) k.get(1), (float) k.get(2)), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			break;
 
+
 		case createFuelStationIncmomeReport:
-			int st_id = (int) message.getObj();
-			sendToClientObject(GasStationControllerServer.createFuelStationIncmomeReport(st_id),client);
-			break;	
-			
-			case createFuelStationPurchasesReport:
-				int st_id1 = (int) message.getObj();
-				sendToClientObject(GasStationControllerServer.createFuelStationPurchasesReport(st_id1),client);
+
+			ArrayList<Object> params = (ArrayList<Object>) message.getObj();
+			int st_id = (int) params.get(0);
+			String companyname = (String) params.get(1);
+			Quarter q = (Quarter) params.get(2);
+			String year = (String) params.get(3);
+			//File file;
+			try {
+				file = GasStationControllerServer.createFuelStationIncmomeReport(st_id, companyname,q,year);
+				
+				if(file == null)
+					client.sendToClient(new Message(null, Commands.defaultRes));
+				
+				else
+				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+			} catch (Exception e) {
+				e.printStackTrace(); 
+			}
 			break;
+			
+		
+		case createFuelStationPurchasesReport:
+			ArrayList<Object> params1 = (ArrayList<Object>) message.getObj();
+			int st_id1 = (int) params1.get(0);
+			String companyname1 = (String) params1.get(1);
+			Quarter q1 = (Quarter) params1.get(2);
+			String year1 = (String) params1.get(3);
+			File file2;
+			
+			try {
+				file2 = GasStationControllerServer.createFuelStationPurchasesReport(st_id1,companyname1,q1,year1);
+				if(file2 == null)
+					client.sendToClient(new Message(null, Commands.defaultRes));
+				
+				else
+				client.sendToClient(new Message(convertFileToSeializable(file2),Commands.reciveFile));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+			
+		case createFuelStationInventoryReport:
+			ArrayList<Object> params2 = (ArrayList<Object>) message.getObj();
+			int st_id2 = (int) params2.get(0);
+			String companyname2 = (String) params2.get(1);
+			Quarter q2 = (Quarter) params2.get(2);
+			String year2 = (String) params2.get(3);
+			File file3;
+			
+			try {
+				file3 = GasStationControllerServer.createInventoryReporteport(st_id2, companyname2,q2,year2);
+				if(file3 == null)
+					client.sendToClient(new Message(null,Commands.defaultRes));
+				
+				else
+				client.sendToClient(new Message(convertFileToSeializable(file3),Commands.reciveFile));
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
+		case getAllReportByYearandStationId:
+			ArrayList<Object> p = (ArrayList<Object>) message.getObj();
+			String p_id = (String) p.get(0);
+			int p_stid = (int) p.get(1);
+			try {
+				client.sendToClient(
+						new Message(GasStationControllerServer.getAllReportByYearandStationId(p_id,p_stid), Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+				
+		case getFileToclient:
+			GenericReport r = (GenericReport) message.getObj();
+			File f = FileManagmentSys.getFile(FileManagmentSys.createLocation(r.getCompanyName(),FileManagmentSys.stationManagerReports,r.getReportType()),r.getFileName());
+			
+			try {
+				client.sendToClient(new Message(convertFileToSeializable(f),Commands.reciveFile));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+			
+			
 
 		default:
 			System.out.println("default");
