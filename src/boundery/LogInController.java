@@ -100,13 +100,9 @@ public class LogInController {
 						break;
 
 					case "ceo":
-						// still un-emplemented
-						/*
-						 *Controller.markitingManager = employee;
-						 *MasterGUIController.getMasterGUIController().
-						 *switchWindows("GUIfileName.fxml");
-						 */
-						System.out.println("still un-emplemented");
+						 CeoGUIController.ceo= employee;
+						 MasterGUIController.getMasterGUIController().
+						 switchWindows("CeoGUI.fxml");
 						break;
 
 					case "station manager":
@@ -149,9 +145,9 @@ public class LogInController {
 				switchWindows("SupplierBoundary.fxml");
 				//
 			} else if (obj == null)
-				System.out.println("not exist");
+				JOptionPane.showMessageDialog(null, "not exist");
 			else if (obj.equals(Commands.UserAlreadyConnected))
-				System.out.println("already online");
+				JOptionPane.showMessageDialog(null, "already online");
 		}
 	}
 }

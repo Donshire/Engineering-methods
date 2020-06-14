@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import Entity.Car;
+import Entity.CompanyFuel;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.GasOrder;
+import Entity.Fuel;
 import Entity.GasStationOrder;
 import Entity.GenericReport;
 import Entity.FuelPurchase;
@@ -219,7 +221,28 @@ public class MyFuelServer extends AbstractServer {
 			String companyName1 = (String) message.getObj();
 			sendToClientArrayList(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),client);
 			break;
+		
+		case updateFuelMaxPriceDetails:
+			ArrayList<CompanyFuel> list = (ArrayList<CompanyFuel>) message.getObj();
+			try {
+				client.sendToClient(new Message(CompanyFuelControllerServer.updateAllFuelMaxPriceDetails(list),
+						Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 			
+		case getFuelMaxPriceDetails:
+			String companyName2 = (String) (message.getObj());
+			try {
+				client.sendToClient(new Message(CompanyFuelControllerServer.getAllFuelMaxPriceDetails(companyName2),
+						Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
 			sendToClientObject(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),client);
@@ -234,6 +257,17 @@ public class MyFuelServer extends AbstractServer {
 			
 		case GetMaxPrice:
 			sendToClientObject(CompanyFuelController.getMaxPrice((String) message.getObj()),client);
+			break;
+			
+		case getBuildRateApprovalDetails:
+			String companyName3 = (String) (message.getObj());
+			try {
+				client.sendToClient(new Message(CompanyFuelControllerServer.getBuildRateApprovalDetails(companyName3),
+						Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 			
 		case CustomerOrderList:
@@ -421,12 +455,31 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
-		case GetStationInventory:
-			str =  (ArrayList<Object>) message.getObj();
-			sendToClientObject(GasStationControllerServer.getStationFuelQuantity((int)str.get(0),(String)str.get(1)), client);
+
+		case confirmFuelMaxPriceDetails:
+			ArrayList<PricingModule> PricingModuleCheckBoxlist = (ArrayList<PricingModule>) message.getObj();
+			try {
+				client.sendToClient(
+						new Message(CompanyFuelControllerServer.checkBoxRateApproval(PricingModuleCheckBoxlist),
+								Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 
+		case rejectFuelMaxPriceDetails:
+			ArrayList<PricingModule> rejectedPricingModuleCheckBoxlist = (ArrayList<PricingModule>) message.getObj();
+			try {
+				client.sendToClient(
+						new Message(CompanyFuelControllerServer.checkBoxRateReject(rejectedPricingModuleCheckBoxlist),
+								Commands.defaultRes));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		    
 		default:
 			System.out.println("default");
 		}
@@ -509,22 +562,28 @@ public class MyFuelServer extends AbstractServer {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
-		//log out all the users
-		for(UserOnline user : usersOnline) {
-				try {
-					if(user.userType.compareTo("customer")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					if(user.userType.compareTo("supplier")==0)
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-					
-					else 
-					LogINController.updateUserOnlineStatus("customer",user.getUserID(), 0);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			ServerController.onlineUserTableCont(user.getUserID(),"");
+		// log out all the users
+		int i = 0, size = usersOnline.size();
+		UserOnline users;
+
+		while (i < size) {
+			users = usersOnline.get(0);
+
+			try {
+				if (users.userType.compareTo("customer") == 0)
+					LogINController.updateUserOnlineStatus("customer", users.getUserID(), 0);
+
+				else if (users.userType.compareTo("supplier") == 0)
+					LogINController.updateUserOnlineStatus("supplier", users.getUserID(), 0);
+
+				else
+					LogINController.updateUserOnlineStatus("employee", users.getUserID(), 0);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ServerController.onlineUserTableCont(users.getUserID(), users.userType);
+			i++;
 		}
 	}
 	

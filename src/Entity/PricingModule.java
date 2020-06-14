@@ -3,8 +3,9 @@ package Entity;
 import enums.CustomerRateTypes;
 import enums.RatesStatus;
 import helpinigStructForGUI.CheckBoxImplementation;
+import java.io.Serializable;
 
-public class PricingModule extends CheckBoxImplementation{
+public class PricingModule extends CheckBoxImplementation implements Serializable {
 	/**
 	 * 
 	 */

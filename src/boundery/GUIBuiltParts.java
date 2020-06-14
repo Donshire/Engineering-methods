@@ -2,8 +2,6 @@ package boundery;
 
 import java.util.ArrayList;
 
-import Entity.PricingModule;
-import Entity.Rates;
 import helpinigStructForGUI.CheckBoxImplementation;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -58,7 +56,6 @@ public class GUIBuiltParts {
 					public ObservableValue<Boolean> call(CellDataFeatures<Rates, Boolean> param) {
 						Rates rate = param.getValue();
 						SimpleBooleanProperty booleanProp = new SimpleBooleanProperty(rate.getCheck());
-
 						booleanProp.addListener(new ChangeListener<Boolean>() {
 							@Override
 							public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue,
@@ -73,7 +70,6 @@ public class GUIBuiltParts {
 						return booleanProp;
 					}
 				});
-
 		rateCheckBoxSelect.setCellFactory(new Callback<TableColumn<Rates, Boolean>, //
 				TableCell<Rates, Boolean>>() {
 			@Override

@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import Entity.Car;
+import Entity.CompanyFuel;
 import Entity.Customer;
 import Entity.CustomerModule;
 import Entity.GasStationOrder;
@@ -14,6 +15,7 @@ import Entity.Employee;
 import Entity.GasOrder;
 import Entity.GasStation;
 import Entity.GasStationOrder;
+import Entity.Fuel;
 import Entity.PricingModule;
 import Entity.Sale;
 import Entity.StationFuel;
@@ -71,7 +73,7 @@ public class BuildObjectByQueryData {
 		ArrayList<PricingModule> purchaseModuleList = new ArrayList<PricingModule>();
 		try {
 			while (res.next() == true)
-				purchaseModuleList.add(new PricingModule(res.getInt(1), res.getFloat(2)));
+				purchaseModuleList.add(new PricingModule(res.getInt(1), Float.valueOf(res.getString(2))));
 				res.close();
 			return purchaseModuleList;
 		} catch (SQLException e) {
@@ -135,6 +137,7 @@ public class BuildObjectByQueryData {
 		}
 		return null;
 	}
+	
 	
 	/**
 	 * @author iamme
@@ -289,4 +292,49 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 	
+
+	public static ArrayList<Fuel> BuildFuel(ResultSet res) {
+		ArrayList<Fuel> maxPriceDetails = new ArrayList<Fuel>();
+		try {
+			while (res.next() == true)
+				maxPriceDetails.add(new Fuel(res.getString(1), res.getDouble(2)));
+			res.close();
+			return maxPriceDetails;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	public static ArrayList<PricingModule> getBuildRateApprovalDetails(ResultSet res) {
+		ArrayList<PricingModule> RateApprovalDetails = new ArrayList<PricingModule>();
+		try {
+			while (res.next() == true) {
+				RateApprovalDetails.add(new PricingModule(res.getInt(1), Float.valueOf(res.getString(2)), res.getString(3),
+						RatesStatus.valueOf(res.getString(4))));
+			}
+			res.close();
+			return RateApprovalDetails;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	public static ArrayList<CompanyFuel> BuildCompanyFuel(ResultSet res) {
+		ArrayList<CompanyFuel> companyFuels = new ArrayList<CompanyFuel>();
+		try {
+			//no refrence constructor
+			while (res.next() == true)
+				companyFuels.add(new CompanyFuel(res.getString(1), res.getString(2), res.getFloat(3)));
+			res.close();
+			return companyFuels;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 }

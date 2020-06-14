@@ -478,7 +478,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setFloat(4, pricingModule.getSalePercent());
+				stm.setDouble(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 			} catch (Exception e) {
@@ -506,7 +506,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setFloat(4, pricingModule.getSalePercent());
+				stm.setDouble(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 
@@ -576,7 +576,7 @@ public class CompanyFuelControllerServer {
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			stm.setInt(1, pricingModel.getModelNumber());
-			stm.setFloat(2, pricingModel.getSalePercent());
+			stm.setDouble(2, pricingModel.getSalePercent());
 			stm.setString(3, pricingModel.getCompanyName());
 			stm.setString(4, pricingModel.getStatus().toString());
 			
@@ -699,6 +699,159 @@ public class CompanyFuelControllerServer {
 
 		return sales;
 
+	}
+
+	public static ArrayList<CompanyFuel> getAllFuelMaxPriceDetails(String companyName) {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<CompanyFuel> companyFuel = null;
+
+		try {
+
+			stm = ConnectionToDB.conn.prepareStatement("SELECT * FROM myfueldb.company where companyName = ?");
+
+			stm.setString(1, companyName);
+			res = stm.executeQuery();
+
+			companyFuel = BuildObjectByQueryData.BuildCompanyFuel(res);
+
+			res.close();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(companyFuel==null||companyFuel.isEmpty())return null;
+		return companyFuel;
+
+	}
+
+	public static boolean updateAllFuelMaxPriceDetails(ArrayList<CompanyFuel> list) {
+		PreparedStatement stm;
+
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(
+					"UPDATE myfueldb.company set maxPrice=? " + " WHERE companyName = ? and fuelType = ?");
+			for (CompanyFuel fuellist : list) {
+				stm.setDouble(1, Double.valueOf(fuellist.getNewMaxPrice()));
+				stm.setString(2, fuellist.getCompanyName());
+				stm.setString(3, fuellist.getFuelType());
+				stm.executeUpdate();
+			}
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+
+	}
+
+	public static boolean checkBoxRateApproval(ArrayList<PricingModule> list) {
+		PreparedStatement stm;
+
+		try {
+
+			stm = ConnectionToDB.conn.prepareStatement(
+					"UPDATE myfueldb.PricingModule set status = ? " + " WHERE company = ? and modelNumber = ? and salePercent = ?");
+			for (PricingModule fuellist : list) {
+
+				stm.setString(1, String.valueOf(RatesStatus.confirmed.toString()));
+				stm.setString(2, fuellist.getCompanyName());
+				stm.setInt(3, fuellist.getModelNumber());
+				stm.setString(4, Float.toString(fuellist.getSalePercent()));
+				
+				stm.executeUpdate();
+
+			}
+			stm.close();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public static boolean checkBoxRateReject(ArrayList<PricingModule> list) {
+		PreparedStatement stm;
+
+		try {
+
+			stm = ConnectionToDB.conn.prepareStatement(
+					"UPDATE myfueldb.PricingModule set status = ? " + " WHERE company = ? and modelNumber = ? and salePercent = ?");
+			for (PricingModule fuellist : list) {
+
+				stm.setString(1, String.valueOf(RatesStatus.rejected.toString()));
+				stm.setString(2, fuellist.getCompanyName());
+				stm.setInt(3, fuellist.getModelNumber());
+				stm.setString(4, Float.toString(fuellist.getSalePercent()));
+				
+				stm.executeUpdate();
+
+			}
+			stm.close();
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
+	}
+
+	public static ArrayList<PricingModule> getBuildRateApprovalDetails(String companyName) {
+		PreparedStatement stm;
+		ResultSet res;
+		ArrayList<PricingModule> BuildRateApproval = null;
+
+		try {
+
+			stm = ConnectionToDB.conn
+					.prepareStatement("SELECT * FROM myfueldb.pricingmodule where company = ? and status = ?");
+
+			stm.setString(1, companyName);
+			stm.setString(2, RatesStatus.created.toString());
+			res = stm.executeQuery();
+			BuildRateApproval = BuildObjectByQueryData.getBuildRateApprovalDetails(res);
+			System.out.println(BuildRateApproval);
+			res.close();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return BuildRateApproval;
+
+	}
+
+	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationID) {
+
+		ArrayList<GenericReport> reports = new ArrayList<GenericReport>();
+		PreparedStatement stm;
+		ResultSet res;
+		GenericReport r;
+
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from genericreport WHERE year = ? and stationId = ?");
+			stm.setString(1, year);
+			stm.setInt(2, stationID);
+			res = stm.executeQuery();
+
+			while (res.next()) {
+				r = new GenericReport(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getInt(6));
+				System.out.println(r);
+				reports.add(r);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return reports;
 	}
 
 }

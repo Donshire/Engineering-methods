@@ -8,6 +8,8 @@ import Entity.CompanyFuel;
 import Entity.Customer;
 import Entity.GasStationOrder;
 import Entity.GenericReport;
+import Entity.Fuel;
+import Entity.GenericReport;
 import Entity.Message;
 import Entity.PricingModule;
 import Entity.Rates;
@@ -172,19 +174,6 @@ public class EmployeeCC {
 		return (File) MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year,int stationId){
-		ArrayList<Object> parameters = new ArrayList<Object>();
-		parameters.add(year);
-		parameters.add(stationId);
-		ClientUI.client.accept(new Message(parameters, Commands.getAllReportByYearandStationId));
-		return (ArrayList<GenericReport>) MyFuelClient.ServerRetObj;
-	}
-	
-	public static File getFile(GenericReport r) {
-		ClientUI.client.accept(new Message(r, Commands.getFileToclient));
-		return (File) MyFuelClient.ServerRetObj;
-	}
-	
 	public static Customer getCustomerDetails(String id) {
 		ClientUI.client.accept(new Message(id,Commands.getCustomerDetails));
 		return (Customer)MyFuelClient.ServerRetObj;
@@ -209,4 +198,46 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(sale,Commands.addNewSaleTemp));
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
+
+	public static ArrayList<CompanyFuel> getFuelMaxPriceDetails(String companyName) {
+		ClientUI.client.accept(new Message(companyName, Commands.getFuelMaxPriceDetails));
+
+		return (ArrayList<CompanyFuel>) MyFuelClient.ServerRetObj;
+	}
+
+	public static boolean updateFuelMaxPriceDetails(ArrayList<CompanyFuel> list) {
+		ClientUI.client.accept(new Message(list, Commands.updateFuelMaxPriceDetails));
+
+		return (boolean) MyFuelClient.ServerRetObj;
+	}
+
+	public static ArrayList<PricingModule> getBuildRateApprovalDetails(String companyName) {
+		ClientUI.client.accept(new Message(companyName, Commands.getBuildRateApprovalDetails));
+
+		return (ArrayList<PricingModule>) MyFuelClient.ServerRetObj;
+	}
+
+	public static boolean confirmBuildRateApprovalDetails(ArrayList<PricingModule> list) {
+		ClientUI.client.accept(new Message(list, Commands.confirmFuelMaxPriceDetails));
+		return (boolean) MyFuelClient.ServerRetObj;
+	}
+
+	public static boolean rejectBuildRateApprovalDetails(ArrayList<PricingModule> list) {
+		ClientUI.client.accept(new Message(list, Commands.rejectFuelMaxPriceDetails));
+		return (boolean) MyFuelClient.ServerRetObj;
+	}
+
+	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationId) {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.add(year);
+		parameters.add(stationId);
+		ClientUI.client.accept(new Message(parameters, Commands.getAllReportByYearandStationId));
+		return (ArrayList<GenericReport>) MyFuelClient.ServerRetObj;
+	}
+
+	public static File getFile(GenericReport r) {
+		ClientUI.client.accept(new Message(r, Commands.getFileToclient));
+		return (File) MyFuelClient.ServerRetObj;
+	}
+
 }

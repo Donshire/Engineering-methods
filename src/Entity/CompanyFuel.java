@@ -11,13 +11,29 @@ public class CompanyFuel implements Serializable{
 	private String companyName;
 	private Fuel fuel;
 	private float companyPrice;
+	String fuelType;
+	private String newMaxPrice; // for the GUI not to use
 
 	public CompanyFuel(String companyName, Fuel fuel, float companyPrice) {
 		this.companyName = companyName;
 		this.fuel = fuel;
 		this.companyPrice = companyPrice;
 	}
+	
+	public CompanyFuel(String companyName, String fuelType, float companyPrice) {
+		this.companyName = companyName;
+		this.fuelType = fuelType;
+		this.companyPrice = companyPrice;
+	}
 
+	public String getNewMaxPrice() {
+		return newMaxPrice;
+	}
+
+	public void setNewMaxPrice(String newMaxPrice) {
+		this.newMaxPrice = newMaxPrice;
+	}
+	
 	public String getCompanyName() {
 		return companyName;
 	}
@@ -40,6 +56,14 @@ public class CompanyFuel implements Serializable{
 
 	public void setCompanyPrice(float companyPrice) {
 		this.companyPrice = companyPrice;
+	}
+
+	public String getFuelType() {
+		return fuelType;
+	}
+
+	public void setFuelType(String fuelType) {
+		this.fuelType = fuelType;
 	}
 
 	@Override
