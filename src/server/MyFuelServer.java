@@ -26,6 +26,7 @@ import Entity.Supplier;
 import boundery.ServerController;
 import client.EmployeeCC;
 import enums.Commands;
+import enums.Quarter;
 import enums.StationManagerReportsTypes;
 import ocsf.server.*;
 import server.GasStationControllerServer;
@@ -290,7 +291,7 @@ public class MyFuelServer extends AbstractServer {
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
 			try {
-				client.sendToClient(new Message(MyOrderConrtollerServer.getOrders(s), Commands.defaultRes));
+				client.sendToClient(new Message(CustomerConrtollerServer.getOrders(s), Commands.defaultRes));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -393,9 +394,11 @@ public class MyFuelServer extends AbstractServer {
 			ArrayList<Object> params = (ArrayList<Object>) message.getObj();
 			int st_id = (int) params.get(0);
 			String companyname = (String) params.get(1);
+			Quarter q = (Quarter) params.get(2);
+			String year = (String) params.get(3);
 			File file;
 			try {
-				file = GasStationControllerServer.createFuelStationIncmomeReport(st_id, companyname);
+				file = GasStationControllerServer.createFuelStationIncmomeReport(st_id, companyname,q,year);
 				
 				if(file == null)
 					client.sendToClient(new Message(null, Commands.defaultRes));
@@ -408,14 +411,15 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case createFuelStationPurchasesReport:
-
 			ArrayList<Object> params1 = (ArrayList<Object>) message.getObj();
 			int st_id1 = (int) params1.get(0);
 			String companyname1 = (String) params1.get(1);
+			Quarter q1 = (Quarter) params1.get(2);
+			String year1 = (String) params1.get(3);
 			File file2;
 			
 			try {
-				file2 = GasStationControllerServer.createFuelStationPurchasesReport(st_id1,companyname1);
+				file2 = GasStationControllerServer.createFuelStationPurchasesReport(st_id1,companyname1,q1,year1);
 				if(file2 == null)
 					client.sendToClient(new Message(null, Commands.defaultRes));
 				
@@ -430,10 +434,12 @@ public class MyFuelServer extends AbstractServer {
 			ArrayList<Object> params2 = (ArrayList<Object>) message.getObj();
 			int st_id2 = (int) params2.get(0);
 			String companyname2 = (String) params2.get(1);
+			Quarter q2 = (Quarter) params2.get(2);
+			String year2 = (String) params2.get(3);
 			File file3;
 			
 			try {
-				file3 = GasStationControllerServer.createInventoryReporteport(st_id2, companyname2);
+				file3 = GasStationControllerServer.createInventoryReporteport(st_id2, companyname2,q2,year2);
 				if(file3 == null)
 					client.sendToClient(new Message(null,Commands.defaultRes));
 				
@@ -445,11 +451,13 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 
-		case getAllReportByYear:
-			String param = (String) message.getObj();
+		case getAllReportByYearandStationId:
+			ArrayList<Object> p = (ArrayList<Object>) message.getObj();
+			String p_id = (String) p.get(0);
+			int p_stid = (int) p.get(1);
 			try {
 				client.sendToClient(
-						new Message(GasStationControllerServer.getAllReportByYear(param), Commands.defaultRes));
+						new Message(GasStationControllerServer.getAllReportByYearandStationId(p_id,p_stid), Commands.defaultRes));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -466,6 +474,8 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+			
 
 		default:
 			System.out.println("default");

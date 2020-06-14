@@ -7,43 +7,37 @@ public class GenericReport implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5679960090887730645L;
-	private String date;
-	private String time;
+	private String year;
+	private String quarter;
 	private String fileName;
 	private String reportType;
 	private String companyName;
+	private int stationId;
 
-	/**
-	 * 
-	 * @param date
-	 * @param time
-	 * @param fileName
-	 * @param reportType
-	 * @param companyName
-	 */
-
-	public GenericReport(String date, String time, String fileName, String reportType, String companyName) {
-		this.date = date;
-		this.time = time;
+	public GenericReport(String year, String quarter, String fileName, String reportType, String companyName,
+			int stationId) {
+		this.year = year;
+		this.quarter = quarter;
 		this.fileName = fileName;
 		this.reportType = reportType;
 		this.companyName = companyName;
+		this.stationId = stationId;
 	}
 
-	public String getDate() {
-		return date;
+	public String getYear() {
+		return year;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setYear(String year) {
+		this.year = year;
 	}
 
-	public String getTime() {
-		return time;
+	public String getQuarter() {
+		return quarter;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setQuarter(String quarter) {
+		this.quarter = quarter;
 	}
 
 	public String getFileName() {
@@ -70,14 +64,22 @@ public class GenericReport implements Serializable {
 		this.companyName = companyName;
 	}
 
+	public int getStationId() {
+		return stationId;
+	}
+
+	public void setStationId(int stationId) {
+		this.stationId = stationId;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
 	@Override
 	public String toString() {
-		return "GenericReport [date=" + date + ", time=" + time + ", fileName=" + fileName + ", reportType="
-				+ reportType + ", companyName=" + companyName + "]";
+		return "GenericReport [year=" + year + ", quarter=" + quarter + ", fileName=" + fileName + ", reportType="
+				+ reportType + ", companyName=" + companyName + ", stationId=" + stationId + "]";
 	}
 
 }

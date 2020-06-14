@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -21,12 +22,22 @@ import Entity.StationFuel;
 import Entity.Supplier;
 import boundery.StationManagerController;
 import enums.GasStationOrderFromSupplier;
+import enums.Quarter;
 import enums.SupplierOrderStatus;
 
 public class GasStationControllerServer {
 
-	// return all the orders to the supplier according to the supplierId and the
+	//
 	// status
+
+	/**
+	 * return all the orders to the supplier according to the supplierId and the
+	 * status
+	 * 
+	 * @param supplierId
+	 * @param status
+	 * @return ArrayList<GasStationOrder>
+	 */
 	public static ArrayList<GasStationOrder> getAllOrdersByStatus(String supplierId, String status) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -46,10 +57,18 @@ public class GasStationControllerServer {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 
 		return orders;
 	}
+
+	/**
+	 * the function return all station orders by stationId and status
+	 * 
+	 * @param stationId
+	 * @param status
+	 * @return ArrayList<GasStationOrder>
+	 */
 
 	public static ArrayList<GasStationOrder> getAllstationOrdersByStatus(int stationId, String status) {
 
@@ -75,6 +94,7 @@ public class GasStationControllerServer {
 	}
 
 	// update the order status and the fuel inventory according to the order
+
 	public static boolean updateOrderStatus(GasStationOrder orders) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -117,6 +137,14 @@ public class GasStationControllerServer {
 		return true;
 	}
 
+	/**
+	 * the function updates orders status in the db and return true if Succeeded ,
+	 * else false
+	 * 
+	 * @param orders
+	 * @return true or false if succeeded or not
+	 */
+
 	public static Object changeOrdersStatus(ArrayList<GasStationOrder> orders) {
 
 		PreparedStatement stm;
@@ -140,6 +168,13 @@ public class GasStationControllerServer {
 		return true;
 
 	}
+
+	/**
+	 * the function get station id and return all statin fuel types in arraylist
+	 * 
+	 * @param stationId
+	 * @return ArrayList<StationFuel> - all fuel types of the station
+	 */
 
 	public static ArrayList<StationFuel> getAllStationFuel(int stationId) {
 
@@ -166,6 +201,15 @@ public class GasStationControllerServer {
 		return fuel;
 	}
 
+	/**
+	 * the function get stationid , and new min quantity and update
+	 * 
+	 * @param stationid
+	 * @param fueltype
+	 * @param minQuantity
+	 * @return Boolean - return true if update succeeded else flase
+	 */
+
 	public static Boolean updateFuelMinQuantitybyType(int stationid, String fueltype, float minQuantity) {
 
 		PreparedStatement stm;
@@ -187,33 +231,78 @@ public class GasStationControllerServer {
 		return true;
 	}
 
-	public static File createFuelStationIncmomeReport(int stationId, String companyName) {
+	/**
+	 * the fucntion calculate the profit of the station in the demand quater and
+	 * write the result into file
+	 * 
+	 * @param stationId
+	 * @param companyName
+	 * @param quarter
+	 * @param year
+	 * @return file if created succeeded else return null
+	 */
+	public static File createFuelStationIncmomeReport(int stationId, String companyName, Quarter quarter, String year) {
 
 		PreparedStatement stm;
 		File file = null;
 		ResultSet res;
+		String startDate = year, endDate = year, nextyear = (Integer.parseInt(year) + 1) + "";
+
+		switch (quarter) {
+
+		case first:
+			startDate += "-01-01";
+			endDate += "-04-01";
+			break;
+
+		case second:
+			startDate += "-04-01";
+			endDate += "-07-01";
+			break;
+
+		case third:
+
+			startDate += "-07-01";
+			endDate += "-10-01";
+			break;
+
+		case fourth:
+			endDate = nextyear;
+			startDate += "-10-01";
+			endDate += "-01-01";
+			break;
+
+		}
 
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(
-					"select SUM(currentPrice) - sum(priceOfPurchase) from myfueldb.fuelpurchase where stationId= ? ");
+					"select SUM(currentPrice) - sum(priceOfPurchase) from fuelpurchase where stationId= ? "
+							+ "and date >= ? and date < ?");
 
 			stm.setInt(1, stationId);
+			stm.setString(2, startDate);
+			stm.setString(3, endDate);
 			res = stm.executeQuery();
 
 			if (res.next()) {
-				file = FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
-						FileManagmentSys.stationManagerReports, FileManagmentSys.incomeReport),
-						FileManagmentSys.incomeReport, stationId);
-				
-				if(file == null) return null;
-				
-				FileManagmentSys.writeToQuarterReport(file,FileManagmentSys.incomeReportFormat(res,stationId+""));
-				
-				CompanyFuelControllerServer.createGenericReport(new GenericReport(LocalDate.now().toString(),
-						LocalTime.now().toString(), file.getName(), FileManagmentSys.incomeReport, companyName));
+				file = FileManagmentSys.createFile(
+						FileManagmentSys.createLocation(companyName, FileManagmentSys.stationManagerReports,
+								FileManagmentSys.incomeReport),
+						FileManagmentSys.incomeReport, stationId, quarter + "", year);
+
+				if (file == null)
+					return null;
+
+				FileManagmentSys.writeToQuarterReport(file,
+						FileManagmentSys.incomeReportFormat(res, stationId + "", year, quarter + ""));
+
+				CompanyFuelControllerServer.createGenericReport(new GenericReport(year, quarter.toString(),
+						file.getName(), FileManagmentSys.incomeReport, companyName, stationId));
 			}
 
-		} catch (Exception e) { 
+		}
+
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -221,29 +310,76 @@ public class GasStationControllerServer {
 
 	}
 
-	public static File createFuelStationPurchasesReport(int stationId, String companyName) {
+	/**
+	 * the fucntion calculate How much each fuel is consumed in the Desired quarter
+	 * and write the result into file
+	 * 
+	 * @param stationId
+	 * @param companyName
+	 * @param quarter
+	 * @param year
+	 * @return file if created succeeded else return null
+	 */
+
+	public static File createFuelStationPurchasesReport(int stationId, String companyName, Quarter quarter,
+			String year) {
 		PreparedStatement stm;
 		ResultSet res;
 		File file = null;
+		String startDate = year, endDate = year, nextyear = (Integer.parseInt(year) + 1) + "";
+		;
+
+		switch (quarter) {
+
+		case first:
+			startDate += "-01-01";
+			endDate += "-04-01";
+			break;
+
+		case second:
+			startDate += "-04-01";
+			endDate += "-07-01";
+			break;
+
+		case third:
+			startDate += "-07-01";
+			endDate += "-10-01";
+			break;
+
+		case fourth:
+			endDate = nextyear;
+			startDate += "-10-01";
+			endDate += "-01-01";
+			break;
+
+		}
 
 		try {
 			stm = ConnectionToDB.conn
 					.prepareStatement("select DISTINCT(c.fuelType),sum(f.fuelQuantity) from myfueldb.car as c"
 							+ " LEFT JOIN myfueldb.fuelpurchase as f ON c.carNumber = f.CarNumber "
-							+ " where f.stationId=? group by(c.fuelType)");
+							+ " where f.stationId=? and date >= ? and date < ? group by(c.fuelType)");
 			stm.setInt(1, stationId);
+			stm.setString(2, startDate);
+			stm.setString(3, endDate);
 			res = stm.executeQuery();
 
-			file = FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
-					FileManagmentSys.stationManagerReports, FileManagmentSys.purchasesReport),
-					FileManagmentSys.purchasesReport, stationId);
-			
-			if(file == null) return null;
-			
-			FileManagmentSys.writeToQuarterReport(file,FileManagmentSys.purchaseReportFormat(res,stationId+""));
+			if (res.next()) {
 
-			CompanyFuelControllerServer.createGenericReport(new GenericReport(LocalDate.now().toString(),
-					LocalTime.now().toString(), file.getName(), FileManagmentSys.purchasesReport, companyName));
+				file = FileManagmentSys.createFile(
+						FileManagmentSys.createLocation(companyName, FileManagmentSys.stationManagerReports,
+								FileManagmentSys.purchasesReport),
+						FileManagmentSys.purchasesReport, stationId, quarter + "", year);
+
+				if (file == null)
+					return null;
+
+				FileManagmentSys.writeToQuarterReport(file,
+						FileManagmentSys.purchaseReportFormat(res, stationId + "", year, quarter + ""));
+
+				CompanyFuelControllerServer.createGenericReport(new GenericReport(year, quarter + "", file.getName(),
+						FileManagmentSys.purchasesReport, companyName, stationId));
+			}
 		}
 
 		catch (Exception e) {
@@ -253,29 +389,40 @@ public class GasStationControllerServer {
 		return file;
 	}
 
-	public static File createInventoryReporteport(int stationId, String companyName) {
+	/**
+	 * the fucntion calculate the quantity of each fuel in the staion and write the
+	 * result into file
+	 * 
+	 * @param stationId
+	 * @param companyName
+	 * @param quarter
+	 * @param year
+	 * @return
+	 */
+	public static File createInventoryReporteport(int stationId, String companyName, Quarter quarter, String year) {
 		PreparedStatement stm;
 		ResultSet res;
 		File file = null;
 
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("select fuelType,amount from myfueldb.stationfuel where stationId = ?");
+			stm = ConnectionToDB.conn.prepareStatement("select fuelType,amount from stationfuel where stationId = ?");
 			stm.setInt(1, stationId);
 			res = stm.executeQuery();
 
 			if (res.next()) {
+				file = FileManagmentSys.createFile(
+						FileManagmentSys.createLocation(companyName, FileManagmentSys.stationManagerReports,
+								FileManagmentSys.inventoryReport),
+						FileManagmentSys.inventoryReport, stationId, quarter + "", year);
 
-				file = FileManagmentSys.createFile(FileManagmentSys.createLocation(companyName,
-						FileManagmentSys.stationManagerReports, FileManagmentSys.inventoryReport),
-						FileManagmentSys.inventoryReport, stationId);
+				if (file == null)
+					return null;
 
-				if(file == null) return null;
-				
-				FileManagmentSys.writeToQuarterReport(file,FileManagmentSys.inventoryReportFormat(res,stationId+""));
-				
-				CompanyFuelControllerServer.createGenericReport(new GenericReport(LocalDate.now().toString(),
-						LocalTime.now().toString(), file.getName(), FileManagmentSys.inventoryReport, companyName));
+				FileManagmentSys.writeToQuarterReport(file,
+						FileManagmentSys.inventoryReportFormat(res, stationId + "", year, quarter + ""));
+
+				CompanyFuelControllerServer.createGenericReport(new GenericReport(year, quarter + "", file.getName(),
+						FileManagmentSys.inventoryReport, companyName, stationId));
 			}
 
 		}
@@ -287,7 +434,15 @@ public class GasStationControllerServer {
 		return file;
 	}
 
-	public static ArrayList<GenericReport> getAllReportByYear(String year) {
+	/**
+	 * the function find all the report of station by id and by year and return the
+	 * result in arraylist
+	 * 
+	 * @param year
+	 * @param stationId
+	 * @return ArrayList<GenericReport> - the report
+	 */
+	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationId) {
 
 		ArrayList<GenericReport> reports = new ArrayList<GenericReport>();
 		PreparedStatement stm;
@@ -295,13 +450,14 @@ public class GasStationControllerServer {
 		GenericReport r;
 
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from genericreport WHERE SUBSTR(date,1,4)= ?");
+			stm = ConnectionToDB.conn.prepareStatement("select * from genericreport WHERE year = ? and stationId = ?");
 			stm.setString(1, year);
+			stm.setInt(2, stationId);
 			res = stm.executeQuery();
 
 			while (res.next()) {
 				r = new GenericReport(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5));
+						res.getString(5), res.getInt(6));
 				System.out.println(r);
 				reports.add(r);
 			}

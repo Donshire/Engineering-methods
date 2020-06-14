@@ -87,7 +87,7 @@ public class FileManagmentSys {
 	 * @param stationID int
 	 * @return the created File
 	 */
-	public static File createFile(String loc, String fileType, int stationID) {
+	public static File createFile(String loc, String fileType, int stationID, String quarter, String year) {
 
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 		LocalDateTime now = LocalDateTime.now();
@@ -104,7 +104,7 @@ public class FileManagmentSys {
 		case (purchasesReport):
 		case (inventoryReport):
 			// ReportType-stationID
-			fileName = String.format("st_id-%d-%s-%s", stationID, now.getYear(), getQuarter(now.toLocalDate()));
+			fileName = String.format("st_id-%d-%s-%s", stationID, year, quarter);
 			break;
 		case (analiticData):
 			// analiticData-Date
@@ -112,7 +112,7 @@ public class FileManagmentSys {
 			break;
 
 		}
- 
+
 		file = new File(loc + "\\" + fileName + ".txt");
 		try {
 			if (!file.createNewFile()) {
@@ -383,65 +383,42 @@ public class FileManagmentSys {
 		return String.format("%-12s %s", CutomerID, totalePurchases) + "\n";
 	}
 
-	/**
-	 * build string according to the file formate
-	 * 
-	 * @param QuarterData
-	 * @param data
-	 * @return the string containing /n
-	 */
-	public static String quatrerFileFormate(String date, String data) {
-		return String.format("%-20s_%sIncome Report 2020 Quarter 4 station_id : 4\n", date, data);
+	public static String buildHeader(String year, String stationId, String reportType, String quarter) {
+
+		return String.format("%s %s %s Quarter station_id : %-4s\n\n", reportType, year, quarter, stationId);
 	}
 
-	public static String getQuarter(LocalDate date) {
-		String QuarterData = "Quarter ";
-		int d = date.getMonthValue();
-
-		if (d <= 3)
-			QuarterData += 1;
-		else if (d <= 6)
-			QuarterData += 2;
-		else if (d <= 9)
-			QuarterData += 3;
-		else
-			QuarterData += 4;
-
-		return QuarterData;
-	}
-
-	public static String buildHeader(LocalDate date, String stationId, String reportType) {
-
-		return String.format("%s %s %s station_id : %-4s\n\n", reportType, date.getYear(), getQuarter(date), stationId);
-	}
-
-	public static String incomeReportFormat(ResultSet res, String stationId) throws SQLException {
-		String format = buildHeader(LocalDate.now(), stationId, incomeReport);
+	public static String incomeReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, incomeReport, quarter);
 		return String.format("%sthe income is = %.2f\n_____________________________________________\n", format,
 				res.getFloat(1));
 	}
 
-	public static String purchaseReportFormat(ResultSet res, String stationId) throws SQLException {
-		String format = buildHeader(LocalDate.now(), stationId, purchasesReport);
+	public static String purchaseReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, purchasesReport, quarter);
 
-		format += String.format("%-20s%-15s\n", "Fuel Type", "total purchases" );
-		while (res.next())
+		format += String.format("%-20s%-15s\n", "Fuel Type", "total purchases");
+
+		do {
 			format += String.format("%-24s%-15.2f\n", res.getString(1), res.getFloat(2));
+		} while (res.next());
 
 		return format;
 	}
-	
-	public static String inventoryReportFormat(ResultSet res, String stationId) throws SQLException {
-		String format = buildHeader(LocalDate.now(), stationId, inventoryReport);
 
-		
-		format += String.format("%-20s%-15s\n","Fuel Type","Quantity");
-		while (res.next())
+	public static String inventoryReportFormat(ResultSet res, String stationId, String year, String quarter)
+			throws SQLException {
+		String format = buildHeader(year, stationId, inventoryReport, quarter);
+
+		format += String.format("%-20s%-15s\n", "Fuel Type", "Quantity");
+
+		do {
 			format += String.format("%-24s%-15.2f\n", res.getString(1), res.getFloat(2));
+		} while (res.next());
 
 		return format;
 	}
-	
-	
 
 }

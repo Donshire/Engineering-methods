@@ -1,8 +1,9 @@
 package boundery;
 
-import java.awt.TextComponent;
+
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
@@ -18,6 +19,7 @@ import client.ClientUI;
 import client.EmployeeCC;
 import enums.Commands;
 import enums.GasStationOrderFromSupplier;
+import enums.Quarter;
 import enums.StationManagerReportsTypes;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -51,9 +53,9 @@ import javafx.util.Callback;
 import server.FileManagmentSys;
 
 public class StationManagerController implements Initializable {
-	
+
 	private Stage curr_stage;
-	
+
 	public static StationManager stationManager;
 
 	private ArrayList<GasStationOrder> selectedOrders = new ArrayList<GasStationOrder>();
@@ -113,13 +115,10 @@ public class StationManagerController implements Initializable {
 	private TableColumn<GenericReport, String> ReportType;
 
 	@FXML
-	private TableColumn<GenericReport, String> ReportDate;
+	private TableColumn<GenericReport, String> ReportYearcol;
 
 	@FXML
-	private TableColumn<GenericReport, String> ReportTime;
-
-	@FXML
-	private TableColumn<GenericReport, String> companyNamecol;
+	private TableColumn<GenericReport, String> ReportQuartercol;
 
 	// Report table end
 
@@ -173,6 +172,33 @@ public class StationManagerController implements Initializable {
 
 	@FXML
 	private TextField enterYeartxt;
+
+	@FXML
+	private ComboBox<Quarter> quartercombox;
+
+	@FXML
+	private TextField enterYearCreatetxt;
+
+	@FXML
+	void reportTypecomboHandler(ActionEvent event) {
+
+		StationManagerReportsTypes reportType = reportTypecombo.getValue();
+
+		switch (reportType) {
+
+		case inventory:
+			quartercombox.setVisible(false);
+			enterYearCreatetxt.setVisible(false);
+			JOptionPane.showMessageDialog(null, "The report is produced on the current quantity");
+			break;
+
+		default:
+			quartercombox.setVisible(true);
+			enterYearCreatetxt.setVisible(true);
+			break;
+
+		}
+	}
 
 	@FXML
 	void ChooseOrdersStatus(ActionEvent event) {
@@ -234,16 +260,21 @@ public class StationManagerController implements Initializable {
 			try {
 				val = Integer.parseInt(s);
 				if (val <= 0) {
+					ReportTable.setItems(null);
 					JOptionPane.showMessageDialog(null, "Year Value must be greater then zero");
+					enterYeartxt.clear();
 					return;
 				}
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "input error try again");
+				ReportTable.setItems(null);
+				enterYeartxt.clear();
 				return;
 			}
 
 			// All tests passed. Input is correct
-			 ReportTable.setItems(getAllReportsByYear(s));
+			ReportTable.setItems(getAllReportByYearandStationId(s, stationManager.getStationID()));
+			enterYeartxt.clear();
 		}
 
 	}
@@ -309,24 +340,130 @@ public class StationManagerController implements Initializable {
 		System.out.println();
 	}
 
+	public boolean isValid(int year, Quarter quarter) {
+
+		int startMonth = 0;
+
+		// the year passed we can create report --
+		if (LocalDate.now().getYear() > year)
+			return true;
+
+		// the year didnt passed so we cant create report
+		if (LocalDate.now().getYear() < year)
+			return false;
+
+		switch (quarter) {
+
+		case first:
+			startMonth = 1;
+			break;
+
+		case second:
+			startMonth = 4;
+			break;
+
+		case third:
+			startMonth = 7;
+			break;
+
+		case fourth:
+			startMonth = 10;
+			break;
+		}
+
+		// We did not reach the desired date , so we cant create report yet
+		if (startMonth > LocalDate.now().getMonthValue())
+			return false;
+
+		// all passed
+		return true;
+	}
+	
+	public Quarter getCurrentQuarter(){
+		
+		int currentquareter = LocalDate.now().getMonthValue();
+		
+		if(currentquareter >=1 && currentquareter <= 3 ) return Quarter.first;
+		
+		else if (currentquareter >=4 && currentquareter <= 6 ) return Quarter.second;
+		
+		else if(currentquareter >=7 && currentquareter <= 10 ) return Quarter.third;
+		
+		return Quarter.fourth;
+		
+	}
+
 	@FXML
 	void CretaeReportByType(ActionEvent event) {
 
 		Button b = (Button) event.getSource();
 		File f;
 		StationManagerReportsTypes s;
+		Quarter q;
+		int val;
+		boolean check;
 
 		if (b == createReportbtn) {
 			s = reportTypecombo.getValue();
-			if (s == null)
-				JOptionPane.showMessageDialog(null, "You Must Choose Report Type");
+			q = quartercombox.getValue();
 
-			else {
-				f = EmployeeCC.createFuelStationReports(stationManager.getStationID(),stationManager.getCompanyName(), s);
-				if(f == null) JOptionPane.showMessageDialog(null, "report already exist");
-				else showReport(f, null);
+			if (s == null) {
+				JOptionPane.showMessageDialog(null, "You Must Choose Report Type");
+				return;
 			}
 
+			if (!s.equals(StationManagerReportsTypes.inventory)) {
+
+				if (q == null) {
+					JOptionPane.showMessageDialog(null, "You Must Choose Quarter");
+					return;
+				}
+
+				if (enterYearCreatetxt.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "You must enter a year");
+					return;
+				}
+			
+
+			try {
+				val = Integer.parseInt(enterYearCreatetxt.getText());
+				if (val <= 0) {
+					JOptionPane.showMessageDialog(null, "Year Value must be greater then zero");
+					enterYearCreatetxt.clear();
+					return;
+				}
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "input error try again");
+				enterYearCreatetxt.clear();
+				return;
+			}
+
+			check = isValid(val, q);
+
+			if (check == true) {
+
+				f = EmployeeCC.createFuelStationReports(stationManager.getStationID(), stationManager.getCompanyName(),
+						s, q, val + "");
+				if (f == null)
+					JOptionPane.showMessageDialog(null, "report already exist");
+				else
+					showReport(f, null);
+
+			}
+
+			else
+				JOptionPane.showMessageDialog(null,
+						"There is an error , you try create a report On dates that have not yet arrived");
+			}
+			
+			else {
+				f = EmployeeCC.createFuelStationReports(stationManager.getStationID(), stationManager.getCompanyName(),
+						s, getCurrentQuarter(), LocalDate.now().getYear() + "");
+				if (f == null)
+					JOptionPane.showMessageDialog(null, "report already exist");
+				else
+					showReport(f, null);
+			}
 		}
 	}
 
@@ -433,25 +570,23 @@ public class StationManagerController implements Initializable {
 	}
 
 	public void initializeReportTable() {
-		
-		//clicked row-------------------------
-		ReportTable.setRowFactory(tv -> {
-	    TableRow<GenericReport> row = new TableRow<>();
-	    row.setOnMouseClicked(event -> {
-	        if (! row.isEmpty() && event.getButton()==MouseButton.PRIMARY 
-	             && event.getClickCount() == 2) { 
 
-	        	GenericReport clickedRow = row.getItem();
-	        	showReport(null,clickedRow);
-	        	
-	            System.out.println(clickedRow.toString());
-	        }
-	    });
-	    return row ;
-	});
-		//----------------------
-		nametxt.setText(stationManager.getFirstName());
-		enterYeartxt.setText("Enter Year");
+		// clicked row-------------------------
+		ReportTable.setRowFactory(tv -> {
+			TableRow<GenericReport> row = new TableRow<>();
+			row.setOnMouseClicked(event -> {
+				if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+
+					GenericReport clickedRow = row.getItem();
+					showReport(null, clickedRow);
+
+					System.out.println(clickedRow.toString());
+				}
+			});
+			return row;
+		});
+		// ----------------------
+		
 
 		// set up comboxbox with types of reports start--------------
 		ObservableList<StationManagerReportsTypes> reportTypes = FXCollections
@@ -459,26 +594,28 @@ public class StationManagerController implements Initializable {
 		reportTypecombo.setItems(reportTypes);
 		// end comboxbox with types of reports start-----------------
 
-		//report table start
-			
-		 
+		// set up comboxbox with types of qurter start--------------
+		ObservableList<Quarter> quartersTypes = FXCollections.observableArrayList(Quarter.values());
+		quartercombox.setItems(quartersTypes);
+		// end comboxbox with types of qurter start-----------------
 
-		 ReportType.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("reportType"));
-		 ReportDate.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("date"));
-		 ReportTime.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("time"));
-		 companyNamecol.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("companyName"));
-		//report table end
+		// report table start
+
+		ReportType.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("reportType"));
+		ReportYearcol.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("year"));
+		ReportQuartercol.setCellValueFactory(new PropertyValueFactory<GenericReport, String>("quarter"));
+		// report table end
 
 	}
-	
-	public void showReport(File f,GenericReport r) {
-		
-		QuarterReportController.file =  f;
+
+	public void showReport(File f, GenericReport r) {
+
+		QuarterReportController.file = f;
 		QuarterReportController.report = r;
 		QuarterReportController c = new QuarterReportController();
-    	Stage st = new Stage();
-    	
-    	try {
+		Stage st = new Stage();
+
+		try {
 			c.start(st);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -503,9 +640,9 @@ public class StationManagerController implements Initializable {
 		return fuel;
 	}
 
-	public ObservableList<GenericReport> getAllReportsByYear(String year) {
-		ArrayList<GenericReport> rp = EmployeeCC.getAllReportByYear(year);
-		if(rp.isEmpty()) 
+	public ObservableList<GenericReport> getAllReportByYearandStationId(String year, int stationId) {
+		ArrayList<GenericReport> rp = EmployeeCC.getAllReportByYearandStationId(year, stationId);
+		if (rp.isEmpty())
 			JOptionPane.showMessageDialog(null, "there is no report in this year");
 		ObservableList<GenericReport> reports = FXCollections.observableArrayList(rp);
 		return reports;
@@ -518,6 +655,7 @@ public class StationManagerController implements Initializable {
 		StationReportsView.setVisible(false);
 		QuantityView.setVisible(false);
 		curr = QuantityView;
+		nametxt.setText(stationManager.getFirstName());
 		initializeOrderTable();
 		initializeMinQuantityTable();
 		initializeReportTable();

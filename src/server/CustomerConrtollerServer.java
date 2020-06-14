@@ -1,17 +1,21 @@
 package server;
 
-import Entity.Customer;
-import Entity.Employee;
+
 import Entity.GasOrder;
-import Entity.Supplier;
-import enums.Commands;
+
 import enums.OrderStatus;
 
+import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class MyOrderConrtollerServer {
+public class CustomerConrtollerServer  {
+
+	/**
+	 * 
+	 */
+
 
 	public static Object getOrders(String customerId) {
 
@@ -42,5 +46,6 @@ public class MyOrderConrtollerServer {
 		return orderList;
 
 	}
+
 
 }

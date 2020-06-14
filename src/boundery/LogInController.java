@@ -78,10 +78,10 @@ public class LogInController {
 		else {
 			Object obj = UserCC.login(username, password);
 			if (obj instanceof Customer) {
-				System.out.println("customer");
-				GasHomeController aFrame = new GasHomeController();
-				aFrame.customer = (Customer) obj;
 				try {
+					System.out.println("customer");
+					CustomerGuiController aFrame = new CustomerGuiController();
+					CustomerGuiController.customer = (Customer) obj;
 					aFrame.start(ClientUI.mainStage);
 				} catch (Exception e) {
 					e.printStackTrace();
