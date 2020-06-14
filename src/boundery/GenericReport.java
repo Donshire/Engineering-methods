@@ -76,6 +76,10 @@ public class GenericReport implements Serializable {
 		return serialVersionUID;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "GenericReport [year=" + year + ", quarter=" + quarter + ", fileName=" + fileName + ", reportType="
+				+ reportType + ", companyName=" + companyName + ", stationId=" + stationId + "]";
+	}
 
 }

@@ -106,5 +106,6 @@ public class MyFuelClient extends AbstractClient {
 		}
 		return null;
 	}
+	
 }
 //End of ChatClient class

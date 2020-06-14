@@ -27,10 +27,10 @@ public class LogInController {
 
 	@FXML
 	private TextField usernametxt;
-	
+
 	@FXML
 	private TextField carNumberInput;
-	
+
 	@FXML
 	private Button fastFuelBtn;
 
@@ -40,22 +40,23 @@ public class LogInController {
 	@FXML
 	void fastFuel(ActionEvent event) {
 		String carNumber = carNumberInput.getText();
-		if(carNumber.isEmpty())JOptionPane.showMessageDialog(null, "Please enter car number");
+		if (carNumber.isEmpty())
+			JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
-			//call the server and get the car details 
-			Car car =UserCC.fastFuelingLogIn(carNumber);
-			if(car==null) {
+			// call the server and get the car details
+			Car car = UserCC.fastFuelingLogIn(carNumber);
+			if (car == null) {
 				JOptionPane.showMessageDialog(null, "Car wasn't found");
 				return;
 			}
 			FastFuelingController fastFueling = new FastFuelingController();
-			
-			fastFueling.car= car;
-			
+
+			fastFueling.car = car;
+
 //			fastFueling.car=(Car)result.get(0);
 //			fastFueling.customer=(Customer)result.get(1);
 //			fastFueling.customerModule=(CustomerModule)result.get(2);
-			
+
 			try {
 				fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
@@ -63,7 +64,7 @@ public class LogInController {
 			}
 		}
 	}
-	
+
 	@FXML
 	void login(ActionEvent event) {
 
@@ -78,21 +79,22 @@ public class LogInController {
 			if (obj instanceof Customer) {
 				System.out.println("customer");
 				GasHomeController aFrame = new GasHomeController();
-				aFrame.customer = (Customer)obj;
+				aFrame.customer = (Customer) obj;
 				try {
 					aFrame.start(ClientUI.mainStage);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
-			
+
 			//
 			else if (obj instanceof Employee) {
 
 				System.out.println("employee");
-				ClientUI.user = obj;
-				MarketingManagerController marketingManager = new MarketingManagerController();
+
+				CeoGUIController marketingManager = new CeoGUIController();
+				marketingManager.ceo = (Employee) obj;
 				try {
 					marketingManager.start(ClientUI.mainStage);
 				} catch (Exception e) {

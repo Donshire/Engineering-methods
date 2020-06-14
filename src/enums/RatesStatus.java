@@ -1,6 +1,6 @@
 package enums;
 
 public enum RatesStatus {
-	confirmed,created,active
+	confirmed, created, active, rejected
 	
 }

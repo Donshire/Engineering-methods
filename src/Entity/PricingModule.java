@@ -1,21 +1,28 @@
 package Entity;
 
-public class PricingModule {
+import java.io.Serializable;
+
+import boundery.CheckBoxImplementation;
+import enums.RatesStatus;
+
+public class PricingModule extends CheckBoxImplementation implements Serializable {
 
 	private int modelNumber;
 	private float salePercent;
+	private RatesStatus status;
 	private String CompanyName;
-	
+ 
+
+	public PricingModule(int modelNumber, float salePercent, String companyName, RatesStatus status) {
+		this.modelNumber = modelNumber;
+		this.salePercent = salePercent;
+		this.status = status;
+		CompanyName = companyName;
+	}
+
 	public PricingModule(int modelNumber, float salePercent) {
 		this.modelNumber = modelNumber;
 		this.salePercent = salePercent;
-	}
-
-	public PricingModule(int modelNumber, float salePercent, String companyName) {
-		super();
-		this.modelNumber = modelNumber;
-		this.salePercent = salePercent;
-		CompanyName = companyName;
 	}
 
 	public int getModelNumber() {
@@ -42,10 +49,20 @@ public class PricingModule {
 		CompanyName = companyName;
 	}
 
+	public RatesStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RatesStatus status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "PricingModule [modelNumber=" + modelNumber + ", salePercent=" + salePercent + ", CompanyName="
-				+ CompanyName + "]";
+		return "PricingModule [modelNumber=" + modelNumber + ", salePercent=" + salePercent + ", status=" + status
+				+ ", CompanyName=" + CompanyName + "]";
 	}
-	
+
+
+
 }
