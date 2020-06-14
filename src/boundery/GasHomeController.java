@@ -2,6 +2,7 @@ package boundery;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
@@ -38,7 +39,8 @@ public class GasHomeController implements Initializable {
 	private float gasAmount;
 	private float priceOfPurchase = 0;
 	private float pricePerUnit = 0;
-	private String contemporaryDateStr;
+	private String dateNowStr;
+	private LocalDate contemporaryDate;
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -54,6 +56,12 @@ public class GasHomeController implements Initializable {
 
 	@FXML
 	private DatePicker filedSupplyDate;
+
+	@FXML
+	private Text noteDate;
+
+	@FXML
+	private Text noteAmount;
 
 	@FXML
 	private TextField textAmount;
@@ -86,8 +94,14 @@ public class GasHomeController implements Initializable {
 	 * button.
 	 */
 	void radioSelected(ActionEvent event) {
-		textSupplyDate.setVisible(normalSupply.isSelected());
-		filedSupplyDate.setVisible(normalSupply.isSelected());
+		if (normalSupply.isSelected()) {
+			textSupplyDate.setVisible(true);
+			filedSupplyDate.setVisible(true);
+		} else {
+			textSupplyDate.setVisible(false);
+			filedSupplyDate.setVisible(false);
+			noteDate.setVisible(false);
+		}
 		settingDiscount();
 		setPrice();
 	}
@@ -98,7 +112,7 @@ public class GasHomeController implements Initializable {
 	 */
 	void supplyDateSelected(ActionEvent event) {
 		LocalDate date = filedSupplyDate.getValue();
-		supplyDate = "" + date.getDayOfMonth() + "/" + date.getMonthValue() + "/" + date.getYear();
+		supplyDate = "" + date.getYear() + "-" + date.getDayOfMonth() + "-" + date.getMonthValue();
 	}
 
 	@FXML
@@ -106,16 +120,26 @@ public class GasHomeController implements Initializable {
 	 * Sending the purchase order to server.
 	 */
 	void makePurchase(ActionEvent event) {
+	/*
 		if (!normalSupply.isSelected())
 			supplyDate = contemporaryDateStr;
 		GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, gasAmount, contemporaryDateStr, priceOfPurchase,
 				!normalSupply.isSelected());
 		System.out.println(order.toString());
-		
-		if (CustomerCC.createNewOrder(order)) 
+*/
+		if (isInputCorrect()) {
+			if (!normalSupply.isSelected())
+				supplyDate = dateNowStr;
+			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, LocalTime.now().toString(), gasAmount, dateNowStr, priceOfPurchase,
+					!normalSupply.isSelected());
+			System.out.println(order.toString());
+			
+			if (CustomerCC.createNewOrder(order)) 
 			JOptionPane.showMessageDialog(null,"Order created succesfully");
 		else  JOptionPane.showMessageDialog(null,"clouldn't create order");	
-
+			// HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order), "Order created succesfully",
+			//		"clouldn't create order");
+		}
 	}
 
 	/**
@@ -141,9 +165,47 @@ public class GasHomeController implements Initializable {
 			else
 				discount = 0;
 		}
-		textDiscount.setText(discount.toString());
+		textDiscount.setText(discount.toString() + "%");
 	}
 
+	public boolean isInputCorrect() {
+		boolean proper = true;
+		
+		noteDate.setVisible(false);
+		noteAmount.setVisible(false);
+
+		if (normalSupply.isSelected()) {
+			if (filedSupplyDate.getValue() == null) {
+				noteDate.setText("Delivery date must be set.");
+				noteDate.setVisible(true);
+				proper = false;
+			} else if (filedSupplyDate.getValue().isBefore(contemporaryDate)) {
+				noteDate.setText("Must be set a future date.");
+				noteDate.setVisible(true);
+				proper = false;
+			}
+		}
+
+		if (!amountIsNumber()) {
+			noteAmount.setVisible(true);
+			proper = false;
+		}
+
+		return proper;
+	}
+
+	private boolean amountIsNumber() {
+		String amountStr = textAmount.getText();
+		
+		try {
+			@SuppressWarnings("unused")
+			Float amountNum = new Float(amountStr);
+		} catch (Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
@@ -171,12 +233,17 @@ public class GasHomeController implements Initializable {
 		
 		customer = (Customer) ClientUI.user;
 		
-		textDiscount.setText("0");
+		//textDiscount.setText("0");
 
 		// Loading the today's date
+			contemporaryDate = LocalDate.now();
+		dateNowStr = "" + contemporaryDate.getYear() + "-" + contemporaryDate.getMonthValue() + "-" + contemporaryDate.getDayOfMonth();
+		
+		/*
 		LocalDate contemporaryDate = LocalDate.now();
 		contemporaryDateStr = "" + contemporaryDate.getDayOfMonth() + "/" + contemporaryDate.getMonthValue() + "/"
 				+ contemporaryDate.getYear();
+		*/
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 			@Override

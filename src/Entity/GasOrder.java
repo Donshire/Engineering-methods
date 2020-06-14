@@ -14,37 +14,49 @@ public class GasOrder implements Serializable {
 	 */
 	private int purchaseID;
 	private String custmoerId;
-	private String fuelType;
+	//private String fuelType;
 	private String supplyDate;
-	
+	private String time;
 	private float gasAmount;
 	private String date;
 	private float priceOfPurchase;
 	private boolean urgent;
-	private OrderStatus status;
-	private int saleID;
-	private float currentPrice;
-	private String companyName;
+//	private OrderStatus status;
+//	private int saleID;
+//  float currentPrice;
+//	private String companyName;
+	
 
 	/**
 	 * 
 	 * @param purchaseID      - Automatically created on DB.
 	 * @param custmoerId
 	 * @param supplyDate
+	 * @param string 
 	 * @param gasAmount
 	 * @param date
 	 * @param priceOfPurchase
 	 * @param urgent
+	 * @param time 
 	 */
-	public GasOrder(int purchaseID, String custmoerId, String supplyDate, float gasAmount, String date,
+	public GasOrder(int purchaseID, String custmoerId, String supplyDate, String time, float gasAmount, String date,
 			float priceOfPurchase, boolean urgent) {
 		this.purchaseID = purchaseID;
 		this.custmoerId = custmoerId;
 		this.supplyDate = supplyDate;
+		this.time = time;
 		this.gasAmount = gasAmount;
 		this.date = date;
 		this.priceOfPurchase = priceOfPurchase;
 		this.urgent = urgent;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 	public int getPurchaseID() {
@@ -63,6 +75,7 @@ public class GasOrder implements Serializable {
 		this.custmoerId = custmoerId;
 	}
 
+/*
 	public String getFuelType() {
 		return fuelType;
 	}
@@ -70,6 +83,7 @@ public class GasOrder implements Serializable {
 	public void setFuelType(String fuelType) {
 		this.fuelType = fuelType;
 	}
+*/
 
 	public String getSupplyDate() {
 		return supplyDate;
@@ -111,6 +125,7 @@ public class GasOrder implements Serializable {
 		this.urgent = urgent;
 	}
 
+/*	
 	public OrderStatus getStatus() {
 		return status;
 	}
@@ -150,5 +165,6 @@ public class GasOrder implements Serializable {
 				+ priceOfPurchase + ", urgent=" + urgent + ", status=" + status + ", saleID=" + saleID
 				+ ", currentPrice=" + currentPrice + ", companyName=" + companyName + "]";
 	}
+*/
 
 }

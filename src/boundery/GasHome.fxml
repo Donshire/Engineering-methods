@@ -11,7 +11,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="875.0" prefWidth="1289.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.GasHomeController">
    <children>
-      <Text layoutX="396.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gas Home" textAlignment="CENTER">
+      <Text layoutX="396.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Gas" textAlignment="CENTER">
          <font>
             <Font size="96.0" />
          </font>
@@ -55,7 +55,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <Text fx:id="textDiscount" fill="#094beb" layoutX="340.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%" wrappingWidth="115.63086585700512">
+            <Text fx:id="textDiscount" fill="#094beb" layoutX="340.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2%" wrappingWidth="115.63086585700512">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -83,5 +83,7 @@
          </font>
       </Text>
       <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="349.0" layoutY="339.0" onAction="#supplyDateSelected" visible="false" />
+      <Text fx:id="noteDate" fill="RED" layoutX="596.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" visible="false" wrappingWidth="517.6708984375" />
+      <Text fx:id="noteAmount" fill="RED" layoutX="520.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Invalid input" visible="false" wrappingWidth="97.700689509511" />
    </children>
 </Pane>
