@@ -233,7 +233,7 @@ public class SupplierController implements Initializable {
 		SupplierOrdersPane.setVisible(false);
 
 		ObservableList<SupplierOrderStatus> orderTypes = FXCollections
-				.observableArrayList(SupplierOrderStatus.values());
+				.observableArrayList(SupplierOrderStatus.confirmed,SupplierOrderStatus.supplied);
 		OrderTypeCombox.setItems(orderTypes);
 	}
 	

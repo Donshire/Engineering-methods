@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -10,6 +9,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -28,42 +29,61 @@
          </children>
       </Pane>
       <Button fx:id="addCustomerBtn" layoutX="14.0" layoutY="266.0" mnemonicParsing="false" onAction="#openNewClientPane" prefHeight="60.0" prefWidth="150.0" text="Add Customer" />
-      <Pane fx:id="NewClientPane" layoutX="218.0" layoutY="127.0" prefHeight="500.0" prefWidth="653.0">
+      <Pane fx:id="NewClientPane" layoutX="184.0" layoutY="83.0" prefHeight="544.0" prefWidth="687.0">
          <children>
-            <Label fx:id="IdLbl" layoutX="74.0" layoutY="75.0" prefHeight="24.0" prefWidth="52.0" text="ID:" textAlignment="RIGHT" />
-            <Label fx:id="FirstNameLbl" layoutX="74.0" layoutY="120.0" text="First Name:" />
-            <Label fx:id="LastNameLbl" layoutX="74.0" layoutY="162.0" text="Last Name:" />
-            <Label fx:id="EmailLbl" layoutX="73.0" layoutY="200.0" text="Email:" />
-            <Label fx:id="CreditCardNoLbl" layoutX="71.0" layoutY="241.0" text="Credit Card No:" />
-            <Label fx:id="ExpDateLbl" layoutX="394.0" layoutY="241.0" text="Exp Date:" />
-            <Label fx:id="CVVLbl" layoutX="539.0" layoutY="241.0" text="CVV:" />
-            <Button fx:id="RegistrationNextBtn" layoutX="452.0" layoutY="438.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="31.0" prefWidth="62.0" text="Next" />
-            <Label fx:id="ORLbl" layoutX="527.0" layoutY="443.0" text="OR" />
-            <Button fx:id="RegistrationFinishBtn" layoutX="564.0" layoutY="438.0" mnemonicParsing="false" onAction="#registration" prefHeight="31.0" prefWidth="62.0" text="Finish" />
-            <TextField fx:id="IDTxt" layoutX="194.0" layoutY="72.0" />
-            <TextField fx:id="FirstNameTxt" layoutX="194.0" layoutY="113.0" />
-            <TextField fx:id="LastNameTxt" layoutX="194.0" layoutY="154.0" />
-            <TextField fx:id="EmailTxt" layoutX="194.0" layoutY="195.0" />
-            <TextField fx:id="CreditCardTxt" layoutX="194.0" layoutY="236.0" />
-            <TextField fx:id="ExpDateTxt" layoutX="465.0" layoutY="236.0" prefHeight="31.0" prefWidth="56.0" />
-            <TextField fx:id="CVVTxt" layoutX="587.0" layoutY="236.0" prefHeight="31.0" prefWidth="45.0" />
-            <Label layoutX="31.0" layoutY="25.0" text="Registration">
+            <Label fx:id="IdLbl" layoutX="69.0" layoutY="64.0" prefHeight="24.0" prefWidth="52.0" text="ID:" textAlignment="RIGHT" />
+            <Label fx:id="dateFormatLbl" layoutX="463.0" layoutY="200.0" text="mm / yyyy" />
+            <Label fx:id="FirstNameLbl" layoutX="69.0" layoutY="109.0" text="First Name:" />
+            <Label fx:id="LastNameLbl" layoutX="69.0" layoutY="151.0" text="Last Name:" />
+            <Label fx:id="EmailLbl" layoutX="68.0" layoutY="189.0" text="Email:" />
+            <Label fx:id="CreditCardNoLbl" layoutX="66.0" layoutY="230.0" text="Credit Card No:" />
+            <Label fx:id="ExpDateLbl" layoutX="385.0" layoutY="230.0" prefHeight="21.0" prefWidth="66.0" text="Exp Date:" />
+            <Label fx:id="CVVLbl" layoutX="560.0" layoutY="230.0" text="CVV:" />
+            <Button fx:id="RegistrationNextBtn" layoutX="452.0" layoutY="500.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="31.0" prefWidth="62.0" text="Next" />
+            <Label fx:id="ORLbl" layoutX="527.0" layoutY="505.0" text="OR" />
+            <Button fx:id="RegistrationFinishBtn" layoutX="564.0" layoutY="500.0" mnemonicParsing="false" onAction="#registration" prefHeight="31.0" prefWidth="62.0" text="Finish" />
+            <TextField fx:id="IDTxt" layoutX="189.0" layoutY="61.0" />
+            <TextField fx:id="FirstNameTxt" layoutX="189.0" layoutY="102.0" />
+            <TextField fx:id="LastNameTxt" layoutX="189.0" layoutY="143.0" />
+            <TextField fx:id="EmailTxt" layoutX="189.0" layoutY="184.0" />
+            <Label fx:id="dividExpDateLbl" layoutX="495.0" layoutY="230.0" text="/" />
+            <TextField fx:id="addressNoTxt" layoutX="419.0" layoutY="305.0" prefHeight="31.0" prefWidth="39.0" />
+            <TextField fx:id="CreditCardTxt" layoutX="189.0" layoutY="225.0" />
+            <TextField fx:id="ExpDateMonthTxt" layoutX="455.0" layoutY="225.0" prefHeight="31.0" prefWidth="35.0" />
+            <TextField fx:id="CVVTxt" layoutX="600.0" layoutY="225.0" prefHeight="31.0" prefWidth="45.0" />
+            <Label fx:id="addressNoLbl" layoutX="390.0" layoutY="310.0" text="No:" />
+            <Label layoutX="26.0" layoutY="14.0" text="Registration">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Label fx:id="PhoneLbl" layoutX="69.0" layoutY="284.0" text="Phone:" />
-            <Label fx:id="AddressLbl" layoutX="72.0" layoutY="322.0" text="Address:" />
-            <TextField fx:id="PhoneTxt" layoutX="194.0" layoutY="277.0" />
-            <TextField fx:id="AddressTXt" layoutX="194.0" layoutY="317.0" />
-            <Label fx:id="UserNameLbl" layoutX="72.0" layoutY="362.0" text="User name:" />
-            <TextField fx:id="UserNameTxt" layoutX="194.0" layoutY="357.0" />
-            <Label fx:id="passwordLbl" layoutX="72.0" layoutY="403.0" text="Password:" />
-            <TextField fx:id="PasswordTxt" layoutX="194.0" layoutY="398.0" />
+            <Label fx:id="PhoneLbl" layoutX="64.0" layoutY="273.0" text="Phone:" />
+            <Label fx:id="AddressLbl" layoutX="67.0" layoutY="311.0" text="Address:" />
+            <TextField fx:id="PhoneTxt" layoutX="189.0" layoutY="266.0" />
+            <TextField fx:id="AddressTXt" layoutX="189.0" layoutY="306.0" />
+            <Label fx:id="UserNameLbl" layoutX="67.0" layoutY="351.0" text="User name:" />
+            <TextField fx:id="UserNameTxt" layoutX="189.0" layoutY="346.0" />
+            <Label fx:id="passwordLbl" layoutX="67.0" layoutY="392.0" text="Password:" />
+            <TextField fx:id="PasswordTxt" layoutX="189.0" layoutY="387.0" />
+            <Label fx:id="customerTypeLbl" layoutX="67.0" layoutY="433.0" text="Customer Type" />
+            <ComboBox fx:id="customerTypeCombox" layoutX="189.0" layoutY="426.0" onAction="#openCompany" prefWidth="150.0" />
+            <Label fx:id="customercompanyNameLbl" layoutX="66.0" layoutY="469.0" text="Company Name:" />
+            <TextField fx:id="customercompanyNameTxt" layoutX="189.0" layoutY="464.0" />
+            <ImageView fx:id="CVVImage" fitHeight="60.0" fitWidth="104.0" layoutX="580.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../Users/97250/Desktop/CVV.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="helpImage" fitHeight="49.0" fitWidth="69.0" layoutX="645.0" layoutY="220.0" onMousePressed="#openCVVImgae" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../Users/97250/Desktop/help.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="ExpDateYearTxt" layoutX="505.0" layoutY="225.0" prefHeight="31.0" prefWidth="49.0" />
          </children>
       </Pane>
       <Button fx:id="carAndModleBtn" layoutX="14.0" layoutY="335.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="150.0" text="Car And Module" />
-      <Pane fx:id="carAndModelPane" layoutX="205.0" layoutY="125.0" prefHeight="515.0" prefWidth="673.0">
+      <Pane fx:id="carAndModelPane" layoutX="200.0" layoutY="120.0" prefHeight="515.0" prefWidth="673.0">
          <children>
             <Label fx:id="carNumberLbl" layoutX="153.0" layoutY="183.0" text="Car Number:" />
             <TextField fx:id="carNumberTxt" layoutX="280.0" layoutY="178.0" />
@@ -85,7 +105,7 @@
          </children>
       </Pane>
       <Button fx:id="openUpdateCustomerPane" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="150.0" text="Update Customer" />
-      <Pane fx:id="updateCustomerPane" layoutX="200.0" layoutY="105.0" prefHeight="535.0" prefWidth="673.0">
+      <Pane fx:id="updateCustomerPane" layoutX="200.0" layoutY="95.0" prefHeight="535.0" prefWidth="673.0">
          <children>
             <Label fx:id="updateCustomerLbl" layoutX="36.0" layoutY="50.0" text="Update Customer">
                <font>
@@ -94,6 +114,7 @@
             </Label>
             <Label fx:id="enterCustomerIDLbl" layoutX="68.0" layoutY="98.0" text="Enter customer ID:" />
             <TextField fx:id="UpdateIdTxt" layoutX="212.0" layoutY="93.0" />
+            <Label fx:id="chExpFormatLbl" layoutX="380.0" layoutY="285.0" text="mm / yyyy" />
             <Button fx:id="uploadCustomerBtn" layoutX="419.0" layoutY="93.0" mnemonicParsing="false" onAction="#showCustomeDetails" text="Upload Customer" />
             <Label fx:id="upFirstNameLbl" layoutX="62.0" layoutY="180.0" text="First Name:" />
             <Label fx:id="upPhoneLbl" layoutX="61.0" layoutY="361.0" text="Phone:" />
@@ -102,12 +123,16 @@
             <Label fx:id="upLasttNameLbl" layoutX="62.0" layoutY="224.0" text="Last Name:" />
             <Label fx:id="upExpDateLbl" layoutX="300.0" layoutY="315.0" text="Exp Date:" />
             <Label fx:id="upAddressLbl" layoutX="62.0" layoutY="406.0" text="Address:" />
+            <TextField fx:id="upAdrdressNoTxt" layoutX="400.0" layoutY="400.0" prefHeight="31.0" prefWidth="44.0" />
+            <Label fx:id="upAddressNoLbl" layoutX="370.0" layoutY="405.0" text="No:" />
             <Label fx:id="upCVVLbl" layoutX="500.0" layoutY="315.0" text="CVV:" />
             <TextField fx:id="firstNameChangetxt" layoutX="170.0" layoutY="175.0" />
             <TextField fx:id="lastNameChangeTxt" layoutX="170.0" layoutY="219.0" />
             <TextField fx:id="emailChangTxt" layoutX="170.0" layoutY="264.0" />
             <TextField fx:id="CCNChangeTxt" layoutX="170.0" layoutY="310.0" prefHeight="31.0" prefWidth="122.0" />
-            <TextField fx:id="expChangeTxt" layoutX="368.0" layoutY="310.0" prefHeight="31.0" prefWidth="122.0" />
+            <Label fx:id="dividExpDate1" layoutX="407.0" layoutY="314.0" text="/" />
+            <TextField fx:id="expChangeYearTxt" layoutX="420.0" layoutY="310.0" prefHeight="31.0" prefWidth="53.0" />
+            <TextField fx:id="expChangeMonthTxt" layoutX="368.0" layoutY="310.0" prefHeight="31.0" prefWidth="35.0" />
             <TextField fx:id="CVVChangeTxt" layoutX="542.0" layoutY="310.0" prefHeight="31.0" prefWidth="84.0" />
             <TextField fx:id="phoneChangeTxt" layoutX="170.0" layoutY="356.0" />
             <TextField fx:id="addressChangeTxt" layoutX="170.0" layoutY="401.0" />
@@ -117,10 +142,20 @@
                   <Font name="System Bold Italic" size="15.0" />
                </font>
             </Text>
+            <ImageView fx:id="CVVImage1" fitHeight="60.0" fitWidth="104.0" layoutX="553.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../Users/97250/Desktop/CVV.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="helpImage1" fitHeight="49.0" fitWidth="69.0" layoutX="626.0" layoutY="306.0" onMousePressed="#openCVVImgae1" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../Users/97250/Desktop/help.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Button fx:id="salesBtn" layoutX="14.0" layoutY="473.0" mnemonicParsing="false" onAction="#openSalesPane" prefHeight="60.0" prefWidth="150.0" text="Sales" />
-      <Pane fx:id="salesPane" layoutX="170.0" layoutY="110.0" prefHeight="515.0" prefWidth="696.0">
+      <Pane fx:id="salesPane" layoutX="170.0" layoutY="100.0" prefHeight="515.0" prefWidth="696.0">
          <children>
             <Label fx:id="saleHeader" layoutX="40.0" layoutY="29.0" text="All sale templates:">
                <font>
@@ -134,7 +169,6 @@
                   <TableColumn fx:id="statusColumn" prefWidth="54.0" text="status" />
                 <TableColumn fx:id="companyColumn" prefWidth="62.0" text="company name" />
                   <TableColumn fx:id="fuelTypeColumn" prefWidth="71.0" text="fuel type" />
-                  <TableColumn fx:id="purchaseMoColumn" prefWidth="71.0" text="purchase module" />
                   <TableColumn fx:id="salePrecentColumn" prefWidth="76.0" text="sale percent" />
                   <TableColumn fx:id="startTColumn" prefWidth="74.0" text="start time" />
                   <TableColumn fx:id="endTColumn" prefWidth="76.0" text="end time" />
@@ -148,7 +182,7 @@
          </children>
       </Pane>
       <Button layoutX="755.0" layoutY="44.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="74.0" text="Log Out" />
-      <Pane fx:id="createNewSalePane" layoutX="183.0" layoutY="110.0" prefHeight="515.0" prefWidth="681.0">
+      <Pane fx:id="createNewSalePane" layoutX="190.0" layoutY="110.0" prefHeight="515.0" prefWidth="681.0">
          <children>
             <Label fx:id="newSaleLbl" layoutX="31.0" layoutY="35.0" text="New Sale">
                <font>
@@ -156,30 +190,29 @@
                </font>
             </Label>
             <Label fx:id="companyNameLbl" layoutX="71.0" layoutY="94.0" text="Company Name:" />
-            <TextField fx:id="companyNameTxt" layoutX="197.0" layoutY="82.0" />
             <Label fx:id="FuelTypeLbl" layoutX="114.0" layoutY="129.0" text="Fuel Type:" />
-            <Label fx:id="salePurchaseLbl" layoutX="67.0" layoutY="168.0" text="Purchase Module:" />
-            <ChoiceBox fx:id="salePurchaseCombox" layoutX="197.0" layoutY="163.0" prefHeight="31.0" prefWidth="186.0" />
-            <Label fx:id="salePercentsLbl" layoutX="94.0" layoutY="210.0" text="Sale Percents:" />
-            <TextField fx:id="salePercentTxt" layoutX="197.0" layoutY="205.0" />
-            <Label fx:id="startTimeLbl" layoutX="112.0" layoutY="251.0" text="Start Time:" />
-            <Label fx:id="endTimeLbl1" layoutX="115.0" layoutY="293.0" text="End Time:" />
-            <TextField fx:id="fuelTypeTxt" layoutX="197.0" layoutY="124.0" />
-            <Label fx:id="startDateLbl" layoutX="112.0" layoutY="334.0" text="Start Date:" />
-            <TextField fx:id="startTimeTxt" layoutX="197.0" layoutY="246.0" />
-            <Label fx:id="endDateLbl" layoutX="115.0" layoutY="373.0" text="End Date:" />
-            <TextField fx:id="endTimeTxt" layoutX="197.0" layoutY="288.0" />
-            <Label fx:id="daysLbl" layoutX="139.0" layoutY="417.0" text="Days:" />
-            <Button fx:id="saveSaleBtn" layoutX="560.0" layoutY="454.0" mnemonicParsing="false" onAction="#createNewSale" text="Save" />
-            <DatePicker fx:id="startDatePicker" layoutX="197.0" layoutY="329.0" prefHeight="31.0" prefWidth="186.0" />
-            <DatePicker fx:id="endDatePicker" layoutX="197.0" layoutY="368.0" prefHeight="31.0" prefWidth="186.0" />
-            <CheckBox fx:id="sunday" layoutX="200.0" layoutY="418.0" mnemonicParsing="false" text="Sun" />
-            <CheckBox fx:id="monday" layoutX="257.0" layoutY="418.0" mnemonicParsing="false" text="Mon" />
-            <CheckBox fx:id="tuesday" layoutX="325.0" layoutY="418.0" mnemonicParsing="false" text="Tue" />
-            <CheckBox fx:id="wednesday" layoutX="383.0" layoutY="418.0" mnemonicParsing="false" text="Wed" />
-            <CheckBox fx:id="thuesday" layoutX="450.0" layoutY="418.0" mnemonicParsing="false" text="Thu" />
-            <CheckBox fx:id="friday" layoutX="511.0" layoutY="417.0" mnemonicParsing="false" text="Fri" />
-            <CheckBox fx:id="saturday" layoutX="562.0" layoutY="417.0" mnemonicParsing="false" text="Sat" />
+            <Label fx:id="salePercentsLbl" layoutX="95.0" layoutY="165.0" text="Sale Percents:" />
+            <TextField fx:id="salePercentTxt" layoutX="198.0" layoutY="160.0" />
+            <Label fx:id="startTimeLbl" layoutX="113.0" layoutY="206.0" text="Start Time:" />
+            <Label fx:id="endTimeLbl1" layoutX="116.0" layoutY="248.0" text="End Time:" />
+            <Label fx:id="startDateLbl" layoutX="113.0" layoutY="289.0" text="Start Date:" />
+            <TextField fx:id="startTimeTxt" layoutX="198.0" layoutY="201.0" />
+            <Label fx:id="endDateLbl" layoutX="116.0" layoutY="328.0" text="End Date:" />
+            <TextField fx:id="endTimeTxt" layoutX="198.0" layoutY="243.0" />
+            <Label fx:id="daysLbl" layoutX="140.0" layoutY="372.0" text="Days:" />
+            <ComboBox fx:id="fuelTypesForSaleCombox" layoutX="198.0" layoutY="122.0" prefHeight="31.0" prefWidth="186.0" />
+            <Button fx:id="saveSaleBtn" layoutX="563.0" layoutY="456.0" mnemonicParsing="false" onAction="#createNewSale" text="Save" />
+            <DatePicker fx:id="startDatePicker" layoutX="198.0" layoutY="284.0" prefHeight="31.0" prefWidth="186.0" />
+            <DatePicker fx:id="endDatePicker" layoutX="198.0" layoutY="323.0" prefHeight="31.0" prefWidth="186.0" />
+            <CheckBox fx:id="sunday" layoutX="201.0" layoutY="373.0" mnemonicParsing="false" text="Sun" />
+            <CheckBox fx:id="monday" layoutX="258.0" layoutY="373.0" mnemonicParsing="false" text="Mon" />
+            <CheckBox fx:id="tuesday" layoutX="326.0" layoutY="373.0" mnemonicParsing="false" text="Tue" />
+            <CheckBox fx:id="wednesday" layoutX="384.0" layoutY="373.0" mnemonicParsing="false" text="Wed" />
+            <CheckBox fx:id="thuesday" layoutX="451.0" layoutY="373.0" mnemonicParsing="false" text="Thu" />
+            <CheckBox fx:id="friday" layoutX="512.0" layoutY="372.0" mnemonicParsing="false" text="Fri" />
+            <CheckBox fx:id="saturday" layoutX="563.0" layoutY="372.0" mnemonicParsing="false" text="Sat" />
+            <CheckBox fx:id="allCheckBox" layoutX="622.0" layoutY="372.0" mnemonicParsing="false" text="All" />
+            <Text fx:id="companyNameTxt" layoutX="201.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
    </children>

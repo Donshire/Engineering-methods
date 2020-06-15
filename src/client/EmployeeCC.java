@@ -109,6 +109,7 @@ public class EmployeeCC {
 	}
 	
 
+	
 	public static ArrayList<GasStationOrder> getAllstationOrders(int stationId, String status) {
 
 		ArrayList<Object> o = new ArrayList<Object>();
@@ -187,5 +188,15 @@ public class EmployeeCC {
 	public static boolean addNewSaleTemp(Sale sale) {
 		ClientUI.client.accept(new Message(sale,Commands.addNewSaleTemp));
 		return (boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static ArrayList<String> getFuelTypesByCompany(String companyName){
+		ClientUI.client.accept(new Message(companyName, Commands.getFuelTypesByCompany));
+		return(ArrayList<String>)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean checkIfUserNameExist(String userName) {
+		ClientUI.client.accept(new Message(userName, Commands.checkIfUserNameExist));
+		return(boolean)MyFuelClient.ServerRetObj;
 	}
 }

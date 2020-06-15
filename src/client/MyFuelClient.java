@@ -1,3 +1,5 @@
+
+  
 // This file contains material supporting section 3.7 of the textbook:
 // "Object Oriented Software Engineering" and is issued under the open-source
 // license found at www.lloseng.com 
@@ -36,30 +38,14 @@ public class MyFuelClient extends AbstractClient {
 
 			switch (message.getCmd()) {
 				case defaultRes:
-					if(message.getObj() instanceof Boolean)
-						ServerRetObj = message;
-					else ServerRetObj = message.getObj();
+					ServerRetObj = message.getObj();
 					break;
 				case NoElementFound:
-					if(message.getObj() instanceof Boolean)
-						ServerRetObj = message;
-					else ServerRetObj = message.getObj();
-					break;
-				case CustomerOrderListRes: // receive from server ArrayList<employee>
-					ServerRetObj = message.getObj();
-					break;
-				case CreateNewOrderRes:
-					ServerRetObj = message.getObj();
-					break;	
-				case MaxPriceRes:
 					ServerRetObj = message.getObj();
 					break;
 				case reciveFile:
 					MyFile myFile = (MyFile) message.getObj();
 					ServerRetObj = saveFile(myFile);
-					break;
-				case ThereIsNoSale:
-					ServerRetObj = Commands.ThereIsNoSale;
 					break;
 			}
 		}
@@ -116,5 +102,6 @@ public class MyFuelClient extends AbstractClient {
 		}
 		return null;
 	}
+	
 }
-//End of ChatClient class
+

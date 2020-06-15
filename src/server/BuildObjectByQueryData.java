@@ -23,6 +23,7 @@ public class BuildObjectByQueryData {
 
 	/**
 	 * build car object and closes res
+	 * 
 	 * @author iamme
 	 * @param res
 	 * @return
@@ -39,9 +40,10 @@ public class BuildObjectByQueryData {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * build Customer object and closes res
+	 * 
 	 * @param res
 	 * @return
 	 */
@@ -51,17 +53,19 @@ public class BuildObjectByQueryData {
 			while (res.next() == true)
 				customersList.add(new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),res.getString(15),res.getString(16)));
-				res.close();
+						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
+						res.getString(15), res.getString(16), res.getString(17), res.getString(18)));
+			res.close();
 			return customersList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * build PricingModule object and closes res
+	 * 
 	 * @author iamme
 	 * @param res
 	 * @return
@@ -71,16 +75,17 @@ public class BuildObjectByQueryData {
 		try {
 			while (res.next() == true)
 				purchaseModuleList.add(new PricingModule(res.getInt(1), res.getFloat(2)));
-				res.close();
+			res.close();
 			return purchaseModuleList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * build CustomerModule object and closes res
+	 * 
 	 * @author iamme
 	 * @param res
 	 * @return
@@ -89,65 +94,65 @@ public class BuildObjectByQueryData {
 		ArrayList<CustomerModule> customerModuleList = new ArrayList<CustomerModule>();
 		try {
 			while (res.next() == true)
-				customerModuleList.add(new CustomerModule(res.getString(1),
-						res.getInt(2), converStringToSet(res.getString(3)),
-						res.getString(4), res.getString(5)));
-				res.close();
+				customerModuleList.add(new CustomerModule(res.getString(1), res.getInt(2),
+						converStringToSet(res.getString(3)), res.getString(4), res.getString(5)));
+			res.close();
 			return customerModuleList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Convert String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW] 
+	 * Convert String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW]
+	 * 
 	 * @author iamme
 	 * @param companies
 	 * @return
 	 */
-	public static Set<String> converStringToSet (String str){
+	public static Set<String> converStringToSet(String str) {
 		Set<String> sets = new HashSet<String>();
-		String[] words=str.split(",");
-		for(int i=0;i<words.length;i++)
+		String[] words = str.split(",");
+		for (int i = 0; i < words.length; i++)
 			sets.add(words[i].toUpperCase());
 		return sets;
 	}
-	
+
 	/**
-	 * Build Pricing Model Rates according to res 
+	 * Build Pricing Model Rates according to res
+	 * 
 	 * @author iamme
 	 * @param res
-	 * @return arrayList of the object
-	 * there is three cases 1)ArrayList empty 2)ArrayList not empty 3)null in case of exeption
+	 * @return arrayList of the object there is three cases 1)ArrayList empty
+	 *         2)ArrayList not empty 3)null in case of exeption
 	 */
-	public static ArrayList<PricingModule> BuildPricingModelRates(ResultSet res){
+	public static ArrayList<PricingModule> BuildPricingModelRates(ResultSet res) {
 		ArrayList<PricingModule> pricingModelRatesList = new ArrayList<PricingModule>();
 		try {
 			while (res.next() == true)
-				pricingModelRatesList.add(new PricingModule(res.getInt(1), res.getFloat(2)
-						, res.getString(3), RatesStatus.valueOf(res.getString(4))));
-				res.close();
+				pricingModelRatesList.add(new PricingModule(res.getInt(1), res.getFloat(2), res.getString(3),
+						RatesStatus.valueOf(res.getString(4))));
+			res.close();
 			return pricingModelRatesList;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * @author iamme
 	 * @param res
 	 * @return
 	 */
-	public static ArrayList<Supplier> BuildSupplier(ResultSet res){
+	public static ArrayList<Supplier> BuildSupplier(ResultSet res) {
 		ArrayList<Supplier> supplierList = new ArrayList<Supplier>();
 		try {
 			while (res.next() == true)
-				supplierList.add(new Supplier(res.getString(1), res.getString(2),
-						res.getString(3), res.getString(4), res.getString(5),
-						res.getString(6), res.getString(8), res.getInt(9), res.getString(7)));
-				res.close();
+				supplierList.add(new Supplier(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getString(6), res.getString(8), res.getInt(9), res.getString(7)));
+			res.close();
 			return supplierList;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -157,45 +162,49 @@ public class BuildObjectByQueryData {
 
 	/**
 	 * Build GasStationOrder Object
+	 * 
 	 * @author iamme
 	 * @param res
 	 * @return
 	 */
-	public static ArrayList<GasStationOrder> BuildGasStationOrder(ResultSet res){
+	public static ArrayList<GasStationOrder> BuildGasStationOrder(ResultSet res) {
 		ArrayList<GasStationOrder> orders = new ArrayList<GasStationOrder>();
 		try {
 			while (res.next() == true)
-				orders.add(new GasStationOrder(res.getInt(1), res.getString(2), res.getInt(3),
-						res.getString(4), res.getString(5), res.getString(6), res.getString(7), res.getFloat(8)));
-				
-				res.close();
+				orders.add(new GasStationOrder(res.getInt(1), res.getString(2), res.getInt(3), res.getString(4),
+						res.getString(5), res.getString(6), res.getString(7), res.getFloat(8)));
+
+			res.close();
 			return orders;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Build Stationfuel object
-	 * it uses one of the two constructors according to the cunstructorType<br>
+	 * Build Stationfuel object it uses one of the two constructors according to the
+	 * cunstructorType<br>
 	 * if cunstructorType true uses the constructor without refrence objects<br>
 	 * uses the other constructor with refrence objects
+	 * 
 	 * @author iamme
 	 * @param res
 	 * @param cunstructorType
 	 * @return
 	 */
-	public static ArrayList<StationFuel> BuildStationfuel(ResultSet res,boolean cunstructorType){
+	public static ArrayList<StationFuel> BuildStationfuel(ResultSet res, boolean cunstructorType) {
 		ArrayList<StationFuel> stationFuel = new ArrayList<StationFuel>();
 		try {
-			if(cunstructorType)
-			while (res.next() == true)
-				stationFuel.add(new StationFuel(res.getString(2),
-						res.getInt(1), res.getFloat(3), res.getFloat(4), res.getInt(5)));
-				
-			else {};//the cunstructor with refrence objects
-				res.close();
+			if (cunstructorType)
+				while (res.next() == true)
+					stationFuel.add(new StationFuel(res.getString(2), res.getInt(1), res.getFloat(3), res.getFloat(4),
+							res.getInt(5)));
+
+			else {
+			}
+			;// the cunstructor with refrence objects
+			res.close();
 			return stationFuel;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -203,74 +212,76 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 
-	
 	/**
 	 * Build Employee object
+	 * 
 	 * @param res
 	 * @return
 	 */
-	public static ArrayList<Employee> BuildEmployee(ResultSet res){
+	public static ArrayList<Employee> BuildEmployee(ResultSet res) {
 		ArrayList<Employee> employees = new ArrayList<Employee>();
 		try {
 			while (res.next() == true)
 				employees.add(new Employee(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
 						res.getInt(10), res.getInt(11), res.getString(12)));
-				
-				res.close();
+
+			res.close();
 			return employees;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Build GasStation object
-	 * it uses one of the two constructors according to the cunstructorType<br>
+	 * Build GasStation object it uses one of the two constructors according to the
+	 * cunstructorType<br>
 	 * if cunstructorType true uses the constructor without refrence objects<br>
 	 * uses the other constructor with refrence objects
+	 * 
 	 * @param res
 	 * @param cunstructorType
 	 * @return
 	 */
-	public static ArrayList<GasStation> BuildGasStation(ResultSet res,boolean cunstructorType){
+	public static ArrayList<GasStation> BuildGasStation(ResultSet res, boolean cunstructorType) {
 		ArrayList<GasStation> gasStation = new ArrayList<GasStation>();
 		try {
-			if(cunstructorType)
-			while (res.next() == true)
-				gasStation.add(new GasStation(res.getString(1), res.getInt(2),
-						res.getString(3), res.getString(4), res.getInt(5)));
-				
-			else {};//the cunstructor with refrence objects
-				res.close();
+			if (cunstructorType)
+				while (res.next() == true)
+					gasStation.add(new GasStation(res.getString(1), res.getInt(2), res.getString(3), res.getString(4),
+							res.getInt(5)));
+
+			else {
+			}
+			;// the cunstructor with refrence objects
+			res.close();
 			return gasStation;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * build Sale object
+	 * 
 	 * @param res
 	 * @return
 	 */
-	public static ArrayList<Sale> BuildSale(ResultSet res){
+	public static ArrayList<Sale> BuildSale(ResultSet res) {
 		ArrayList<Sale> sales = new ArrayList<Sale>();
 		try {
 			while (res.next() == true)
-				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getString(10), res.getString(11)));
-				
-				res.close();
+
+				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(4), res.getString(5), res.getFloat(5),
+						res.getString(6), res.getString(7), res.getString(8), res.getString(9), res.getString(10)));
+			res.close();
 			return sales;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 }

@@ -16,10 +16,12 @@ public class Customer extends User implements Serializable {
 	private String visaNumber;
 	private String expDate;
 	private String CVV;
+	private String customerType;
+	private String companyName;
 
 	public Customer(String userName, String password, String firstName, String lastName, String mail, String id,
 			String phoneNumber, int online, String adress, int pricingModel, int customerTypeAnaleticRank,
-			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV) {
+			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV,String customerType, String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber, online);
 		this.adress = adress;
 		this.pricingModel = pricingModel;
@@ -29,6 +31,24 @@ public class Customer extends User implements Serializable {
 		this.visaNumber = visaNumber;
 		this.expDate = expDate;
 		this.CVV = CVV;
+		this.customerType = customerType;
+		this.companyName = companyName;
+	}
+
+	public String getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(String customerType) {
+		this.customerType = customerType;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public String getVisaNumber() {
@@ -87,12 +107,14 @@ public class Customer extends User implements Serializable {
 		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
 				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
 				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
-				+ "]";
+				+ ", customerType=" + customerType + ", companyName=" + companyName + "]";
 	}
 
 	public int getFuelingHourAnaleticRank() {

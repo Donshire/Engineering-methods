@@ -67,6 +67,7 @@ public class LogInController {
 			}
 		}
 	}
+	
 
 	@FXML
 	void login(ActionEvent event) {
@@ -92,6 +93,13 @@ public class LogInController {
 				ClientUI.user = obj;
 				Employee employee = (Employee) obj;
 				try {
+					System.out.println(employee.getRole().toLowerCase());
+					if(employee.getRole().toLowerCase().compareTo("marketing employee")==0) {
+						System.out.println("marketing employee");
+						MarketingEmployeeController.markem = (Employee) obj;
+						MarketingEmployeeController aFrame = new MarketingEmployeeController();
+						aFrame.start(ClientUI.mainStage);
+					}
 					switch (employee.getRole().toLowerCase()) {
 					case "marketing manager":
 						MarketingManagerController marketingManager = new MarketingManagerController();
@@ -110,9 +118,11 @@ public class LogInController {
 						stationManager.start(ClientUI.mainStage);
 						break;
 
-					case "markitig employee":
-						// still un-emplemented
-						System.out.println("still un-emplemented");
+					case "marketig employee":
+						System.out.println("marketing employee");
+						MarketingEmployeeController.markem = (Employee) obj;
+						MarketingEmployeeController aFrame = new MarketingEmployeeController();
+						aFrame.start(ClientUI.mainStage);
 						break;
 					}
 

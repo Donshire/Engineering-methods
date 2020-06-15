@@ -2,6 +2,7 @@
 package Entity;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import enums.SaleStatus;
 import helpinigStructForGUI.CheckBoxImplementation;
@@ -17,7 +18,6 @@ public class Sale extends CheckBoxImplementation implements Serializable{
 	private SaleStatus status;
 	private String companyName;
 	private String fuelType;
-	private String purchaseModule;
 	private float salePercent;
 	private String startTime;
 	private String endTime;
@@ -26,13 +26,12 @@ public class Sale extends CheckBoxImplementation implements Serializable{
 	private String saleDays;
 
 private Boolean select;
-	public Sale(Integer saleID, String status, String companyName, String fuelType, String purchaseModule,
+	public Sale(Integer saleID, String status, String companyName, String fuelType,
 			float salePercent, String startTime, String endTime, String startDate, String endDate, String saleDays) {
 		this.saleID = saleID;
 		this.status = SaleStatus.valueOf(status);
 		this.companyName = companyName;
 		this.fuelType = fuelType;
-		this.purchaseModule = purchaseModule;
 		this.salePercent = salePercent;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -75,13 +74,6 @@ private Boolean select;
 		this.fuelType = fuelType;
 	}
 
-	public String getPurchaseModule() {
-		return purchaseModule;
-	}
-
-	public void setPurchaseModule(String purchaseModule) {
-		this.purchaseModule = purchaseModule;
-	}
 
 	public float getSalePercent() {
 		return salePercent;
@@ -135,7 +127,7 @@ private Boolean select;
 	@Override
 	public String toString() {
 		return "Sale [saleID=" + saleID + ", status=" + status + ", companyName=" + companyName + ", fuelType="
-				+ fuelType + ", purchaseModule=" + purchaseModule + ", salePercent=" + salePercent + ", startTime="
+				+ fuelType + ", salePercent=" + salePercent + ", startTime="
 				+ startTime + ", endTime=" + endTime + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", saleDays=" + saleDays + ", select=" + select + "]";
 	}

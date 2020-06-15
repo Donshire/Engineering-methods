@@ -52,7 +52,7 @@ public class SendMail implements Runnable{
 //	          message.setRecipients(Message.RecipientType.TO,
 //	                  InternetAddress.parse(mail));
 	          message.setRecipients(Message.RecipientType.TO,
-	                  InternetAddress.parse("iamme0ssa@gmail.com"));
+	                  InternetAddress.parse(mail));
 	          message.setSubject(messageHeader);
 	          message.setText(messageContent);
 	          

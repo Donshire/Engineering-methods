@@ -1,29 +1,31 @@
 package boundery;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import com.sun.deploy.uitoolkit.impl.fx.ui.FXConsole;
+import com.sun.javafx.binding.StringFormatter;
 
 import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
-import Entity.GasStationOrder;
 import Entity.Sale;
-import Entity.Supplier;
 import client.ClientUI;
 import client.EmployeeCC;
-import client.SupplierCC;
 import client.UserCC;
+import enums.CustomerTypes;
 import enums.PricingModel;
 import enums.PurchaseModel;
 import enums.SaleStatus;
-import enums.SupplierOrderStatus;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -39,6 +41,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -48,6 +51,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -99,6 +104,9 @@ public class MarketingEmployeeController implements Initializable {
 
 	@FXML
 	private Button RegistrationFinishBtn;
+
+	@FXML
+	private Label addressMsg;
 
 	@FXML
 	private TextField IDTxt;
@@ -311,22 +319,25 @@ public class MarketingEmployeeController implements Initializable {
 	private Pane createNewSalePane;
 
 	@FXML
+	private Label customerTypeLbl;
+
+	@FXML
+	private ComboBox<CustomerTypes> customerTypeCombox;
+
+	@FXML
+	private Label customercompanyNameLbl;
+
+	@FXML
+	private TextField customercompanyNameTxt;
+
+	@FXML
 	private Label newSaleLbl;
 
 	@FXML
 	private Label companyNameLbl;
 
 	@FXML
-	private TextField companyNameTxt;
-
-	@FXML
 	private Label FuelTypeLbl;
-
-	@FXML
-	private Label salePurchaseLbl;
-
-	@FXML
-	private ChoiceBox<PurchaseModel> salePurchaseCombox;
 
 	@FXML
 	private Label salePercentsLbl;
@@ -355,41 +366,86 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private Label endDateLbl;
 
-    @FXML
-    private DatePicker startDatePicker;
+	@FXML
+	private DatePicker startDatePicker;
 
-    @FXML
-    private DatePicker endDatePicker;
-	
+	@FXML
+	private DatePicker endDatePicker;
+
 	@FXML
 	private Label daysLbl;
 
-    @FXML
-    private CheckBox sunday;
+	@FXML
+	private CheckBox sunday;
 
-    @FXML
-    private CheckBox monday;
+	@FXML
+	private CheckBox monday;
 
-    @FXML
-    private CheckBox tuesday;
+	@FXML
+	private CheckBox tuesday;
 
-    @FXML
-    private CheckBox wednesday;
+	@FXML
+	private CheckBox wednesday;
 
-    @FXML
-    private CheckBox thuesday;
+	@FXML
+	private CheckBox thuesday;
 
-    @FXML
-    private CheckBox friday;
+	@FXML
+	private CheckBox friday;
 
-    @FXML
-    private CheckBox saturday;
+	@FXML
+	private CheckBox saturday;
+
+	@FXML
+	private CheckBox allCheckBox;
+
+	@FXML
+	private ImageView CVVImage1;
+
+	@FXML
+	private Label dividExpDateLbl;
+
+	@FXML
+	private Label upAddressNoLbl;
+
+	@FXML
+	private TextField upAdrdressNoTxt;
+
+	@FXML
+	private Label chExpFormatLbl;
+
+	@FXML
+	private Label dividExpDate1;
+
+	@FXML
+	private TextField expChangeYearTxt;
+
+	@FXML
+	private TextField expChangeMonthTxt;
+
+	@FXML
+	private TextField ExpDateYearTxt;
+
+	@FXML
+	private TextField ExpDateMonthTxt;
+
+	@FXML
+	private ImageView helpImage1;
 
 	@FXML
 	private Button saveSaleBtn;
 
 	@FXML
+	private TextField addressNoTxt;
+
+	@FXML
+	private Label addressNoLbl;
+
+	@FXML
 	private Button deleteSaleBtn;
+
+	@FXML
+	private Label dateFormatLbl;
 
 	@FXML
 	private Button salesBtn;
@@ -397,11 +453,28 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private Button createSaleBtn;
 
+	@FXML
+	private ImageView CVVImage;
+
+	@FXML
+	private Text companyNameTxt;
+
+	@FXML
+	private ImageView helpImage;
+
+	@FXML
+	private Button helpCVVBtn;
+
+	@FXML
+	private ComboBox<String> fuelTypesForSaleCombox;
+
 	private Pane currentPane;
 	public static Employee markem;
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
+	private ArrayList<String> fuelTypesForSale = new ArrayList<String>();
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
@@ -440,13 +513,29 @@ public class MarketingEmployeeController implements Initializable {
 	// switch to registration pane
 	@FXML
 	void openNewClientPane(ActionEvent event) {
+		customercompanyNameLbl.setVisible(false);
+		customercompanyNameTxt.setVisible(false);
+		CVVImage.setVisible(false);
+		CVVImage1.setVisible(false);
 		switchPanes(NewClientPane);
+	}
+
+	@FXML
+	void openCVVImgae(MouseEvent event) {
+		CVVImage.setVisible(true);
+	}
+
+	@FXML
+	void openCVVImgae1(MouseEvent event) {
+		CVVImage1.setVisible(true);
 	}
 
 	// switch to creating new sale pane
 	@FXML
 	void openNewSalePane(ActionEvent event) {
 		switchPanes(createNewSalePane);
+		String company = markem.getCompanyName();
+		companyNameTxt.setText(company);
 	}
 
 	// switch to customers pane - for detail update
@@ -461,7 +550,10 @@ public class MarketingEmployeeController implements Initializable {
 		upCreditCardLbl.setVisible(false);
 		CCNChangeTxt.setVisible(false);
 		upExpDateLbl.setVisible(false);
-		expChangeTxt.setVisible(false);
+		expChangeMonthTxt.setVisible(false);
+		dividExpDate1.setVisible(false);
+		chExpFormatLbl.setVisible(false);
+		expChangeYearTxt.setVisible(false);
 		upCVVLbl.setVisible(false);
 		CVVChangeTxt.setVisible(false);
 		upPhoneLbl.setVisible(false);
@@ -469,6 +561,11 @@ public class MarketingEmployeeController implements Initializable {
 		upAddressLbl.setVisible(false);
 		addressChangeTxt.setVisible(false);
 		changeHeader.setVisible(false);
+		helpImage1.setVisible(false);
+		CVVImage1.setVisible(false);
+		upAddressNoLbl.setVisible(false);
+		upAdrdressNoTxt.setVisible(false);
+		addressMsg.setVisible(false);
 		switchPanes(updateCustomerPane);
 
 	}
@@ -493,8 +590,10 @@ public class MarketingEmployeeController implements Initializable {
 	// initializing the scene
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		markem = (Employee) ClientUI.user;
+		System.out.println("employee:  " + markem);
 		fuelTypes.add("95");
-		fuelTypes.add("98");
+		fuelTypes.add("MOTOR CYCLES");
 		fuelTypes.add("Solar");
 		// loading the main window data
 		System.out.println("hello");
@@ -515,41 +614,143 @@ public class MarketingEmployeeController implements Initializable {
 
 		ObservableList<PurchaseModel> purchase = FXCollections.observableArrayList(PurchaseModel.values());
 		purchaseModelCombox.setItems(purchase);
-		salePurchaseCombox.setItems(purchase);
 
 		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
 		FuelTypeCombox.setItems(fuelType);
 
+		ObservableList<CustomerTypes> customerTypes = FXCollections.observableArrayList(CustomerTypes.values());
+		customerTypeCombox.setItems(customerTypes);
 
-	}
+		System.out.println("companyy  : " + markem.getCompanyName());
+		fuelTypesForSale = EmployeeCC.getFuelTypesByCompany(markem.getCompanyName());
+		ObservableList<String> fuelTypeForSale = FXCollections.observableArrayList(fuelTypesForSale);
+		fuelTypesForSaleCombox.setItems(fuelTypeForSale);
+		
+		Callback<DatePicker, DateCell> datePicker = new Callback<DatePicker, DateCell>() {
+		            @Override
+		            public DateCell call( DatePicker param) {
+		                return new DateCell() {
+		                    @Override
+		                    public void updateItem(LocalDate item, boolean empty) {
+		                        super.updateItem(item, empty); 
+		                        LocalDate today = LocalDate.now();
+		                        setDisable(empty || item.compareTo(today) < 0);
+		                    }
+
+		                };
+		            }
+
+		        };
+		        startDatePicker.setDayCellFactory(datePicker);
+		        endDatePicker.setDayCellFactory(datePicker);
+		 }
+		 
+	
 
 	// this method is for new client registration
 	@FXML
 	void registration(ActionEvent event) {
 		int res;
-		String firstName, lastName, mail, id, phoneNumber, address, userName, password, creditCardNo, expDate, CVV;
+		boolean flag = false;
+		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: \n");
+		StringBuilder expDate = new StringBuilder();
+		StringBuilder fullAddress = new StringBuilder();
+		CustomerTypes cusType;
+		String firstName, lastName, mail, id, phoneNumber, address, addressNo, userName, password, creditCardNo,
+				expDateMon, expDateYear, CVV, companyName = null;
 		id = IDTxt.getText();
 		firstName = FirstNameTxt.getText();
 		lastName = LastNameTxt.getText();
 		mail = EmailTxt.getText();
 		phoneNumber = PhoneTxt.getText();
 		address = AddressTXt.getText();
+		addressNo = addressNoTxt.getText();
 		userName = UserNameTxt.getText();
 		password = PasswordTxt.getText();
 		creditCardNo = CreditCardTxt.getText();
-		expDate = ExpDateTxt.getText();
+		expDateMon = ExpDateMonthTxt.getText();
+		expDateYear = ExpDateYearTxt.getText();
+		expDate.append(expDateMon);
+		expDate.append("/");
+		expDate.append(expDateYear);
 		CVV = CVVTxt.getText();
+
+		cusType = (CustomerTypes) customerTypeCombox.getValue();
+		if (cusType.equals(CustomerTypes.Company)) {
+			companyName = customercompanyNameTxt.getText();
+			if (companyName.isEmpty())
+				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
+		}
 		// check that all the data was entered
 		if (id.isEmpty() == true || firstName.isEmpty() == true || lastName.isEmpty() == true || mail.isEmpty() == true
 				|| phoneNumber.isEmpty() == true || address.isEmpty() == true || userName.isEmpty() == true
-				|| password.isEmpty() == true || creditCardNo.isEmpty() == true || expDate.isEmpty() == true
-				|| CVV.isEmpty() == true)
+				|| password.isEmpty() == true || creditCardNo.isEmpty() == true || expDateMon.isEmpty() == true
+				|| expDateYear.isEmpty() == true || CVV.isEmpty() == true || addressNo.isEmpty() == true) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
+		}
+
+		if (!testId(id)) {
+			inputMsg.append("ID, " + "\n");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(firstName)) {
+			inputMsg.append("first name, " + "\n");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(lastName)) {
+			inputMsg.append("last name, " + "\n");
+			flag = true;
+		}
+		if (!testPhone(phoneNumber)) {
+			inputMsg.append("phone, " + "\n");
+			flag = true;
+		}
+		if (!mail.matches(EMAIL_REGEX)) {
+			inputMsg.append("mail, " + "\n");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(address)) {
+			inputMsg.append("address, " + "\n");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyNumbers(addressNo)) {
+			inputMsg.append("address no, " + "\n");
+			flag = true;
+		}
+		if (!testCreditCard(creditCardNo)) {
+			inputMsg.append("credit card no, " + "\n");
+			flag = true;
+		}
+		if (!testDateOfExp(expDateMon, expDateYear)) {
+			inputMsg.append("Exp Date, " + "\n");
+			flag = true;
+		}
+		if (!testCVV(CVV)) {
+			inputMsg.append("CVV, " + "\n");
+			flag = true;
+		}
+		if (checkIfUserNameExist(userName)) {
+			inputMsg.append("user name already exist!, " + "\n");
+			flag = true;
+		}
+		if (flag) {
+			inputMsg.delete(inputMsg.length() - 3, inputMsg.length() - 2);
+			JOptionPane.showMessageDialog(null, inputMsg.toString());
+			return;
+		}
 
 		// creating new Customer object and sending to server
 		else {
-			Customer customer = new Customer(userName, password, firstName, lastName, mail, id, phoneNumber, 0, address,
-					0, 0, 0, 0, creditCardNo, expDate, CVV);
+			fullAddress.append(address);
+			fullAddress.append(" ");
+			fullAddress.append(addressNo);
+			Customer customer = new Customer(userName, password, firstName, lastName, mail, id, phoneNumber, 0,
+					fullAddress.toString(), 0, 0, 0, 0, creditCardNo, expDate.toString(), CVV, cusType.toString(),
+					companyName);
+
 			System.out.println(customer);
 			res = EmployeeCC.checkIfExist(customer.getId());
 			if (res == 1) {
@@ -565,6 +766,19 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
+	@FXML
+	void openCompany(ActionEvent event) {
+		CustomerTypes type = customerTypeCombox.getValue();
+		if (type.equals(CustomerTypes.Company)) {
+			customercompanyNameLbl.setVisible(true);
+			customercompanyNameTxt.setVisible(true);
+		}
+		if (type.equals(CustomerTypes.Private)) {
+			customercompanyNameLbl.setVisible(false);
+			customercompanyNameTxt.setVisible(false);
+		}
+	}
+
 	// this method is to find if a specific customer exist in the system
 	@FXML
 	void uploadCustomer(ActionEvent event) {
@@ -572,8 +786,8 @@ public class MarketingEmployeeController implements Initializable {
 		id = carAndModelIDTxt.getText();
 		int res;
 		Customer customer;
-		if (id.isEmpty())
-			JOptionPane.showMessageDialog(null, "Please enter id");
+		if (id.isEmpty() || !testId(id))
+			JOptionPane.showMessageDialog(null, "ID is empty or incorrect, Please enter id");
 		else {
 			// sending the customer id to server to check if exist
 			res = EmployeeCC.checkIfExist(id);
@@ -608,6 +822,15 @@ public class MarketingEmployeeController implements Initializable {
 		pricingM = pricingModelCombox.getValue();
 		System.out.println(" 1 " + pricingM);
 		purchaseM = purchaseModelCombox.getValue();
+		if (id.isEmpty() == true || carNumber.isEmpty() == true || fuelType.isEmpty() == true
+				|| pricingM.toString().isEmpty() == true || purchaseM.toString().isEmpty() == true) {
+			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
+		}
+		if (!testCar(carNumber)) {
+			JOptionPane.showMessageDialog(null, "car number is not in the correct format");
+			return;
+		}
 		// adding the car
 		Car car = new Car(carNumber, fuelType, id);
 		if (EmployeeCC.addNewCar(car)) {
@@ -629,8 +852,11 @@ public class MarketingEmployeeController implements Initializable {
 	void showCustomeDetails(ActionEvent event) {
 		String id = UpdateIdTxt.getText();
 		Customer customer;
+		String expDate, expMon, expYear;
 		if (id.isEmpty())
 			JOptionPane.showMessageDialog(null, "Please enter id");
+		if (EmployeeCC.checkIfExist(id) == 0)
+			JOptionPane.showMessageDialog(null, "User Id doesn't exist");
 		else {
 			customer = EmployeeCC.getCustomerDetails(id);
 			if (customer.equals(null))
@@ -640,11 +866,16 @@ public class MarketingEmployeeController implements Initializable {
 				lastNameChangeTxt.setText(customer.getLastName());
 				emailChangTxt.setText(customer.getMail());
 				CCNChangeTxt.setText(customer.getVisaNumber());
-				expChangeTxt.setText(customer.getExpDate());
+				expDate = customer.getExpDate();
+				expChangeMonthTxt.setText(expDate.substring(0, 2).toString());
+				expChangeYearTxt.setText(expDate.substring(3, 7).toString());
 				CVVChangeTxt.setText(customer.getCVV());
 				phoneChangeTxt.setText(customer.getPhoneNumber());
-				addressChangeTxt.setText(customer.getAdress());
-
+				addressChangeTxt.setText(customer.getAdress().replaceAll("\\d",""));
+				upAdrdressNoTxt.setText(customer.getAdress().replaceAll("[^0-9]", ""));
+				
+				
+			
 				upFirstNameLbl.setVisible(true);
 				firstNameChangetxt.setVisible(true);
 				upLasttNameLbl.setVisible(true);
@@ -654,7 +885,10 @@ public class MarketingEmployeeController implements Initializable {
 				upCreditCardLbl.setVisible(true);
 				CCNChangeTxt.setVisible(true);
 				upExpDateLbl.setVisible(true);
-				expChangeTxt.setVisible(true);
+				expChangeMonthTxt.setVisible(true);
+				dividExpDate1.setVisible(true);
+				chExpFormatLbl.setVisible(true);
+				expChangeYearTxt.setVisible(true);
 				upCVVLbl.setVisible(true);
 				CVVChangeTxt.setVisible(true);
 				upPhoneLbl.setVisible(true);
@@ -662,6 +896,10 @@ public class MarketingEmployeeController implements Initializable {
 				upAddressLbl.setVisible(true);
 				addressChangeTxt.setVisible(true);
 				changeHeader.setVisible(true);
+				helpImage1.setVisible(true);
+				upAddressNoLbl.setVisible(true);
+				upAdrdressNoTxt.setVisible(true);
+				addressMsg.setVisible(true);
 
 			}
 
@@ -672,28 +910,96 @@ public class MarketingEmployeeController implements Initializable {
 	// this method is for updating customers details
 	@FXML
 	void changeCustomerDetails(ActionEvent event) {
+		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		ArrayList<String> upCustomer = new ArrayList<String>();
-		String chFirst, chLast, chEmail, chCreditNo, chExpDate, chCvv, chPhone, chAddress, chId;
+		String chFirst, chLast, chEmail, chCreditNo, chExpDate, chCvv, chPhone, chAddress, chId, chAddressNo;
+		StringBuilder fullAddress = new StringBuilder();
+		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: ");
+		StringBuilder expDate = new StringBuilder();
+		boolean flag = false;
 		// get all the data that the user entered
 		chFirst = firstNameChangetxt.getText();
 		chLast = lastNameChangeTxt.getText();
 		chEmail = emailChangTxt.getText();
 		chCreditNo = CCNChangeTxt.getText();
-		chExpDate = expChangeTxt.getText();
+		String expDateMon = expChangeMonthTxt.getText();
+		String expDateYear = expChangeYearTxt.getText();
+		expDate.append(expDateMon);
+		expDate.append("/");
+		expDate.append(expDateYear);
 		chCvv = CVVChangeTxt.getText();
 		chPhone = phoneChangeTxt.getText();
 		chAddress = addressChangeTxt.getText();
+		chAddressNo = upAdrdressNoTxt.getText();
+		System.out.println("no: " + chAddressNo);
 		chId = UpdateIdTxt.getText();
+
+		if (chFirst.isEmpty() == true || chLast.isEmpty() == true || chEmail.isEmpty() == true
+				|| chCreditNo.isEmpty() == true || expDateMon.isEmpty() == true || expDateYear.isEmpty() == true
+				|| chCvv.isEmpty() == true || chPhone.isEmpty() == true || chAddress.isEmpty() == true
+				|| chId.isEmpty() == true) {
+			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
+		}
+		if (!testId(chId)) {
+			inputMsg.append("ID, ");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(chFirst)) {
+			inputMsg.append("first name, ");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(chLast)) {
+			inputMsg.append("last name, ");
+			flag = true;
+		}
+		if (!testPhone(chPhone)) {
+			inputMsg.append("phone, ");
+			flag = true;
+		}
+		if (!chEmail.matches(EMAIL_REGEX)) {
+			inputMsg.append("mail, ");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyCharacter(chAddress)) {
+			inputMsg.append("address, " + "\n");
+			flag = true;
+		}
+		if (!checkIfStringContainsOnlyNumbers(chAddressNo)) {
+			inputMsg.append("address no, " + "\n");
+			flag = true;
+		}
+
+		if (!testCreditCard(chCreditNo)) {
+			inputMsg.append("credit card no, ");
+			flag = true;
+		}
+		if (!testDateOfExp(expDateMon, expDateYear)) {
+			inputMsg.append("Exp Date, " + "\n");
+			flag = true;
+		}
+		if (!testCVV(chCvv)) {
+			inputMsg.append("CVV, ");
+			flag = true;
+		}
+		if (flag) {
+			inputMsg.delete(inputMsg.length() - 3, inputMsg.length() - 2);
+			JOptionPane.showMessageDialog(null, inputMsg.toString());
+			return;
+		}
+		fullAddress.append(chAddress);
+		fullAddress.append(" ");
+		fullAddress.append(chAddressNo);
 
 		upCustomer.add(chId);
 		upCustomer.add(chFirst);
 		upCustomer.add(chLast);
 		upCustomer.add(chEmail);
 		upCustomer.add(chCreditNo);
-		upCustomer.add(chExpDate);
+		upCustomer.add(expDate.toString());
 		upCustomer.add(chCvv);
 		upCustomer.add(chPhone);
-		upCustomer.add(chAddress);
+		upCustomer.add(fullAddress.toString());
 		// send the data to the server for update
 		if (EmployeeCC.updateCustomerDetails(upCustomer))
 			JOptionPane.showMessageDialog(null, "Updated customer successfully!");
@@ -701,8 +1007,8 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error ! could not update customer, try again");
 	}
 
-	
-	// this method is for uploading all the sales templates that exist in the DB to the gui table
+	// this method is for uploading all the sales templates that exist in the DB to
+	// the gui table
 	@FXML
 	void uploadSalesToTable() {
 		// checkBox initializing
@@ -738,14 +1044,11 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		});
 
-	 
-		
 		// column define
 		SaleIDColumn.setCellValueFactory(new PropertyValueFactory<Sale, Integer>("saleID"));
 		statusColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("status"));
 		companyColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("companyName"));
 		fuelTypeColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("fuelType"));
-		purchaseMoColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("purchaseModule"));
 		salePrecentColumn.setCellValueFactory(new PropertyValueFactory<Sale, Float>("salePercent"));
 		startTColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("startTime"));
 		endTColumn.setCellValueFactory(new PropertyValueFactory<Sale, String>("endTime"));
@@ -773,51 +1076,177 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error! sales could not be deleted, try again");
 	}
 
-	
 	// this method if for creating new sale in DB
 	@FXML
-	void createNewSale(ActionEvent event) {
-		String compantName, fuelType, startTime, endTime, startDate, endDate, purchaseNum = null;
-		PurchaseModel purchaseM;
-		Time time;
+	void createNewSale(ActionEvent event) throws ParseException {
+		String compantName, fuelType, startTime, endTime, startDate, endDate;
+		String TIME_REGEX = "(([0-9]{2}):([0-9]{2}))";
+		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: " + "\n");
+		boolean flag = false;
 		float percent;
-
-		compantName = companyNameTxt.getText();
-
-		fuelType = fuelTypeTxt.getText();
+		// compantName = companyNameTxt.getText();
 		startTime = startTimeTxt.getText();
 		endTime = endTimeTxt.getText();
-		if(startDatePicker.getValue()==null||endDatePicker.getValue()==null) {
+		fuelType = fuelTypesForSaleCombox.getValue();
+		// startTime = startTimeTxt.getText();
+		// endTime = endTimeTxt.getText();
+		if (startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
 			JOptionPane.showMessageDialog(null, "please select dates");
 			return;
 		}
-		startDate = formatter.format(startDatePicker.getValue());
-		endDate = formatter.format(endDatePicker.getValue());
-
-		purchaseM = salePurchaseCombox.getValue();
+		
+		startDate = dateFormatter.format(startDatePicker.getValue());
+		endDate = dateFormatter.format(endDatePicker.getValue());
+		if (!checkIfStringContainsOnlyNumbersInFloatType(salePercentTxt.getText())) {
+			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: xx.xx");
+			return;
+		}
+		if(!startTime.matches(TIME_REGEX)) {
+			JOptionPane.showMessageDialog(null, "You need to enter time in the following format: \n HH:mm");
+			return;
+		}
+		if(!testTime(startTime)){
+			inputMsg.append("start time"+ "\n");
+			flag = true;
+		}
+		if(!testTime(endTime)) {
+			inputMsg.append("end time");
+			flag = true;
+		}
+		if (flag) {
+			JOptionPane.showMessageDialog(null, inputMsg.toString());
+			return;
+		}
 		percent = Float.parseFloat(salePercentTxt.getText());
 
-		switch (purchaseM) {
-		case Casualfueling:
-			purchaseNum = "1";
-			break;
-		case MonthlysubscriptioOneCar:
-			purchaseNum = "2";
-			break;
-		case Monthlysubscriptio2OrMoreCars:
-			purchaseNum = "3";
-			break;
-		case FullMonthlysubscription:
-			purchaseNum = "4";
-			break;
+		if (startDate.isEmpty() || endDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || fuelType.isEmpty()
+				|| salePercentTxt.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
 		}
-//		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), compantName, fuelType, purchaseNum, percent,
-//				startTime, endTime, startDate, endDate, days.toString());
-//		if (EmployeeCC.addNewSaleTemp(newSale))
-//			JOptionPane.showMessageDialog(null, "Sale added successfully!");
-//		else
-//			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 
+		StringBuilder days = new StringBuilder();
+
+		if (sunday.isSelected())
+			days.append("Sunday ");
+		if (monday.isSelected())
+			days.append("Monday ");
+		if (tuesday.isSelected())
+			days.append("Tuesday ");
+		if (wednesday.isSelected())
+			days.append("Wednesday ");
+		if (thuesday.isSelected())
+			days.append("Thuesday ");
+		if (friday.isSelected())
+			days.append("Friday ");
+		if (saturday.isSelected())
+			days.append("Saturday ");
+		if (allCheckBox.isSelected()) {
+			days.delete(0, days.length());
+			days.append("All");
+		}
+		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), markem.getCompanyName(), fuelType, percent,
+				startTime, endTime, startDate, endDate, days.toString());
+		if (EmployeeCC.addNewSaleTemp(newSale))
+			JOptionPane.showMessageDialog(null, "Sale added successfully!");
+		else
+			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 	}
-}
 
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////// INPUTTESTS///////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	public static boolean checkIfStringContainsOnlyNumbersInFloatType(String str) {
+		boolean flag = true;
+		for (int i = 0; i < str.length(); i++) {
+			if (!Character.isDigit(str.charAt(i))) {
+				if (str.charAt(i) == '.') {
+					flag = true;
+					continue;
+				}
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
+
+	public static boolean checkIfStringContainsOnlyNumbers(String str) {
+		boolean flag = true;
+		for (int i = 0; i < str.length(); i++) {
+			if (!Character.isDigit(str.charAt(i))) {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
+
+	public static boolean testId(String str) {
+		if ((str.length() == 9) && (checkIfStringContainsOnlyNumbers(str)))
+			return true;
+		return false;
+	}
+
+	public static boolean checkIfStringContainsOnlyCharacter(String str) {
+		boolean flag = true;
+		for (int i = 0; i < str.length(); i++) {
+			if (!Character.isLetter(str.charAt(i))) {
+				if (str.charAt(i) == ' ')
+					continue;
+				flag = false;
+				break;
+			}
+		}
+		return flag;
+	}
+
+	public static boolean testPhone(String str) {
+		if ((str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
+			return true;
+		return false;
+	}
+
+	public static boolean testCar(String str) {
+		if ((str.length() == 7 || str.length() == 8) && (checkIfStringContainsOnlyNumbers(str)))
+			return true;
+		return false;
+	}
+
+	public static boolean testCreditCard(String str) {
+		if ((str.length() == 16 || str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
+			return true;
+		return false;
+	}
+
+	public static boolean testCVV(String str) {
+		if ((str.length() == 3) && (checkIfStringContainsOnlyNumbers(str)))
+			return true;
+		return false;
+	}
+
+	public static boolean checkIfUserNameExist(String userName) {
+		return EmployeeCC.checkIfUserNameExist(userName);
+	}
+
+	public static boolean testDateOfExp(String month, String year) {
+		if ((!checkIfStringContainsOnlyNumbers(month)) || (!checkIfStringContainsOnlyNumbers(year)))
+			return false;
+		if ((Integer.parseInt(month) < 1) || (Integer.parseInt(month) > 12))
+			return false;
+		if (Integer.parseInt(year) < 2020)
+			return false;
+		return true;
+	}
+	
+	public static boolean testTime(String time) {
+		if(Integer.parseInt(time.substring(0, 2)) > 23 ||Integer.parseInt(time.substring(0, 2))<0 )
+			return false;
+		System.out.println(Integer.parseInt(time.substring(3, 4)));
+		if(Integer.parseInt(time.substring(3, 5)) > 59 ||Integer.parseInt(time.substring(3, 5))<0 )
+			return false;
+		return true;
+	}
+
+}

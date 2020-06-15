@@ -219,6 +219,7 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
 		// logics
@@ -330,9 +331,10 @@ public class MarketingManagerController implements Initializable {
 		String saleType = salesTypeCombo.getValue().toString();
 		// call the server to get the sales data
 		ObservableList<Sale> data = FXCollections.observableArrayList(EmployeeCC.getCompanySalesByStatus(
-				new Sale(0, saleType, markitingManager.getCompanyName(), null, null, 0, null, null, null, null, null)));		
+				new Sale(0, saleType, markitingManager.getCompanyName(), null, 0, null, null, null, null, null)));		
 
 		// Fill the table
+		
 		salesDetailsTable.getItems().setAll(data);
 
 		// empety the selected row
@@ -621,7 +623,6 @@ public class MarketingManagerController implements Initializable {
 			statusSaleDAta.setText(SaleStatus.not_Activated.toString());
 		CompanyNameSaleDAta.setText(sale.getCompanyName());
 		fuelTypeSaleDAta.setText(sale.getFuelType());
-		purchaseModuleSaleDAta.setText(sale.getPurchaseModule());
 		salePercentSaleDAta.setText(Float.toString(sale.getSalePercent()));
 		startTimeSaleDAta.setText(sale.getStartTime());
 		endTimeSaleDAta.setText(sale.getEndTime());
