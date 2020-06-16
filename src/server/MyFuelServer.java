@@ -499,6 +499,11 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case GetStationInventory:
+			ArrayList<Object> array2 = (ArrayList<Object>) message.getObj();
+			sendToClientObject(GasStationControllerServer.getStationFuelQuantity((int)array2.get(0),(String)array2.get(1)), client);
+			break;
 		    
 		default:
 			System.out.println("default");
