@@ -88,18 +88,9 @@ public class LogInController {
 				switchWindows("CustomerGUI.fxml");
 				//
 			} else if (obj instanceof Employee) {
-				System.out.println("employee");
-				ClientUI.user = obj;
 				Employee employee = (Employee) obj;
-				try {
-					System.out.println(employee.getRole().toLowerCase());
-					if(employee.getRole().toLowerCase().compareTo("marketing employee")==0) {
-						System.out.println("marketing employee");
-						MarketingEmployeeController.markem = (Employee) obj;
-						MarketingEmployeeController aFrame = new MarketingEmployeeController();
-						aFrame.start(ClientUI.mainStage);
-					}
-					switch (employee.getRole().toLowerCase()) {
+				System.out.println("the employee detail:"+employee);
+				switch (employee.getRole().toLowerCase()) {
 					case "marketing manager":
 						MarketingManagerController.markitingManager = employee;
 						//
@@ -121,16 +112,12 @@ public class LogInController {
 						break;
 						
 					case "markitig employee":
-						MarketingEmployeeController.markem=(Employee) obj;
+						MarketingEmployeeController.markem=employee;
 						//
 						MasterGUIController.getMasterGUIController().
 						switchWindows("MarketingEmployee.fxml");
 						break;
 					}
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
 
 			else if (obj instanceof Supplier) {
@@ -141,8 +128,7 @@ public class LogInController {
 				switchWindows("SupplierBoundary.fxml");
 				//
 			}
-			else if (obj == null)
-				JOptionPane.showMessageDialog(null, "not exist");
+			else if (obj == null) JOptionPane.showMessageDialog(null, "not exist");
 			else if (obj.equals(Commands.UserAlreadyConnected))
 				JOptionPane.showMessageDialog(null, "already online");
 		}

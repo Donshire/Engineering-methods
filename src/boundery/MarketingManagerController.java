@@ -673,7 +673,6 @@ public class MarketingManagerController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
 		System.out.println("hello");
-		markitingManager = (Employee) ClientUI.user;
 		// if agreed we can use a file to load and save the nofitications
 
 		helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " + markitingManager.getLastName());

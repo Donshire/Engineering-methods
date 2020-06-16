@@ -589,14 +589,12 @@ public class MarketingEmployeeController implements Initializable {
 	// initializing the scene
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		markem = (Employee) ClientUI.user;
 		System.out.println("employee:  " + markem);
 		fuelTypes.add("95");
 		fuelTypes.add("MOTOR CYCLES");
 		fuelTypes.add("Solar");
 		// loading the main window data
 		System.out.println("hello");
-		markem = (Employee) ClientUI.user;
 		System.out.println(markem);
 		// set the current pane as the main
 		currentPane = MainPane;
