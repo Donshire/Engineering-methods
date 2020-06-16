@@ -54,8 +54,9 @@ public class BuildObjectByQueryData {
 			while (res.next() == true)
 				customersList.add(new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),res.getString(15),res.getString(16)));
-				res.close();
+						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
+						res.getString(15), res.getString(16), res.getString(17), res.getString(18)));
+			res.close();
 			return customersList;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -265,11 +266,10 @@ public class BuildObjectByQueryData {
 		ArrayList<Sale> sales = new ArrayList<Sale>();
 		try {
 			while (res.next() == true)
-				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getString(10), res.getString(11)));
-				
-				res.close();
+
+				sales.add(new Sale(res.getInt(1), res.getString(2), res.getString(4), res.getString(5), res.getFloat(5),
+						res.getString(6), res.getString(7), res.getString(8), res.getString(9), res.getString(10)));
+			res.close();
 			return sales;
 		} catch (SQLException e) {
 			e.printStackTrace();

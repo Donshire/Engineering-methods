@@ -23,6 +23,7 @@ import enums.SaleStatus;
 public class CompanyFuelControllerServer {
 
 	
+	
 	/**
 	 * create periodicReport and save it in a file
 	 * @param companyName String
@@ -601,14 +602,13 @@ public class CompanyFuelControllerServer {
 			stm.setString(1, sale.getStatus().toString());
 			stm.setString(2, sale.getCompanyName());
 			stm.setString(3, sale.getFuelType());
-			stm.setString(4, sale.getPurchaseModule());
-			stm.setFloat(5, sale.getSalePercent());
-			stm.setString(6, sale.getStartTime());
-			stm.setString(7, sale.getEndTime());
-			stm.setString(8, sale.getStartDate());
-			stm.setString(9, sale.getEndDate());
-			stm.setString(10, sale.getSaleDays());
-			stm.setInt(11, sale.getSaleID());
+			stm.setFloat(4, sale.getSalePercent());
+			stm.setString(5, sale.getStartTime());
+			stm.setString(6, sale.getEndTime());
+			stm.setString(7, sale.getStartDate());
+			stm.setString(8, sale.getEndDate());
+			stm.setString (9, sale.getSaleDays());
+			stm.setInt(10, sale.getSaleID());
 
 			stm.executeUpdate();
 			stm.close();
@@ -633,13 +633,12 @@ public class CompanyFuelControllerServer {
 			stm.setString(2, sale.getStatus().toString());
 			stm.setString(3, sale.getCompanyName());
 			stm.setString(4, sale.getFuelType());
-			stm.setString(5, sale.getPurchaseModule());
-			stm.setFloat(6, sale.getSalePercent());
-			stm.setString(7, sale.getStartTime());
-			stm.setString(8, sale.getEndTime());
-			stm.setString(9, sale.getStartDate());
-			stm.setString(10, sale.getEndDate());
-			stm.setString(11, sale.getSaleDays());
+			stm.setFloat(5, sale.getSalePercent());
+			stm.setString(6, sale.getStartTime());
+			stm.setString(7, sale.getEndTime());
+			stm.setString(8, sale.getStartDate());
+			stm.setString(9, sale.getEndDate());
+			stm.setString(10, sale.getSaleDays());
 
 			stm.executeUpdate();
 
@@ -684,10 +683,9 @@ public class CompanyFuelControllerServer {
 
 			while (res.next() == true) {
 
-				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getString(10), res.getString(11));
-
+				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(4), res.getString(5),
+						res.getFloat(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
+						res.getString(10));
 				sales.add(sale);
 
 			}

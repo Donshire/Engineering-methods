@@ -18,6 +18,7 @@ import Entity.Sale;
 import Entity.PricingModule;
 import client.ClientUI;
 import client.EmployeeCC;
+import client.UserCC;
 import enums.Commands;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
@@ -343,6 +344,7 @@ public class CeoGUIController implements Initializable {
 	@FXML
 	void MainPaneHandler(ActionEvent event) {
 		if(event.getSource()==logOut) {
+			UserCC.logOut(ceo.getId(), ceo.getClass().toString());
 			MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 		}
 		else if(event.getSource()==MainPaneButton) {

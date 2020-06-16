@@ -151,39 +151,53 @@ public class GasStationControllerServer {
 // update the order status and the fuel inventory according to the order
 
 	public static boolean updateOrderStatus(GasStationOrder orders) {
-		PreparedStatement stm;
-		ResultSet res;
-		Float amount = (float) 0.0;
-		Float newAmount;
+		PreparedStatement stm1, stm2, stm3;
+		ResultSet res1, res2 = null;
+		Employee stationMan = null;
+		int workerID =0;
+		float amount;
 		try {
 			// return the current amount from the table
-			stm = ConnectionToDB.conn
-					.prepareStatement("select amount from myfueldb.stationfuel where stationId=? and fuelType=?");
-			stm.setInt(1, orders.getStationID());
-			stm.setString(2, orders.getFuelType());
-			res = stm.executeQuery();
-			if (res.next()) {
-				amount = res.getFloat(1);
-			}
-			res.close();
-			stm.close();
-			newAmount = amount + orders.getQuantity();
+			amount = getStationFuelQuantity(orders.getStationID(), orders.getFuelType());
+			amount = amount + orders.getQuantity();
 
 			// first update fuel quantity
-			stm = ConnectionToDB.conn
-					.prepareStatement("update myfueldb.stationfuel set amount=? where stationId=? and fuelType=?");
-			stm.setFloat(1, newAmount);
-			stm.setInt(2, orders.getStationID());
-			stm.setString(3, orders.getFuelType());
-			stm.executeUpdate();
-			stm.close();
+			updateFuelQuantity(amount, orders.getStationID(), orders.getFuelType());
 			// update order status
 
-			stm = ConnectionToDB.conn.prepareStatement("update myfueldb.gasstationorder set status=? where orderID=?");
-			stm.setString(1, SupplierOrderStatus.supplied.toString());
-			stm.setInt(2, orders.getOrderID());
-			stm.executeUpdate();
-			stm.close();
+			stm1 = ConnectionToDB.conn.prepareStatement("update myfueldb.gasstationorder set status=? where orderID=?");
+			stm1.setString(1, SupplierOrderStatus.supplied.toString());
+			stm1.setInt(2, orders.getOrderID());
+			stm1.executeUpdate();
+
+			stm2 = ConnectionToDB.conn
+					.prepareStatement("select stationManagerID from myfueldb.gasstation where stationId=?");
+			stm2.setInt(1, orders.getStationID());
+			res1 = stm2.executeQuery();
+			if (res1.next()) {
+			 workerID = res1.getInt(1);
+			 System.out.println("worker id:   " + workerID);
+			}
+			stm3 = ConnectionToDB.conn.prepareStatement("select * from myfueldb.employee where workerId=?");
+			stm3.setInt(1, workerID);
+			res2 = stm3.executeQuery();
+	
+			
+			if(res2.next()) {
+			stationMan = new Employee(res2.getString(1), res2.getString(2), res2.getString(3), res2.getNString(4),
+					res2.getNString(5), res2.getNString(6), res2.getNString(7), res2.getNString(8), res2.getNString(9),
+					res2.getInt(10), res2.getInt(11), res2.getNString(12));
+			System.out.println(stationMan);
+			}
+			
+			Thread sendMail = new Thread(new SendMail(orders.getStationID(), orders.getFuelType(), stationMan.getMail(),
+					String.format("Fuel type %s has supplied by the supplier !", orders.getFuelType()),
+					String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
+			          		+ " has supplied, the supplier updated the order status to: Supplied.\n"
+			          		+ "\n\nMYFUEL 2020 LTM",
+			          		stationMan.getFirstName(),stationMan.getLastName(),orders.getFuelType(),orders.getStationID())));
+			sendMail.start();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;

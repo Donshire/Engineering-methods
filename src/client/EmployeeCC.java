@@ -240,4 +240,13 @@ public class EmployeeCC {
 		return (File) MyFuelClient.ServerRetObj;
 	}
 
+	public static ArrayList<String> getFuelTypesByCompany(String companyName){
+		ClientUI.client.accept(new Message(companyName, Commands.getFuelTypesByCompany));
+		return(ArrayList<String>)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean checkIfUserNameExist(String userName) {
+		ClientUI.client.accept(new Message(userName, Commands.checkIfUserNameExist));
+		return(boolean)MyFuelClient.ServerRetObj;
+	}
 }

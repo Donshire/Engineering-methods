@@ -444,7 +444,27 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-				
+		
+		case getFuelTypesByCompany:
+			String companyNameByEmployee = (String) message.getObj();
+			try {
+				client.sendToClient(new Message(EmployeeController.getFuelTypesByCompany(companyNameByEmployee),
+						Commands.defaultRes));
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		case checkIfUserNameExist:
+			String userName = (String)message.getObj();
+			try {
+				client.sendToClient(new Message(EmployeeController.checkIfUserNameExist(userName),Commands.defaultRes));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+		
 		case getFileToclient:
 			GenericReport r = (GenericReport) message.getObj();
 			File f = FileManagmentSys.getFile(FileManagmentSys.createLocation(r.getCompanyName(),FileManagmentSys.stationManagerReports,r.getReportType()),r.getFileName());

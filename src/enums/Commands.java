@@ -9,5 +9,5 @@ public enum Commands {
 	getAllstationOrdersBystatus,approveOrders,getAllStationFuelById,updateFuelMinQuantitybyType
 	,createFuelStationIncmomeReport,createFuelStationPurchasesReport,createFuelStationInventoryReport
 	,getAllReportByYearandStationId,getFileToclient, updatePricingModel, getCustomerDetails, updateCustomerDetails, getAllSales, deleteSales, addNewSaleTemp, CreateNewOrder, GetStationInventory
-	, saveRate,getFuelMaxPriceDetails, updateFuelMaxPriceDetails, getBuildRateApprovalDetails,confirmFuelMaxPriceDetails,rejectFuelMaxPriceDetails
+	, saveRate,getFuelMaxPriceDetails, updateFuelMaxPriceDetails, getBuildRateApprovalDetails,confirmFuelMaxPriceDetails,rejectFuelMaxPriceDetails,getFuelTypesByCompany,checkIfUserNameExist
 };

@@ -16,10 +16,12 @@ public class Customer extends User implements Serializable {
 	private String visaNumber;
 	private String expDate;
 	private String CVV;
-	
+	private String customerType;
+	private String companyName;
+
 	public Customer(String userName, String password, String firstName, String lastName, String mail, String id,
-			String phoneNumber, int online, String adress, int pricingModel, int purchaseModule,
-			int customerTypeAnaleticRank, int fuelingHourAnaleticRank, String visaNumber, String expDate, String cVV) {
+			String phoneNumber, int online, String adress, int pricingModel, int customerTypeAnaleticRank,
+			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV,String customerType, String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber, online);
 		this.adress = adress;
 		this.pricingModel = pricingModel;
@@ -28,7 +30,33 @@ public class Customer extends User implements Serializable {
 		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
 		this.visaNumber = visaNumber;
 		this.expDate = expDate;
-		CVV = cVV;
+		this.CVV = CVV;
+		this.customerType = customerType;
+		this.companyName = companyName;
+	}
+
+	public String getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(String customerType) {
+		this.customerType = customerType;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
+
+	public String getVisaNumber() {
+		return visaNumber;
+	}
+
+	public void setVisaNumber(String visaNumber) {
+		this.visaNumber = visaNumber;
 	}
 
 	public String getAdress() {
@@ -55,30 +83,6 @@ public class Customer extends User implements Serializable {
 		this.purchaseModule = purchaseModule;
 	}
 
-	public int getCustomerTypeAnaleticRank() {
-		return customerTypeAnaleticRank;
-	}
-
-	public void setCustomerTypeAnaleticRank(int customerTypeAnaleticRank) {
-		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
-	}
-
-	public int getFuelingHourAnaleticRank() {
-		return fuelingHourAnaleticRank;
-	}
-
-	public void setFuelingHourAnaleticRank(int fuelingHourAnaleticRank) {
-		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
-	}
-
-	public String getVisaNumber() {
-		return visaNumber;
-	}
-
-	public void setVisaNumber(String visaNumber) {
-		this.visaNumber = visaNumber;
-	}
-
 	public String getExpDate() {
 		return expDate;
 	}
@@ -95,20 +99,31 @@ public class Customer extends User implements Serializable {
 		CVV = cVV;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public int getCustomerTypeAnaleticRank() {
+		return customerTypeAnaleticRank;
 	}
+
+	public void setCustomerTypeAnaleticRank(int customerTypeAnaleticRank) {
+		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
+	}
+
+
 
 	@Override
 	public String toString() {
-		return super.toString() + "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
+		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
 				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
 				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
-				+ "]";
+				+ ", customerType=" + customerType + ", companyName=" + companyName + "]";
 	}
 
+	public int getFuelingHourAnaleticRank() {
+		return fuelingHourAnaleticRank;
+	}
 
-	
+	public void setFuelingHourAnaleticRank(int fuelingHourAnaleticRank) {
+		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
+	}
 
 
 }

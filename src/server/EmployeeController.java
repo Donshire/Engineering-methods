@@ -37,8 +37,9 @@ public class EmployeeController {
 
 			stm.close();
 
-			if(car==null||car.isEmpty()) return null;
-				
+			if (car == null || car.isEmpty())
+				return null;
+
 			return car.get(0);
 
 		} catch (SQLException e) {
@@ -48,8 +49,7 @@ public class EmployeeController {
 	}
 
 	/**
-	 * to check if customer exist
-	 * changed the name-saleem
+	 * to check if customer exist changed the name-saleem
 	 * 
 	 * @param customerId
 	 * @return customer object if exist ,else return null in case of exeption or car
@@ -69,8 +69,9 @@ public class EmployeeController {
 
 			stm.close();
 
-			if(customer==null||customer.isEmpty()) return null;
-				
+			if (customer == null || customer.isEmpty())
+				return null;
+
 			return customer.get(0);
 
 		} catch (SQLException e) {
@@ -83,8 +84,8 @@ public class EmployeeController {
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(
-					"insert into myfueldb.customer (userName,password,firstName,lastName,mail,id,phoneNumber,online,adress,pricingModel,customerTypeAnaleticRank,purchaseModule,fuelingHourAnaleticRank ,visanumber,expDate,CVV) "
-							+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+					"insert into myfueldb.customer (userName,password,firstName,lastName,mail,id,phoneNumber,online,adress,pricingModel,customerTypeAnaleticRank,purchaseModule,fuelingHourAnaleticRank ,visanumber,expDate,CVV,customerType,companyName) "
+							+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			stm.setString(1, customer.getUserName());
 			stm.setString(2, customer.getPassword());
 			stm.setString(3, customer.getFirstName());
@@ -101,6 +102,8 @@ public class EmployeeController {
 			stm.setString(14, customer.getVisaNumber());
 			stm.setString(15, customer.getExpDate());
 			stm.setString(16, customer.getCVV());
+			stm.setString(17, customer.getCustomerType());
+			stm.setString(18, customer.getCompanyName());
 			stm.executeUpdate();
 
 			stm.close();
@@ -151,7 +154,7 @@ public class EmployeeController {
 
 	public static boolean updateModels(String pricing, String purchase, String id) {
 		PreparedStatement stm;
-		int pricingNum =0, purchaseNum=0 ;
+		int pricingNum = 0, purchaseNum = 0;
 		switch (pricing) {
 		case "onlyOneStatione":
 			pricingNum = 1;
@@ -160,18 +163,19 @@ public class EmployeeController {
 			pricingNum = 2;
 			break;
 		}
+		
 		switch (purchase) {
 		case "Casualfueling":
-			purchaseNum = 1;
+			purchaseNum = 0;
 			break;
 		case "MonthlysubscriptioOneCar":
-			purchaseNum = 2;
+			purchaseNum = 1;
 			break;
 		case "Monthlysubscriptio2OrMoreCars":
-			purchaseNum = 3;
+			purchaseNum = 2;
 			break;
 		case "FullMonthlysubscription":
-			purchaseNum = 4;
+			purchaseNum = 3;
 			break;
 		}
 		try {
@@ -189,31 +193,31 @@ public class EmployeeController {
 		}
 		return true;
 	}
-	
+
 	public static Employee getEmployeeByWorkerID(int workerId) {
 		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<Employee> employee;
-		String query="select * from myfueldb.employee where workerId = ?";
+		String query = "select * from myfueldb.employee where workerId = ?";
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			stm.setInt(1, workerId);
-			res=stm.executeQuery();
-			//create car object
-			employee=BuildObjectByQueryData.BuildEmployee(res);
-			
+			res = stm.executeQuery();
+			// create car object
+			employee = BuildObjectByQueryData.BuildEmployee(res);
+
 			stm.close();
-			
-			if(employee==null||employee.isEmpty())return null;
+
+			if (employee == null || employee.isEmpty())
+				return null;
 			return employee.get(0);
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	
+
 	public static Customer getCustomerDetails(String id) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -225,7 +229,7 @@ public class EmployeeController {
 				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
 						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
-						res.getString(15), res.getString(16));
+						res.getString(15), res.getString(16), res.getString(17), res.getString(18));
 				return customer;
 			}
 		} catch (Exception e) {
@@ -269,9 +273,9 @@ public class EmployeeController {
 			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.sale");
 			res = stm.executeQuery();
 			while (res.next() == true) {
-				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getFloat(6), res.getString(7), res.getString(8), res.getString(9),
-						res.getString(10), res.getString(11));
+				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(4), res.getString(5),
+						res.getFloat(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
+						res.getString(10));
 				sales.add(sale);
 			}
 			res.close();
@@ -303,18 +307,17 @@ public class EmployeeController {
 		PreparedStatement stm;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(
-					"insert into myfueldb.sale (status,companyName,fuelType,purchaseModule,salePercent,startTime,endTime,startDate,endDate,days) "
-							+ "values (?,?,?,?,?,?,?,?,?,?)");
+					"insert into myfueldb.sale (status,companyName,fuelType,salePercent,startTime,endTime,startDate,endDate,days) "
+							+ "values (?,?,?,?,?,?,?,?,?)");
 			stm.setString(1, sale.getStatus().toString());
 			stm.setString(2, sale.getCompanyName());
 			stm.setString(3, sale.getFuelType());
-			stm.setString(4, sale.getPurchaseModule());
-			stm.setFloat(5, sale.getSalePercent());
-			stm.setString(6, sale.getStartTime());
-			stm.setString(7, sale.getEndTime());
-			stm.setString(8, sale.getStartDate());
-			stm.setString(9, sale.getEndDate());
-			stm.setString(10, sale.getSaleDays());
+			stm.setFloat(4, sale.getSalePercent());
+			stm.setString(5, sale.getStartTime());
+			stm.setString(6, sale.getEndTime());
+			stm.setString(7, sale.getStartDate());
+			stm.setString(8, sale.getEndDate());
+			stm.setString(9, sale.getSaleDays());
 			stm.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -323,4 +326,49 @@ public class EmployeeController {
 		}
 		return true;
 	}
+
+	public static ArrayList<String> getFuelTypesByCompany(String companyName) {
+		PreparedStatement stm;
+		ResultSet res;
+
+		ArrayList<String> fuelTypes = new ArrayList<String>();
+		try {
+			System.out.println("company = " + companyName);
+			stm = ConnectionToDB.conn.prepareStatement("select fuelType from myfueldb.company where companyName=?");
+			stm.setString(1, companyName);
+			res = stm.executeQuery();
+			while (res.next()) {
+				String fuel = res.getString(1);
+				if (!fuel.equals("HOME GAS"))
+					fuelTypes.add(fuel);
+			}
+			stm.close();
+			res.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return fuelTypes;
+	}
+
+	public static boolean checkIfUserNameExist(String userName) {
+		PreparedStatement stm;
+		ResultSet res;
+		System.out.println("user name:  " + userName);
+		String id = null;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select id from myfueldb.customer where userName=?");
+			stm.setString(1, userName);
+			res = stm.executeQuery();
+			if (res.next())
+				id = res.getString(1);
+			System.out.println("id: " + id);
+			if (!id.isEmpty())
+				return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
+	}
+
 }
