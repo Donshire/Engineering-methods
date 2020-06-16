@@ -308,6 +308,11 @@ public class AnalticData implements Runnable {
 			return -1;
 		}
 		
+		@Override
+		public String toString() {
+			return "KeyplusRank [key=" + key + ", rank=" + rank + "]";
+		}
+		
 	}
 	
 	
@@ -524,10 +529,14 @@ public class AnalticData implements Runnable {
 			
 			//sort houres by rank
 			ArrayList<KeyplusRank> startHourRank =new ArrayList<KeyplusRank>();
+			
 			for(i=0;i<20;i+=2) {
 				startHourRank.add(fuelingHourAnaleticRank.get(i));
 			}
 			Collections.sort(startHourRank);
+			
+			System.out.println(startHourRank);
+			
 			ArrayList<KeyplusRank> endHoursRank =new ArrayList<KeyplusRank>();
 			//
 			int countRank=1;
@@ -546,6 +555,9 @@ public class AnalticData implements Runnable {
 			}
 			//free
 			fuelingHourAnaleticRank=null;
+			//
+			System.out.println(startHourRank);
+			System.out.println(endHoursRank);
 			
 			//ranks are ranged from 1/(countRank+1) to 1 so max will be 10 and min countRank/(countRank+1)~1
 			countRank=10;
