@@ -465,13 +465,36 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	private ComboBox<String> fuelTypesForSaleCombox;
 
+	@FXML
+	private Button replaceCarBtn;
+
+	@FXML
+	private Label oldCarNumLbl;
+
+	@FXML
+	private TextField oldCarNumTxt;
+
+	@FXML
+	private ComboBox<String> chooseCompany1;
+
+	@FXML
+	private ComboBox<String> chooseCompany2;
+
+	@FXML
+	private ComboBox<String> chooseCompany3;
+
+	@FXML
+	private Label chooseCompLbl;
+
 	private Pane currentPane;
 	public static Employee markem;
+	public boolean replaceCarFlag = false;
 	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private ArrayList<String> fuelTypesForSale = new ArrayList<String>();
+	private ArrayList<String> companys = new ArrayList<String>();
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
@@ -489,8 +512,6 @@ public class MarketingEmployeeController implements Initializable {
 		primaryStage.show();
 	}
 
-	
-	
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markem.getId(), markem.getClass().toString());
@@ -576,6 +597,13 @@ public class MarketingEmployeeController implements Initializable {
 		FuelTypeCombox.setDisable(true);
 		pricingModelCombox.setDisable(true);
 		purchaseModelCombox.setDisable(true);
+		replaceCarBtn.setDisable(true);
+		oldCarNumLbl.setDisable(true);
+		oldCarNumTxt.setDisable(true);
+		chooseCompany1.setVisible(false);
+		chooseCompany2.setVisible(false);
+		chooseCompany3.setVisible(false);
+		chooseCompLbl.setVisible(false);
 		switchPanes(carAndModelPane);
 	}
 
@@ -618,31 +646,34 @@ public class MarketingEmployeeController implements Initializable {
 		ObservableList<CustomerTypes> customerTypes = FXCollections.observableArrayList(CustomerTypes.values());
 		customerTypeCombox.setItems(customerTypes);
 
-		System.out.println("companyy  : " + markem.getCompanyName());
 		fuelTypesForSale = EmployeeCC.getFuelTypesByCompany(markem.getCompanyName());
 		ObservableList<String> fuelTypeForSale = FXCollections.observableArrayList(fuelTypesForSale);
 		fuelTypesForSaleCombox.setItems(fuelTypeForSale);
-		
+
+		companys = EmployeeCC.getCompanyNames();
+		ObservableList<String> companyForPricingModule = FXCollections.observableArrayList(companys);
+		chooseCompany1.setItems(companyForPricingModule);
+		chooseCompany2.setItems(companyForPricingModule);
+		chooseCompany3.setItems(companyForPricingModule);
+
 		Callback<DatePicker, DateCell> datePicker = new Callback<DatePicker, DateCell>() {
-		            @Override
-		            public DateCell call( DatePicker param) {
-		                return new DateCell() {
-		                    @Override
-		                    public void updateItem(LocalDate item, boolean empty) {
-		                        super.updateItem(item, empty); 
-		                        LocalDate today = LocalDate.now();
-		                        setDisable(empty || item.compareTo(today) < 0);
-		                    }
+			@Override
+			public DateCell call(DatePicker param) {
+				return new DateCell() {
+					@Override
+					public void updateItem(LocalDate item, boolean empty) {
+						super.updateItem(item, empty);
+						LocalDate today = LocalDate.now();
+						setDisable(empty || item.compareTo(today) < 0);
+					}
 
-		                };
-		            }
+				};
+			}
 
-		        };
-		        startDatePicker.setDayCellFactory(datePicker);
-		        endDatePicker.setDayCellFactory(datePicker);
-		 }
-		 
-	
+		};
+		startDatePicker.setDayCellFactory(datePicker);
+		endDatePicker.setDayCellFactory(datePicker);
+	}
 
 	// this method is for new client registration
 	@FXML
@@ -799,28 +830,49 @@ public class MarketingEmployeeController implements Initializable {
 				FuelTypeCombox.setDisable(false);
 				pricingModelCombox.setDisable(false);
 				purchaseModelCombox.setDisable(false);
+				replaceCarBtn.setDisable(false);
+
 				// if res == -1 -> there has been an error in the server
 			} else
 				JOptionPane.showMessageDialog(null, "There has been an error, try again");
 		}
 	}
 
+	@FXML
+	void openReplaceCar(ActionEvent event) {
+		oldCarNumLbl.setDisable(false);
+		oldCarNumTxt.setDisable(false);
+		replaceCarFlag = true;
+
+	}
+
 	// this method is to update the car and / or model to the user we uploaded
 	@FXML
 	void updateCarAndModel(ActionEvent event) {
-		String id, carNumber;
-		String fuelType;
+		String id, carNumber, company1, company2, company3;
+		String fuelType, oldNum = null;
 		PricingModel pricingM;
+		StringBuilder companyNames = new StringBuilder();
 		int pricingNum = 0, purchaseNum = 0;
 		PurchaseModel purchaseM;
 		id = carAndModelIDTxt.getText();
 		carNumber = carNumberTxt.getText();
 		fuelType = FuelTypeCombox.getValue();
 		pricingM = pricingModelCombox.getValue();
-		System.out.println(" 1 " + pricingM);
 		purchaseM = purchaseModelCombox.getValue();
-		if (id.isEmpty() == true || carNumber.isEmpty() == true || fuelType.isEmpty() == true
-				|| pricingM.toString().isEmpty() == true || purchaseM.toString().isEmpty() == true) {
+		if (replaceCarFlag) {
+			oldNum = oldCarNumTxt.getText();
+			if (oldNum == null) {
+				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+				return;
+			}
+			if (!testCar(oldNum)) {
+				JOptionPane.showMessageDialog(null, "car number is not in the correct format");
+				return;
+			}
+		}
+
+		if (id == null || carNumber == null || fuelType == null || pricingM == null || purchaseM == null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
@@ -828,20 +880,81 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "car number is not in the correct format");
 			return;
 		}
-		// adding the car
-		Car car = new Car(carNumber, fuelType, id);
-		if (EmployeeCC.addNewCar(car)) {
-			JOptionPane.showMessageDialog(null, "Car added successfully to system");
-		} else {
-			JOptionPane.showMessageDialog(null, "There has been an error, try again");
+
+		if (pricingM.equals(PricingModel.onlyOneStatione)) {
+			company1 = chooseCompany1.getValue();
+			if (company1 == null) {
+				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+				return;
+			}
+			companyNames.append(company1);
+
+		}
+		if (pricingM.equals(PricingModel.TwoOrThreeStations)) {
+			company1 = chooseCompany1.getValue();
+			company2 = chooseCompany2.getValue();
+			company3 = chooseCompany3.getValue();
+			if (company1 == null || company2 == null) {
+				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+				return;
+			}
+			if (company1.equals(company2) || company2.equals(company3) || company1.equals(company3)) {
+				JOptionPane.showMessageDialog(null, "You need to choose different companies");
+				return;
+			}
+			if (company3 == null) {
+				companyNames.append(company1);
+				companyNames.append(", ");
+				companyNames.append(company2);
+			} else {
+				companyNames.append(company1);
+				companyNames.append(", ");
+				companyNames.append(company2);
+				companyNames.append(", ");
+				companyNames.append(company3);
+			}
 		}
 
+		Car car = new Car(carNumber, fuelType, id);
+		// adding the car
+		if (!replaceCarFlag) {
+			if (EmployeeCC.addNewCar(car)) {
+				JOptionPane.showMessageDialog(null, "Car added successfully to system");
+			} else {
+				JOptionPane.showMessageDialog(null, "There has been an error, try again");
+			}
+		} else {
+			if (EmployeeCC.updateCar(car, oldNum)) {
+				JOptionPane.showMessageDialog(null, "Car updated successfully to system");
+			} else {
+				JOptionPane.showMessageDialog(null, "There has been an error or the old car number doesn't exist, try again");
+			}
+		}
 		// adding the model
-		if (EmployeeCC.updateModels(pricingM.toString(), purchaseM.toString(), id))
+		if (EmployeeCC.updateModels(pricingM.toString(), purchaseM.toString(), id)
+				&& (EmployeeCC.addModule(id, purchaseM.toString(), companyNames.toString())))
 
 			JOptionPane.showMessageDialog(null, "Models added successfully to system");
 		else
 			JOptionPane.showMessageDialog(null, "There has been an error, try again");
+
+	}
+
+	@FXML
+	void openCompanyChooser(ActionEvent event) {
+
+		if (pricingModelCombox.getValue().equals(PricingModel.onlyOneStatione)) {
+			chooseCompLbl.setVisible(true);
+			chooseCompany2.setVisible(false);
+			chooseCompany3.setVisible(false);
+			chooseCompany1.setVisible(true);
+		}
+		if (pricingModelCombox.getValue().equals(PricingModel.TwoOrThreeStations)) {
+			chooseCompLbl.setVisible(true);
+			chooseCompany1.setVisible(true);
+			chooseCompany2.setVisible(true);
+			chooseCompany3.setVisible(true);
+		}
 	}
 
 	// this method id to upload all the details of a specific customer
@@ -856,7 +969,7 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "User Id doesn't exist");
 		else {
 			customer = EmployeeCC.getCustomerDetails(id);
-			if (customer==null)
+			if (customer == null)
 				JOptionPane.showMessageDialog(null, "There has been an error");
 			else {
 				firstNameChangetxt.setText(customer.getFirstName());
@@ -868,11 +981,9 @@ public class MarketingEmployeeController implements Initializable {
 				expChangeYearTxt.setText(expDate.substring(3, 7).toString());
 				CVVChangeTxt.setText(customer.getCVV());
 				phoneChangeTxt.setText(customer.getPhoneNumber());
-				addressChangeTxt.setText(customer.getAdress().replaceAll("\\d",""));
+				addressChangeTxt.setText(customer.getAdress().replaceAll("\\d", ""));
 				upAdrdressNoTxt.setText(customer.getAdress().replaceAll("[^0-9]", ""));
-				
-				
-			
+
 				upFirstNameLbl.setVisible(true);
 				firstNameChangetxt.setVisible(true);
 				upLasttNameLbl.setVisible(true);
@@ -1090,22 +1201,22 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "please select dates");
 			return;
 		}
-		
+
 		startDate = dateFormatter.format(startDatePicker.getValue());
 		endDate = dateFormatter.format(endDatePicker.getValue());
 		if (!checkIfStringContainsOnlyNumbersInFloatType(salePercentTxt.getText())) {
 			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: xx.xx");
 			return;
 		}
-		if(!startTime.matches(TIME_REGEX)) {
+		if (!startTime.matches(TIME_REGEX)) {
 			JOptionPane.showMessageDialog(null, "You need to enter time in the following format: \n HH:mm");
 			return;
 		}
-		if(!testTime(startTime)){
-			inputMsg.append("start time"+ "\n");
+		if (!testTime(startTime)) {
+			inputMsg.append("start time" + "\n");
 			flag = true;
 		}
-		if(!testTime(endTime)) {
+		if (!testTime(endTime)) {
 			inputMsg.append("end time");
 			flag = true;
 		}
@@ -1235,12 +1346,12 @@ public class MarketingEmployeeController implements Initializable {
 			return false;
 		return true;
 	}
-	
+
 	public static boolean testTime(String time) {
-		if(Integer.parseInt(time.substring(0, 2)) > 23 ||Integer.parseInt(time.substring(0, 2))<0 )
+		if (Integer.parseInt(time.substring(0, 2)) > 23 || Integer.parseInt(time.substring(0, 2)) < 0)
 			return false;
 		System.out.println(Integer.parseInt(time.substring(3, 4)));
-		if(Integer.parseInt(time.substring(3, 5)) > 59 ||Integer.parseInt(time.substring(3, 5))<0 )
+		if (Integer.parseInt(time.substring(3, 5)) > 59 || Integer.parseInt(time.substring(3, 5)) < 0)
 			return false;
 		return true;
 	}

@@ -71,37 +71,52 @@
             <TextField fx:id="customercompanyNameTxt" layoutX="189.0" layoutY="464.0" />
             <ImageView fx:id="CVVImage" fitHeight="60.0" fitWidth="104.0" layoutX="580.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Users/97250/Desktop/CVV.png" />
+                  <Image url="@../../../../Desktop/CVV.png" />
                </image>
             </ImageView>
             <ImageView fx:id="helpImage" fitHeight="49.0" fitWidth="69.0" layoutX="645.0" layoutY="220.0" onMousePressed="#openCVVImgae" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Users/97250/Desktop/help.png" />
+                  <Image url="@../../../../Desktop/help.png" />
                </image>
             </ImageView>
             <TextField fx:id="ExpDateYearTxt" layoutX="505.0" layoutY="225.0" prefHeight="31.0" prefWidth="49.0" />
          </children>
       </Pane>
       <Button fx:id="carAndModleBtn" layoutX="14.0" layoutY="335.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="150.0" text="Car And Module" />
-      <Pane fx:id="carAndModelPane" layoutX="200.0" layoutY="120.0" prefHeight="515.0" prefWidth="673.0">
+      <Pane fx:id="carAndModelPane" layoutX="190.0" layoutY="110.0" prefHeight="515.0" prefWidth="673.0">
          <children>
             <Label fx:id="carNumberLbl" layoutX="153.0" layoutY="183.0" text="Car Number:" />
             <TextField fx:id="carNumberTxt" layoutX="280.0" layoutY="178.0" />
-            <ComboBox fx:id="pricingModelCombox" layoutX="280.0" layoutY="272.0" prefHeight="31.0" prefWidth="186.0" />
-            <Label fx:id="pricingModelLbl" layoutX="153.0" layoutY="277.0" text="Pricing Model:" />
-            <Label fx:id="purchaseModelLbl" layoutX="153.0" layoutY="325.0" text="Purchase Model:" />
-            <ComboBox fx:id="purchaseModelCombox" layoutX="280.0" layoutY="320.0" prefHeight="31.0" prefWidth="186.0" />
+            <ComboBox fx:id="pricingModelCombox" layoutX="280.0" layoutY="319.0" onAction="#openCompanyChooser" prefHeight="31.0" prefWidth="186.0" />
+            <Label fx:id="pricingModelLbl" layoutX="153.0" layoutY="324.0" text="Pricing Model:" />
+            <Label fx:id="purchaseModelLbl" layoutX="152.0" layoutY="430.0" text="Purchase Model:" />
+            <ComboBox fx:id="purchaseModelCombox" layoutX="279.0" layoutY="425.0" prefHeight="31.0" prefWidth="186.0" />
             <Button fx:id="carAndModelFinishBtn" layoutX="574.0" layoutY="440.0" mnemonicParsing="false" onAction="#updateCarAndModel" prefHeight="31.0" prefWidth="66.0" text="Finish" />
             <Label fx:id="carAndModelIDLbl" layoutX="153.0" layoutY="135.0" text="ID:" />
             <TextField fx:id="carAndModelIDTxt" layoutX="280.0" layoutY="130.0" />
-            <Label fx:id="fuelTypeLbl" layoutX="153.0" layoutY="230.0" text="Fuel Type:" />
-            <ComboBox fx:id="FuelTypeCombox" layoutX="280.0" layoutY="225.0" prefHeight="31.0" prefWidth="186.0" />
+            <Label fx:id="fuelTypeLbl" layoutX="153.0" layoutY="277.0" text="Fuel Type:" />
+            <ComboBox fx:id="FuelTypeCombox" layoutX="280.0" layoutY="272.0" prefHeight="31.0" prefWidth="186.0" />
             <Label fx:id="carAndModelLbl" layoutX="32.0" layoutY="29.0" text="Car And Model">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="uploadCustomerBtn" layoutX="488.0" layoutY="130.0" mnemonicParsing="false" onAction="#uploadCustomer" text="Upload customer" />
+            <Button fx:id="uploadCustomerBtn1" layoutX="488.0" layoutY="130.0" mnemonicParsing="false" onAction="#uploadCustomer" text="Check ID" />
+            <Button fx:id="replaceCarBtn" layoutX="488.0" layoutY="178.0" mnemonicParsing="false" onAction="#openReplaceCar" prefHeight="31.0" prefWidth="118.0" text="Replace existig car">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="oldCarNumLbl" layoutX="153.0" layoutY="230.0" text="Old Car number:" />
+            <TextField fx:id="oldCarNumTxt" layoutX="280.0" layoutY="225.0" />
+            <ComboBox fx:id="chooseCompany1" layoutX="176.0" layoutY="373.0" prefHeight="31.0" prefWidth="124.0" />
+            <ComboBox fx:id="chooseCompany2" layoutX="312.0" layoutY="373.0" prefHeight="31.0" prefWidth="124.0" />
+            <ComboBox fx:id="chooseCompany3" layoutX="446.0" layoutY="373.0" prefHeight="31.0" prefWidth="124.0" />
+            <Label fx:id="chooseCompLbl" layoutX="71.0" layoutY="380.0" text="*choose company">
+               <font>
+                  <Font name="System Italic" size="12.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <Button fx:id="openUpdateCustomerPane" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="150.0" text="Update Customer" />
@@ -144,12 +159,12 @@
             </Text>
             <ImageView fx:id="CVVImage1" fitHeight="60.0" fitWidth="104.0" layoutX="553.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Users/97250/Desktop/CVV.png" />
+                  <Image url="@../../../../Desktop/CVV.png" />
                </image>
             </ImageView>
             <ImageView fx:id="helpImage1" fitHeight="49.0" fitWidth="69.0" layoutX="626.0" layoutY="306.0" onMousePressed="#openCVVImgae1" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Users/97250/Desktop/help.png" />
+                  <Image url="@../../../../Desktop/help.png" />
                </image>
             </ImageView>
          </children>

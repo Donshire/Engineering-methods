@@ -249,4 +249,26 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(userName, Commands.checkIfUserNameExist));
 		return(boolean)MyFuelClient.ServerRetObj;
 	}
+	
+	public static ArrayList<String> getCompanyNames() {
+		ClientUI.client.accept(new Message(null, Commands.getCompanyNames));
+		return(ArrayList<String>)MyFuelClient.ServerRetObj;
+		
+	}
+	public static boolean addModule(String id,String purchaseM,String companyNames) {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.add(id);
+		parameters.add(purchaseM);
+		parameters.add(companyNames);
+		ClientUI.client.accept(new Message(parameters, Commands.addModule));
+		return(boolean)MyFuelClient.ServerRetObj;
+	}
+	
+	public static boolean updateCar(Car car,String oldCar) {
+		ArrayList<Object> parameters = new ArrayList<Object>();
+		parameters.add(car);
+		parameters.add(oldCar);
+		ClientUI.client.accept(new Message(parameters, Commands.updateCar));
+		return(boolean)MyFuelClient.ServerRetObj;
+	}
 }

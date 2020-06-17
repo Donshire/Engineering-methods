@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
@@ -163,7 +165,7 @@ public class EmployeeController {
 			pricingNum = 2;
 			break;
 		}
-		
+
 		switch (purchase) {
 		case "Casualfueling":
 			purchaseNum = 0;
@@ -371,4 +373,106 @@ public class EmployeeController {
 		return false;
 	}
 
+	public static ArrayList<String> getCompanyNames() {
+		ArrayList<String> companyNames = new ArrayList<String>();
+		PreparedStatement stm;
+		ResultSet res;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select distinct companyName from myfueldb.company");
+			res = stm.executeQuery();
+			while (res.next() == true) {
+				String name = res.getString(1);
+				companyNames.add(name);
+			}
+			res.close();
+			stm.close();
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return companyNames;
+	}
+
+	public static boolean addModule(String id, String purchM, String companyNames) {
+		PreparedStatement stm, stm1;
+		ResultSet res;
+		int purchaseNum = -1;
+		switch (purchM) {
+		case "Casualfueling":
+			purchaseNum = 0;
+			break;
+		case "MonthlysubscriptioOneCar":
+			purchaseNum = 1;
+			break;
+		case "Monthlysubscriptio2OrMoreCars":
+			purchaseNum = 2;
+			break;
+		case "FullMonthlysubscription":
+			purchaseNum = 3;
+			break;
+		}
+
+		try {
+			stm = ConnectionToDB.conn
+					.prepareStatement("select modelNumber from myfueldb.customermodule where CustomerID = ?");
+			stm.setString(1, id);
+			res = stm.executeQuery();
+			if (res.next()) {
+				System.out.println("res : " + res.getInt(1));
+				stm1 = ConnectionToDB.conn.prepareStatement(
+						"update myfueldb.customermodule set modelNumber=?,companyNamesSubscribed=? where CustomerID = ?");
+				stm1.setInt(1, purchaseNum);
+				stm1.setString(2, companyNames);
+				stm1.setString(3, id);
+				stm1.executeUpdate();
+				return true;
+			} else {
+				stm1 = ConnectionToDB.conn
+						.prepareStatement("insert into myfueldb.customermodule (CustomerID,modelNumber,companyNamesSubscribed) "
+								+ "values (?,?,?)");
+
+				stm1.setString(1, id);
+				stm1.setInt(2, purchaseNum);
+				stm1.setString(3, companyNames);
+				stm1.executeUpdate();
+				return true;
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+
+		}
+		return false;
+
+	}
+	
+	public static boolean updateCar(Car car,String oldCar) {
+		PreparedStatement stm,stm1;
+		ResultSet res;
+		try {
+			stm1 =ConnectionToDB.conn.prepareStatement(
+					"select carNumber from myfueldb.car where carNumber = ? and CustomerID = ?");
+			stm1.setString(1,oldCar);
+			stm1.setString(2, car.getCarCustomerId());
+			res = stm1.executeQuery();
+			if(res.next()) {
+			stm = ConnectionToDB.conn.prepareStatement(
+					"update myfueldb.car set carNumber=?,fuelType=? where carNumber = ?");
+			stm.setString(1, car.getCarNumber());
+			stm.setString(2, car.getFuelType());
+			stm.setString(3, oldCar);
+			stm.executeUpdate();
+			
+			}
+			else 
+				return false;
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 }

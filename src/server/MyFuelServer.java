@@ -40,10 +40,10 @@ public class MyFuelServer extends AbstractServer {
 
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
 	public static String schemaName, dbPassword;
-	
+
 	ArrayList<GasStationOrder> orders;
 	String status;
-	
+
 	public MyFuelServer(int port) {
 		super(port);
 	}
@@ -54,22 +54,21 @@ public class MyFuelServer extends AbstractServer {
 		Message message = (Message) msg;
 		PricingModule pricingModel;
 		ArrayList<PricingModule> result;
-		
+
 		File file;
 		Object resltObject;
-		
+
 		ArrayList<String> arr;
 		ArrayList<Object> str;
-		
+
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat timeFileFormat = new SimpleDateFormat("HH-mm-ss");
 		DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
-		
+
 		boolean flag;
 		int stationID;
-		
-		
+
 		ServerController.writeToServerConsole(
 				"Message received: cmd " + message.getCmd() + " the object " + message.getObj() + " from " + client);
 
@@ -109,32 +108,32 @@ public class MyFuelServer extends AbstractServer {
 			ServerController.onlineUserTableCont(arr.get(0), "");
 			sendToClientObject("No Thing", client);
 			break;
-			
+
 		case fastFuelingLogIn:
-			String carNumber=(String)message.getObj();
+			String carNumber = (String) message.getObj();
 			sendToClientArrayList(FastFuelController.fastFuelingLogIn(carNumber), client);
 			break;
-			
+
 		case getAllCompanyFuelStationID:
-			String companyName=(String)message.getObj();
-				sendToClientArrayList(FastFuelController.getAllCompanyFuelStationID(companyName), client);
-            break;
-            
+			String companyName = (String) message.getObj();
+			sendToClientArrayList(FastFuelController.getAllCompanyFuelStationID(companyName), client);
+			break;
+
 		case getPurchasePriceDetails:
-			str =(ArrayList<Object>)message.getObj();
-				sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
-						((String)str.get(0),(String)str.get(1),(int)str.get(2),dateFormat.format(date),timeDBFormat.format(date)), client);
-            break;
-            
+			str = (ArrayList<Object>) message.getObj();
+			sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel((String) str.get(0),
+					(String) str.get(1), (int) str.get(2), dateFormat.format(date), timeDBFormat.format(date)), client);
+			break;
+
 		case commitFuelPurchase:
-			str =(ArrayList<Object>)message.getObj();
-			FuelPurchase fuelPurchase = (FuelPurchase)str.get(2);
+			str = (ArrayList<Object>) message.getObj();
+			FuelPurchase fuelPurchase = (FuelPurchase) str.get(2);
 			fuelPurchase.setTime(timeDBFormat.format(date));
 			fuelPurchase.setDate(dateFormat.format(date));
-			sendToClientObject(FastFuelController.commitFuelPurchase(
-					(String)str.get(0),(String)str.get(1),fuelPurchase,(String)str.get(3)),client);
-            break;
-            
+			sendToClientObject(FastFuelController.commitFuelPurchase((String) str.get(0), (String) str.get(1),
+					fuelPurchase, (String) str.get(3)), client);
+			break;
+
 		case updatePricingModel:
 			ArrayList<PricingModule> pricingModules = (ArrayList<PricingModule>) message.getObj();
 			flag = true;
@@ -144,7 +143,7 @@ public class MyFuelServer extends AbstractServer {
 			}
 			sendToClientObject(flag, client);
 			break;
-			
+
 		case updateGasOrdersStatus:
 			ArrayList<GasStationOrder> orders = (ArrayList<GasStationOrder>) message.getObj();
 			flag = true;
@@ -168,60 +167,64 @@ public class MyFuelServer extends AbstractServer {
 		case getAllCompanySalesByStatus:
 			Sale salesPartialData = (Sale) message.getObj();
 			// partial means that not all the data are filled
-				ArrayList<Sale> sales_getAllCompanySalesByStatus = CompanyFuelControllerServer
-						.getAllCompanySalesByStatus(salesPartialData.getCompanyName(), salesPartialData.getStatus());
-				sendToClientArrayList(sales_getAllCompanySalesByStatus,client);
+			ArrayList<Sale> sales_getAllCompanySalesByStatus = CompanyFuelControllerServer
+					.getAllCompanySalesByStatus(salesPartialData.getCompanyName(), salesPartialData.getStatus());
+			sendToClientArrayList(sales_getAllCompanySalesByStatus, client);
 
 			break;
 
 		case getAllCompanyRatesByStatus:
 			pricingModel = (PricingModule) message.getObj();
-			result = CompanyFuelControllerServer.getAllCompanyRatesByStatus(
-					pricingModel.getCompanyName(), pricingModel.getStatus());
-			sendToClientArrayList(result,client);
+			result = CompanyFuelControllerServer.getAllCompanyRatesByStatus(pricingModel.getCompanyName(),
+					pricingModel.getStatus());
+			sendToClientArrayList(result, client);
 			break;
 
 		case getCompanyPricingRate:
 			pricingModel = (PricingModule) message.getObj();
-			sendToClientObject(CompanyFuelControllerServer.getCompanyActivePricingRate(pricingModel.getCompanyName(), pricingModel.getModelNumber()),client);
+			sendToClientObject(CompanyFuelControllerServer.getCompanyActivePricingRate(pricingModel.getCompanyName(),
+					pricingModel.getModelNumber()), client);
 			break;
-			
+
 		case savePricingModel:
 			pricingModel = (PricingModule) message.getObj();
-			sendToClientObject(CompanyFuelControllerServer.savePricingModel(pricingModel),client);
+			sendToClientObject(CompanyFuelControllerServer.savePricingModel(pricingModel), client);
 			break;
 
 		case getSaleResponseReport:
 			ArrayList<String> array = (ArrayList<String>) message.getObj();
-			//salID,CompanyName 
-			file=CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1), dateFormat.format(date), timeFileFormat.format(date));
-			if(file!=null)
+			// salID,CompanyName
+			file = CompanyFuelControllerServer.responseReport(Integer.valueOf(array.get(0)), array.get(1),
+					dateFormat.format(date), timeFileFormat.format(date));
+			if (file != null)
 				try {
 					client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			else sendToClientObject(null, client);
+			else
+				sendToClientObject(null, client);
 			break;
 		case getPeriodicReport:
 			ArrayList<String> periodicReportdetails = (ArrayList<String>) message.getObj();
-			file=CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0)
-						,periodicReportdetails.get(1),periodicReportdetails.get(2),
-						dateFormat.format(date), timeFileFormat.format(date));
-			if(file!=null)
-			try {
-				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			else sendToClientObject(null, client);
+			file = CompanyFuelControllerServer.periodicReport(periodicReportdetails.get(0),
+					periodicReportdetails.get(1), periodicReportdetails.get(2), dateFormat.format(date),
+					timeFileFormat.format(date));
+			if (file != null)
+				try {
+					client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			else
+				sendToClientObject(null, client);
 			break;
-			
+
 		case getAllCompanyFuel:
 			String companyName1 = (String) message.getObj();
-			sendToClientArrayList(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1),client);
+			sendToClientArrayList(CompanyFuelControllerServer.getAllCompanyFuelTypes(companyName1), client);
 			break;
-		
+
 		case updateFuelMaxPriceDetails:
 			ArrayList<CompanyFuel> list = (ArrayList<CompanyFuel>) message.getObj();
 			try {
@@ -232,7 +235,7 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case getFuelMaxPriceDetails:
 			String companyName2 = (String) (message.getObj());
 			try {
@@ -245,20 +248,20 @@ public class MyFuelServer extends AbstractServer {
 			break;
 		case getCompanyFuel:
 			ArrayList<String> compName = (ArrayList<String>) message.getObj();
-			sendToClientObject(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)),client);
+			sendToClientObject(CompanyFuelControllerServer.getCompanyFuel(compName.get(0), compName.get(1)), client);
 			break;
-			
+
 		case getAllOrdersByStatus:
 			ArrayList<Object> objs = (ArrayList<Object>) message.getObj();
-			String supplierId = (String)objs.get(0);
-			String status =(String) objs.get(1);
-		    sendToClientArrayList(GasStationControllerServer.getAllOrdersByStatus(supplierId,status),client);
+			String supplierId = (String) objs.get(0);
+			String status = (String) objs.get(1);
+			sendToClientArrayList(GasStationControllerServer.getAllOrdersByStatus(supplierId, status), client);
 			break;
-			
+
 		case GetMaxPrice:
-			sendToClientObject(CompanyFuelController.getMaxPrice((String) message.getObj()),client);
+			sendToClientObject(CompanyFuelController.getMaxPrice((String) message.getObj()), client);
 			break;
-			
+
 		case getBuildRateApprovalDetails:
 			String companyName3 = (String) (message.getObj());
 			try {
@@ -269,85 +272,85 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case CustomerOrderList:
 			String s = (String) (message.getObj());
-			sendToClientArrayList(CustomerGasOrderController.getOrders(s),client);
+			sendToClientArrayList(CustomerGasOrderController.getOrders(s), client);
 			break;
 
 		case CreateNewOrder:
-				boolean	orderObj = CustomerGasOrderController.createNewOrder((GasOrder) message.getObj());
-				sendToClientObject(orderObj, client);
+			boolean orderObj = CustomerGasOrderController.createNewOrder((GasOrder) message.getObj());
+			sendToClientObject(orderObj, client);
 			break;
-			
+
 		case addNewCustomer:
-			Customer cust = (Customer)(message.getObj());
-			sendToClientObject(EmployeeController.addNewCustmer(cust),client);
+			Customer cust = (Customer) (message.getObj());
+			sendToClientObject(EmployeeController.addNewCustmer(cust), client);
 			break;
-			
+
 		case checkIfExist:
-			String id = (String)(message.getObj());
-			sendToClientObject(EmployeeController.checkIfExist(id),client);
+			String id = (String) (message.getObj());
+			sendToClientObject(EmployeeController.checkIfExist(id), client);
 			break;
-			
+
 		case addNewCar:
-			Car car = (Car)(message.getObj());
-			sendToClientObject(EmployeeController.addNewCar(car),client);
+			Car car = (Car) (message.getObj());
+			sendToClientObject(EmployeeController.addNewCar(car), client);
 			break;
-			
+
 		case updateModels:
 			ArrayList<Object> objlist = (ArrayList<Object>) message.getObj();
-			String pricing =(String)objlist.get(0);
-			String purchase =(String)objlist.get(1);
-			String cuId = (String)objlist.get(2);
-			
-			sendToClientObject(EmployeeController.updateModels(pricing, purchase, cuId),client);
+			String pricing = (String) objlist.get(0);
+			String purchase = (String) objlist.get(1);
+			String cuId = (String) objlist.get(2);
+
+			sendToClientObject(EmployeeController.updateModels(pricing, purchase, cuId), client);
 			break;
-			
+
 		case getCustomerDetails:
 			String upid = (String) (message.getObj());
-			sendToClientObject(EmployeeController.getCustomerDetails(upid),client);
+			sendToClientObject(EmployeeController.getCustomerDetails(upid), client);
 			break;
 
 		case updateCustomerDetails:
 			ArrayList<String> update = (ArrayList<String>) (message.getObj());
-			sendToClientObject(EmployeeController.updateCustomerDetails(update),client);
+			sendToClientObject(EmployeeController.updateCustomerDetails(update), client);
 			break;
-			
+
 		case getAllSales:
-			sendToClientArrayList(EmployeeController.getAllSales(),client);
+			sendToClientArrayList(EmployeeController.getAllSales(), client);
 			break;
-			
+
 		case deleteSales:
-			ArrayList<Sale> sales = (ArrayList<Sale>)message.getObj();
+			ArrayList<Sale> sales = (ArrayList<Sale>) message.getObj();
 			flag = true;
 			for (Sale sale : sales) {
 				if (!EmployeeController.deleteSales(sale))
 					flag = false;
 			}
-			
+
 			sendToClientObject(flag, client);
 			break;
-			
+
 		case addNewSaleTemp:
-			Sale sale = (Sale)message.getObj();
-			sendToClientObject(EmployeeController.addNewSaleTemp(sale),client);
+			Sale sale = (Sale) message.getObj();
+			sendToClientObject(EmployeeController.addNewSaleTemp(sale), client);
 			break;
-			
+
 		case getAllstationOrdersBystatus:
 			ArrayList<Object> o = (ArrayList<Object>) message.getObj();
 			int stationid = (int) o.get(0);
 			status = (String) o.get(1);
-			sendToClientArrayList(GasStationControllerServer.getAllstationOrdersByStatus(stationid, status),client);
+			sendToClientArrayList(GasStationControllerServer.getAllstationOrdersByStatus(stationid, status), client);
 			break;
 
 		case approveOrders:
 			orders = (ArrayList<GasStationOrder>) message.getObj();
-			sendToClientObject(GasStationControllerServer.changeOrdersStatus(orders),client);
+			sendToClientObject(GasStationControllerServer.changeOrdersStatus(orders), client);
 			break;
 
 		case getAllStationFuelById:
-			
+
 			int stationId = (Integer) message.getObj();
 			try {
 				client.sendToClient(
@@ -369,7 +372,6 @@ public class MyFuelServer extends AbstractServer {
 
 			break;
 
-
 		case createFuelStationIncmomeReport:
 
 			ArrayList<Object> params = (ArrayList<Object>) message.getObj();
@@ -377,21 +379,20 @@ public class MyFuelServer extends AbstractServer {
 			String companyname = (String) params.get(1);
 			Quarter q = (Quarter) params.get(2);
 			String year = (String) params.get(3);
-			//File file;
+			// File file;
 			try {
-				file = GasStationControllerServer.createFuelStationIncmomeReport(st_id, companyname,q,year);
-				
-				if(file == null)
+				file = GasStationControllerServer.createFuelStationIncmomeReport(st_id, companyname, q, year);
+
+				if (file == null)
 					client.sendToClient(new Message(null, Commands.defaultRes));
-				
+
 				else
-				client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
+					client.sendToClient(new Message(convertFileToSeializable(file), Commands.reciveFile));
 			} catch (Exception e) {
-				e.printStackTrace(); 
+				e.printStackTrace();
 			}
 			break;
-			
-		
+
 		case createFuelStationPurchasesReport:
 			ArrayList<Object> params1 = (ArrayList<Object>) message.getObj();
 			int st_id1 = (int) params1.get(0);
@@ -399,19 +400,19 @@ public class MyFuelServer extends AbstractServer {
 			Quarter q1 = (Quarter) params1.get(2);
 			String year1 = (String) params1.get(3);
 			File file2;
-			
+
 			try {
-				file2 = GasStationControllerServer.createFuelStationPurchasesReport(st_id1,companyname1,q1,year1);
-				if(file2 == null)
+				file2 = GasStationControllerServer.createFuelStationPurchasesReport(st_id1, companyname1, q1, year1);
+				if (file2 == null)
 					client.sendToClient(new Message(null, Commands.defaultRes));
-				
+
 				else
-				client.sendToClient(new Message(convertFileToSeializable(file2),Commands.reciveFile));
+					client.sendToClient(new Message(convertFileToSeializable(file2), Commands.reciveFile));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case createFuelStationInventoryReport:
 			ArrayList<Object> params2 = (ArrayList<Object>) message.getObj();
 			int st_id2 = (int) params2.get(0);
@@ -419,15 +420,15 @@ public class MyFuelServer extends AbstractServer {
 			Quarter q2 = (Quarter) params2.get(2);
 			String year2 = (String) params2.get(3);
 			File file3;
-			
+
 			try {
-				file3 = GasStationControllerServer.createInventoryReporteport(st_id2, companyname2,q2,year2);
-				if(file3 == null)
-					client.sendToClient(new Message(null,Commands.defaultRes));
-				
+				file3 = GasStationControllerServer.createInventoryReporteport(st_id2, companyname2, q2, year2);
+				if (file3 == null)
+					client.sendToClient(new Message(null, Commands.defaultRes));
+
 				else
-				client.sendToClient(new Message(convertFileToSeializable(file3),Commands.reciveFile));
-				
+					client.sendToClient(new Message(convertFileToSeializable(file3), Commands.reciveFile));
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -438,13 +439,13 @@ public class MyFuelServer extends AbstractServer {
 			String p_id = (String) p.get(0);
 			int p_stid = (int) p.get(1);
 			try {
-				client.sendToClient(
-						new Message(GasStationControllerServer.getAllReportByYearandStationId(p_id,p_stid), Commands.defaultRes));
+				client.sendToClient(new Message(GasStationControllerServer.getAllReportByYearandStationId(p_id, p_stid),
+						Commands.defaultRes));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
-		
+
 		case getFuelTypesByCompany:
 			String companyNameByEmployee = (String) message.getObj();
 			try {
@@ -456,21 +457,23 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 		case checkIfUserNameExist:
-			String userName = (String)message.getObj();
+			String userName = (String) message.getObj();
 			try {
-				client.sendToClient(new Message(EmployeeController.checkIfUserNameExist(userName),Commands.defaultRes));
-			}catch (Exception e) {
+				client.sendToClient(
+						new Message(EmployeeController.checkIfUserNameExist(userName), Commands.defaultRes));
+			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
 			break;
-		
+
 		case getFileToclient:
 			GenericReport r = (GenericReport) message.getObj();
-			File f = FileManagmentSys.getFile(FileManagmentSys.createLocation(r.getCompanyName(),FileManagmentSys.stationManagerReports,r.getReportType()),r.getFileName());
-			
+			File f = FileManagmentSys.getFile(FileManagmentSys.createLocation(r.getCompanyName(),
+					FileManagmentSys.stationManagerReports, r.getReportType()), r.getFileName());
+
 			try {
-				client.sendToClient(new Message(convertFileToSeializable(f),Commands.reciveFile));
+				client.sendToClient(new Message(convertFileToSeializable(f), Commands.reciveFile));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -499,47 +502,78 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case GetStationInventory:
 			ArrayList<Object> array2 = (ArrayList<Object>) message.getObj();
-			sendToClientObject(GasStationControllerServer.getStationFuelQuantity((int)array2.get(0),(String)array2.get(1)), client);
+			sendToClientObject(
+					GasStationControllerServer.getStationFuelQuantity((int) array2.get(0), (String) array2.get(1)),
+					client);
 			break;
-		    
+
+		case getCompanyNames:
+			sendToClientObject(EmployeeController.getCompanyNames(), client);
+
+			break;
+
+		case addModule:
+			ArrayList<Object> param = (ArrayList<Object>) message.getObj();
+			try {
+				sendToClientObject(EmployeeController.addModule((String) param.get(0), (String) param.get(1),
+						(String) param.get(2)), client);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+
+		case updateCar:
+			ArrayList<Object> parame = (ArrayList<Object>) message.getObj();
+			try {
+			sendToClientObject(EmployeeController.updateCar((Car) parame.get(0), (String) parame.get(1)), client);
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
 		default:
 			System.out.println("default");
 		}
 
 	}
-	
+
 	/**
 	 * Generic function that send to client any arrayList
+	 * 
 	 * @param <T>
 	 * @param obj
 	 * @param client
 	 */
-	private <T> void sendToClientArrayList(ArrayList<T> obj,ConnectionToClient client) {
+	private <T> void sendToClientArrayList(ArrayList<T> obj, ConnectionToClient client) {
 		try {
 			if (obj != null) {
-				if(!obj.isEmpty())
-				client.sendToClient(new Message(obj, Commands.defaultRes));
-				else 
+				if (!obj.isEmpty())
+					client.sendToClient(new Message(obj, Commands.defaultRes));
+				else
 					client.sendToClient(new Message(obj, Commands.NoElementFound));
 			}
-			//there was an expetion on the server that must be handeled 
-			else client.sendToClient(new Message(null, Commands.NoElementFound));
+			// there was an expetion on the server that must be handeled
+			else
+				client.sendToClient(new Message(null, Commands.NoElementFound));
 
 		} catch (IOException e) {
-			System.out.println("Cloud not send to client:"+client);
+			System.out.println("Cloud not send to client:" + client);
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * sends to the client single object from the arrayList
+	 * 
 	 * @param <T>
 	 * @param obj
 	 * @param client
 	 */
-	private <T> void sendToClientObject(T obj,ConnectionToClient client) {
+	private <T> void sendToClientObject(T obj, ConnectionToClient client) {
 		try {
 			if (obj != null)
 				client.sendToClient(new Message(obj, Commands.defaultRes));
@@ -548,15 +582,16 @@ public class MyFuelServer extends AbstractServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
 
 	/**
 	 * convert File To Seializable
+	 * 
 	 * @param fileName
 	 * @param filePath
 	 * @return
 	 */
-	
+
 	private MyFile convertFileToSeializable(File file) {
 		MyFile msg = new MyFile(file.getName());
 		try {
@@ -574,7 +609,7 @@ public class MyFuelServer extends AbstractServer {
 		System.out.println("file had been converted");
 		return msg;
 	}
-	
+
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
@@ -611,58 +646,65 @@ public class MyFuelServer extends AbstractServer {
 			i++;
 		}
 	}
-	
-	//just to show in the GUI
+
+	// just to show in the GUI
 	/**
 	 * String UserID ,String userType
+	 * 
 	 * @author iamme
 	 *
 	 */
-		public static class UserOnline{
-			String UserID;
-			String userType;
-			/**
-			 * 
-			 * @param userID
-			 * @param userType
-			 */
-			public UserOnline(String userID, String userType) {
-				UserID = userID;
-				this.userType = userType;
-			}
-			public String getUserID() {
-				return UserID;
-			}
-			public void setUserID(String userID) {
-				UserID = userID;
-			}
-			public String getUserType() {
-				return userType;
-			}
-			public void setUserType(String userType) {
-				this.userType = userType;
-			}
-			
-			@Override
-			public boolean equals(Object obj) {
-				if (this == obj)
-					return true;
-				if (obj == null)
-					return false;
-				if (getClass() != obj.getClass())
-					return false;
-				UserOnline other = (UserOnline) obj;
-				if (UserID == null) {
-					if (other.UserID != null)
-						return false;
-				} else if (!UserID.equals(other.UserID))
-					return false;
-				return true;
-			}
-			@Override
-			public String toString() {
-				return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
-			}
-			
+	public static class UserOnline {
+		String UserID;
+		String userType;
+
+		/**
+		 * 
+		 * @param userID
+		 * @param userType
+		 */
+		public UserOnline(String userID, String userType) {
+			UserID = userID;
+			this.userType = userType;
 		}
+
+		public String getUserID() {
+			return UserID;
+		}
+
+		public void setUserID(String userID) {
+			UserID = userID;
+		}
+
+		public String getUserType() {
+			return userType;
+		}
+
+		public void setUserType(String userType) {
+			this.userType = userType;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			UserOnline other = (UserOnline) obj;
+			if (UserID == null) {
+				if (other.UserID != null)
+					return false;
+			} else if (!UserID.equals(other.UserID))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";
+		}
+
+	}
 }
