@@ -45,7 +45,7 @@ public class LogInController {
 		if (carNumber.isEmpty())
 			JOptionPane.showMessageDialog(null, "Please enter car number");
 		else {
-			if(carNumber.replaceAll("[^0-9?!\\.]","").compareTo(carNumber)!=0) {
+			if (carNumber.replaceAll("[^0-9?!\\.]", "").compareTo(carNumber) != 0) {
 				JOptionPane.showMessageDialog(null, "Please enter just numbers");
 				return;
 			}
@@ -60,9 +60,8 @@ public class LogInController {
 			fastFueling.customer = (Customer) result.get(1);
 			fastFueling.customerModule = (CustomerModule) result.get(2);
 			try {
-				MasterGUIController.getMasterGUIController().
-				switchWindows("FastFueling.fxml");
-				//fastFueling.start(ClientUI.mainStage);
+				MasterGUIController.getMasterGUIController().switchWindows("FastFueling.fxml");
+				// fastFueling.start(ClientUI.mainStage);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -78,13 +77,12 @@ public class LogInController {
 			JOptionPane.showMessageDialog(null, "username or password are missing");
 		else {
 			Object obj = UserCC.login(username, password);
-			
+
 			if (obj instanceof Customer) {
 				//
-				CustomerGuiController.customer=(Customer) obj;
+				CustomerGuiController.customer = (Customer) obj;
 				//
-				MasterGUIController.getMasterGUIController().
-				switchWindows("CustomerGUI.fxml");
+				MasterGUIController.getMasterGUIController().switchWindows("CustomerGUI.fxml");
 				//
 			} else if (obj instanceof Employee) {
 				System.out.println("employee");
@@ -95,28 +93,24 @@ public class LogInController {
 					case "marketing manager":
 						MarketingManagerController.markitingManager = employee;
 						//
-						MasterGUIController.getMasterGUIController().
-						switchWindows("MarketingManager.fxml");
+						MasterGUIController.getMasterGUIController().switchWindows("MarketingManager.fxml");
 						break;
 
 					case "ceo":
-						 CeoGUIController.ceo= employee;
-						 MasterGUIController.getMasterGUIController().
-						 switchWindows("CeoGUI.fxml");
+						CeoGUIController.ceo = employee;
+						MasterGUIController.getMasterGUIController().switchWindows("CeoGUI.fxml");
 						break;
 
 					case "station manager":
-						StationManagerController.stationManager=(StationManager) obj;
+						StationManagerController.stationManager = (StationManager) obj;
 						//
-						MasterGUIController.getMasterGUIController().
-						switchWindows("StationManagerGUI.fxml");
+						MasterGUIController.getMasterGUIController().switchWindows("StationManagerGUI.fxml");
 						break;
 
 					case "markitig employee":
-						MarketingEmployeeController.markem=(Employee) obj;
+						MarketingEmployeeController.markem = (Employee) obj;
 						//
-						MasterGUIController.getMasterGUIController().
-						switchWindows("MarketingEmployee.fxml");
+						MasterGUIController.getMasterGUIController().switchWindows("MarketingEmployee.fxml");
 						break;
 					}
 
@@ -126,25 +120,13 @@ public class LogInController {
 			}
 
 			else if (obj instanceof Supplier) {
-				System.out.println("supplier");
-				ClientUI.user = obj;
-				SupplierController supplier = new SupplierController();
-				try {
-					supplier.start(ClientUI.mainStage);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				SupplierController.supplier = (Supplier) obj;
+				//
+				MasterGUIController.getMasterGUIController().switchWindows("SupplierBoundary.fxml");
 
 			}
 
-			else if (obj == null) {
-				//
-				SupplierController.supplier=(Supplier) obj;
-				//
-				MasterGUIController.getMasterGUIController().
-				switchWindows("SupplierBoundary.fxml");
-				//
-			} else if (obj == null)
+			else if (obj == null)
 				JOptionPane.showMessageDialog(null, "not exist");
 			else if (obj.equals(Commands.UserAlreadyConnected))
 				JOptionPane.showMessageDialog(null, "already online");

@@ -5,16 +5,23 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.ServerController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.ServerController">
    <children>
-      <Pane fx:id="serverPortPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+      <ImageView fitHeight="800.0" fitWidth="1266.0" layoutX="-245.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/MyFuel.jpg" />
+         </image>
+      </ImageView>
+      <Pane fx:id="serverPortPane" layoutX="-8.0" layoutY="93.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.93" prefHeight="428.0" prefWidth="965.0" style="-fx-background-color: #e0c0a0;">
          <children>
             <TextField fx:id="portNumber" layoutX="299.0" layoutY="197.0" text="5555" />
-            <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
+            <Text layoutX="14.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
@@ -24,7 +31,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
-            <Button fx:id="setPortNumberBtn" layoutX="408.0" layoutY="429.0" mnemonicParsing="false" onAction="#setServerData" text="Continue" />
+            <Button fx:id="setPortNumberBtn" layoutX="857.0" layoutY="387.0" mnemonicParsing="false" onAction="#setServerData" stylesheets="@styles.css" text="Continue" />
             <Text layoutX="56.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter MySQL SCHEMA name">
                <font>
                   <Font name="System Bold" size="15.0" />
@@ -47,21 +54,24 @@
             </Text>
          </children>
       </Pane>
-      <Pane fx:id="serverPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" visible="false">
+      <Pane fx:id="serverPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="941.0" visible="false">
          <children>
-            <TextField id="text" fx:id="serverScreen" layoutX="593.0" layoutY="23.0" text="Server is OFF" />
-            <Button id="OnOFF" fx:id="OnOffBtn" layoutX="627.0" layoutY="73.0" mnemonicParsing="false" onAction="#OnOff" prefHeight="31.0" prefWidth="118.0" text="ON/OFF" />
-            <TextArea fx:id="serverConsole" layoutX="26.0" layoutY="147.0" prefHeight="420.0" prefWidth="550.0" />
-            <Text layoutX="25.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
+            <TextField id="text" fx:id="serverScreen" layoutX="770.0" layoutY="14.0" text="Server is OFF" />
+            <Button id="OnOFF" fx:id="OnOffBtn" layoutX="801.0" layoutY="48.0" mnemonicParsing="false" onAction="#OnOff" prefHeight="31.0" prefWidth="118.0" stylesheets="@styles.css" text="ON/OFF" />
+            <TextArea fx:id="serverConsole" layoutX="26.0" layoutY="147.0" prefHeight="420.0" prefWidth="550.0" style="-fx-background-color: #f2f2f2; -fx-opacity: 0.9;" />
+            <Text fill="WHITE" layoutX="14.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel Server">
                <font>
                   <Font name="Arial Bold" size="48.0" />
                </font>
             </Text>
-            <Text layoutX="26.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Console" />
-            <TableView fx:id="UsersTable" layoutX="586.0" layoutY="147.0" prefHeight="420.0" prefWidth="200.0">
+            <Text fill="WHITE" layoutX="26.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Server Console">
+               <font>
+                  <Font size="20.0" />
+               </font></Text>
+            <TableView fx:id="UsersTable" layoutX="586.0" layoutY="147.0" prefHeight="420.0" prefWidth="347.0" style="-fx-background-color: #f2f2f2; -fx-opacity: 0.9;">
               <columns>
-                <TableColumn fx:id="userID" minWidth="100.0" prefWidth="75.0" text="UserID" />
-                <TableColumn fx:id="userType" minWidth="100.0" prefWidth="75.0" text="User Type" />
+                <TableColumn fx:id="userID" minWidth="88.0" prefWidth="165.0" text="UserID" />
+                <TableColumn fx:id="userType" minWidth="100.0" prefWidth="181.0" text="User Type" />
               </columns>
             </TableView>
          </children>
