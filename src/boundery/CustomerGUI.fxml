@@ -65,8 +65,8 @@
                </font>
             </Text>
             <TextField fx:id="textAmount" layoutX="208.0" layoutY="333.0" text="0" />
-            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="188.0" layoutY="191.0" onAction="#supplyDateSelected" />
-            <Text fx:id="textSupplyDate" layoutX="433.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" wrappingWidth="179.21288983523846">
+            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="188.0" layoutY="191.0" onAction="#supplyDateSelected" visible="false" />
+            <Text fx:id="textSupplyDate" layoutX="433.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
                <font>
                   <Font size="16.0" />
                </font>
@@ -116,7 +116,7 @@
                </children>
             </Pane>
             <Text fx:id="noteDate" fill="RED" layoutX="613.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Text fx:id="noteAmount" fill="RED" layoutX="422.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="noteAmount" fill="RED" layoutX="422.0" layoutY="354.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Must be a positive number." visible="false" />
             <Text layoutX="111.0" layoutY="255.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(3% off buying over 600" />
             <Text layoutX="111.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and 4% off buying over 800)" />
          </children>

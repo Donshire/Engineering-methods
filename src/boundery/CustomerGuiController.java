@@ -236,7 +236,7 @@ public class CustomerGuiController implements Initializable {
 		noteDate.setVisible(false);
 		noteAmount.setVisible(false);
 
-		if (normalSupply.isSelected()) {
+		if (normalSupply.isSelected()) {		
 			if (filedSupplyDate.getValue() == null) {
 				noteDate.setText("Delivery date must be set.");
 				noteDate.setVisible(true);
@@ -260,6 +260,10 @@ public class CustomerGuiController implements Initializable {
 
 	private boolean amountIsNumber() {
 		String amountStr = textAmount.getText();
+		String str = amountStr.replaceAll("\\D+","");
+		return (amountStr.compareTo(str) == 0);
+			
+/*		
 		
 		try {
 			@SuppressWarnings("unused")
@@ -269,10 +273,10 @@ public class CustomerGuiController implements Initializable {
 			return false;
 		}
 		return true;
+*/
 	}
 	
 	private void setPrice() {
-		// double beforeDiscount = priceListPrice * gasAmount;
 		float beforeDiscount = 4.8f * gasAmount;
 		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
 		total.setText(String.format("%.2f", priceOfPurchase));
@@ -289,35 +293,38 @@ public class CustomerGuiController implements Initializable {
 			else
 				discount = 0;
 		}
-		textDiscount.setText(discount.toString());
+		textDiscount.setText(discount.toString() + "%");
 	}
 
 	public void orderHomeGasInitialize() {
 		
 		// Loading the price of per unit.
-				float pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
-				priceList.setText(Float.toString(pricePerUnit));
+		float pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		priceList.setText(Float.toString(pricePerUnit));
 		
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-				try {
-					gasAmount = Float.valueOf(newValue);
-					if(gasAmount>0) noteAmount.setVisible(false);
-					else {
+				
+					
+					String str = newValue.replaceAll("\\D+","");
+					if (newValue.compareTo(str) != 0) {
+						noteAmount.setVisible(true);
 						gasAmount = 0;
 						newValue = "0.0";
-						noteAmount.setText("Must be Number");
-						noteAmount.setVisible(true);
+					} else {
+						try {
+							gasAmount = Float.valueOf(newValue);
+							noteAmount.setVisible(false);
+						} catch (Exception e) {
+							gasAmount = 0;
+							newValue = "0.0";
+							noteAmount.setVisible(true);
+						}
 					}
-				} catch (Exception e) {
-					gasAmount = 0;
-					newValue = "0.0";
-					noteAmount.setText("Must be Number");
-					noteAmount.setVisible(true);
-				}
+				
 				settingDiscount();
 				setPrice();
 			}
