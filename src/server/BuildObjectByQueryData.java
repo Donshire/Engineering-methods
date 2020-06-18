@@ -94,8 +94,7 @@ public class BuildObjectByQueryData {
 		try {
 			while (res.next() == true)
 				customerModuleList.add(new CustomerModule(res.getString(1),
-						res.getInt(2), converStringToSet(res.getString(3)),
-						res.getString(4), res.getString(5)));
+						res.getInt(2), converStringToSet(res.getString(3))));
 				res.close();
 			return customerModuleList;
 		} catch (SQLException e) {

@@ -17,19 +17,14 @@ public class CustomerModule implements Serializable{
 	private int modelNumber;
 
 	private Set<String> companyNamesSubscribed = new HashSet<String>();
-	private String startDate;
-	private String endDate;
 	
 	/**
 	 * 
 	 * */
-	public CustomerModule(String id, int modelNumber, Set<String> companyNamesSubscribed, String startDate,
-			String endDate) {
+	public CustomerModule(String id, int modelNumber, Set<String> companyNamesSubscribed) {
 		this.id = id;
 		this.modelNumber = modelNumber;
 		this.companyNamesSubscribed = companyNamesSubscribed;
-		this.startDate = startDate;
-		this.endDate = endDate;
 	}
 
 	public String getId() {
@@ -56,26 +51,10 @@ public class CustomerModule implements Serializable{
 		this.companyNamesSubscribed = companyNamesSubscribed;
 	}
 
-	public String getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
 	@Override
 	public String toString() {
 		return "CustomerModule [id=" + id + ", modelNumber=" + modelNumber + ", companyNamesSubscribed="
-				+ companyNamesSubscribed + ", startDate=" + startDate + ", endDate=" + endDate + "]";
+				+ companyNamesSubscribed ;
 	}
 
 }
