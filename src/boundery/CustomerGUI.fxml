@@ -65,10 +65,10 @@
                </font>
             </Text>
             <TextField fx:id="textAmount" layoutX="208.0" layoutY="333.0" text="0" />
-            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="360.0" layoutY="191.0" onAction="#supplyDateSelected" visible="false" />
-            <Text fx:id="textSupplyDate" layoutX="180.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
+            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="188.0" layoutY="191.0" onAction="#supplyDateSelected" />
+            <Text fx:id="textSupplyDate" layoutX="433.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" wrappingWidth="179.21288983523846">
                <font>
-                  <Font name="System Bold" size="16.0" />
+                  <Font size="16.0" />
                </font>
             </Text>
             <Pane layoutX="83.0" layoutY="384.0" prefHeight="236.0" prefWidth="853.0" style="-fx-background-color: caf0f8;">
