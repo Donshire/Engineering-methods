@@ -124,7 +124,7 @@ public class FastFuelingController implements Initializable {
 		if (!salesID.isEmpty())
 			sales = salesID.get(0);
 		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice*amount, "", "",
-				sales, currentPrice*amount, customer.getId());
+				sales, currentPrice*amount, customer.getId(),customer.getPricingModel());
 		
 		if (visaRadio.isSelected())
 			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());

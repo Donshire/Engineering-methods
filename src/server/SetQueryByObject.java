@@ -29,6 +29,7 @@ public class SetQueryByObject {
 			stm.setString(6, purchase.getDate());
 			stm.setInt(7, purchase.getSaleID());
 			stm.setFloat(8, purchase.getCurrentPrice());
+			stm.setInt(9, purchase.getPricingModelNumber());
 			stm.executeUpdate();
 			stm.close();
 			return true;

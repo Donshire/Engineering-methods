@@ -322,8 +322,8 @@ public class FastFuelController {
 		
 		String query="insert into myfueldb.fuelpurchase " + 
 				"(stationId,CarNumber,fuelQuantity," + 
-				"priceOfPurchase,time,date,saleID,currentPrice) " + 
-				"values (?,?,?,?,?,?,?,?)";
+				"priceOfPurchase,time,date,saleID,currentPrice,pricingModel) " + 
+				"values (?,?,?,?,?,?,?,?,?)";
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			//get the current price and set it in the purchase

@@ -16,9 +16,10 @@ public class FuelPurchase implements Serializable {
 	private int saleID;
 	private float currentPrice;
 	private String customerID;
+	private int pricingModelNumber;
 
 	public FuelPurchase(Integer purchaseID, int stationId, String carNumber, float fuelQuantity, float priceOfPurchase,
-			String time, String date, int saleID, float currentPrice, String customerID) {
+			String time, String date, int saleID, float currentPrice, String customerID, int pricingModelNumber) {
 		super();
 		this.purchaseID = purchaseID;
 		this.stationId = stationId;
@@ -30,8 +31,16 @@ public class FuelPurchase implements Serializable {
 		this.saleID = saleID;
 		this.currentPrice = currentPrice;
 		this.customerID = customerID;
+		this.pricingModelNumber = pricingModelNumber;
 	}
 	
+	public int getPricingModelNumber() {
+		return pricingModelNumber;
+	}
+	
+	public void setPricingModelNumber(int pricingModelNumber) {
+		this.pricingModelNumber = pricingModelNumber;
+	}
 
 	public String getCustomerID() {
 		return customerID;
