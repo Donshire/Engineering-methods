@@ -39,8 +39,6 @@
             <Label fx:id="CreditCardNoLbl" layoutX="66.0" layoutY="230.0" text="Credit Card No:" />
             <Label fx:id="ExpDateLbl" layoutX="385.0" layoutY="230.0" prefHeight="21.0" prefWidth="66.0" text="Exp Date:" />
             <Label fx:id="CVVLbl" layoutX="560.0" layoutY="230.0" text="CVV:" />
-            <Button fx:id="RegistrationNextBtn" layoutX="452.0" layoutY="500.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="31.0" prefWidth="62.0" text="Next" />
-            <Label fx:id="ORLbl" layoutX="527.0" layoutY="505.0" text="OR" />
             <Button fx:id="RegistrationFinishBtn" layoutX="564.0" layoutY="500.0" mnemonicParsing="false" onAction="#registration" prefHeight="31.0" prefWidth="62.0" text="Finish" />
             <TextField fx:id="IDTxt" layoutX="189.0" layoutY="61.0" />
             <TextField fx:id="FirstNameTxt" layoutX="189.0" layoutY="102.0" />

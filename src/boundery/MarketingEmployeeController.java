@@ -723,7 +723,7 @@ public class MarketingEmployeeController implements Initializable {
 		CVV = CVVTxt.getText();
 
 		cusType = (CustomerTypes) customerTypeCombox.getValue();
-		if (cusType.equals(CustomerTypes.Company)) {
+		if (cusType==CustomerTypes.Company) {
 			companyName = customercompanyNameTxt.getText();
 			if (companyName.isEmpty())
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
@@ -804,8 +804,14 @@ public class MarketingEmployeeController implements Initializable {
 			} else if (res == -1)
 				JOptionPane.showMessageDialog(null, "There has been an error, try again");
 			else {
-				if (EmployeeCC.AddNewCustomer(customer))
+				if (EmployeeCC.AddNewCustomer(customer)) {
 					JOptionPane.showMessageDialog(null, "Customer added successfully!");
+					IDTxt.clear();
+					FirstNameTxt.clear();
+					LastNameTxt.clear();
+					EmailTxt.clear();
+					CreditCardTxt.clear();
+				}
 				else
 					JOptionPane.showMessageDialog(null, "Update un-succeded one or more of the data didn't update");
 			}
@@ -859,9 +865,17 @@ public class MarketingEmployeeController implements Initializable {
 	// open the option to change car that exist
 	@FXML
 	void openReplaceCar(ActionEvent event) {
-		oldCarNumLbl.setDisable(false);
-		oldCarNumTxt.setDisable(false);
-		replaceCarFlag = true;
+		if(oldCarNumTxt.isDisable()) {
+			oldCarNumLbl.setDisable(false);
+			oldCarNumTxt.setDisable(false);
+			replaceCarFlag = true;
+		}
+		else {
+			oldCarNumLbl.setDisable(true);
+			oldCarNumTxt.setDisable(true);
+			replaceCarFlag = false;
+			oldCarNumTxt.clear();
+		}
 
 	}
 
@@ -970,6 +984,12 @@ public class MarketingEmployeeController implements Initializable {
 				secCar2 = new Car(secCar, secFuel, id);
 
 			}
+		}
+		else {
+			secondCarLbl.setVisible(false);
+			secondCarTxt.setVisible(false);
+			secfuelTypeLbl.setVisible(false);
+			secFuelTypeCombox.setVisible(false);
 		}
 
 		Car car = new Car(carNumber, fuelType, id);
