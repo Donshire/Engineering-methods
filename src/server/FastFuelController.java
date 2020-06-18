@@ -63,9 +63,9 @@ public class FastFuelController {
 	 * @param model CustomerModule
 	 * @param prcingModelNumber int
 	 * @param amount float
-	 * @return
+	 * @return purchasePrice,SalePercent,RatePercent,Sale ID,pumpChoosen.
 	 */
-	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,String customerID,String fuelType,int prcingModelNumber,String date,String time) {
+	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,String customerID,String fuelType,int prcingModelNumber,int pumpNum,String date,String time) {
 		//the ArrayList contains purchasePrice,currentPrice,SalePercent
 		ArrayList<Float> result= new ArrayList<Float>();
 		
@@ -96,7 +96,8 @@ public class FastFuelController {
 		result.add(maxPrice);//currentPrice
 		result.add(salePercent);//SalePercent
 		result.add(roundThreeDecimals(1-salePercentOfRate));//RatePercent
-		result.add(saleID);//Sale ID 
+		result.add(saleID);//Sale ID
+		result.add((float)pumpNum);//pumpChoosen
 		
 		return result;
 	}
