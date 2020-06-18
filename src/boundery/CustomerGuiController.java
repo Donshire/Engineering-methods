@@ -4,13 +4,10 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
-
 import javax.swing.JOptionPane;
-
 import Entity.Customer;
 import Entity.GasOrder;
 import client.CustomerCC;
@@ -25,19 +22,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -94,11 +86,21 @@ public class CustomerGuiController implements Initializable {
    @FXML
     private TableColumn<GasOrder,String> Status;
 
-
 	// ORDER TABLE END ------------------------------------
 
+   
+    // ---------------- General Components ----------------------
 	@FXML
 	private Text hellotxt;
+	
+	@FXML
+	private Button orderGasbtn;
+
+	@FXML
+	private Button myOrdersbtn;
+
+	
+	
 	
 	@FXML
 	private Text noteAmount;
@@ -106,11 +108,6 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	private Text noteDate;
 
-	@FXML
-	private Button orderGasbtn;
-
-	@FXML
-	private Button myOrdersbtn;
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -128,9 +125,6 @@ public class CustomerGuiController implements Initializable {
 	private DatePicker filedSupplyDate;
 
 	@FXML
-	private Slider sliderAmount;
-
-	@FXML
 	private TextField textAmount;
 
 	@FXML
@@ -145,20 +139,19 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	private Button buttonBuy;
 
+	
+	
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
-
 		gasAmount = new Float(textAmount.getText());
-		// gasAmount = (double) spinnerAmount.getValue();
-		// sliderAmount.setValue(value);
 		settingDiscount();
 		setPrice();
 	}
 
 	@FXML
 	/**
-	 * Displays or hides the option to select a date according to the selected radio
-	 * button
+	 * Displays or hides the option to select a date <br>
+	 * according to the selected radio button.
 	 */
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
@@ -168,12 +161,7 @@ public class CustomerGuiController implements Initializable {
 		setPrice();
 	}
 
-	private void setPrice() {
-		// double beforeDiscount = priceListPrice * gasAmount;
-		float beforeDiscount = 4.8f * gasAmount;
-		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
-		total.setText(String.format("%.2f", priceOfPurchase));
-	}
+	
 
 	@FXML
 	void logOut(ActionEvent event) {
@@ -213,23 +201,14 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	void myOrdersClicked(ActionEvent event) {
-		//Button btn = (Button) event.getSource();
-
-		//if (btn.equals(myOrdersbtn)) {
 			myOrdersPane.setVisible(true);
 			orderHomeGasPane.setVisible(false);
-		//}
-
 	}
 
 	@FXML
 	void orderGasClicked(ActionEvent event) {
-		//Button btn = (Button) event.getSource();
-
-		//if (btn.equals(orderGasbtn)) {
 			myOrdersPane.setVisible(false);
 			orderHomeGasPane.setVisible(true);
-		//}
 	}
 
 	public void start(Stage primaryStage) throws Exception {
@@ -251,7 +230,7 @@ public class CustomerGuiController implements Initializable {
 	}
 	
 	
-	public boolean isInputCorrect() {
+	private boolean isInputCorrect() {
 		boolean proper = true;
 		
 		noteDate.setVisible(false);
@@ -292,8 +271,14 @@ public class CustomerGuiController implements Initializable {
 		return true;
 	}
 	
+	private void setPrice() {
+		// double beforeDiscount = priceListPrice * gasAmount;
+		float beforeDiscount = 4.8f * gasAmount;
+		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
+		total.setText(String.format("%.2f", priceOfPurchase));
+	}
 	
-	void settingDiscount() {
+	private void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
 		else {
