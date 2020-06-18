@@ -1,32 +1,37 @@
 .button
 {
--fx-background-color : #EBE8F9;
+-fx-background-color :   #bf9e7e;
 -fx-text-fill : #000000;
--fx-background-radius: 20px, 20px, 20px, 20px;
--fx-background-insets: 0 0 -1 0, 0, 1, 2;
+-fx-border-color : black;
+-fx-background-insets: 0.0 0.0 -1.0 0.0, 0.0, 1.0, 2.0;
+
+
 
 }
+
 .button:hover{
 
  	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
-    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
-    -fx-background-radius: 20px, 20px, 20px, 20px;
+    -fx-background-insets: 0.0 0.0 -1.0 0.0, 0.0, 1.0, 2.0;
     -fx-padding: 0.333333em 0.666667em 0.333333em 0.666667em; /* 4 8 4 8 */
     -fx-text-fill: -fx-text-base-color;
     -fx-alignment: CENTER;
     -fx-content-display: LEFT;
+    
+    
 }
+
 .button:pressed
 {
--fx-background-color : #EBE8F9;
+-fx-background-color : #f9ede1; 
 
 }
 .popup {
     -fx-background-color: cornsilk;
-    -fx-padding: 10;
+    -fx-padding: 10.0;
     -fx-border-color: black; 
-    -fx-border-width: 5;
-    -fx-font-size: 16;
+    -fx-border-width: 5.0;
+    -fx-font-size: 16.0;
 }
 
 .scroll-pane {
@@ -46,13 +51,13 @@
 .scroll-bar:vertical .track{
     -fx-background-color: transparent;
     -fx-border-color: transparent;
-    -fx-background-radius: 0em;
+    -fx-background-radius: 0.0em;
 }
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
     -fx-background-color: #BDBBC3;
-    -fx-background-radius: 5em;
+    -fx-background-radius: 5.0em;
 }
 .pane {
     -fx-border-color: black;

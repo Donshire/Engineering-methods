@@ -5,92 +5,126 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.CeoGUIController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.CeoGUIController">
    <children>
-      <AnchorPane fx:id="reportsPane" layoutX="162.0" layoutY="99.0" prefHeight="501.0" prefWidth="658.0">
+      <Pane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;">
          <children>
-            <TableView fx:id="ReportTable" layoutX="34.0" layoutY="132.0" prefHeight="283.0" prefWidth="608.0">
+            <Button fx:id="MaxPriceOfGasButton" layoutY="286.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Set max price of gas" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="RateApprovalButton" layoutY="168.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Rate approval" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="ReportsHandler" layoutY="227.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Station reports" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="MainPaneButton" layoutY="108.0" mnemonicParsing="false" onAction="#MainPaneHandler" prefHeight="60.0" prefWidth="192.0" styleClass="styles.css" stylesheets="@styles.css" text="Main pane" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <ImageView fitHeight="111.0" fitWidth="232.0" layoutX="-40.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/MyFuel.jpg" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <AnchorPane fx:id="reportsPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+         <children>
+            <TableView fx:id="ReportTable" layoutX="32.0" layoutY="141.0" prefHeight="265.0" prefWidth="705.0">
               <columns>
-                <TableColumn fx:id="ReportType" prefWidth="95.0" text="Report Type" />
-                <TableColumn fx:id="ReportDate" prefWidth="183.0" text="Date" />
-                  <TableColumn fx:id="ReportTime" prefWidth="179.0" text="Time" />
-                  <TableColumn fx:id="ReportStationId" prefWidth="150.0" text="Station ID" />
+                <TableColumn fx:id="ReportType" prefWidth="162.0" text="Report Type" />
+                <TableColumn fx:id="ReportDate" prefWidth="173.0" text="Date" />
+                  <TableColumn fx:id="ReportTime" prefWidth="203.0" text="Time" />
+                  <TableColumn fx:id="ReportStationId" prefWidth="166.0" text="Station ID" />
               </columns>
             </TableView>
-            <Text layoutX="31.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year:">
+            <Text layoutX="373.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year:">
                <font>
                   <Font size="20.0" />
                </font>
             </Text>
-            <TextField fx:id="ReportEnterYear" layoutX="134.0" layoutY="18.0" />
-            <Button fx:id="ShowReport" layoutX="338.0" layoutY="14.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" text="show" />
-            <TextField fx:id="ReportsStationID" layoutX="134.0" layoutY="73.0" />
-            <Text layoutX="32.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Station ID:">
+            <TextField fx:id="ReportEnterYear" layoutX="478.0" layoutY="102.0" />
+            <Button fx:id="ShowReport" layoutX="652.0" layoutY="100.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="27.0" prefWidth="74.0" stylesheets="@styles.css" text="show">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <TextField fx:id="ReportsStationID" layoutX="135.0" layoutY="103.0" />
+            <Text layoutX="32.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Station ID:">
                <font>
                   <Font size="20.0" />
+               </font>
+            </Text>
+            <Text layoutX="32.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Stations reports" wrappingWidth="280.6708984375">
+               <font>
+                  <Font size="32.0" />
                </font>
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="MainPane" layoutX="163.0" layoutY="99.0" prefHeight="501.0" prefWidth="650.0" visible="false">
+      <AnchorPane fx:id="MainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <Text layoutX="33.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications">
+            <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications">
                <font>
                   <Font size="17.0" />
                </font>
             </Text>
-            <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="33.0" layoutY="105.0" prefHeight="200.0" prefWidth="546.0" />
+            <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="14.0" layoutY="53.0" prefHeight="312.0" prefWidth="736.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="SetMaxPriceOfGasPane" layoutX="164.0" layoutY="99.0" prefHeight="501.0" prefWidth="658.0" visible="false">
+      <AnchorPane fx:id="SetMaxPriceOfGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <Text layoutX="79.0" layoutY="349.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* double click on the new max  price row to enter a new max price" />
-            <Text layoutX="79.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum price list:">
+            <Text layoutX="14.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* double click on the new max  price row to enter a new max price" />
+            <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum price list:">
                <font>
                   <Font size="20.0" />
                </font>
             </Text>
-            <TableView fx:id="MaxPriceList" editable="true" layoutX="79.0" layoutY="129.0" prefHeight="207.0" prefWidth="504.0">
+            <TableView fx:id="MaxPriceList" editable="true" layoutX="14.0" layoutY="62.0" prefHeight="207.0" prefWidth="736.0">
               <columns>
                 <TableColumn fx:id="FuelTypeCol" prefWidth="150.0" text="Fuel Type" />
-                  <TableColumn fx:id="CurrentPriceCol" prefWidth="177.0" text="Current max price" />
-                  <TableColumn fx:id="NewMaxPriceCol" prefWidth="176.0" text="New max price" />
+                  <TableColumn fx:id="CurrentPriceCol" prefWidth="347.0" text="Current max price" />
+                  <TableColumn fx:id="NewMaxPriceCol" prefWidth="238.0" text="New max price" />
               </columns>
             </TableView>
-            <Button fx:id="MaxPriceUpdateBtn" layoutX="524.0" layoutY="366.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" text="Update" />
-            <Button fx:id="MaxPriceRefresh" layoutX="527.0" layoutY="85.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" text="Refresh" />
+            <Button fx:id="MaxPriceUpdateBtn" layoutX="685.0" layoutY="387.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" stylesheets="@styles.css" text="Update" />
+            <Button fx:id="MaxPriceRefresh" layoutX="684.0" layoutY="12.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" stylesheets="@styles.css" text="Refresh" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="RateApprovalPane" layoutX="162.0" layoutY="99.0" prefHeight="501.0" prefWidth="658.0" visible="false">
+      <AnchorPane fx:id="RateApprovalPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <TableView fx:id="RequestListTable" editable="true" layoutX="9.0" layoutY="101.0" prefHeight="312.0" prefWidth="634.0">
+            <TableView fx:id="RequestListTable" editable="true" layoutX="16.0" layoutY="60.0" prefHeight="312.0" prefWidth="736.0">
               <columns>
                   <TableColumn fx:id="RequestSelectCol" prefWidth="70.0" text="Select" />
-                  <TableColumn fx:id="RequestModelCol" prefWidth="172.0" text="Model Number" />
-                  <TableColumn fx:id="RequestSalePecentCol" prefWidth="133.0" text="Sale Percent" />
-                  <TableColumn fx:id="RequestCompanyNameCol" prefWidth="137.0" text="Company Name" />
-                  <TableColumn fx:id="RequestStatusCol" prefWidth="121.0" text="Status" />
+                  <TableColumn fx:id="RequestModelCol" prefWidth="157.0" text="Model Number" />
+                  <TableColumn fx:id="RequestSalePecentCol" prefWidth="187.0" text="Sale Percent" />
+                  <TableColumn fx:id="RequestCompanyNameCol" prefWidth="179.0" text="Company Name" />
+                  <TableColumn fx:id="RequestStatusCol" prefWidth="142.0" text="Status" />
               </columns>
             </TableView>
-            <Text layoutX="29.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Request List">
+            <Text layoutX="14.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Request List">
                <font>
                   <Font size="26.0" />
                </font>
             </Text>
-            <Button fx:id="RequestListConfirmBtn" layoutX="559.0" layoutY="442.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="25.0" prefWidth="85.0" text="Confirm" />
-            <Button fx:id="RequestListRejectBtn" layoutX="448.0" layoutY="442.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="25.0" prefWidth="85.0" text="Reject" />
-            <Button fx:id="RateApprovalRefresh" layoutX="583.0" layoutY="55.0" mnemonicParsing="false" onAction="#RateApprovalHandler" text="Refresh" />
+            <Button fx:id="RequestListConfirmBtn" layoutX="669.0" layoutY="385.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="25.0" prefWidth="85.0" stylesheets="@styles.css" text="Confirm" />
+            <Button fx:id="RequestListRejectBtn" layoutX="574.0" layoutY="385.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="25.0" prefWidth="85.0" stylesheets="@styles.css" text="Reject" />
+            <Button fx:id="RateApprovalRefresh" layoutX="682.0" layoutY="11.0" mnemonicParsing="false" onAction="#RateApprovalHandler" stylesheets="@styles.css" text="Refresh" />
          </children>
       </AnchorPane>
-      <Button fx:id="MaxPriceOfGasButton" layoutX="14.0" layoutY="279.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="141.0" text="Set max price of gas" />
-      <Button fx:id="RateApprovalButton" layoutX="14.0" layoutY="350.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="60.0" prefWidth="141.0" text="Rate approval" />
-      <Button fx:id="logOut" layoutX="713.0" layoutY="24.0" mnemonicParsing="false" onAction="#MainPaneHandler" text="Log Out" />
-      <Button fx:id="MainPaneButton" layoutX="14.0" layoutY="204.0" mnemonicParsing="false" onAction="#MainPaneHandler" prefHeight="60.0" prefWidth="141.0" text="Main pane" />
-      <Button fx:id="ReportsHandler" layoutX="14.0" layoutY="417.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="141.0" text="Station reports" />
+      <Button fx:id="logOut" layoutX="872.0" layoutY="14.0" mnemonicParsing="false" onAction="#MainPaneHandler" stylesheets="@styles.css" text="Log Out">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
    </children>
 </Pane>

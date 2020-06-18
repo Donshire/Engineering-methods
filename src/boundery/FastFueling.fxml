@@ -4,6 +4,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -11,38 +13,72 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
    <children>
-      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0">
+      <ImageView fitHeight="428.0" fitWidth="814.0" layoutX="-92.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/MyFuel.jpg" />
+         </image>
+      </ImageView>
+      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0; -fx-opacity: 0.95;">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="GAINSBORO" height="205.0" layoutX="22.0" layoutY="167.0" stroke="#dddddd" strokeType="INSIDE" width="557.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#969696" height="120.0" layoutX="77.0" layoutY="21.0" stroke="#969696" strokeType="INSIDE" width="411.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" height="148.0" layoutY="72.0" stroke="BLACK" strokeType="INSIDE" width="600.0" />
-            <Text layoutX="94.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Fuel - Fast Fueling System">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9ede1" height="384.0" layoutX="9.0" layoutY="9.0" stroke="#dddddd" strokeType="INSIDE" width="580.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4b773" height="148.0" layoutX="15.0" layoutY="72.0" stroke="#ebe0df" strokeType="INSIDE" width="567.0" />
+            <Text layoutX="12.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fast Fueling System">
                <font>
                   <Font name="System Bold" size="27.0" />
                </font>
             </Text>
-            <Text fill="WHITE" layoutX="22.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Car Number" />
+            <Text fill="WHITE" layoutX="22.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Car Number">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
             <Text fx:id="carNumberTxt" fill="WHITE" layoutX="189.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Text fill="WHITE" layoutX="20.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Type" />
+            <Text fill="WHITE" layoutX="20.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Type">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
             <Text fx:id="fuelTypeTxt" fill="WHITE" layoutX="189.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Text fill="WHITE" layoutX="21.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Price per leter" />
+            <Text fill="WHITE" layoutX="21.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel Price per leter">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
             <Text layoutX="53.0" layoutY="303.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select station id" />
             <Text fx:id="fuelPricePL" fill="WHITE" layoutX="189.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text layoutX="52.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Fuel amount" />
             <TextField fx:id="fuelAmount" layoutX="192.0" layoutY="323.0" promptText="000" />
-            <Button fx:id="nextToPaymentBtn" layoutX="441.0" layoutY="323.0" mnemonicParsing="false" onAction="#nextToPayment" text="Next" />
+            <Button fx:id="nextToPaymentBtn" layoutX="521.0" layoutY="356.0" mnemonicParsing="false" onAction="#nextToPayment" prefHeight="25.0" prefWidth="63.0" stylesheets="@styles.css" text="Next">
+               <font>
+                  <Font size="13.0" />
+               </font></Button>
             <ComboBox fx:id="companiesCombo" layoutX="192.0" layoutY="235.0" onAction="#selectCompany" prefWidth="150.0" promptText="Company" style="-fx-background-color: white;" />
             <ComboBox fx:id="stationsIDCombo" layoutX="192.0" layoutY="282.0" prefWidth="150.0" promptText="StationID" style="-fx-background-color: white;" />
             <Text layoutX="52.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Company" />
-            <Text fill="WHITE" layoutX="305.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Percent" />
-            <Text fill="WHITE" layoutX="305.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel Number" />
-            <Text fill="WHITE" layoutX="19.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you'r Price per leter" />
+            <Text fill="WHITE" layoutX="305.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Percent">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
+            <Text fill="WHITE" layoutX="305.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel Number">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
+            <Text fill="WHITE" layoutX="19.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you'r Price per leter">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
             <Text fx:id="customerPriceTxt" fill="WHITE" layoutX="189.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text fx:id="pricingModelTxt" fill="WHITE" layoutX="470.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text fx:id="salePercentTxt" fill="WHITE" layoutX="470.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-            <Button layoutX="14.0" layoutY="32.0" mnemonicParsing="false" onAction="#backToLogInPage" text="Back" />
-            <Text fill="WHITE" layoutX="305.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel Sale" />
-            <Text fill="WHITE" layoutX="305.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sale ID" />
+            <Button layoutX="519.0" layoutY="21.0" mnemonicParsing="false" onAction="#backToLogInPage" prefHeight="25.0" prefWidth="63.0" stylesheets="@styles.css" text="Back">
+               <font>
+                  <Font size="13.0" />
+               </font></Button>
+            <Text fill="WHITE" layoutX="305.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="pricingModel Sale">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
+            <Text fill="WHITE" layoutX="305.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sale ID">
+               <font>
+                  <Font size="17.0" />
+               </font></Text>
             <Text fx:id="salIDTxt" fill="WHITE" layoutX="470.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text fx:id="pricingModelSaleTxt" fill="WHITE" layoutX="470.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
