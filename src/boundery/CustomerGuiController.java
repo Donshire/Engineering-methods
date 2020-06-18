@@ -200,8 +200,11 @@ public class CustomerGuiController implements Initializable {
 			
 			System.out.println(order.toString());
 			
-			if (CustomerCC.createNewOrder(order)) 
+			if (CustomerCC.createNewOrder(order)) {
 			JOptionPane.showMessageDialog(null,"Order created succesfully");
+			myOrdersClicked(null);
+			orderTable.setItems(getOrders());
+			}
 		else  JOptionPane.showMessageDialog(null,"clouldn't create order");	
 			// HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order), "Order created succesfully",
 			//		"clouldn't create order");
@@ -215,7 +218,6 @@ public class CustomerGuiController implements Initializable {
 		//if (btn.equals(myOrdersbtn)) {
 			myOrdersPane.setVisible(true);
 			orderHomeGasPane.setVisible(false);
-			orderTable.setItems(getOrders());
 		//}
 
 	}
@@ -345,6 +347,8 @@ public class CustomerGuiController implements Initializable {
 		PurchaseTimecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("time"));
 		PurchasePricecol.setCellValueFactory(new PropertyValueFactory<GasOrder, Float>("priceOfPurchase"));
 		Status.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("status"));
+		
+		orderTable.setItems(getOrders());
 	}
 	
 	
@@ -366,10 +370,6 @@ public class CustomerGuiController implements Initializable {
 		myOrdersInitialize();
 		
 		myOrdersClicked(null);
-		/*myOrdersPane.setVisible(true);		
-		orderHomeGasPane.setVisible(false);
-		orderTable.setItems(getOrders());*/
-		//
 
 	}
 
