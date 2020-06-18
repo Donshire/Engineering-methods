@@ -3,13 +3,9 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -30,8 +26,8 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	public void run() {
 		while(continueThread) {
 			 do{
-				before=getFirstOfMonth();
-				after =getLastOfMonth();
+				before=getLastOfMonth();
+				after =getFirstOfMonth();
 				System.out.println("before "+before+" after "+after);
 				
 				//
@@ -55,23 +51,33 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	}
 	
 	
-	public static void takeMoneyFromUsers() {
+	public void takeMoneyFromUsers() {
 		//run at all users
-		Statement stm;
+		PreparedStatement stm;
 		ResultSet res;
 		String currentCustomer,currentCar;
 		
-		String query="select id,carNumber\r\n" + 
-				"from myfueldb.car,myfueldb.customer\r\n" + 
-				"where pricingModel='3' and car.CustomerID=customer.id \r\n" + 
-				"order by id";
+		String query="select par.id,sum(fp2.priceOfPurchase)\r\n" + 
+				"from \r\n" + 
+				"(SELECT fp.CarNumber,fp.priceOfPurchase\r\n" + 
+				"FROM  myfueldb.fuelpurchase as fp\r\n" + 
+				"where fp.date<=? and fp.date >= ? and fp.pricingModel='3') as fp2\r\n" + 
+				"Left join \r\n" + 
+				"(SELECT id,carNumber FROM myfueldb.car,myfueldb.customer\r\n" + 
+				"where car.CustomerID=id) as par\r\n" + 
+				"on par.carNumber=fp2.CarNumber\r\n" + 
+				"group by par.id";
 		try {
-			stm = ConnectionToDB.conn.createStatement();
-			res=stm.executeQuery(query);
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, before.toString());
+			stm.setString(2, after.toString());
+			
+			res=stm.executeQuery();
+			//get the current date
+			String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/yyyy"));
 			
 			while(res.next()) {
-				currentCustomer=res.getString(1);
-				currentCar=res.getString(2);
+				FastFuelController.payment(res.getString(1), "", res.getFloat(2), formattedDate);
 			}
 			
 			res.close();
@@ -79,7 +85,6 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
 		
 	}
 	
@@ -103,6 +108,7 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	
 	private LocalDate getFirstOfMonth() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
 		calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
 		Date nextMonthFirstDay = calendar.getTime();
 		return nextMonthFirstDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -110,6 +116,7 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	
 	private LocalDate getLastOfMonth() {
 		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.MONTH, -1);
 		calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		Date nextMonthFirstDay = calendar.getTime();
 		return nextMonthFirstDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
