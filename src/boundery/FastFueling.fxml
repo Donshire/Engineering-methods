@@ -50,7 +50,7 @@
       <Pane fx:id="paymentPane" prefHeight="400.0" prefWidth="600.0" visible="false">
          <children>
             <Text layoutX="74.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total price" />
-            <Text layoutX="76.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose payment method" />
+            <Text fx:id="helpingPaymentTxt" layoutX="76.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose payment method" />
             <RadioButton fx:id="visaRadio" layoutX="80.0" layoutY="139.0" mnemonicParsing="false" onAction="#handleRadioSelect" text="VISA" />
             <RadioButton fx:id="cashRadio" layoutX="80.0" layoutY="174.0" mnemonicParsing="false" onAction="#handleRadioSelect" text="CASH" />
             <Text layoutX="47.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payment">

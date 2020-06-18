@@ -65,7 +65,7 @@ public class FastFuelController {
 	 * @param amount float
 	 * @return
 	 */
-	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,String fuelType,int prcingModelNumber,String date,String time) {
+	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName,String customerID,String fuelType,int prcingModelNumber,String date,String time) {
 		//the ArrayList contains purchasePrice,currentPrice,SalePercent
 		ArrayList<Float> result= new ArrayList<Float>();
 		
@@ -74,13 +74,18 @@ public class FastFuelController {
 			System.out.println("rate has not been created");
 			return null;
 		}
+		//calculate the rate according to the Pricing Model Number 
+		Float salePercentOfRate = getVAlueOfRate(rate, customerID, prcingModelNumber, companyName);
+		if(salePercentOfRate==null) return null;
+		//
 		Sale sale = getCurentsSale(companyName,fuelType, date, time);
 		float maxPrice=getMaxPrice(companyName, fuelType);
+		
 		
 		DecimalFormat df = new DecimalFormat("0.00");
 		float purchasePrice=maxPrice,salePercent=0,saleID=0;
 		//user must have pricing model
-		purchasePrice=purchasePrice*(1-rate.getSalePercent());
+		purchasePrice=purchasePrice*(salePercentOfRate);
 		if(sale!=null) {
 			purchasePrice=purchasePrice*(1-sale.getSalePercent());
 			salePercent=sale.getSalePercent();
@@ -90,18 +95,119 @@ public class FastFuelController {
 		result.add(roundTwoDecimals(purchasePrice));//purchasePrice
 		result.add(maxPrice);//currentPrice
 		result.add(salePercent);//SalePercent
-		result.add(rate.getSalePercent());//RatePercent
+		result.add(roundThreeDecimals(1-salePercentOfRate));//RatePercent
 		result.add(saleID);//Sale ID 
 		
 		return result;
 	}
 	
+	/**
+	 * round float and get the first two decimals
+	 * @param d
+	 * @return
+	 */
 	public static float roundTwoDecimals(float d) {
 		  DecimalFormat twoDForm = new DecimalFormat("#.##");
 		  return Float.valueOf(twoDForm.format(d));
 		}
 	
+	/**
+	 * round float and get the first three decimals
+	 * @param d
+	 * @return
+	 */
+	public static float roundThreeDecimals(float d) {
+		  DecimalFormat twoDForm = new DecimalFormat("#.###");
+		  return Float.valueOf(twoDForm.format(d));
+		}
 	
+	/**
+	 * Calculate sale percent for each purchase model (models number start from 0):<br>
+	 * the first model return 0 always.<br>
+	 * the second model return the value of rate percent always.<br>
+	 * the third model return the value of (1-rate percent)*(second model rate * carCount). <br>
+	 * the fourth model return the value of (1-rate percent)*(third model rate(for just one car)). <br>
+	 * 
+	 * @param rate
+	 * @param customerID
+	 * @param prcingModelNumber
+	 * @param companyName
+	 * @return null if any rate is missing from company db.
+	 */
+	public static Float getVAlueOfRate(PricingModule rate,String customerID,int prcingModelNumber,String companyName) {
+		
+		Float returnSalePercent=1f;
+		
+		switch(prcingModelNumber) {
+		
+		case 0:
+			break;
+			
+		case 1:
+			returnSalePercent = 1-rate.getSalePercent();
+			break;
+			
+		case 2:
+			returnSalePercent = calculateRate2(rate, customerID, companyName);
+			break;
+	
+		case 3:
+			PricingModule secRate = getPricingModule(companyName,1);
+			if(secRate==null) {
+				System.out.println("rate has not been created");
+				return null;
+			}
+			returnSalePercent = (calculateRate2(secRate, customerID, companyName))*(1-rate.getSalePercent());
+			break;
+		}
+		return returnSalePercent;
+	}
+	
+	
+	private static Float calculateRate2(PricingModule rate,String customerID,String companyName) {
+		int carCount=customerCarsNumber(customerID);
+		PricingModule secRate = getPricingModule(companyName,1);
+		if(secRate==null) {
+			System.out.println("rate has not been created");
+			return null;
+		}
+		//(1-rate1*carCount)*(1-rate2)
+		return(1-carCount*secRate.getSalePercent())*(1-rate.getSalePercent());
+	} 
+	
+	/**
+	 * get customer cars number
+	 * @param customerID
+	 * @return
+	 */
+	public static int customerCarsNumber(String customerID) {
+		PreparedStatement stm;
+		ResultSet res;
+		int result=0;
+		String query="select count(*)\r\n" + 
+				"from myfueldb.car\r\n" + 
+				"where car.CustomerID= ?";
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, customerID);
+			
+			res=stm.executeQuery();
+			if(res.next())result= res.getInt(1);
+			
+			res.close();
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	/**
+	 * get the max price of fuel in company
+	 * @param companyName
+	 * @param fuelType
+	 * @return
+	 */
 	public static float getMaxPrice(String companyName,String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -188,7 +294,8 @@ public class FastFuelController {
 	}
 	
 	/**
-	 * call payment method and save the purchase details
+	 * call payment method and save the purchase details, there is no need to call the payment method in <br>
+	 * Pricing model number 3, because the payment is only once a month.
 	 * check station fuel quantity, if there is no enough.<br>
 	 * it will return the max amount for purchase <br>
 	 * else it will updates the station fuel
@@ -198,7 +305,7 @@ public class FastFuelController {
 	 * @param purchase FuelPurchase
 	 * @return -1 if succeded -2 if un-succeded 
 	 */
-	public static int commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase,String fuelType) {
+	public static int commitFuelPurchase(String customerId,int pricingModelNumber,String paymentOption,FuelPurchase purchase,String fuelType) {
 		//check if station contain the amount needed
 		float amountInStation = GasStationControllerServer.getStationFuelQuantity(purchase.getStationId(), fuelType);
 		if(amountInStation<purchase.getFuelQuantity()) 
@@ -211,12 +318,20 @@ public class FastFuelController {
 		//Check fuel Quantity
 		GasStationControllerServer.ReachedMinemumQuantityHandler(purchase.getStationId(),fuelType,amountInStation);
 		
-		//call paymentMethod
-		if(payment(customerId, paymentOption,purchase.getPriceOfPurchase(),purchase.getDate()))
-		//save purchase details
-		if(savePurchaseDetails(purchase)) return -1;
+		//in the forth model payment isn't after each purchase at the end of each month
+		if(pricingModelNumber==3) {
+			if(savePurchaseDetails(purchase)) return -1;
+			else return -2;
+		}
+		else {
+			//call paymentMethod
+			if(payment(customerId, paymentOption,purchase.getPriceOfPurchase(),purchase.getDate()))
+			//save purchase details
+			if(savePurchaseDetails(purchase)) return -1;
+			
+			return -2;
+		}
 		
-		return -2;
 	}
 	
 	/**
@@ -307,6 +422,7 @@ public class FastFuelController {
 		return CompanyFuelStationsID;
 	}
 	
+	
 	/**
 	 * save Purchase Details
 	 * @param carNumber String
@@ -335,8 +451,19 @@ public class FastFuelController {
 		return false;
 	}
 	
+	
+	/**
+	 * simulating payment in CASH always return true, in visa just chech the <br>
+	 * exp date if valid true else false.
+	 * @param customerId
+	 * @param paymentOption
+	 * @param priceOfPurchase
+	 * @param currentDate
+	 * @return
+	 */
 	public static boolean payment(String customerId,String paymentOption,float priceOfPurchase,String currentDate) {
 		Customer customer=EmployeeController.getCutomerByCustomerID(customerId);
+		if(paymentOption.compareTo("CASH")==0)return true;
 		if(customer!=null) {
 			if(customer.getExpDate().compareTo(currentDate)>0) return true;
 		}

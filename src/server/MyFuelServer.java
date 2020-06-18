@@ -13,10 +13,8 @@ import java.util.Date;
 import Entity.Car;
 import Entity.CompanyFuel;
 import Entity.Customer;
-import Entity.CustomerModule;
 import Entity.Employee;
 import Entity.GasOrder;
-import Entity.Fuel;
 import Entity.GasStationOrder;
 import Entity.GenericReport;
 import Entity.FuelPurchase;
@@ -65,6 +63,7 @@ public class MyFuelServer extends AbstractServer {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		DateFormat timeFileFormat = new SimpleDateFormat("HH-mm-ss");
 		DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
+		
 		
 		boolean flag;
 		int stationID;
@@ -123,16 +122,16 @@ public class MyFuelServer extends AbstractServer {
 		case getPurchasePriceDetails:
 			str =(ArrayList<Object>)message.getObj();
 				sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
-						((String)str.get(0),(String)str.get(1),(int)str.get(2),dateFormat.format(date),timeDBFormat.format(date)), client);
+						((String)str.get(0),(String)str.get(1),(String)str.get(2),(int)str.get(3),dateFormat.format(date),timeDBFormat.format(date)), client);
             break;
             
 		case commitFuelPurchase:
 			str =(ArrayList<Object>)message.getObj();
-			FuelPurchase fuelPurchase = (FuelPurchase)str.get(2);
+			FuelPurchase fuelPurchase = (FuelPurchase)str.get(3);
 			fuelPurchase.setTime(timeDBFormat.format(date));
 			fuelPurchase.setDate(dateFormat.format(date));
 			sendToClientObject(FastFuelController.commitFuelPurchase(
-					(String)str.get(0),(String)str.get(1),fuelPurchase,(String)str.get(3)),client);
+					(String)str.get(0),(int)str.get(1),(String)str.get(2),fuelPurchase,(String)str.get(4)),client);
             break;
             
 		case updatePricingModel:
