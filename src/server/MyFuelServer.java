@@ -41,6 +41,10 @@ public class MyFuelServer extends AbstractServer {
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
 	public static String schemaName, dbPassword;
 
+	//
+	private AutoMaticPurchaseModel3Calc autoMaticPurchaseModel3Calc;
+	private Thread secThread;
+	
 	ArrayList<GasStationOrder> orders;
 	String status;
 
@@ -120,19 +124,20 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getPurchasePriceDetails:
-			str = (ArrayList<Object>) message.getObj();
-			sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel((String) str.get(0),
-					(String) str.get(1), (int) str.get(2), dateFormat.format(date), timeDBFormat.format(date)), client);
+			str =(ArrayList<Object>)message.getObj();
+			sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
+					((String)str.get(0),(String)str.get(1),(String)str.get(2),(int)str.get(3),dateFormat.format(date),timeDBFormat.format(date)), client);
 			break;
 
 		case commitFuelPurchase:
-			str = (ArrayList<Object>) message.getObj();
-			FuelPurchase fuelPurchase = (FuelPurchase) str.get(2);
+			str =(ArrayList<Object>)message.getObj();
+			FuelPurchase fuelPurchase = (FuelPurchase)str.get(3);
 			fuelPurchase.setTime(timeDBFormat.format(date));
 			fuelPurchase.setDate(dateFormat.format(date));
-			sendToClientObject(FastFuelController.commitFuelPurchase((String) str.get(0), (String) str.get(1),
-					fuelPurchase, (String) str.get(3)), client);
-			break;
+			
+			sendToClientObject(FastFuelController.commitFuelPurchase(
+					(String)str.get(0),(int)str.get(1),(String)str.get(2),fuelPurchase,(String)str.get(4)),client);
+            break;
 
 		case updatePricingModel:
 			ArrayList<PricingModule> pricingModules = (ArrayList<PricingModule>) message.getObj();
@@ -625,12 +630,27 @@ public class MyFuelServer extends AbstractServer {
 		// port " + getPort());
 		FileManagmentSys.createSystemWorkSpace();
 		System.out.println("Server listening for connections on port " + getPort());
+		
+		//
+		autoMaticPurchaseModel3Calc = new AutoMaticPurchaseModel3Calc(); 
+		secThread = new Thread(autoMaticPurchaseModel3Calc);
+		secThread.start();
 	}
 
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
+		
+		//
+		autoMaticPurchaseModel3Calc.continueThread=false;
+		try {
+			secThread.interrupt();
+			secThread.join(1000);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// log out all the users
 		int i = 0, size = usersOnline.size();
 		UserOnline users;

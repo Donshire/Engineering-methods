@@ -30,18 +30,20 @@ public class CustomerCC {
 		return (ArrayList<Integer>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<Float> getPurchasePriceDetails(String companyName,String fuelType,int prcingModelNumber) {
+	public static ArrayList<Float> getPurchasePriceDetails(String companyName,String customerID,String fuelType,int prcingModelNumber) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(companyName);
+		str.add(customerID);
 		str.add(fuelType);
 		str.add(prcingModelNumber);
 		ClientUI.client.accept(new Message(str, Commands.getPurchasePriceDetails));
 		return (ArrayList<Float>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static int commitFuelPurchase(String customerId,String paymentOption,FuelPurchase purchase,String fuelType) {
+	public static int commitFuelPurchase(String customerId,int pricingModelNumber,String paymentOption,FuelPurchase purchase,String fuelType) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(customerId);
+		str.add(pricingModelNumber);
 		str.add(paymentOption);
 		str.add(purchase);
 		str.add(fuelType);

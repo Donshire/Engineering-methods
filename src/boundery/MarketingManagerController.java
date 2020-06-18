@@ -545,8 +545,9 @@ public class MarketingManagerController implements Initializable {
 		CustomerRateTypes rateTypeSelected = rateType.getValue();
 
 		PricingModule pricingModule = EmployeeCC.getCompanyActiveRateAccordingPriceModel(new PricingModule(rateTypeSelected.ordinal(), 0, markitingManager.getCompanyName(), null));
-		
-		maxFuelPricetxt.setText(String.format("the current rate is : %.2f",pricingModule.getSalePercent()));
+		if(pricingModule!=null) 
+			maxFuelPricetxt.setText(String.format("the current rate is : %.2f",pricingModule.getSalePercent()));
+		else JOptionPane.showMessageDialog(null, "system bug there isn't data for this report");
 	}
 
 	@FXML

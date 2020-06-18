@@ -56,6 +56,8 @@ public class FastFuelingController implements Initializable {
 	@FXML
 	private Text carNumberTxt;
 	@FXML
+	private Text helpingPaymentTxt;
+	@FXML
 	private Text pricingModelSaleTxt;
 	@FXML
 	private Text salIDTxt;
@@ -127,13 +129,17 @@ public class FastFuelingController implements Initializable {
 				sales, currentPrice*amount, customer.getId(),customer.getPricingModel());
 		
 		if (visaRadio.isSelected())
-			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());
+			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getPricingModel(),customer.getVisaNumber(), purchase,car.getFuelType());
 
 		else if (cashRadio.isSelected())
-			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
+			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getPricingModel(),"CASH", purchase,car.getFuelType());
 		else {
-			JOptionPane.showMessageDialog(null,"please select payment method");
-			return;
+			if(customer.getPricingModel()==3)
+				result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getPricingModel(),null, purchase,car.getFuelType());
+			else {
+				JOptionPane.showMessageDialog(null,"please select payment method");
+				return;
+			}
 		}
 
 		if (result == -1) JOptionPane.showMessageDialog(null,"Purchase succeded");
@@ -174,7 +180,7 @@ public class FastFuelingController implements Initializable {
 		}
 
 		// call server and calculate totale price
-		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
+		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName,customer.getId() ,car.getFuelType(),
 				customer.getPricingModel());
 		customerPrice = resDetails.get(0);
 		currentPrice=resDetails.get(1);
@@ -193,7 +199,21 @@ public class FastFuelingController implements Initializable {
 		//
 		dataPane.setVisible(false);
 		paymentPane.setVisible(true);
-
+		//
+		if(customer.getPricingModel()==3) {//no payment in model num 3
+			visaRadio.setVisible(false);
+			cashRadio.setVisible(false);
+			//set helping text
+			helpingPaymentTxt.setText("the payment will be calculated by each end of month");
+			pay.setText("finish");
+		}
+		else {
+			visaRadio.setVisible(true);
+			cashRadio.setVisible(true);
+			helpingPaymentTxt.setText("Choose payment method");
+			pay.setText("Pay");
+		}
+		
 		// set the price
 		totalPrice.setText(String.format("%.2f",amount * customerPrice));
 	}
@@ -203,7 +223,7 @@ public class FastFuelingController implements Initializable {
 		companyName = companiesCombo.getValue();
 		// get all company stations
 		// get the pricing data
-				ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
+				ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName,customer.getId() ,car.getFuelType(),
 						customer.getPricingModel());
 		// the calculated price
 		if(pricingRes==null) {
