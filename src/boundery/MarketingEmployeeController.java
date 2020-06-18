@@ -556,12 +556,18 @@ public class MarketingEmployeeController implements Initializable {
 
 	@FXML
 	void openCVVImgae(MouseEvent event) {
-		CVVImage.setVisible(true);
+		if (CVVImage.isVisible())
+			CVVImage.setVisible(false);
+		else
+			CVVImage.setVisible(true);
 	}
 
 	@FXML
 	void openCVVImgae1(MouseEvent event) {
-		CVVImage1.setVisible(true);
+		if (CVVImage1.isVisible())
+			CVVImage1.setVisible(false);
+		else
+			CVVImage1.setVisible(true);
 	}
 
 	// switch to creating new sale pane
@@ -717,23 +723,24 @@ public class MarketingEmployeeController implements Initializable {
 		creditCardNo = CreditCardTxt.getText();
 		expDateMon = ExpDateMonthTxt.getText();
 		expDateYear = ExpDateYearTxt.getText();
+		System.out.println(expDateMon +"  " + expDateYear);
 		expDate.append(expDateMon);
 		expDate.append("/");
 		expDate.append(expDateYear);
 		CVV = CVVTxt.getText();
 
 		cusType = (CustomerTypes) customerTypeCombox.getValue();
-		if (cusType==CustomerTypes.Company) {
+		if (cusType == CustomerTypes.Company) {
 			companyName = customercompanyNameTxt.getText();
-			if (companyName.isEmpty())
+			if (companyName== null)
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
 		// check that all the data was entered
-		if (id.isEmpty() == true || firstName.isEmpty() == true || lastName.isEmpty() == true || mail.isEmpty() == true
-				|| phoneNumber.isEmpty() == true || address.isEmpty() == true || userName.isEmpty() == true
-				|| password.isEmpty() == true || creditCardNo.isEmpty() == true || expDateMon.isEmpty() == true
-				|| expDateYear.isEmpty() == true || CVV.isEmpty() == true || addressNo.isEmpty() == true) {
+		if (id== null || firstName== null || lastName== null || mail== null
+				|| phoneNumber== null || address== null || userName== null
+				|| password== null|| creditCardNo== null || expDateMon.isEmpty()
+				|| expDateYear.isEmpty() || CVV== null || addressNo== null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
@@ -811,8 +818,17 @@ public class MarketingEmployeeController implements Initializable {
 					LastNameTxt.clear();
 					EmailTxt.clear();
 					CreditCardTxt.clear();
-				}
-				else
+					addressNoTxt.clear();
+					ExpDateMonthTxt.clear();
+					CVVTxt.clear();
+					PhoneTxt.clear();
+					AddressTXt.clear();
+					UserNameTxt.clear();
+					PasswordTxt.clear();
+					customercompanyNameTxt.clear();
+					ExpDateYearTxt.clear();
+					customerTypeCombox.setValue(null);
+				} else
 					JOptionPane.showMessageDialog(null, "Update un-succeded one or more of the data didn't update");
 			}
 		}
@@ -821,11 +837,11 @@ public class MarketingEmployeeController implements Initializable {
 	@FXML
 	void openCompany(ActionEvent event) {
 		CustomerTypes type = customerTypeCombox.getValue();
-		if (type.equals(CustomerTypes.Company)) {
+		if (type == CustomerTypes.Company) {
 			customercompanyNameLbl.setVisible(true);
 			customercompanyNameTxt.setVisible(true);
 		}
-		if (type.equals(CustomerTypes.Private)) {
+		if (type == CustomerTypes.Private) {
 			customercompanyNameLbl.setVisible(false);
 			customercompanyNameTxt.setVisible(false);
 		}
@@ -837,8 +853,7 @@ public class MarketingEmployeeController implements Initializable {
 		String id;
 		id = carAndModelIDTxt.getText();
 		int res;
-		Customer customer;
-		if (id.isEmpty() || !testId(id))
+		if (id== null || !testId(id))
 			JOptionPane.showMessageDialog(null, "ID is empty or incorrect, Please enter id");
 		else {
 			// sending the customer id to server to check if exist
@@ -865,12 +880,11 @@ public class MarketingEmployeeController implements Initializable {
 	// open the option to change car that exist
 	@FXML
 	void openReplaceCar(ActionEvent event) {
-		if(oldCarNumTxt.isDisable()) {
+		if (oldCarNumTxt.isDisable()) {
 			oldCarNumLbl.setDisable(false);
 			oldCarNumTxt.setDisable(false);
 			replaceCarFlag = true;
-		}
-		else {
+		} else {
 			oldCarNumLbl.setDisable(true);
 			oldCarNumTxt.setDisable(true);
 			replaceCarFlag = false;
@@ -886,7 +900,7 @@ public class MarketingEmployeeController implements Initializable {
 		String fuelType, oldNum = null;
 		PricingModel pricingM;
 		StringBuilder companyNames = new StringBuilder();
-		int pricingNum = 0, purchaseNum = 0;
+		int count = 0;
 		PurchaseModel purchaseM;
 		id = carAndModelIDTxt.getText();
 		carNumber = carNumberTxt.getText();
@@ -905,7 +919,7 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		}
 
-		if (id == null || carNumber == null || fuelType == null || pricingM == null || purchaseM == null) {
+		if (id.isEmpty() || carNumber == null || fuelType == null || pricingM == null || purchaseM == null ) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
@@ -914,7 +928,7 @@ public class MarketingEmployeeController implements Initializable {
 			return;
 		}
 
-		if (pricingM.equals(PricingModel.onlyOneStatione)) {
+		if (pricingM == PricingModel.onlyOneStatione) {
 			company1 = chooseCompany1.getValue();
 			if (company1 == null) {
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
@@ -923,7 +937,7 @@ public class MarketingEmployeeController implements Initializable {
 			companyNames.append(company1);
 
 		}
-		if (pricingM.equals(PricingModel.TwoOrThreeStations)) {
+		if (pricingM == PricingModel.TwoOrThreeStations) {
 			company1 = chooseCompany1.getValue();
 			company2 = chooseCompany2.getValue();
 			company3 = chooseCompany3.getValue();
@@ -931,7 +945,7 @@ public class MarketingEmployeeController implements Initializable {
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 				return;
 			}
-			if (company1.equals(company2) || company2.equals(company3) || company1.equals(company3)) {
+			if (company1 == company2  || company2==company3 || company1==company3) {
 				JOptionPane.showMessageDialog(null, "You need to choose different companies");
 				return;
 			}
@@ -948,8 +962,8 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		}
 		int carCount = EmployeeCC.getCarCount(id);
-		if (purchaseM.toString().equals("MonthlysubscriptioOneCar")
-				|| purchaseM.toString().equals("FullMonthlysubscription")) {
+		if ((purchaseM.toString() == PurchaseModel.MonthlysubscriptioOneCar.toString())
+				|| purchaseM.toString() == PurchaseModel.FullMonthlysubscription.toString()) {
 			if (carCount != 0) {
 				JOptionPane.showMessageDialog(null,
 						"In this purchase module you can register only one car\n You already have a car in the system. \n Change car number or purchase module");
@@ -957,7 +971,7 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		}
 
-		if (purchaseM.toString().equals("Monthlysubscriptio2OrMoreCars")) {
+		if (purchaseM.toString() == PurchaseModel.Monthlysubscriptio2OrMoreCars.toString()) {
 			if (carCount == 0 && !enter2CarsFlag) {
 				enter2CarsFlag = true;
 				JOptionPane.showMessageDialog(null,
@@ -984,8 +998,7 @@ public class MarketingEmployeeController implements Initializable {
 				secCar2 = new Car(secCar, secFuel, id);
 
 			}
-		}
-		else {
+		} else {
 			secondCarLbl.setVisible(false);
 			secondCarTxt.setVisible(false);
 			secfuelTypeLbl.setVisible(false);
@@ -997,18 +1010,22 @@ public class MarketingEmployeeController implements Initializable {
 		if (!replaceCarFlag) {
 			if (EmployeeCC.addNewCar(car)) {
 				JOptionPane.showMessageDialog(null, "Car added successfully to system");
+				count++;
 			} else {
 				JOptionPane.showMessageDialog(null, "There has been an error, try again");
 			}
 		} else {
 			if (EmployeeCC.updateCar(car, oldNum)) {
 				JOptionPane.showMessageDialog(null, "Car updated successfully to system");
+				count++;
+
 			} else {
 				JOptionPane.showMessageDialog(null,
 						"There has been an error or the old car number doesn't exist, try again");
+				count--;
 			}
 		}
-		System.out.println("second car: " + secCar2);
+
 		if (enter2CarsFlag) {
 			if (EmployeeCC.addNewCar(secCar2)) {
 				JOptionPane.showMessageDialog(null, "Second car added successfully to system");
@@ -1019,24 +1036,38 @@ public class MarketingEmployeeController implements Initializable {
 
 		// adding the model
 		if (EmployeeCC.updateModels(pricingM.toString(), purchaseM.toString(), id)
-				&& (EmployeeCC.addModule(id, purchaseM.toString(), companyNames.toString())))
+				&& (EmployeeCC.addModule(id, purchaseM.toString(), companyNames.toString()))) {
 
 			JOptionPane.showMessageDialog(null, "Models added successfully to system");
-		else
+			count++;
+		} else
 			JOptionPane.showMessageDialog(null, "There has been an error, try again");
-
+		if (count == 2 || count == 3) {
+			carNumberTxt.clear();
+			pricingModelCombox.setValue(null);
+			purchaseModelCombox.setValue(null);
+			carAndModelIDTxt.clear();
+			FuelTypeCombox.setValue(null);
+			oldCarNumTxt.clear();
+			chooseCompany1.setValue(null);
+			chooseCompany2.setValue(null);
+			chooseCompany3.setValue(null);
+			secondCarTxt.clear();
+			secFuelTypeCombox.setValue(null);
+			openCarAndModelPane(null);
+		}
 	}
 
 	@FXML
 	void openCompanyChooser(ActionEvent event) {
 
-		if (pricingModelCombox.getValue().equals(PricingModel.onlyOneStatione)) {
+		if (pricingModelCombox.getValue() == PricingModel.onlyOneStatione) {
 			chooseCompLbl.setVisible(true);
 			chooseCompany2.setVisible(false);
 			chooseCompany3.setVisible(false);
 			chooseCompany1.setVisible(true);
 		}
-		if (pricingModelCombox.getValue().equals(PricingModel.TwoOrThreeStations)) {
+		if (pricingModelCombox.getValue() == PricingModel.TwoOrThreeStations) {
 			chooseCompLbl.setVisible(true);
 			chooseCompany1.setVisible(true);
 			chooseCompany2.setVisible(true);
@@ -1049,8 +1080,8 @@ public class MarketingEmployeeController implements Initializable {
 	void showCustomeDetails(ActionEvent event) {
 		String id = UpdateIdTxt.getText();
 		Customer customer;
-		String expDate, expMon, expYear;
-		if (id.isEmpty())
+		String expDate;
+		if (id== null)
 			JOptionPane.showMessageDialog(null, "Please enter id");
 		if (EmployeeCC.checkIfExist(id) == 0)
 			JOptionPane.showMessageDialog(null, "User Id doesn't exist");
@@ -1128,10 +1159,10 @@ public class MarketingEmployeeController implements Initializable {
 		System.out.println("no: " + chAddressNo);
 		chId = UpdateIdTxt.getText();
 
-		if (chFirst.isEmpty() == true || chLast.isEmpty() == true || chEmail.isEmpty() == true
-				|| chCreditNo.isEmpty() == true || expDateMon.isEmpty() == true || expDateYear.isEmpty() == true
-				|| chCvv.isEmpty() == true || chPhone.isEmpty() == true || chAddress.isEmpty() == true
-				|| chId.isEmpty() == true) {
+		if (chFirst== null || chLast== null || chEmail== null
+				|| chCreditNo== null || expDateMon.isEmpty() || expDateYear.isEmpty()
+				|| chCvv== null || chPhone== null|| chAddress== null
+				|| chId== null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
@@ -1195,9 +1226,11 @@ public class MarketingEmployeeController implements Initializable {
 		upCustomer.add(chPhone);
 		upCustomer.add(fullAddress.toString());
 		// send the data to the server for update
-		if (EmployeeCC.updateCustomerDetails(upCustomer))
+		if (EmployeeCC.updateCustomerDetails(upCustomer)) {
 			JOptionPane.showMessageDialog(null, "Updated customer successfully!");
-		else
+			openUpdateCustomerPane(null);
+			UpdateIdTxt.clear();
+		} else
 			JOptionPane.showMessageDialog(null, "Error ! could not update customer, try again");
 	}
 
@@ -1273,7 +1306,7 @@ public class MarketingEmployeeController implements Initializable {
 	// this method if for creating new sale in DB
 	@FXML
 	void createNewSale(ActionEvent event) throws ParseException {
-		String compantName, fuelType, startTime, endTime, startDate, endDate;
+		String  fuelType, startTime, endTime, startDate = null, endDate = null;
 		String TIME_REGEX = "(([0-9]{2}):([0-9]{2}))";
 		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: " + "\n");
 		boolean flag = false;
@@ -1282,15 +1315,18 @@ public class MarketingEmployeeController implements Initializable {
 		startTime = startTimeTxt.getText();
 		endTime = endTimeTxt.getText();
 		fuelType = fuelTypesForSaleCombox.getValue();
-		// startTime = startTimeTxt.getText();
-		// endTime = endTimeTxt.getText();
-		if (startDatePicker.getValue() == null || endDatePicker.getValue() == null) {
-			JOptionPane.showMessageDialog(null, "please select dates");
-			return;
+
+		if (startDatePicker.getValue() != null || endDatePicker.getValue() != null) {
+			startDate = dateFormatter.format(startDatePicker.getValue());
+			endDate = dateFormatter.format(endDatePicker.getValue());
+
 		}
 
-		startDate = dateFormatter.format(startDatePicker.getValue());
-		endDate = dateFormatter.format(endDatePicker.getValue());
+		if (startDate== null || endDate== null || startTime== null || endTime== null || fuelType== null
+				|| salePercentTxt.getText()== null) {
+			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
+			return;
+		}
 		if (!checkIfStringContainsOnlyNumbersInFloatType(salePercentTxt.getText())) {
 			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: xx.xx");
 			return;
@@ -1313,11 +1349,6 @@ public class MarketingEmployeeController implements Initializable {
 		}
 		percent = Float.parseFloat(salePercentTxt.getText());
 
-		if (startDate.isEmpty() || endDate.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || fuelType.isEmpty()
-				|| salePercentTxt.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
-			return;
-		}
 
 		StringBuilder days = new StringBuilder();
 
@@ -1341,8 +1372,24 @@ public class MarketingEmployeeController implements Initializable {
 		}
 		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), markem.getCompanyName(), fuelType, percent,
 				startTime, endTime, startDate, endDate, days.toString());
-		if (EmployeeCC.addNewSaleTemp(newSale))
+		if (EmployeeCC.addNewSaleTemp(newSale)) {
 			JOptionPane.showMessageDialog(null, "Sale added successfully!");
+			salePercentTxt.clear();
+			startTimeTxt.clear();
+			endTimeTxt.clear();
+			fuelTypesForSaleCombox.setValue(null);
+			startDatePicker.setValue(null);
+			endDatePicker.setValue(null);
+			sunday.setSelected(false);
+			monday.setSelected(false);
+			tuesday.setSelected(false);
+			wednesday.setSelected(false);
+			thuesday.setSelected(false);
+			friday.setSelected(false);
+			saturday.setSelected(false);
+			allCheckBox.setSelected(false);
+			
+		}
 		else
 			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 	}
@@ -1419,7 +1466,6 @@ public class MarketingEmployeeController implements Initializable {
 			return true;
 		return false;
 	}
-	
 
 	public static boolean checkIfUserNameExist(String userName) {
 		return EmployeeCC.checkIfUserNameExist(userName);
