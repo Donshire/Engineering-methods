@@ -198,7 +198,6 @@
             <Button fx:id="createSaleBtn" layoutX="39.0" layoutY="427.0" mnemonicParsing="false" onAction="#openNewSalePane" text="Create new sale" />
          </children>
       </Pane>
-      <Button layoutX="755.0" layoutY="44.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" text="Log Out" />
       <Pane fx:id="createNewSalePane" layoutX="190.0" layoutY="110.0" prefHeight="515.0" prefWidth="681.0">
          <children>
             <Label fx:id="newSaleLbl" layoutX="31.0" layoutY="35.0" text="New Sale">
@@ -232,5 +231,6 @@
             <Text fx:id="companyNameTxt" layoutX="201.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
+      <Button layoutX="755.0" layoutY="44.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" text="Log Out" />
    </children>
 </Pane>
