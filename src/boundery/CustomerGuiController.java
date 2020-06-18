@@ -308,8 +308,10 @@ public class CustomerGuiController implements Initializable {
 	}
 
 	public void orderHomeGasInitialize() {
-		priceList.setText("4.6");
-		//textDiscount.setText("0");
+		
+		// Loading the price of per unit.
+				float pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+				priceList.setText(Float.toString(pricePerUnit));
 		
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {

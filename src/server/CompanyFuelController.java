@@ -13,7 +13,7 @@ public class CompanyFuelController {
 			PreparedStatement stm;
 			ResultSet res;
 
-			stm = ConnectionToDB.conn.prepareStatement("SELECT * FROM myfueldb.fuel where fuelType= ? ;");
+			stm = ConnectionToDB.conn.prepareStatement("SELECT * FROM fuel where fuelType= ? ;");
 			stm.setString(1, type);
 			res = stm.executeQuery();
 			
