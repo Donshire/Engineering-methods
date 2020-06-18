@@ -39,6 +39,10 @@ public class MyFuelServer extends AbstractServer {
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
 	public static String schemaName, dbPassword;
 	
+	//
+	private AutoMaticPurchaseModel3Calc autoMaticPurchaseModel3Calc;
+	private Thread secThread;
+	
 	ArrayList<GasStationOrder> orders;
 	String status;
 	
@@ -580,12 +584,27 @@ public class MyFuelServer extends AbstractServer {
 		// port " + getPort());
 		FileManagmentSys.createSystemWorkSpace();
 		System.out.println("Server listening for connections on port " + getPort());
+		
+		//
+		autoMaticPurchaseModel3Calc = new AutoMaticPurchaseModel3Calc(); 
+		secThread = new Thread(autoMaticPurchaseModel3Calc);
+		secThread.start();
 	}
 
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
 		System.out.println("Server has stopped listening for connections.");
+		
+		//
+		autoMaticPurchaseModel3Calc.continueThread=false;
+		try {
+			secThread.interrupt();
+			secThread.join(1000);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		// log out all the users
 		int i = 0, size = usersOnline.size();
 		UserOnline users;

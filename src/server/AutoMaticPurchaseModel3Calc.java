@@ -101,9 +101,9 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 		long diff = TimeUnit.SECONDS.convert(duration, TimeUnit.MILLISECONDS);
 		
 		System.out.println("the wait time "+diff);
-		//return diff;
+		return diff;
 		//for testing
-		return 100;
+		//return 100;
 	}
 	
 	private LocalDate getFirstOfMonth() {
