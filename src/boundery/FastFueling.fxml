@@ -11,14 +11,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="401.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
    <children>
-      <ImageView fitHeight="428.0" fitWidth="814.0" layoutX="-92.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="409.0" fitWidth="849.0" layoutX="-92.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
-      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0; -fx-opacity: 0.95;">
+      <Pane fx:id="dataPane" prefHeight="402.0" prefWidth="601.0" style="-fx-background-color: #e0c0a0; -fx-opacity: 0.95;">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9ede1" height="384.0" layoutX="9.0" layoutY="9.0" stroke="#dddddd" strokeType="INSIDE" width="580.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4b773" height="148.0" layoutX="15.0" layoutY="72.0" stroke="#ebe0df" strokeType="INSIDE" width="567.0" />
@@ -83,7 +83,7 @@
             <Text fx:id="pricingModelSaleTxt" fill="WHITE" layoutX="490.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
          </children>
       </Pane>
-      <Pane fx:id="paymentPane" prefHeight="400.0" prefWidth="600.0" visible="false">
+      <Pane fx:id="paymentPane" opacity="0.83" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0;" visible="false">
          <children>
             <Text layoutX="74.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total price" />
             <Text layoutX="76.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose payment method" />
@@ -94,7 +94,7 @@
                   <Font name="System Bold" size="30.0" />
                </font>
             </Text>
-            <Button fx:id="pay" layoutX="223.0" layoutY="169.0" mnemonicParsing="false" onAction="#procedPayment" text="Pay" />
+            <Button fx:id="pay" layoutX="197.0" layoutY="169.0" mnemonicParsing="false" onAction="#procedPayment" prefHeight="27.0" prefWidth="63.0" stylesheets="@styles.css" text="Pay" />
             <Text fx:id="purchaseStatus" layoutX="227.0" layoutY="263.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you'r purchases status" textAlignment="CENTER" visible="false" />
             <Text fx:id="totalPrice" layoutX="171.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
                <font>
@@ -102,6 +102,7 @@
                </font>
             </Text>
             <Button layoutX="268.0" layoutY="289.0" mnemonicParsing="false" onAction="#backToLogInPage" text="Back" visible="false" />
+            <Pane prefHeight="388.0" prefWidth="600.0" style="-fx-background-color: #f2f2f2;" visible="false" />
          </children>
       </Pane>
    </children>

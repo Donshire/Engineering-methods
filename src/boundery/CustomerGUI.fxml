@@ -24,7 +24,7 @@
             <Font size="32.0" />
          </font>
       </Text>
-      <Pane fx:id="myOrdersPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <Pane fx:id="myOrdersPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <TableView fx:id="orderTable" layoutX="15.0" layoutY="66.0" prefHeight="343.0" prefWidth="741.0">
               <columns>
@@ -37,42 +37,42 @@
                   <TableColumn fx:id="PurchasePricecol" minWidth="-Infinity" prefWidth="158.0" resizable="false" text="Purchase Price" />
               </columns>
             </TableView>
-            <Text layoutX="21.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders:">
+            <Text layoutX="14.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders">
                <font>
-                  <Font size="32.0" />
+                  <Font size="25.0" />
                </font>
             </Text>
          </children></Pane>
-      <Pane fx:id="orderHomeGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <Pane fx:id="orderHomeGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
-            <RadioButton fx:id="radioImmediat" layoutX="18.0" layoutY="78.0" mnemonicParsing="false" onAction="#radioSelected" text="Immediate">
+            <RadioButton fx:id="radioImmediat" layoutX="58.0" layoutY="118.0" mnemonicParsing="false" onAction="#radioSelected" text="Immediate">
                <toggleGroup>
                   <ToggleGroup fx:id="DeliveryDateRadio" />
                </toggleGroup>
             </RadioButton>
-            <Text layoutX="18.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Gas" textAlignment="CENTER">
+            <Text layoutX="14.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Gas" textAlignment="CENTER">
                <font>
-                  <Font size="32.0" />
+                  <Font size="25.0" />
                </font>
                <effect>
                   <ColorAdjust />
                </effect>
             </Text>
-            <RadioButton fx:id="normalSupply" layoutX="18.0" layoutY="104.0" mnemonicParsing="false" onAction="#radioSelected" text="normal" toggleGroup="$DeliveryDateRadio" />
-            <Text layoutX="104.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(2% extra for the price)" />
-            <Text layoutX="21.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" wrappingWidth="70.21288983523846">
+            <RadioButton fx:id="normalSupply" layoutX="58.0" layoutY="144.0" mnemonicParsing="false" onAction="#radioSelected" text="normal" toggleGroup="$DeliveryDateRadio" />
+            <Text layoutX="144.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(2% extra for the price)" />
+            <Text layoutX="61.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" wrappingWidth="70.21288983523846">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="textAmount" layoutX="96.0" layoutY="133.0" text="0" />
+            <TextField fx:id="textAmount" layoutX="136.0" layoutY="173.0" text="0" />
             <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="360.0" layoutY="191.0" onAction="#supplyDateSelected" visible="false" />
             <Text fx:id="textSupplyDate" layoutX="180.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <Pane layoutX="18.0" layoutY="222.0" prefHeight="184.0" prefWidth="741.0" style="-fx-background-color: #f9ede1;">
+            <Pane layoutX="51.0" layoutY="222.0" prefHeight="184.0" prefWidth="677.0" style="-fx-background-color: #f9ede1;">
                <children>
                   <Text layoutX="22.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price to pay:" wrappingWidth="162.21288983523846">
                      <font>
@@ -109,7 +109,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Button fx:id="buttonBuy" layoutX="635.0" layoutY="140.0" mnemonicParsing="false" onAction="#makePurchase" prefHeight="0.0" prefWidth="92.0" stylesheets="@styles.css" text="Buy">
+                  <Button fx:id="buttonBuy" layoutX="571.0" layoutY="138.0" mnemonicParsing="false" onAction="#makePurchase" prefHeight="0.0" prefWidth="92.0" stylesheets="@styles.css" text="Buy">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -118,6 +118,7 @@
             </Pane>
             <Text fx:id="noteDate" layoutX="613.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text fx:id="noteAmount" layoutX="423.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text layoutX="61.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose shipping method" />
          </children>
       </Pane>
       <ImageView fitHeight="112.0" fitWidth="229.0" layoutX="-37.0" pickOnBounds="true" preserveRatio="true">
