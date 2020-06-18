@@ -484,11 +484,24 @@ public class MarketingEmployeeController implements Initializable {
 	private ComboBox<String> chooseCompany3;
 
 	@FXML
+	private Label secondCarLbl;
+
+	@FXML
+	private TextField secondCarTxt;
+
+	@FXML
 	private Label chooseCompLbl;
+
+	@FXML
+	private Label secfuelTypeLbl;
+
+	@FXML
+	private ComboBox<String> secFuelTypeCombox;
 
 	private Pane currentPane;
 	public static Employee markem;
-	public boolean replaceCarFlag = false;
+	public boolean replaceCarFlag = false, enter2CarsFlag = false;
+	Car secCar2 = null;
 	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
@@ -604,6 +617,10 @@ public class MarketingEmployeeController implements Initializable {
 		chooseCompany2.setVisible(false);
 		chooseCompany3.setVisible(false);
 		chooseCompLbl.setVisible(false);
+		secondCarLbl.setVisible(false);
+		secondCarTxt.setVisible(false);
+		secfuelTypeLbl.setVisible(false);
+		secFuelTypeCombox.setVisible(false);
 		switchPanes(carAndModelPane);
 	}
 
@@ -642,6 +659,7 @@ public class MarketingEmployeeController implements Initializable {
 
 		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
 		FuelTypeCombox.setItems(fuelType);
+		secFuelTypeCombox.setItems(fuelType);
 
 		ObservableList<CustomerTypes> customerTypes = FXCollections.observableArrayList(CustomerTypes.values());
 		customerTypeCombox.setItems(customerTypes);
@@ -838,7 +856,7 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
-	//open the option to change car that exist
+	// open the option to change car that exist
 	@FXML
 	void openReplaceCar(ActionEvent event) {
 		oldCarNumLbl.setDisable(false);
@@ -915,6 +933,44 @@ public class MarketingEmployeeController implements Initializable {
 				companyNames.append(company3);
 			}
 		}
+		int carCount = EmployeeCC.getCarCount(id);
+		if (purchaseM.toString().equals("MonthlysubscriptioOneCar")
+				|| purchaseM.toString().equals("FullMonthlysubscription")) {
+			if (carCount != 0) {
+				JOptionPane.showMessageDialog(null,
+						"In this purchase module you can register only one car\n You already have a car in the system. \n Change car number or purchase module");
+				return;
+			}
+		}
+
+		if (purchaseM.toString().equals("Monthlysubscriptio2OrMoreCars")) {
+			if (carCount == 0 && !enter2CarsFlag) {
+				enter2CarsFlag = true;
+				JOptionPane.showMessageDialog(null,
+						"In this purchase module you have to register 2 or more cars\n You don't have cars registered at all \n Please enter second car ");
+				secondCarLbl.setVisible(true);
+				secondCarTxt.setVisible(true);
+				secfuelTypeLbl.setVisible(true);
+				secFuelTypeCombox.setVisible(true);
+				return;
+
+			}
+			if (enter2CarsFlag) {
+				String secCar = secondCarTxt.getText();
+				String secFuel = secFuelTypeCombox.getValue();
+				if (secCar == null || secFuel == null) {
+					JOptionPane.showMessageDialog(null,
+							"One or more of the details is empty, please fill all the fileds");
+					return;
+				}
+				if (!testCar(secCar)) {
+					JOptionPane.showMessageDialog(null, "car number is not in the correct format");
+					return;
+				}
+				secCar2 = new Car(secCar, secFuel, id);
+
+			}
+		}
 
 		Car car = new Car(carNumber, fuelType, id);
 		// adding the car
@@ -928,9 +984,19 @@ public class MarketingEmployeeController implements Initializable {
 			if (EmployeeCC.updateCar(car, oldNum)) {
 				JOptionPane.showMessageDialog(null, "Car updated successfully to system");
 			} else {
-				JOptionPane.showMessageDialog(null, "There has been an error or the old car number doesn't exist, try again");
+				JOptionPane.showMessageDialog(null,
+						"There has been an error or the old car number doesn't exist, try again");
 			}
 		}
+		System.out.println("second car: " + secCar2);
+		if (enter2CarsFlag) {
+			if (EmployeeCC.addNewCar(secCar2)) {
+				JOptionPane.showMessageDialog(null, "Second car added successfully to system");
+			} else {
+				JOptionPane.showMessageDialog(null, "There has been an error, try again");
+			}
+		}
+
 		// adding the model
 		if (EmployeeCC.updateModels(pricingM.toString(), purchaseM.toString(), id)
 				&& (EmployeeCC.addModule(id, purchaseM.toString(), companyNames.toString())))

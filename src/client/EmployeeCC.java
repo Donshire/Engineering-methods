@@ -271,4 +271,9 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(parameters, Commands.updateCar));
 		return(boolean)MyFuelClient.ServerRetObj;
 	}
+	
+	public static int getCarCount(String id) {
+		ClientUI.client.accept(new Message(id,Commands.getCarCount));
+		return (int)MyFuelClient.ServerRetObj;
+	}
 }

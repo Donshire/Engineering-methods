@@ -535,6 +535,15 @@ public class MyFuelServer extends AbstractServer {
 				e.printStackTrace();
 			}
 			break;
+			
+		case getCarCount:
+			 String idForCount = (String)message.getObj();
+			 try {
+					sendToClientObject(EmployeeController.getCarCount(idForCount), client);
+			 }catch (Exception e) {
+				// TODO: handle exception
+				 e.printStackTrace();
+			}
 		default:
 			System.out.println("default");
 		}

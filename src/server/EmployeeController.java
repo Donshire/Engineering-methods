@@ -475,4 +475,20 @@ public class EmployeeController {
 		}
 		return true;
 	}
+	
+	public static int getCarCount(String idForCount) {
+		PreparedStatement stm;
+		ResultSet res;
+		int count = 0;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select count(carNumber) from myfueldb.car where CustomerID = ?");
+			stm.setString(1, idForCount);
+			res=stm.executeQuery();
+			if(res.next())
+				count = Integer.parseInt(res.getString(1));
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return count;
+	}
 }

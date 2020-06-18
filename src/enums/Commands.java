@@ -13,5 +13,5 @@ public enum Commands {
 	updatePricingModel, getCustomerDetails, updateCustomerDetails, getAllSales, deleteSales, addNewSaleTemp,
 	CreateNewOrder, GetStationInventory, saveRate, getFuelMaxPriceDetails, updateFuelMaxPriceDetails,
 	getBuildRateApprovalDetails, confirmFuelMaxPriceDetails, rejectFuelMaxPriceDetails, getFuelTypesByCompany,
-	checkIfUserNameExist,getCompanyNames, addModule,updateCar
+	checkIfUserNameExist,getCompanyNames, addModule,updateCar,getCarCount
 };

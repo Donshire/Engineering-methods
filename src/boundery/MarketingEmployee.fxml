@@ -71,12 +71,12 @@
             <TextField fx:id="customercompanyNameTxt" layoutX="189.0" layoutY="464.0" />
             <ImageView fx:id="CVVImage" fitHeight="60.0" fitWidth="104.0" layoutX="580.0" layoutY="270.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Desktop/CVV.png" />
+                  <Image url="@../Images/CVV.png" />
                </image>
             </ImageView>
             <ImageView fx:id="helpImage" fitHeight="49.0" fitWidth="69.0" layoutX="645.0" layoutY="220.0" onMousePressed="#openCVVImgae" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Desktop/help.png" />
+                  <Image url="@../Images/help.png" />
                </image>
             </ImageView>
             <TextField fx:id="ExpDateYearTxt" layoutX="505.0" layoutY="225.0" prefHeight="31.0" prefWidth="49.0" />
@@ -91,7 +91,7 @@
             <Label fx:id="pricingModelLbl" layoutX="153.0" layoutY="324.0" text="Pricing Model:" />
             <Label fx:id="purchaseModelLbl" layoutX="152.0" layoutY="430.0" text="Purchase Model:" />
             <ComboBox fx:id="purchaseModelCombox" layoutX="279.0" layoutY="425.0" prefHeight="31.0" prefWidth="186.0" />
-            <Button fx:id="carAndModelFinishBtn" layoutX="574.0" layoutY="440.0" mnemonicParsing="false" onAction="#updateCarAndModel" prefHeight="31.0" prefWidth="66.0" text="Finish" />
+            <Button fx:id="carAndModelFinishBtn" layoutX="579.0" layoutY="464.0" mnemonicParsing="false" onAction="#updateCarAndModel" prefHeight="31.0" prefWidth="66.0" text="Finish" />
             <Label fx:id="carAndModelIDLbl" layoutX="153.0" layoutY="135.0" text="ID:" />
             <TextField fx:id="carAndModelIDTxt" layoutX="280.0" layoutY="130.0" />
             <Label fx:id="fuelTypeLbl" layoutX="153.0" layoutY="277.0" text="Fuel Type:" />
@@ -117,6 +117,10 @@
                   <Font name="System Italic" size="12.0" />
                </font>
             </Label>
+            <Label fx:id="secondCarLbl" layoutX="29.0" layoutY="469.0" text="Enter second car number:" />
+            <TextField fx:id="secondCarTxt" layoutX="208.0" layoutY="464.0" prefHeight="31.0" prefWidth="109.0" />
+            <Label fx:id="secfuelTypeLbl" layoutX="326.0" layoutY="469.0" text="Fuel Type: " />
+            <ComboBox fx:id="secFuelTypeCombox" layoutX="397.0" layoutY="464.0" prefHeight="31.0" prefWidth="109.0" />
          </children>
       </Pane>
       <Button fx:id="openUpdateCustomerPane" layoutX="14.0" layoutY="404.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="150.0" text="Update Customer" />
@@ -159,12 +163,12 @@
             </Text>
             <ImageView fx:id="CVVImage1" fitHeight="60.0" fitWidth="104.0" layoutX="553.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Desktop/CVV.png" />
+                  <Image url="@../Images/CVV.png" />
                </image>
             </ImageView>
             <ImageView fx:id="helpImage1" fitHeight="49.0" fitWidth="69.0" layoutX="626.0" layoutY="306.0" onMousePressed="#openCVVImgae1" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../Desktop/help.png" />
+                  <Image url="@../Images/help.png" />
                </image>
             </ImageView>
          </children>
