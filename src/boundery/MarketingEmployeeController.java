@@ -1399,6 +1399,7 @@ public class MarketingEmployeeController implements Initializable {
 			return true;
 		return false;
 	}
+	
 
 	public static boolean checkIfUserNameExist(String userName) {
 		return EmployeeCC.checkIfUserNameExist(userName);
