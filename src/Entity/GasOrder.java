@@ -21,7 +21,7 @@ public class GasOrder implements Serializable {
 	private String date;
 	private float priceOfPurchase;
 	private boolean urgent;
-//	private OrderStatus status;
+	private OrderStatus status;
 //	private int saleID;
 //  float currentPrice;
 //	private String companyName;
@@ -37,10 +37,11 @@ public class GasOrder implements Serializable {
 	 * @param date
 	 * @param priceOfPurchase
 	 * @param urgent
-	 * @param time 
+	 * @param time
+	 * @param processing 
 	 */
 	public GasOrder(int purchaseID, String custmoerId, String supplyDate, String time, float gasAmount, String date,
-			float priceOfPurchase, boolean urgent) {
+			float priceOfPurchase, boolean urgent, OrderStatus processing) {
 		this.purchaseID = purchaseID;
 		this.custmoerId = custmoerId;
 		this.supplyDate = supplyDate;
@@ -49,6 +50,7 @@ public class GasOrder implements Serializable {
 		this.date = date;
 		this.priceOfPurchase = priceOfPurchase;
 		this.urgent = urgent;
+		this.status = processing;
 	}
 
 	public String getTime() {
@@ -125,15 +127,28 @@ public class GasOrder implements Serializable {
 		this.urgent = urgent;
 	}
 
-/*	
+	
 	public OrderStatus getStatus() {
 		return status;
+	}
+	
+	public int getStatusInt() {
+		switch (status) {
+		case processing:
+			return 1;
+		case onTheWay:
+			return 2;
+		case arrived:
+			return 3;
+		default:
+			return 1;
+		}	
 	}
 
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
-
+/*
 	public int getSaleID() {
 		return saleID;
 	}
@@ -157,14 +172,13 @@ public class GasOrder implements Serializable {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+*/
 
 	@Override
 	public String toString() {
-		return "GasOrder [purchaseID=" + purchaseID + ", custmoerId=" + custmoerId + ", fuelType=" + fuelType
-				+ ", supplyDate=" + supplyDate + ", gasAmount=" + gasAmount + ", date=" + date + ", priceOfPurchase="
-				+ priceOfPurchase + ", urgent=" + urgent + ", status=" + status + ", saleID=" + saleID
-				+ ", currentPrice=" + currentPrice + ", companyName=" + companyName + "]";
+		return "GasOrder [purchaseID=" + purchaseID + ", custmoerId=" + custmoerId + ", supplyDate=" + supplyDate
+				+ ", time=" + time + ", gasAmount=" + gasAmount + ", date=" + date + ", priceOfPurchase="
+				+ priceOfPurchase + ", urgent=" + urgent + ", status=" + status + "]";
 	}
-*/
 
 }

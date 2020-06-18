@@ -26,8 +26,20 @@ public class CustomerGasOrderController {
 			res = stm.executeQuery();
 
 			while(res.next() == true) {
+				OrderStatus stat = OrderStatus.processing;
+				switch (res.getInt(9)) {
+				case 1:
+					stat = OrderStatus.processing;
+					break;
+				case 2:
+					stat = OrderStatus.onTheWay;
+					break;
+				case 3:
+					stat = OrderStatus.arrived;
+					break;
+				}
 				GasOrder order = new GasOrder(res.getInt(1), res.getString(2), res.getString(3),
-						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8));
+						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8), stat);
 				System.out.println(order);
 				orderList.add(order);
 			}
@@ -51,8 +63,8 @@ public class CustomerGasOrderController {
 	public static boolean createNewOrder(GasOrder obj) {
 		PreparedStatement stm;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, time, gasAmount, date, priceOfPurchase, urgent) " + 
-					"VALUES (?, ?, ?, ?, ?, ?, ?); ");
+			stm = ConnectionToDB.conn.prepareStatement("INSERT INTO gasorder (customerID, supplyDate, time, gasAmount, date, priceOfPurchase, urgent, status) " + 
+					"VALUES (?, ?, ?, ?, ?, ?, ?, ?); ");
 			stm.setString(1, obj.getCustmoerId());
 			stm.setString(2, obj.getSupplyDate());
 			stm.setString(3, obj.getTime());
@@ -60,7 +72,8 @@ public class CustomerGasOrderController {
 			stm.setString(5, obj.getDate());
 			stm.setFloat(6, obj.getPriceOfPurchase());
 			stm.setBoolean(7, obj.isUrgent());
-			
+			int stat = obj.getStatusInt();		//***
+			stm.setInt(8, stat);	
 			stm.executeUpdate();
 			stm.close();
 		} catch (SQLException e) {

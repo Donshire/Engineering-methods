@@ -20,6 +20,7 @@ import Entity.PricingModule;
 import Entity.Sale;
 import Entity.StationFuel;
 import Entity.Supplier;
+import enums.OrderStatus;
 import enums.RatesStatus;
 
 public class BuildObjectByQueryData {
@@ -282,7 +283,7 @@ public class BuildObjectByQueryData {
 		try {
 			while (res.next() == true)
 				sales.add(new GasOrder(res.getInt(1), res.getString(2), res.getString(3),
-						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8)));
+						res.getString(4), res.getFloat(5), res.getString(6), res.getFloat(7), res.getBoolean(8), (OrderStatus) res.getObject(9)));
 				
 				res.close();
 			return sales;

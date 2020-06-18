@@ -90,6 +90,10 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	private TableColumn<GasOrder, Float> PurchasePricecol;
+	
+   @FXML
+    private TableColumn<GasOrder,String> Status;
+
 
 	// ORDER TABLE END ------------------------------------
 
@@ -192,7 +196,7 @@ public class CustomerGuiController implements Initializable {
 			if (!normalSupply.isSelected())
 				supplyDate = currentDate;
 			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, currentTime, gasAmount, currentDate, priceOfPurchase,
-					!normalSupply.isSelected());
+					!normalSupply.isSelected(), OrderStatus.processing);
 			
 			System.out.println(order.toString());
 			
@@ -206,24 +210,24 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	void myOrdersClicked(ActionEvent event) {
-		Button btn = (Button) event.getSource();
+		//Button btn = (Button) event.getSource();
 
-		if (btn.equals(myOrdersbtn)) {
+		//if (btn.equals(myOrdersbtn)) {
 			myOrdersPane.setVisible(true);
 			orderHomeGasPane.setVisible(false);
 			orderTable.setItems(getOrders());
-		}
+		//}
 
 	}
 
 	@FXML
 	void orderGasClicked(ActionEvent event) {
-		Button btn = (Button) event.getSource();
+		//Button btn = (Button) event.getSource();
 
-		if (btn.equals(orderGasbtn)) {
+		//if (btn.equals(orderGasbtn)) {
 			myOrdersPane.setVisible(false);
 			orderHomeGasPane.setVisible(true);
-		}
+		//}
 	}
 
 	public void start(Stage primaryStage) throws Exception {
@@ -232,16 +236,16 @@ public class CustomerGuiController implements Initializable {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("CustomerGUI.fxml"));
-
+		
 		mainPane = loader.load();
-
+	
 		// connect the scene to the file
 		s = new Scene(mainPane);
 
 		primaryStage.setTitle("Order Gas Home");
 		primaryStage.setScene(s);
 		primaryStage.show();
-
+		
 	}
 	
 	
@@ -303,7 +307,7 @@ public class CustomerGuiController implements Initializable {
 
 	public void orderHomeGasInitialize() {
 		priceList.setText("4.6");
-		textDiscount.setText("0");
+		//textDiscount.setText("0");
 		
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
@@ -340,7 +344,7 @@ public class CustomerGuiController implements Initializable {
 		urgentcol.setCellValueFactory(new PropertyValueFactory<GasOrder, Boolean>("urgent"));
 		PurchaseTimecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("time"));
 		PurchasePricecol.setCellValueFactory(new PropertyValueFactory<GasOrder, Float>("priceOfPurchase"));
-
+		Status.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("status"));
 	}
 	
 	
@@ -360,6 +364,11 @@ public class CustomerGuiController implements Initializable {
 		hellotxt.setText("Hello " + customer.getFirstName());
 		orderHomeGasInitialize();
 		myOrdersInitialize();
+		
+		myOrdersClicked(null);
+		/*myOrdersPane.setVisible(true);		
+		orderHomeGasPane.setVisible(false);
+		orderTable.setItems(getOrders());*/
 		//
 
 	}
