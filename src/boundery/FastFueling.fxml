@@ -4,6 +4,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -11,7 +13,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.FastFuelingController">
    <children>
-      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0;">
+      <ImageView fitHeight="428.0" fitWidth="814.0" layoutX="-92.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Images/MyFuel.jpg" />
+         </image>
+      </ImageView>
+      <Pane fx:id="dataPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0; -fx-opacity: 0.95;">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9ede1" height="384.0" layoutX="9.0" layoutY="9.0" stroke="#dddddd" strokeType="INSIDE" width="580.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#e4b773" height="148.0" layoutX="15.0" layoutY="72.0" stroke="#ebe0df" strokeType="INSIDE" width="567.0" />

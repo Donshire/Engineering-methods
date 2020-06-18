@@ -5,6 +5,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -14,7 +16,7 @@
    <children>
       <Pane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;">
          <children>
-            <Button fx:id="MaxPriceOfGasButton" layoutY="288.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Set max price of gas" textFill="WHITE">
+            <Button fx:id="MaxPriceOfGasButton" layoutY="286.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Set max price of gas" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
@@ -22,7 +24,7 @@
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="ReportsHandler" layoutY="228.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Station reports" textFill="WHITE">
+            <Button fx:id="ReportsHandler" layoutY="227.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Station reports" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
@@ -30,6 +32,11 @@
                <font>
                   <Font size="18.0" />
                </font></Button>
+            <ImageView fitHeight="111.0" fitWidth="232.0" layoutX="-40.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../Images/MyFuel.jpg" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <AnchorPane fx:id="reportsPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">

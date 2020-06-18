@@ -2,8 +2,9 @@
 {
 -fx-background-color :   #bf9e7e;
 -fx-text-fill : #000000;
-
+-fx-border-color : black;
 -fx-background-insets: 0.0 0.0 -1.0 0.0, 0.0, 1.0, 2.0;
+
 
 
 }
@@ -22,7 +23,7 @@
 
 .button:pressed
 {
--fx-background-color : #f9ede1;
+-fx-background-color : #f9ede1; 
 
 }
 .popup {
