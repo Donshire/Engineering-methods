@@ -31,6 +31,7 @@ public class SetQueryByObject {
 			stm.setFloat(8, purchase.getCurrentPrice());
 			stm.setInt(9, purchase.getPricingModelNumber());
 			stm.setString(10, purchase.getCompanyName());
+			stm.setString(11, purchase.getFuelType());
 			stm.executeUpdate();
 			stm.close();
 			return true;

@@ -27,6 +27,9 @@ public class FileManagmentSys {
 	public static final String incomeReport = "incomeReport";
 	public static final String purchasesReport = "purchasesReport";
 	public static final String inventoryReport = "inventoryReport";
+	
+	public static final String customerAnaliticData = "customerAnaliticData";
+	public static final String statisticData = "statisticData";
 
 	public static final String marketingManagerReports = "marketingManagerReports";
 	public static final String stationManagerReports = "stationManagerReports";
@@ -66,6 +69,8 @@ public class FileManagmentSys {
 		//
 		curr = temp;
 		curr += "\\" + analiticData;
+		createSingleFolder(curr + "\\" + customerAnaliticData);
+		createSingleFolder(curr + "\\" + statisticData);
 		createSingleFolder(curr);
 
 		return true;

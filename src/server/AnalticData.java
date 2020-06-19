@@ -50,32 +50,56 @@ public class AnalticData implements Runnable {
 				
 				//create files for all companies
 				ArrayList<String> companies = getAllCompanies();
-				File [] files = new File[companies.size()];
+				File [] filesRank = new File[companies.size()];
+				File [] filesStatistic = new File[companies.size()];
 				int index = 0;
-
-				for (String val : companies) {
-				files[index++] = FileManagmentSys.createFile(FileManagmentSys.createLocation(val, FileManagmentSys.analiticData, ""),
-							FileManagmentSys.analiticData, 0, "", "");
-					
-				}
+				
 				//
 				currentCustomers = getAllCustomersID();
-				fuelingHourRanks = calculatefuelingHourAnaleticRank(files);
-				customerTypeRanks = calculateCustomerTypeAnaleticRank();
-				fuelTypeRanks = calculatefuelTypeAnaleticRank();
+				
+				for (String val : companies) {
+					filesRank[index] = FileManagmentSys.createFile(FileManagmentSys.createLocation
+						(val, FileManagmentSys.analiticData, FileManagmentSys.customerAnaliticData),
+							FileManagmentSys.analiticData, 0, "", "");
+					filesStatistic[index] = FileManagmentSys.createFile(FileManagmentSys.createLocation
+						(val, FileManagmentSys.analiticData, FileManagmentSys.statisticData),
+							FileManagmentSys.analiticData, 0, "", "");
+					
+					//
+					fuelingHourRanks = calculatefuelingHourAnaleticRank(filesStatistic[index],val);
+					customerTypeRanks = calculateCustomerTypeAnaleticRank(filesStatistic[index],val);
+					fuelTypeRanks = calculatefuelTypeAnaleticRank(filesStatistic[index],val);
+					writeAnalitic(filesRank[index],currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
+					
+					index++;
+				}
 
 				System.out.println("Houers: " + fuelingHourRanks);
 				System.out.println("CustomerType: " + customerTypeRanks);
 				System.out.println("fuelType: " + fuelTypeRanks);
 
-				updateCutomersAnaliticdata(currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
+				//updateCutomersAnaliticdata(currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
 
 				// calculateCustomerTypeAnaleticRank();
 			} while (threadSleep());
 			//
 		}
 	}
-
+	
+	private void writeAnalitic(File filesRank,ArrayList<String> customersID, ArrayList<Float> fuelTypeRanks,
+			ArrayList<Float> fuelingHourRanks, ArrayList<Integer> customerTypeRank) {
+		int index =0;
+		StringBuilder str = new StringBuilder();
+		str.append(String.format("%-15s%-15s%-15s%-15s","customerID","fuel Type","fueling Hour","customerType"));
+		//
+		while (index < customersID.size()) {
+		str.append(String.format("%-15s%-15d%-15d%-15d",customersID.get(index),customerTypeRank.get(index),
+				Math.round(fuelingHourRanks.get(index)),Math.round(fuelTypeRanks.get(index))));
+			index++;
+		}
+		FileManagmentSys.writeToAnaliticData(filesRank, str.toString());
+	}
+	
 	private boolean threadSleep() {
 		boolean flag = false;// didn't finish
 		while (continueThread && !flag)
@@ -121,22 +145,20 @@ public class AnalticData implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<Float> calculatefuelTypeAnaleticRank() {
+	private ArrayList<Float> calculatefuelTypeAnaleticRank(File filesStatistic,String company) {
 		PreparedStatement stm;
 		ResultSet res;
 		ArrayList<Float> countOfGasStationFuelsPurchased = new ArrayList<Float>();
 		int index = 0;
-		// get all system fuels
-		ArrayList<String> companies = getAllCompanies();
+		//
 		ArrayList<CompanyFuel> fuels = new ArrayList<CompanyFuel>();
-		for (String company : companies)
-			fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
+		fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
 		// sort the fuels prices
 		Collections.sort(fuels);
 
 		int count = 0, currRank;
 		String currFuel, fuelType = "";
-
+		
 		// ------------------------------------------------------------------------------
 		Set<String> fuelNames = new HashSet<String>();
 		ArrayList<KeyplusRank> rankedFuels = new ArrayList<KeyplusRank>();
@@ -174,15 +196,22 @@ public class AnalticData implements Runnable {
 		try {
 			// gasStationFuels
 			stm = ConnectionToDB.conn.prepareStatement(
-					"Select cus.id,cc.fuelType\r\n" + "from myfueldb.customer as cus\r\n" + "left join \r\n"
-							+ "(SELECT CustomerID,car.fuelType,car.carNumber\r\n" + "FROM  myfueldb.car) as cc \r\n"
-							+ "on cus.id = cc.CustomerID\r\n" + "left join \r\n" + "(SELECT pur.CarNumber FROM \r\n"
-							+ "myfueldb.fuelpurchase as pur where pur.date >= ? and pur.date <=\r\n" + "? ) as par\r\n"
-							+ "on cc.carNumber = par.CarNumber \r\n" + "group by par.CarNumber,cus.id \r\n"
-							+ "order by cus.id ");
+					"Select cus.id,par.fuelType\r\n" + 
+					"from myfueldb.customer as cus\r\n" + 
+					"left join \r\n" + 
+					"(SELECT CustomerID,car.carNumber\r\n" + 
+					"FROM  myfueldb.car) as cc\r\n" + 
+					"on cus.id = cc.CustomerID\r\n" + 
+					"left join \r\n" + 
+					"(SELECT pur.CarNumber,pur.fuelType FROM\r\n" + 
+					"myfueldb.fuelpurchase as pur where pur.date >=?  and pur.date <=?  and pur.company=?) as par\r\n" + 
+					"on cc.carNumber = par.CarNumber \r\n" + 
+					"group by par.CarNumber,cus.id \r\n" + 
+					"order by cus.id ");
 
 			stm.setString(1, after.toString());
 			stm.setString(2, before.toString());
+			stm.setString(3, company);
 			res = stm.executeQuery();
 
 			index = 0;
@@ -216,33 +245,10 @@ public class AnalticData implements Runnable {
 					countOfGasStationFuelsPurchased.add(rankPercent + 1f / lower);
 				}
 			}
-
-			// homeGasFuel 1/0
-			stm = ConnectionToDB.conn
-					.prepareStatement("Select id,count(customerID) from myfueldb.customer as cus left join (SELECT "
-							+ "ord.customerID FROM myfueldb.gasorder as ord where ord.date >= ? "
-							+ "and ord.date <= ? ) as par on cus.id = par.customerID GROUP BY "
-							+ "cus.id order by cus.id");
-
-			stm.setString(1, after.toString());
-			stm.setString(2, before.toString());
-			res = stm.executeQuery();
-
-			//
-			float homeGasRank = rankedFuels.get(KeyplusRank.indexOf("HOME GAS", rankedFuels)).rank, calculatedRank;
-
-			index = 0;
-			while (res.next()) {
-				if (res.getInt(2) > 0)
-					calculatedRank = homeGasRank;
-				else
-					calculatedRank = 0;
-
-				countOfGasStationFuelsPurchased.set(index,
-						(Math.max(1, (countOfGasStationFuelsPurchased.get(index) + calculatedRank) * 10)));
-				index++;
-			}
-
+			
+			//get rank in numbers
+			for(Float flow : countOfGasStationFuelsPurchased) flow*=10;
+			
 			res.close();
 			stm.close();
 
@@ -370,12 +376,14 @@ public class AnalticData implements Runnable {
 	 * 
 	 * @return
 	 */
-	private ArrayList<Integer> calculateCustomerTypeAnaleticRank() {
+	private ArrayList<Integer> calculateCustomerTypeAnaleticRank(File filesStatistic,String company) {
 
 		PreparedStatement stm;
 		Statement statment;
 		ResultSet res;
 		ArrayList<Integer> customerTypeAnaleticRank = new ArrayList<Integer>();
+		int countSumPurchase[] = new int[5];
+		int countSumCar[] = new int[4];
 
 		try {
 			// Totale purchases
@@ -383,12 +391,14 @@ public class AnalticData implements Runnable {
 					+ "from myfueldb.customer as cus \r\n" + "left join myfueldb.car as car\r\n"
 					+ "on car.CustomerID=cus.id\r\n" + "left join\r\n"
 					+ "  (SELECT pur.CarNumber,pur.priceOfPurchase\r\n" + "  FROM myfueldb.fuelpurchase as pur\r\n"
-					+ "    where pur.date >= ?\r\n" + "      and pur.date <= ?\r\n" + "  ) as par \r\n"
+					+ "    where pur.date >= ?\r\n" + "      and pur.date <= ?\r\n" + "  and pur.company= ? ) as par \r\n"
 					+ "on car.carNumber = par.CarNumber\r\n" + "group by cus.id  order by cus.id";
 
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			stm.setString(1, after.toString());
 			stm.setString(2, before.toString());
+			stm.setString(3, company);
+			
 			res = stm.executeQuery();
 
 			// ranking eatch customer
@@ -410,9 +420,13 @@ public class AnalticData implements Runnable {
 
 			while (res.next()) {
 				price = res.getInt(2);
-				if (price != null)
+				if (price == null)
 					rankPercent = 1;
-				rankPercent = (int) rankedFuels.get(KeyplusRank.indexOfRang(price, rankedFuels)).rank;
+				else {
+					rankPercent = (int) rankedFuels.get(KeyplusRank.indexOfRang(price, rankedFuels)).rank;
+					countSumPurchase[rankPercent]++;
+				}
+				
 				customerTypeAnaleticRank.add(rankPercent);
 			}
 
@@ -426,19 +440,61 @@ public class AnalticData implements Runnable {
 			rankedFuels.add(new KeyplusRank("21", 4));
 
 			statment = ConnectionToDB.conn.createStatement();
-			res = statment.executeQuery("Select cus.id,count(carNumber) from myfueldb.customer as cus "
-					+ "left join myfueldb.car as car on car.CustomerID=cus.id " + "group by cus.id order by cus.id");
+			res = statment.executeQuery("Select cus.id,count(carNumber),companyNamesSubscribed\r\n" + 
+					"from myfueldb.customer as cus\r\n" + 
+					"left join myfueldb.car as car \r\n" + 
+					"on car.CustomerID=cus.id \r\n" + 
+					"left join myfueldb.customermodule as cum \r\n" + 
+					"on cum.CustomerID=cus.id \r\n" + 
+					"group by cus.id order by cus.id");
 
-			int carNumber;
+			int carNumber,j;
 			index = 0;
+			String[] lines;
+			
 			while (res.next()) {
 				carNumber = res.getInt(2);
-				if (carNumber > 0)
-					customerTypeAnaleticRank.set(index, (int) (customerTypeAnaleticRank.get(index)
-							+ rankedFuels.get(KeyplusRank.indexOfRang(carNumber, rankedFuels)).rank));
-				index++;
+				//
+				if (carNumber > 0) {
+					if(res.getString(3)!=null) {
+						lines = res.getString(3).split(",");
+						for(j=0;j<lines.length;j++) {
+							if(lines[j].compareTo(company)==0) {
+								customerTypeAnaleticRank.set(index, (int) (customerTypeAnaleticRank.get(index)
+										+ rankedFuels.get(KeyplusRank.indexOfRang(carNumber, rankedFuels)).rank));
+								countSumCar[KeyplusRank.indexOfRang(carNumber, rankedFuels)]++;
+							}
+						}
+					}//inner if
+					
+				}
+				//
+					index++;
 			}
-
+			
+			//write statistics to file
+			StringBuilder str = new StringBuilder();
+			purchase = 1000;
+			
+			str.append("car number and total purchase\n");
+			str.append(String.format("%-15s%-10s\n","sum purchase","count"));
+			
+			for(int k=0;k<5;k++) {
+				str.append(String.format("%-15.0f%-10d",purchase,countSumPurchase[k]));
+				if (index % 2 == 0)
+					purchase *= 5;
+				else
+					purchase *= 2;
+			}
+			
+			str.append(String.format("%-15s%-10s\n","car count","count"));
+			str.append(String.format("%-10d%-10d",3,countSumCar[0]));
+			str.append(String.format("%-10d%-10d",9,countSumCar[1]));
+			str.append(String.format("%-10d%-10d",15,countSumCar[2]));
+			str.append(String.format("%-10d%-10d",21,countSumCar[3]));
+			
+			FileManagmentSys.writeToAnaliticData(filesStatistic, str.toString());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -460,7 +516,7 @@ public class AnalticData implements Runnable {
 	 * @return
 	 */
 
-	private ArrayList<Float> calculatefuelingHourAnaleticRank(File [] filearr) {
+	private ArrayList<Float> calculatefuelingHourAnaleticRank(File filesStatistic,String company) {
 		PreparedStatement stm;
 		Statement statment;
 		ResultSet res;
@@ -484,13 +540,14 @@ public class AnalticData implements Runnable {
 						+ "left join myfueldb.car as car\r\n" + "on car.CustomerID=cus.id\r\n"
 						+ "left join myfueldb.fuelpurchase as par\r\n" + "on car.carNumber = par.CarNumber\r\n"
 						+ "where par.date >= ?\r\n" + "and par.date <= ?\r\n" + "and par.time<=? and par.time>=?\r\n"
-						+ "order by par.time  ";
+						+ "and company= ? order by par.time  ";
 
 				stm = ConnectionToDB.conn.prepareStatement(query);
 				stm.setString(1, after.toString());
 				stm.setString(2, before.toString());
 				stm.setString(3, fuelingHourAnaleticRank.get(i*2+1).key);
 				stm.setString(4, fuelingHourAnaleticRank.get(i*2).key);
+				stm.setString(5, company);
 				// fuelingHourAnaleticRank
 				res = stm.executeQuery();
 				res.next();
@@ -503,13 +560,14 @@ public class AnalticData implements Runnable {
 					+ "left join myfueldb.fuelpurchase as par\r\n" + "on car.carNumber = par.CarNumber\r\n"
 					+ "where par.date >= ?\r\n" + "and par.date <= ?\r\n"
 					+ "and (( par.time<='24:00' and par.time>=?) or\r\n" + "(par.time<=? and par.time>='00:00'))\r\n"
-					+ "order by par.time    ";
+					+ "and company= ? order by par.time    ";
 
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			stm.setString(1, after.toString());
 			stm.setString(2, before.toString());
 			stm.setString(3, fuelingHourAnaleticRank.get(parts * 2 - 2).key);
 			stm.setString(4, fuelingHourAnaleticRank.get(parts * 2 - 1).key);
+			stm.setString(5, company);
 			// fuelingHourAnaleticRank
 			res = stm.executeQuery();
 			res.next();
@@ -518,15 +576,11 @@ public class AnalticData implements Runnable {
 			
 			//save for all the companies the result of the set
 			
+			builder.append(String.format("purchase per range of hours\n%-12s%-10s\n","range","count"));
 			for(int j = 0 ; j < parts ; j++) {
-			builder.append(String.format("%s-%s_%d\n",fuelingHourAnaleticRank.get(j*2).key,fuelingHourAnaleticRank.get(j*2+1).key,(int)fuelingHourAnaleticRank.get(j*2).rank));
+			builder.append(String.format("%s-%s% -10d\n",fuelingHourAnaleticRank.get(j*2).key,fuelingHourAnaleticRank.get(j*2+1).key,(int)fuelingHourAnaleticRank.get(j*2).rank));
 			}
-			
-			for(File f : filearr) {
-				FileManagmentSys.writeToAnaliticData(f, builder.toString());
-			}
-			
-			//________________________________________________
+			FileManagmentSys.writeToAnaliticData(filesStatistic, builder.toString());
 			
 			// ----------------------------------------------------------------
 			// claculate houres rank
