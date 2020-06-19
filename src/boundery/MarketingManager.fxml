@@ -20,6 +20,7 @@
       <Button fx:id="reportGenerationWindowBtn" layoutX="14.0" layoutY="197.0" mnemonicParsing="false" onAction="#openReportGenerationPane" prefHeight="60.0" prefWidth="141.0" text="Report generation" />
       <Button fx:id="mainPane" layoutX="14.0" layoutY="434.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="141.0" text="Main Pane" />
       <Button fx:id="logOutBtn" layoutX="713.0" layoutY="24.0" mnemonicParsing="false" onAction="#logOut" text="Log Out" />
+      <Button fx:id="analiticDatabtn" layoutX="14.0" layoutY="510.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="144.0" text="AnaliticData" />
       <Pane fx:id="markitingManagerNofPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
             <Text fx:id="helloUserTxt" layoutX="475.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" />
@@ -27,7 +28,7 @@
             <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
          </children>
       </Pane>
-      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0">
+      <Pane fx:id="fuelRatesPane" layoutX="170.0" layoutY="100.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
             <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Company Rate">
                <font>
@@ -56,6 +57,7 @@
             </Text>
             <Text layoutX="339.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Rate status" />
             <Button fx:id="updateRates" layoutX="542.0" layoutY="455.0" mnemonicParsing="false" onAction="#UpdateSelectedRates" text="Activate" />
+            <Pane layoutX="17.0" layoutY="-5.0" prefHeight="488.0" prefWidth="465.0" />
          </children>
       </Pane>
       <Pane fx:id="saleDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
@@ -269,6 +271,22 @@
             <DatePicker fx:id="startDate" layoutX="102.0" layoutY="73.0" prefHeight="31.0" prefWidth="156.0" promptText="start Date" visible="false" />
             <DatePicker fx:id="endDate" layoutX="285.0" layoutY="73.0" prefHeight="31.0" prefWidth="156.0" promptText="End Date" visible="false" />
             <Text fx:id="selectDateTxt" layoutX="14.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Dates" visible="false" />
+         </children>
+      </Pane>
+      <Pane fx:id="analiticDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0">
+         <children>
+            <TableView fx:id="AnaliticDataTable" layoutX="109.0" layoutY="243.0" prefHeight="210.0" prefWidth="450.0">
+              <columns>
+                <TableColumn fx:id="weekCol" prefWidth="150.0" text="Week" />
+                <TableColumn fx:id="monthCol" prefWidth="150.0" text="Month" />
+                  <TableColumn fx:id="yearCol" prefWidth="150.0" text="Year" />
+              </columns>
+            </TableView>
+            <TextField fx:id="getYeartxt" layoutX="288.0" layoutY="170.0" />
+            <ComboBox fx:id="monthComboBox" layoutX="109.0" layoutY="170.0" prefWidth="150.0" />
+            <Button fx:id="showAnaliticDatabtn" layoutX="494.0" layoutY="170.0" mnemonicParsing="false" onAction="#showAnaliticDataClick" text="show" />
+            <Text layoutX="109.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Month" wrappingWidth="116.63817688822746" />
+            <Text layoutX="288.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="enter year" wrappingWidth="143.99998486042023" />
          </children>
       </Pane>
    </children>

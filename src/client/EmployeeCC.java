@@ -3,6 +3,7 @@ package client;
 import java.io.File;
 import java.util.ArrayList;
 
+import Entity.AnaliticDataReport;
 import Entity.Car;
 import Entity.CompanyFuel;
 import Entity.Customer;
@@ -17,6 +18,7 @@ import Entity.Sale;
 import Entity.StationFuel;
 import enums.Commands;
 import enums.StationManagerReportsTypes;
+import sun.security.krb5.internal.PAData;
 import enums.CustomerRateTypes;
 import enums.Quarter;
 
@@ -275,5 +277,13 @@ public class EmployeeCC {
 	public static int getCarCount(String id) {
 		ClientUI.client.accept(new Message(id,Commands.getCarCount));
 		return (int)MyFuelClient.ServerRetObj;
+	}
+	
+	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year){
+		ArrayList<Object> params = new ArrayList<Object>();
+		params.add(month);
+		params.add(year);
+		ClientUI.client.accept(new Message(params,Commands.getAllAnaliticDataByYearAndMonth));
+		return (ArrayList<AnaliticDataReport>) MyFuelClient.ServerRetObj;
 	}
 }

@@ -11,6 +11,7 @@ import java.util.Collections;
 
 import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
+import Entity.AnaliticDataReport;
 import Entity.CompanyFuel;
 import Entity.Fuel;
 import Entity.GenericReport;
@@ -597,7 +598,7 @@ public class CompanyFuelControllerServer {
 		try {
 
 			stm = ConnectionToDB.conn.prepareStatement(
-					"UPDATE myfueldb.sale set status=?,companyName=?,fueltype=?,purchaseModule=?,salePercent=?,startTime=?"
+					"UPDATE sale set status=?,companyName=?,fueltype=?,purchaseModule=?,salePercent=?,startTime=?"
 							+ ",endTime=?,startDate=?,endDate=?,days=?" + " WHERE saleID = ?");
 			stm.setString(1, sale.getStatus().toString());
 			stm.setString(2, sale.getCompanyName());
@@ -849,6 +850,29 @@ public class CompanyFuelControllerServer {
 			e.printStackTrace();
 		}
 
+		return reports;
+	}
+	
+	
+	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year){
+		ArrayList<AnaliticDataReport> reports = new ArrayList<AnaliticDataReport>();
+		PreparedStatement stm;
+		ResultSet res;
+		
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from analiticdata WHERE month = ? and year = ?");
+			stm.setString(1, month);
+			stm.setString(2,year);
+			res = stm.executeQuery();
+			
+			while(res.next()) {
+				reports.add(new AnaliticDataReport(res.getString(1),res.getString(2),res.getString(3),res.getString(4)));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return reports;
 	}
 

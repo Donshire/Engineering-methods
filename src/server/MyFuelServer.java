@@ -549,6 +549,19 @@ public class MyFuelServer extends AbstractServer {
 				// TODO: handle exception
 				 e.printStackTrace();
 			}
+			 
+		case getAllAnaliticDataByYearAndMonth:
+		ArrayList<String> parameters = (ArrayList<String>) message.getObj();
+		String m=parameters.get(0);
+		String y=parameters.get(1);
+		try {
+			sendToClientObject(CompanyFuelControllerServer.getAllAnaliticDataByYearAndMonth(m, y),client);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		break;
+		
 		default:
 			System.out.println("default");
 		}
