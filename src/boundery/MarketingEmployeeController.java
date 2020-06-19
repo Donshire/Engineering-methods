@@ -1297,8 +1297,10 @@ public class MarketingEmployeeController implements Initializable {
 	// this method if for deleting sales from DB
 	@FXML
 	void deleteSals(ActionEvent event) {
-		if (EmployeeCC.deleteSales(selectedSales))
+		if (EmployeeCC.deleteSales(selectedSales)) {
 			JOptionPane.showMessageDialog(null, "Sales deleted!");
+			uploadSalesToTable();
+		}
 		else
 			JOptionPane.showMessageDialog(null, "Error! sales could not be deleted, try again");
 	}
@@ -1331,7 +1333,7 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: xx.xx");
 			return;
 		}
-		if (!startTime.matches(TIME_REGEX)) {
+		if (!startTime.matches(TIME_REGEX) || !endTime.matches(TIME_REGEX)) {
 			JOptionPane.showMessageDialog(null, "You need to enter time in the following format: \n HH:mm");
 			return;
 		}
@@ -1343,6 +1345,13 @@ public class MarketingEmployeeController implements Initializable {
 			inputMsg.append("end time");
 			flag = true;
 		}
+		
+		if(startDate.compareTo(endDate) > 0)
+		{
+			JOptionPane.showMessageDialog(null, "End date is earlier than start date");
+			return;
+		}
+		
 		if (flag) {
 			JOptionPane.showMessageDialog(null, inputMsg.toString());
 			return;
@@ -1387,8 +1396,8 @@ public class MarketingEmployeeController implements Initializable {
 			friday.setSelected(false);
 			saturday.setSelected(false);
 			allCheckBox.setSelected(false);
-
-		} else
+		}
+		else
 			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 	}
 

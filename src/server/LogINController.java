@@ -30,8 +30,8 @@ public class LogINController {
 					customer = customers.get(0);
 				if (customer.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-//					else
-//						updateUserOnlineStatus("customer", customer.getId(),1);
+					else
+						updateUserOnlineStatus("customer", customer.getId(),1);
 				res.close();
 				return customer;
 				}
@@ -46,8 +46,8 @@ public class LogINController {
 				employee = employees.get(0);
 				if (employee.getOnline() == 1)
 					return Commands.UserAlreadyConnected;
-//					else
-//						updateUserOnlineStatus("employee", employee.getId(),1);
+					else
+						updateUserOnlineStatus("employee", employee.getId(),1);
 				res.close();
 				if (employee.getRole().toLowerCase().compareTo("station manager") == 0) {
 					return getStationManagerById(employee);
@@ -66,8 +66,8 @@ public class LogINController {
 					supplier = suppliers.get(0);
 					if (supplier.getOnline() == 1)
 						return Commands.UserAlreadyConnected;
-//						else
-//							updateUserOnlineStatus("supplier", supplier.getId(),1);
+						else
+							updateUserOnlineStatus("supplier", supplier.getId(),1);
 					res.close();
 					return supplier;
 				}
