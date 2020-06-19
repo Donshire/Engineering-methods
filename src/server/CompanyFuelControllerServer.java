@@ -11,6 +11,7 @@ import java.util.Collections;
 
 import com.sun.xml.internal.ws.api.ha.StickyFeature;
 
+import Entity.AnaliticDataReport;
 import Entity.CompanyFuel;
 import Entity.Fuel;
 import Entity.GenericReport;
@@ -821,6 +822,7 @@ public class CompanyFuelControllerServer {
 		return BuildRateApproval;
 
 	}
+	
 
 	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationID) {
 
@@ -846,6 +848,28 @@ public class CompanyFuelControllerServer {
 			e.printStackTrace();
 		}
 
+		return reports;
+	}
+	
+	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year){
+		ArrayList<AnaliticDataReport> reports = new ArrayList<AnaliticDataReport>();
+		PreparedStatement stm;
+		ResultSet res;
+		
+		try {
+			stm = ConnectionToDB.conn.prepareStatement("select * from analiticdata WHERE month = ? and year = ?");
+			stm.setString(1, month);
+			stm.setString(2,year);
+			res = stm.executeQuery();
+			
+			while(res.next()) {
+				reports.add(new AnaliticDataReport(res.getString(1),res.getString(2),res.getString(3),res.getString(4)));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return reports;
 	}
 
