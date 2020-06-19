@@ -273,7 +273,7 @@
             <Text fx:id="selectDateTxt" layoutX="14.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Dates" visible="false" />
          </children>
       </Pane>
-      <Pane fx:id="analiticDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0">
+      <Pane fx:id="analiticDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
             <TableView fx:id="AnaliticDataTable" layoutX="109.0" layoutY="243.0" prefHeight="210.0" prefWidth="450.0">
               <columns>
