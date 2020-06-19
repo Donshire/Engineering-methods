@@ -1,11 +1,10 @@
 package boundery;
 
-
+import java.awt.List;
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,12 +14,9 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent.EventType;
 
-import Entity.AnaliticDataReport;
 import Entity.CompanyFuel;
 import Entity.Employee;
 import Entity.Fuel;
-import Entity.GasStationOrder;
-import Entity.GenericReport;
 import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
@@ -34,7 +30,6 @@ import enums.CustomerRateTypes;
 import enums.MarkitingManagerReport;
 import enums.RatesStatus;
 import enums.SaleStatus;
-import enums.StationManagerReportsTypes;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -53,15 +48,12 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -73,6 +65,9 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private VBox vboxPeriodicGuiTable;
+	@FXML
+	private Text hellomessage;
+
 	@FXML
 	private Text SaleIDSaleDAta;
 	@FXML
@@ -665,11 +660,6 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	@FXML
-	void openAnaliticDataPane(ActionEvent event) {
-		switchPanes(analiticDataPane);
-	}
-
-	@FXML
 	void viewMoreSaleDetails(ActionEvent event) {
 		currentSaleDataIndex = -1;
 		if (selectedSales.size() <= 0)
@@ -862,6 +852,7 @@ public class MarketingManagerController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
 		System.out.println("hello");
+		hellomessage.setText(markitingManager.getFirstName());
 		// if agreed we can use a file to load and save the nofitications
 
 		helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " + markitingManager.getLastName());

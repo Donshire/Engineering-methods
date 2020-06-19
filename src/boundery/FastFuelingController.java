@@ -37,7 +37,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable {
-	
+	@FXML
+	private Text hellomessage;
 	public static Car car;
 	public static Customer customer;
 	public static CustomerModule customerModule;
@@ -106,8 +107,7 @@ public class FastFuelingController implements Initializable {
 
 	@FXML
 	void backToLogInPage(ActionEvent event) {
-		MasterGUIController.getMasterGUIController().
-		switchWindows("LogIn.fxml");
+		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
 	@FXML

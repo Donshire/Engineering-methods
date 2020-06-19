@@ -17,36 +17,41 @@
 <Pane fx:id="CustomerMainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.CustomerGuiController">
    <children>
       <Button layoutX="887.0" layoutY="15.0" mnemonicParsing="false" onAction="#logOut" stylesheets="@styles.css" text="Log Out" />
-      <Button fx:id="orderGasbtn" layoutY="108.0" mnemonicParsing="false" onAction="#orderGasClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Order Home Gas" />
-      <Button fx:id="myOrdersbtn" layoutY="167.0" mnemonicParsing="false" onAction="#myOrdersClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="View My Orders" />
-      <Text fx:id="hellotxt" layoutX="230.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+      <Button fx:id="orderGasbtn" layoutY="108.0" mnemonicParsing="false" onAction="#orderGasClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Order Home Gas">
          <font>
-            <Font size="32.0" />
+            <Font size="18.0" />
+         </font></Button>
+      <Button fx:id="myOrdersbtn" layoutY="167.0" mnemonicParsing="false" onAction="#myOrdersClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="View My Orders">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+      <Text fx:id="hellotxt" layoutX="752.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+         <font>
+            <Font size="20.0" />
          </font>
       </Text>
       <Pane fx:id="myOrdersPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
             <TableView fx:id="orderTable" layoutX="15.0" layoutY="66.0" prefHeight="343.0" prefWidth="741.0">
               <columns>
-                <TableColumn fx:id="purchaseIDcol" minWidth="-Infinity" prefWidth="71.0" resizable="false" text="Purchase Id" />
-                  <TableColumn fx:id="supplyDatecol" minWidth="-Infinity" prefWidth="102.0" resizable="false" text="supply Date" />
-                  <TableColumn fx:id="PurchaseDatecol" minWidth="-Infinity" prefWidth="113.0" resizable="false" text="Purchase Date" />
-                  <TableColumn fx:id="PurchaseTimecol" minWidth="-Infinity" prefWidth="110.0" resizable="false" text="Purchase Time" />
+                <TableColumn fx:id="purchaseIDcol" minWidth="-Infinity" prefWidth="93.0" resizable="false" text="Purchase Id" />
+                  <TableColumn fx:id="supplyDatecol" minWidth="-Infinity" prefWidth="142.0" resizable="false" text="supply Date" />
+                  <TableColumn fx:id="PurchaseDatecol" minWidth="-Infinity" prefWidth="138.0" resizable="false" text="Purchase Date" />
+                  <TableColumn fx:id="PurchaseTimecol" minWidth="-Infinity" prefWidth="148.0" resizable="false" text="Purchase Time" />
                   <TableColumn fx:id="gasAmountcol" minWidth="-Infinity" prefWidth="104.0" resizable="false" text="gas Amount" />
-                  <TableColumn fx:id="urgentcol" minWidth="-Infinity" prefWidth="70.0" resizable="false" text="urgent" />
-                  <TableColumn fx:id="PurchasePricecol" minWidth="-Infinity" prefWidth="88.0" resizable="false" text="Purchase Price" />
-                  <TableColumn fx:id="Status" prefWidth="96.0" text="Status" />
+                  <TableColumn fx:id="urgentcol" minWidth="-Infinity" prefWidth="117.0" resizable="false" text="urgent" />
+                  <TableColumn fx:id="PurchasePricecol" minWidth="-Infinity" prefWidth="158.0" resizable="false" text="Purchase Price" />
               </columns>
             </TableView>
-            <Text layoutX="21.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders:">
+            <Text layoutX="14.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="My Orders">
                <font>
-                  <Font size="32.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Text>
          </children></Pane>
       <Pane fx:id="orderHomeGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <RadioButton fx:id="radioImmediat" layoutX="21.0" layoutY="67.0" mnemonicParsing="false" onAction="#radioSelected" selected="true" text="Immediate">
+            <RadioButton fx:id="radioImmediat" layoutX="58.0" layoutY="118.0" mnemonicParsing="false" onAction="#radioSelected" text="Immediate">
                <toggleGroup>
                   <ToggleGroup fx:id="DeliveryDateRadio" />
                </toggleGroup>
@@ -54,9 +59,9 @@
                   <Font size="15.0" />
                </font>
             </RadioButton>
-            <Text layoutX="18.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Gas" textAlignment="CENTER">
+            <Text layoutX="14.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Home Gas" textAlignment="CENTER">
                <font>
-                  <Font size="32.0" />
+                  <Font name="System Bold" size="26.0" />
                </font>
                <effect>
                   <ColorAdjust />
@@ -67,19 +72,22 @@
                   <Font size="15.0" />
                </font></RadioButton>
             <Text layoutX="143.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(up to 6 hours. 2% extra for the price)" />
-            <Text layoutX="21.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" wrappingWidth="70.21288983523846">
+            <font>
+                  <Font size="14.0" />
+               </font></Text>
+            <Text layoutX="61.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" wrappingWidth="70.21288983523846">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <TextField fx:id="textAmount" layoutX="96.0" layoutY="133.0" promptText="0" text="0" />
-            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="273.0" layoutY="103.0" onAction="#supplyDateSelected" visible="false" />
-            <Text fx:id="textSupplyDate" layoutX="119.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
+            <TextField fx:id="textAmount" layoutX="136.0" layoutY="173.0" text="0" />
+            <DatePicker fx:id="filedSupplyDate" editable="false" layoutX="360.0" layoutY="191.0" onAction="#supplyDateSelected" visible="false" />
+            <Text fx:id="textSupplyDate" layoutX="180.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a delivery date" visible="false" wrappingWidth="179.21288983523846">
                <font>
-                  <Font size="13.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Text>
-            <Pane layoutX="18.0" layoutY="222.0" prefHeight="184.0" prefWidth="741.0" style="-fx-background-color: #f9ede1;">
+            <Pane layoutX="51.0" layoutY="222.0" prefHeight="184.0" prefWidth="677.0" style="-fx-background-color: #f9ede1;">
                <children>
                   <Text layoutX="22.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price to pay:" wrappingWidth="162.21288983523846">
                      <font>
@@ -101,7 +109,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Text fx:id="textDiscount" fill="#094beb" layoutX="100.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2%" wrappingWidth="115.63086585700512">
+                  <Text fx:id="textDiscount" fill="#094beb" layoutX="100.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0%" wrappingWidth="115.63086585700512">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -116,17 +124,19 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Text>
-                  <Button fx:id="buttonBuy" layoutX="635.0" layoutY="140.0" mnemonicParsing="false" onAction="#makePurchase" prefHeight="0.0" prefWidth="92.0" stylesheets="@styles.css" text="Buy">
+                  <Button fx:id="buttonBuy" layoutX="571.0" layoutY="138.0" mnemonicParsing="false" onAction="#makePurchase" prefHeight="0.0" prefWidth="92.0" stylesheets="@styles.css" text="Buy">
                      <font>
-                        <Font name="System Bold" size="15.0" />
+                        <Font size="15.0" />
                      </font>
                   </Button>
                </children>
             </Pane>
-            <Text fx:id="noteDate" fill="RED" layoutX="472.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="115.63086336106062" />
-            <Text fx:id="noteAmount" fill="RED" layoutX="258.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Must be a positive number." visible="false" />
-            <Text fx:id="discount1" layoutX="18.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="(3% off buying over 600" visible="false" />
-            <Text fx:id="discount2" layoutX="21.0" layoutY="206.0" strokeType="OUTSIDE" strokeWidth="0.0" text="and 4% off buying over 800)" visible="false" />
+            <Text fx:id="noteDate" layoutX="613.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fx:id="noteAmount" layoutX="423.0" layoutY="281.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text layoutX="59.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose shipping method">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font></Text>
          </children>
       </Pane>
       <ImageView fitHeight="112.0" fitWidth="229.0" layoutX="-37.0" pickOnBounds="true" preserveRatio="true">
@@ -134,5 +144,10 @@
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
+      <Text fx:id="hellomessage" layoutX="806.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

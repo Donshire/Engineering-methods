@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -19,16 +20,19 @@
          </image>
       </ImageView>
       <Pane layoutX="229.0" layoutY="18.0" opacity="0.6" prefHeight="380.0" prefWidth="395.0" style="-fx-background-color: white;" />
-      <PasswordField fx:id="passtxt" layoutX="372.0" layoutY="177.0" promptText="Password" text="123" />
-      <TextField fx:id="usernametxt" layoutX="372.0" layoutY="135.0" prefHeight="25.0" prefWidth="149.0" promptText="user name" text="jos" />
-      <Button fx:id="loginbtb" layoutX="372.0" layoutY="223.0" mnemonicParsing="false" onAction="#login" prefHeight="31.0" prefWidth="87.0" stylesheets="@styles.css" text="LogIn" textFill="WHITE" />
-      <Label layoutX="382.0" layoutY="70.0" prefHeight="38.0" prefWidth="87.0" text="Log In" textFill="#43363f">
+      <PasswordField fx:id="passtxt" layoutX="372.0" layoutY="177.0" promptText="                                       Password" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="284.103515625" />
+      <TextField fx:id="usernametxt" layoutX="264.0" layoutY="135.0" prefHeight="25.0" prefWidth="149.0" promptText="                                         Username" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="284.103515625">
+         <padding>
+            <Insets right="1.0" />
+         </padding></TextField>
+      <Button fx:id="loginbtb" layoutX="376.0" layoutY="223.0" mnemonicParsing="false" onAction="#login" prefHeight="31.0" prefWidth="87.0" stylesheets="@styles.css" text="LogIn" textFill="WHITE" />
+      <Label layoutX="354.0" layoutY="70.0" prefHeight="38.0" prefWidth="165.0" text="     Log In" textFill="#43363f" AnchorPane.leftAnchor="354.0" AnchorPane.rightAnchor="343.0">
          <font>
-            <Font name="System Bold" size="26.0" />
+            <Font name="System Bold" size="25.0" />
          </font>
       </Label>
-      <TextField fx:id="carNumberInput" layoutX="373.0" layoutY="331.0" text="5896587442" />
-      <Text layoutX="264.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter car number for fast fuelling">
+      <TextField fx:id="carNumberInput" layoutX="373.0" layoutY="331.0" promptText="                                   Car number" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="284.103515625" />
+      <Text layoutX="264.0" layoutY="317.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter car number for fast fuelling" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="284.103515625">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>

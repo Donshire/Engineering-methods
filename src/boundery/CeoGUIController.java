@@ -45,13 +45,18 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class CeoGUIController implements Initializable {
 	ArrayList<PricingModule> selectPricingModuleList = new ArrayList<PricingModule>();
 
+    
 	public static Employee ceo;
+	
+    @FXML
+    private Text ceo_hello;
 
 	private AnchorPane currentPane;
 
@@ -435,7 +440,7 @@ public class CeoGUIController implements Initializable {
 		// ArrayList<PricingModule> companyPricingModuleByStatus;
 		// System.out.println(ceo.getCompanyName());
 		currentPane = MainPane;
-
+		ceo_hello.setText(ceo.getFirstName());
 		// show the main pane and hide the others
 		currentPane.setVisible(true);
 		RateApprovalPane.setVisible(false);
