@@ -595,9 +595,8 @@ public class CompanyFuelControllerServer {
 		PreparedStatement stm;
 
 		try {
-
 			stm = ConnectionToDB.conn.prepareStatement(
-					"UPDATE myfueldb.sale set status=?,companyName=?,fueltype=?,purchaseModule=?,salePercent=?,startTime=?"
+					"UPDATE myfueldb.sale set status=?,companyName=?,fueltype=?,salePercent=?,startTime=?"
 							+ ",endTime=?,startDate=?,endDate=?,days=?" + " WHERE saleID = ?");
 			stm.setString(1, sale.getStatus().toString());
 			stm.setString(2, sale.getCompanyName());
@@ -683,7 +682,7 @@ public class CompanyFuelControllerServer {
 
 			while (res.next() == true) {
 
-				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(4), res.getString(5),
+				Sale sale = new Sale(res.getInt(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getFloat(5), res.getString(6), res.getString(7), res.getString(8), res.getString(9),
 						res.getString(10));
 				sales.add(sale);
