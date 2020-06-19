@@ -91,14 +91,15 @@ public class FileManagmentSys {
 
 		String fileName = createFileName(fileType, stationID, quarter, year);
 		File file;
-		
-		boolean flage=false;
+
+		boolean flage = false;
 
 		file = new File(loc + "\\" + fileName + ".txt");
 		try {
 			if (!file.createNewFile()) {
-				if(!(fileType.compareTo(FileManagmentSys.periodicReport)==0 || fileType.compareTo(FileManagmentSys.responseReport)==0))
-				file = null;
+				if (!(fileType.compareTo(FileManagmentSys.periodicReport) == 0
+						|| fileType.compareTo(FileManagmentSys.responseReport) == 0))
+					file = null;
 				System.out.println("File already exists.");
 			}
 		} catch (IOException e) {
@@ -109,13 +110,13 @@ public class FileManagmentSys {
 		return file;
 
 	}
-	
-	public static String createFileName(String fileType,int stationID, String quarter, String year) {
+
+	public static String createFileName(String fileType, int stationID, String quarter, String year) {
 		String fileName = "";
-		
+
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 		LocalDateTime now = LocalDateTime.now();
-		
+
 		switch (fileType) {
 		case (responseReport):
 		case (periodicReport):
@@ -133,7 +134,7 @@ public class FileManagmentSys {
 			fileName = String.format("%s-%s", fileType, dtf.format(now));
 			break;
 		}
-		
+
 		return fileName;
 	}
 
@@ -161,24 +162,24 @@ public class FileManagmentSys {
 		return returnFile;
 	}
 
-
 	/**
 	 * return the file path according to the data sent ,it doesn't end with \\
 	 * 
 	 * @param ComapnayName String
-	 * @param Owner String as markiting manager or analitic data
-	 * @param fileType String
+	 * @param Owner        String as markiting manager or analitic data
+	 * @param fileType     String
 	 * @return file path String
 	 */
-	public static String createLocation(String ComapnayName,String Owner,String fileType) {
-		if(ComapnayName.isEmpty())return null;
-		if(Owner.isEmpty())
+	public static String createLocation(String ComapnayName, String Owner, String fileType) {
+		if (ComapnayName.isEmpty())
+			return null;
+		if (Owner.isEmpty())
 			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company";
-		if(fileType.isEmpty())
+		if (fileType.isEmpty())
 			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company" + "\\" + Owner;
-		else 
+		else
 			return curWorkingDir + "\\" + ComapnayName + "_Fuel_Company" + "\\" + Owner + "\\" + fileType;
-		
+
 	}
 
 	public static boolean writeToQuarterReport(File file, String data) {
@@ -233,8 +234,9 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * responseReport doesn't requier companies
-	 * periodicReport doesn't requier numberOfCustomers,totalPurchases
+	 * responseReport doesn't requier companies periodicReport doesn't requier
+	 * numberOfCustomers,totalPurchases
+	 * 
 	 * @param file
 	 * @param data
 	 * @param reportType
@@ -245,21 +247,22 @@ public class FileManagmentSys {
 	 */
 
 	public static boolean writeToMarkitingManagerReport(File file, String data, String reportType,
-			int numberOfCustomers, float totalPurchases,ArrayList<String> companies) {
+			int numberOfCustomers, float totalPurchases, ArrayList<String> companies) {
 		FileWriter myWriter;
 		// String[] lines = data.split(System.getProperty("line.separator"));
 		try {
 			myWriter = new FileWriter(file);
 
 			if (reportType.compareTo(periodicReport) == 0) {
-				int i=0;
-				String str=String.format("%-12s", "CutomerID");
-				for(String strfor:companies)
-					str+=String.format("%-15s",strfor+" Rank(%)");
-		
-				myWriter.write(str+String.format("%15s\n", "total_Purchases"));
+				int i = 0;
+				String str = String.format("%-12s", "CutomerID");
+				for (String strfor : companies)
+					str += String.format("%-15s", strfor + " Rank(%)");
+
+				myWriter.write(str + String.format("%15s\n", "total_Purchases"));
 			} else if (reportType.compareTo(responseReport) == 0) {
-				myWriter.write(String.format("Number of cutomers in the SALE %s\n", Integer.toString(numberOfCustomers)));
+				myWriter.write(
+						String.format("Number of cutomers in the SALE %s\n", Integer.toString(numberOfCustomers)));
 				myWriter.write(
 						String.format("Total purchases of cutomers in the SALE %s\n", Float.toString(totalPurchases)));
 				myWriter.write(String.format("\n%-12s %s\n", "CutomerID", "totalePurchases"));
@@ -280,7 +283,7 @@ public class FileManagmentSys {
 	 * @param file
 	 * @return
 	 */
-	public static ArrayList<String> readMarkitingManagerReport(File file,String reportType) {
+	public static ArrayList<String> readMarkitingManagerReport(File file, String reportType) {
 		FileReader fr;
 		ArrayList<String> resArray = new ArrayList<String>();
 		StringBuilder strBuilder = new StringBuilder();
@@ -288,29 +291,28 @@ public class FileManagmentSys {
 		try {
 			fr = new FileReader(file);
 			// creates a buffering character input stream
-			BufferedReader br = new BufferedReader(fr); 
-			if(reportType.compareTo(FileManagmentSys.responseReport)==0) {
-				//response Report
+			BufferedReader br = new BufferedReader(fr);
+			if (reportType.compareTo(FileManagmentSys.responseReport) == 0) {
+				// response Report
 				String line1 = null, line2 = null;
 				if ((line1 = br.readLine()) != null)
 					if ((line2 = br.readLine()) != null)
-						if((rest = br.readLine()) != null)
-						while ((rest = br.readLine()) != null)
-							strBuilder.append(rest + "\n");
-				
+						if ((rest = br.readLine()) != null)
+							while ((rest = br.readLine()) != null)
+								strBuilder.append(rest + "\n");
+
 				fr.close();
 				resArray.add(line1);
 				resArray.add(line2);
-				rest=strBuilder.toString();
+				rest = strBuilder.toString();
 				System.out.println(rest.length());
-				resArray.add(rest.substring(29,rest.length()));
-			}
-			else if(reportType.compareTo(FileManagmentSys.periodicReport)==0){
+				resArray.add(rest.substring(29, rest.length()));
+			} else if (reportType.compareTo(FileManagmentSys.periodicReport) == 0) {
 				while ((rest = br.readLine()) != null)
 					strBuilder.append(rest + "\n");
 				resArray.add(strBuilder.toString());
 			}
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} // reads the file
@@ -322,27 +324,28 @@ public class FileManagmentSys {
 
 	/**
 	 * Writes data to analict data file
+	 * 
 	 * @param file
 	 * @param data
 	 * @return
 	 */
 	public static boolean writeToAnaliticData(File file, String data) {
-		FileWriter myWriter;
+
+		BufferedWriter writer;
 		try {
-			myWriter = new FileWriter(file);
-
-			myWriter.write(String.format("%-12s %-15s %-15s %s\n", "Cutomer_ID", "Cutomer_type", "purchase_houres",
-					"FuelType Puchased"));
-			myWriter.write(data);
-
-			myWriter.close();
+			writer = new BufferedWriter(new FileWriter(file, true)); // Set true for append mode
+			writer.newLine(); // Add new line
+			writer.write(data);
+			writer.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
+
 		return true;
 	}
-	
+
 	public static String readAnaliticData(File file) {
 		FileReader fr;
 		String str;
@@ -361,30 +364,33 @@ public class FileManagmentSys {
 		}
 		return strBuilder.toString();
 	}
-	
-	public static String analiticFileFormate(String CutomerID,String CutomerType,String purchaseHoures,String FuelTypePuchased) {
-		return String.format("%-12s %-15s %-15s %s", CutomerID,CutomerType,purchaseHoures,
-				FuelTypePuchased)+"\n";
+
+	public static String analiticFileFormate(String CutomerID, String CutomerType, String purchaseHoures,
+			String FuelTypePuchased) {
+		return String.format("%-12s %-15s %-15s %s", CutomerID, CutomerType, purchaseHoures, FuelTypePuchased) + "\n";
 	}
-	
+
 	/**
 	 * build string according to the file formate
+	 * 
 	 * @param CutomerID
 	 * @param CustomerRank
 	 * @param numOfComapnies
 	 * @return the string containing /n
 	 */
-	public static String periodicReportFileFormate(String CutomerID,float[] CustomerRank,int numOfComapnies,float totalPurchases) {
-		String str=String.format("%-12s", CutomerID);
-		StringBuilder strb = new StringBuilder(str); 
-		for(int i=0;i<numOfComapnies;i++) {
+	public static String periodicReportFileFormate(String CutomerID, float[] CustomerRank, int numOfComapnies,
+			float totalPurchases) {
+		String str = String.format("%-12s", CutomerID);
+		StringBuilder strb = new StringBuilder(str);
+		for (int i = 0; i < numOfComapnies; i++) {
 			strb.append(String.format("%-15.2f", CustomerRank[i]));
 		}
-		return strb.toString()+String.format("%-15.2f\n", totalPurchases);
+		return strb.toString() + String.format("%-15.2f\n", totalPurchases);
 	}
-	
+
 	/**
 	 * build string according to the file formate
+	 * 
 	 * @param CutomerID
 	 * @param totalePurchases
 	 * @return the string containing /n
@@ -417,7 +423,7 @@ public class FileManagmentSys {
 
 		return format;
 	}
-		
+
 	public static String inventoryReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, inventoryReport, quarter);
@@ -430,7 +436,7 @@ public class FileManagmentSys {
 
 		return format;
 	}
-	
+
 //	public static String analiticDataFormat(String week,String month,String year,ArrayList<String> customersID,
 //			ArrayList<Float> fuelTypeRanks,ArrayList<Float> fuelingHourRanks,ArrayList<Integer> customerTypeRank) {
 //
@@ -440,8 +446,6 @@ public class FileManagmentSys {
 //		for(String v : customersID) {
 //			s.append(String.format("Id : ", args))
 //		}
-//		
-//		
 //		
 //		
 //		return s.toString();

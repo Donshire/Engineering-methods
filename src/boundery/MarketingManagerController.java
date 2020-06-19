@@ -1,6 +1,5 @@
 package boundery;
 
-
 import java.io.File;
 import java.net.URL;
 import java.time.LocalDate;
@@ -52,6 +51,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -65,6 +65,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -229,60 +230,58 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private Button showAnaliticDatabtn;
-	
-	
-	//PieChartDiagram start---------------------------
-	
+
+	// PieChartDiagram start---------------------------
+
 	private int pie_index = 0;
-	
+
 	@FXML
-    private Pane piePane;
+	private Pane piePane;
 
-    @FXML
-    private PieChart pieChart1;
+	@FXML
+	private PieChart pieChart1;
 
-    @FXML
-    private Button backbtn;
+	@FXML
+	private Button backbtn;
 
-    @FXML
-    private Button nextbtn;
+	@FXML
+	private Button nextbtn;
 
-    @FXML
-    private Button prevbtn;
+	@FXML
+	private Button prevbtn;
 
-    @FXML
-    private PieChart pieChart2;
+	@FXML
+	private PieChart pieChart2;
 
-    @FXML
-    private PieChart pieChart3;
-	
-	//PieChartDiagram end---------------------------
-    
-    @FXML
-    void nextOrPrevWasClicked(ActionEvent event) {
-    	
-    	Button btn = (Button)event.getSource();
-    	
-    	if(btn.equals(nextbtn)) {
-    		pie_index++;
-    		prevbtn.setDisable(false);
-    		if(pie_index == 2)
-    			nextbtn.setDisable(true);
-    	}
-    	
-    	else if(btn.equals(prevbtn)) {
-    		pie_index--;
-    		nextbtn.setDisable(false);
-    		if(pie_index == 0)
-    			prevbtn.setDisable(true);
-    	}
-    }
+	@FXML
+	private PieChart pieChart3;
+
+	// PieChartDiagram end---------------------------
+
+	@FXML
+	void nextOrPrevWasClicked(ActionEvent event) {
+
+		Button btn = (Button) event.getSource();
+
+		if (btn.equals(nextbtn)) {
+			pie_index++;
+			prevbtn.setDisable(false);
+			if (pie_index == 2)
+				nextbtn.setDisable(true);
+		}
+
+		else if (btn.equals(prevbtn)) {
+			pie_index--;
+			nextbtn.setDisable(false);
+			if (pie_index == 0)
+				prevbtn.setDisable(true);
+		}
+	}
 
 	public boolean checkInput(String month, String year) {
-		int val, val2=0;
+		int val, val2 = 0;
 
-		
-		if(year.isEmpty()) {
+		if (year.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "you must enter year");
 			return false;
 		}
@@ -338,7 +337,6 @@ public class MarketingManagerController implements Initializable {
 			break;
 
 		}
-		
 
 		try {
 			val = Integer.parseInt(getYeartxt.getText());
@@ -346,27 +344,26 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "input error");
 			return false;
 		}
-		
-		
-		//month value is negative or zero
-		if(val<=0) {
+
+		// month value is negative or zero
+		if (val <= 0) {
 			JOptionPane.showMessageDialog(null, "year value must be greater then zero");
 			return false;
 		}
-		
-		//This year has not yet arrived
-		if(LocalDate.now().getYear() < val) {
+
+		// This year has not yet arrived
+		if (LocalDate.now().getYear() < val) {
 			JOptionPane.showMessageDialog(null, "This year has not yet arrived , choose another year");
 			return false;
 		}
-		
-		//if the year arrived and month didnt arrived
-		if(LocalDate.now().getYear() == val && val2 > LocalDate.now().getMonthValue() ) {
+
+		// if the year arrived and month didnt arrived
+		if (LocalDate.now().getYear() == val && val2 > LocalDate.now().getMonthValue()) {
 			JOptionPane.showMessageDialog(null, "This month has not yet arrived , choose another month");
 			return false;
 		}
-		
-		//all test are passed
+
+		// all test are passed
 		return true;
 
 	}
@@ -376,20 +373,20 @@ public class MarketingManagerController implements Initializable {
 		Button btn = (Button) event.getSource();
 
 		if (btn.equals(showAnaliticDatabtn)) {
-			
+
 			if (monthComboBox.getValue() == null) {
 				JOptionPane.showMessageDialog(null, "you must choose month");
 				return;
 			}
-			
-			if(checkInput(monthComboBox.getValue().toString(), getYeartxt.getText()) == true)
-			AnaliticDataTable.setItems(getAllAnaliticDataByYearAndMonth(monthComboBox.getValue().toString(),getYeartxt.getText()));
-			
+
+			if (checkInput(monthComboBox.getValue().toString(), getYeartxt.getText()) == true)
+				AnaliticDataTable.setItems(
+						getAllAnaliticDataByYearAndMonth(monthComboBox.getValue().toString(), getYeartxt.getText()));
+
 			monthComboBox.setValue(null);
 			getYeartxt.clear();
 		}
 	}
-	
 
 	@FXML
 	void selectReportType(ActionEvent event) {
@@ -868,7 +865,7 @@ public class MarketingManagerController implements Initializable {
 		primaryStage.setScene(s);
 		primaryStage.show();
 
-	} 
+	}
 
 	private void switchPanes(Pane newPane) {
 		currentPane.setVisible(false);
@@ -880,7 +877,7 @@ public class MarketingManagerController implements Initializable {
 
 		ObservableList<Month> monthsValues = FXCollections.observableArrayList(Month.values());
 		monthComboBox.setItems(monthsValues);
-		
+
 		// clicked row-------------------------
 		AnaliticDataTable.setRowFactory(tv -> {
 			TableRow<AnaliticDataReport> row = new TableRow<>();
@@ -907,6 +904,31 @@ public class MarketingManagerController implements Initializable {
 		ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
 		return analiticData;
 	}
+
+	public ObservableList <PieChart.Data> getpieChartData(){
+		
+		final Label caption = new Label("");
+		caption.setTextFill(Color.DARKORANGE);
+		caption.setStyle("-fx-font: 24 arial;");
+		
+		ObservableList<PieChart.Data> pieChartData = 
+				
+				FXCollections.observableArrayList(
+		                new PieChart.Data("00:00 - 03:00", 13),
+		                new PieChart.Data("03:00 - 06:00", 25),
+		                new PieChart.Data("06:00 - 09:00", 10),
+		                new PieChart.Data("09:00 - 12:00", 22),
+		                new PieChart.Data("12:00 - 15:00", 30),
+						new PieChart.Data("15:00 - 18:00", 30),
+						new PieChart.Data("18:00 - 21:00", 30),
+						new PieChart.Data("21:00 - 00:00", 30));
+		
+		
+		return pieChartData;
+
+	}
+
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -950,6 +972,8 @@ public class MarketingManagerController implements Initializable {
 
 		// build Analitic data Table
 		initializeAnaliticData();
+
+		pieChart1.setData(getpieChartData());
 
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
