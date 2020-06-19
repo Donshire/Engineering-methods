@@ -895,7 +895,13 @@ public class MarketingManagerController implements Initializable {
 		// build company Rate Table
 		buildCompanyRateTable();
 		// call server and get fuel types from company
-		ObservableList<CustomerRateTypes> fuelTypes = FXCollections.observableArrayList(CustomerRateTypes.values());
+		CustomerRateTypes customerArray[] = new CustomerRateTypes[3]; 
+		CustomerRateTypes customerArray1[] = CustomerRateTypes.values();
+		for(int i=0;i<3;i++) {
+			customerArray[i]=customerArray1[i+1];
+		}
+		
+		ObservableList<CustomerRateTypes> fuelTypes = FXCollections.observableArrayList(customerArray);
 		rateType.setItems(fuelTypes);
 
 		// build Analitic data Table
