@@ -17,9 +17,11 @@ public class FuelPurchase implements Serializable {
 	private float currentPrice;
 	private String customerID;
 	private int pricingModelNumber;
+	
+	private String companyName;
 
 	public FuelPurchase(Integer purchaseID, int stationId, String carNumber, float fuelQuantity, float priceOfPurchase,
-			String time, String date, int saleID, float currentPrice, String customerID, int pricingModelNumber) {
+			String time, String date, int saleID, float currentPrice, String customerID, int pricingModelNumber,String companyName) {
 		super();
 		this.purchaseID = purchaseID;
 		this.stationId = stationId;
@@ -32,6 +34,16 @@ public class FuelPurchase implements Serializable {
 		this.currentPrice = currentPrice;
 		this.customerID = customerID;
 		this.pricingModelNumber = pricingModelNumber;
+		this.companyName=companyName;
+	}
+	
+	
+	public String getCompanyName() {
+		return companyName;
+	}
+	
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	
 	public int getPricingModelNumber() {
@@ -130,7 +142,8 @@ public class FuelPurchase implements Serializable {
 	public String toString() {
 		return "FuelPurchase [purchaseID=" + purchaseID + ", stationId=" + stationId + ", CarNumber=" + CarNumber
 				+ ", fuelQuantity=" + fuelQuantity + ", priceOfPurchase=" + priceOfPurchase + ", time=" + time
-				+ ", date=" + date + ", saleID=" + saleID + ", currentPrice=" + currentPrice + "]";
+				+ ", date=" + date + ", saleID=" + saleID + ", currentPrice=" + currentPrice + ", customerID="
+				+ customerID + ", pricingModelNumber=" + pricingModelNumber + ", companyName=" + companyName + "]";
 	}
 	
 }

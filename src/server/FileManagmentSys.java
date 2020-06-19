@@ -40,8 +40,11 @@ public class FileManagmentSys {
 	private static void createSystemFolders() {
 		// Create the main System directory(Folder)
 		mainFoler = createSingleFolder(curWorkingDir);
+		ArrayList<String> companies = AnalticData.getAllCompanies();
+		for (String val : companies) {
+			createCompanyFolderSystem(val);
+			}
 		//
-		createCompanyFolderSystem("PAZ");
 	}
 
 	public static boolean createCompanyFolderSystem(String CompanyName) {

@@ -47,17 +47,18 @@ public class AnalticData implements Runnable {
 				before = LocalDate.now();
 				after = LocalDate.now().minusDays(7);
 				System.out.println("before " + before + " after " + after);
+				
+				//create files for all companies
 				ArrayList<String> companies = getAllCompanies();
 				File [] files = new File[companies.size()];
 				int index = 0;
-				
 
 				for (String val : companies) {
 				files[index++] = FileManagmentSys.createFile(FileManagmentSys.createLocation(val, FileManagmentSys.analiticData, ""),
 							FileManagmentSys.analiticData, 0, "", "");
 					
 				}
-
+				//
 				currentCustomers = getAllCustomersID();
 				fuelingHourRanks = calculatefuelingHourAnaleticRank(files);
 				customerTypeRanks = calculateCustomerTypeAnaleticRank();
@@ -478,7 +479,7 @@ public class AnalticData implements Runnable {
 		//
 		try {
 			// getPurchasesHoures
-			for (i = 1; i < parts * 2 - 2; i += 2) {
+			for (i = 0; i < parts-1; i ++) {
 				String query = "Select count(*)\r\n" + "from myfueldb.customer as cus \r\n"
 						+ "left join myfueldb.car as car\r\n" + "on car.CustomerID=cus.id\r\n"
 						+ "left join myfueldb.fuelpurchase as par\r\n" + "on car.carNumber = par.CarNumber\r\n"
@@ -488,13 +489,13 @@ public class AnalticData implements Runnable {
 				stm = ConnectionToDB.conn.prepareStatement(query);
 				stm.setString(1, after.toString());
 				stm.setString(2, before.toString());
-				stm.setString(3, fuelingHourAnaleticRank.get(i - 1).key);
-				stm.setString(4, fuelingHourAnaleticRank.get(i).key);
+				stm.setString(3, fuelingHourAnaleticRank.get(i*2+1).key);
+				stm.setString(4, fuelingHourAnaleticRank.get(i*2).key);
 				// fuelingHourAnaleticRank
 				res = stm.executeQuery();
 				res.next();
 
-				fuelingHourAnaleticRank.get(i - 1).rank = res.getInt(1);
+				fuelingHourAnaleticRank.get(i*2).rank = res.getInt(1);
 			}
 			// the cros day houres
 			String query = "Select count(*)\r\n" + "from myfueldb.customer as cus \r\n"
@@ -514,6 +515,9 @@ public class AnalticData implements Runnable {
 			res.next();
 			fuelingHourAnaleticRank.get(parts * 2 - 2).rank = res.getInt(1);
 			
+			
+			//save for all the companies the result of the set
+			
 			for(int j = 0 ; j < parts ; j++) {
 			builder.append(String.format("%s-%s_%d\n",fuelingHourAnaleticRank.get(j*2).key,fuelingHourAnaleticRank.get(j*2+1).key,(int)fuelingHourAnaleticRank.get(j*2).rank));
 			}
@@ -521,6 +525,9 @@ public class AnalticData implements Runnable {
 			for(File f : filearr) {
 				FileManagmentSys.writeToAnaliticData(f, builder.toString());
 			}
+			
+			//________________________________________________
+			
 			// ----------------------------------------------------------------
 			// claculate houres rank
 
