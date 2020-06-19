@@ -91,6 +91,7 @@
                   <Font size="20.0" />
                </font>
             </Text>
+            <ComboBox fx:id="pubmpNumberCombo" layoutX="355.0" layoutY="323.0" prefHeight="31.0" prefWidth="135.0" promptText="pump Num" style="-fx-background-color: white;" />
          </children>
       </Pane>
       <Pane fx:id="paymentPane" opacity="0.83" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0;" visible="false">
@@ -113,6 +114,10 @@
             </Text>
             <Button layoutX="268.0" layoutY="289.0" mnemonicParsing="false" onAction="#backToLogInPage" text="Back" visible="false" />
             <Pane prefHeight="388.0" prefWidth="600.0" style="-fx-background-color: #f2f2f2;" visible="false" />
+            <Text fx:id="pumpNumber" fill="WHITE" layoutX="268.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pump Number:">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font></Text>
          </children>
       </Pane>
    </children>

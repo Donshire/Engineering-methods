@@ -62,6 +62,8 @@ public class FastFuelingController implements Initializable {
 	private Text pricingModelSaleTxt;
 	@FXML
 	private Text salIDTxt;
+	@FXML
+	private Text pumpNumber;
 	
 	@FXML
 	private Text fuelTypeTxt;
@@ -80,6 +82,9 @@ public class FastFuelingController implements Initializable {
 
 	@FXML
 	private ComboBox<Integer> stationsIDCombo;
+
+	@FXML
+	private ComboBox<Integer> pubmpNumberCombo;
 
 	@FXML
 	private Text customerPriceTxt;
@@ -178,18 +183,19 @@ public class FastFuelingController implements Initializable {
 			JOptionPane.showMessageDialog(null, "please fill numbers");
 			return;
 		}
+		if(pubmpNumberCombo.getValue()==null) {
+			JOptionPane.showMessageDialog(null, "please select a pump");
+			return;
+		}
 
 		// call server and calculate totale price
 		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName,customer.getId() ,car.getFuelType(),
-				customer.getPricingModel());
+				customer.getPricingModel(),pubmpNumberCombo.getValue());
 		customerPrice = resDetails.get(0);
 		currentPrice=resDetails.get(1);
-		// get all sales ID
-		int i = 4;
-		while (i < resDetails.size()) {
-			salesID.add(resDetails.get(i).intValue());
-			i++;
-		}
+		// 
+		salesID.add(resDetails.get(4).intValue());
+		
 		//check if there is enough amount in the station
 		float res = CustomerCC.checkStationInventory(stationID,car.getFuelType());
 		if(res-amount<0) {
@@ -207,7 +213,7 @@ public class FastFuelingController implements Initializable {
 			helpingPaymentTxt.setText("the payment will be calculated by each end of month");
 			pay.setText("finish");
 		}
-		else {
+		else {//regulare payment
 			visaRadio.setVisible(true);
 			cashRadio.setVisible(true);
 			helpingPaymentTxt.setText("Choose payment method");
@@ -216,6 +222,7 @@ public class FastFuelingController implements Initializable {
 		
 		// set the price
 		totalPrice.setText(String.format("%.2f",amount * customerPrice));
+		pumpNumber.setText(String.format("Pump Number %.0f",resDetails.get(5)));
 	}
 
 	@FXML
@@ -224,7 +231,7 @@ public class FastFuelingController implements Initializable {
 		// get all company stations
 		// get the pricing data
 				ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName,customer.getId() ,car.getFuelType(),
-						customer.getPricingModel());
+						customer.getPricingModel(),0);
 		// the calculated price
 		if(pricingRes==null) {
 			JOptionPane.showMessageDialog(null,"System bug the data for this company still not finished");
@@ -276,6 +283,12 @@ public class FastFuelingController implements Initializable {
 		// fill the combo with companies Names
 		// Set value of companiesCombo
 		fillcompaniesCombo();
+		
+		//fill pumps combo
+		ObservableList<Integer> pumpsID = FXCollections.observableArrayList();
+		for(int i=1;i<5;i++)
+			pumpsID.add(i);
+		pubmpNumberCombo.setItems(pumpsID);
 	}
 
 	private void fillcompaniesCombo() {

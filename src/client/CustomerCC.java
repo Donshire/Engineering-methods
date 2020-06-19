@@ -30,12 +30,13 @@ public class CustomerCC {
 		return (ArrayList<Integer>) MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<Float> getPurchasePriceDetails(String companyName,String customerID,String fuelType,int prcingModelNumber) {
+	public static ArrayList<Float> getPurchasePriceDetails(String companyName,String customerID,String fuelType,int prcingModelNumber,int pumpNum) {
 		ArrayList<Object> str = new ArrayList<Object>();
 		str.add(companyName);
 		str.add(customerID);
 		str.add(fuelType);
 		str.add(prcingModelNumber);
+		str.add(pumpNum);
 		ClientUI.client.accept(new Message(str, Commands.getPurchasePriceDetails));
 		return (ArrayList<Float>) MyFuelClient.ServerRetObj;
 	}
