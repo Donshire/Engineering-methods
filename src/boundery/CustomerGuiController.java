@@ -371,7 +371,7 @@ public class CustomerGuiController implements Initializable {
 		// double plp = (double) ClientCC.getMaxPrice("HOME GAS");
 		orderHomeGasPane.setVisible(false);
 		myOrdersPane.setVisible(false);
-		hellomessage.setText(customer.getFirstName());
+		//hellomessage.setText(customer.getFirstName());
 		hellotxt.setText("Hello " + customer.getFirstName());
 		orderHomeGasInitialize();
 		myOrdersInitialize();
