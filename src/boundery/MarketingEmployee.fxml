@@ -17,8 +17,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" styleClass="c" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.MarketingEmployeeController">
    <children>
-      <Button fx:id="MainPaneBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Main Pane" />
-      <Pane fx:id="MainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <Button fx:id="MainPaneBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Main Pane">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+      <Pane fx:id="MainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <Label fx:id="NotificationsLbl" layoutX="14.0" layoutY="14.0" prefHeight="31.0" prefWidth="101.0" text="Notifications">
                <font>
@@ -28,51 +31,99 @@
             <TextArea layoutX="17.0" layoutY="60.0" prefHeight="331.0" prefWidth="735.0" />
          </children>
       </Pane>
-      <Button fx:id="addCustomerBtn" layoutY="167.0" mnemonicParsing="false" onAction="#openNewClientPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Add Customer" />
-      <Pane fx:id="NewClientPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <Button fx:id="addCustomerBtn" layoutY="167.0" mnemonicParsing="false" onAction="#openNewClientPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Add Customer">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+      <Pane fx:id="NewClientPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
-            <Label fx:id="IdLbl" layoutX="69.0" layoutY="64.0" prefHeight="24.0" prefWidth="52.0" text="ID:" textAlignment="RIGHT" />
-            <Label fx:id="dateFormatLbl" layoutX="477.0" layoutY="141.0" text="mm / yyyy" />
-            <Label fx:id="FirstNameLbl" layoutX="69.0" layoutY="109.0" text="First Name:" />
-            <Label fx:id="LastNameLbl" layoutX="69.0" layoutY="151.0" text="Last Name:" />
-            <Label fx:id="EmailLbl" layoutX="68.0" layoutY="189.0" text="Email:" />
-            <Label fx:id="CreditCardNoLbl" layoutX="66.0" layoutY="230.0" text="Credit Card No:" />
-            <Label fx:id="ExpDateLbl" layoutX="399.0" layoutY="171.0" prefHeight="21.0" prefWidth="66.0" text="Exp Date:" />
-            <Label fx:id="CVVLbl" layoutX="574.0" layoutY="171.0" text="CVV:" />
+            <Label fx:id="IdLbl" layoutX="69.0" layoutY="64.0" prefHeight="24.0" prefWidth="52.0" text="ID:" textAlignment="RIGHT">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="dateFormatLbl" layoutX="477.0" layoutY="141.0" text="mm / yyyy">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="FirstNameLbl" layoutX="69.0" layoutY="109.0" text="First Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="LastNameLbl" layoutX="69.0" layoutY="151.0" text="Last Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="EmailLbl" layoutX="68.0" layoutY="189.0" text="Email:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="CreditCardNoLbl" layoutX="66.0" layoutY="230.0" text="Credit Card No:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="ExpDateLbl" layoutX="399.0" layoutY="171.0" prefHeight="21.0" prefWidth="66.0" text="Exp Date:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="CVVLbl" layoutX="580.0" layoutY="171.0" text="CVV:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <Button fx:id="RegistrationFinishBtn" layoutX="692.0" layoutY="385.0" mnemonicParsing="false" onAction="#registration" prefHeight="31.0" prefWidth="62.0" stylesheets="@styles.css" text="Finish" />
             <TextField fx:id="IDTxt" layoutX="189.0" layoutY="61.0" />
             <TextField fx:id="FirstNameTxt" layoutX="189.0" layoutY="102.0" />
             <TextField fx:id="LastNameTxt" layoutX="189.0" layoutY="143.0" />
             <TextField fx:id="EmailTxt" layoutX="189.0" layoutY="184.0" />
             <Label fx:id="dividExpDateLbl" layoutX="509.0" layoutY="171.0" text="/" />
-            <TextField fx:id="addressNoTxt" layoutX="393.0" layoutY="303.0" prefHeight="31.0" prefWidth="39.0" />
+            <TextField fx:id="addressNoTxt" layoutX="377.0" layoutY="303.0" prefHeight="31.0" prefWidth="39.0" />
             <TextField fx:id="CreditCardTxt" layoutX="189.0" layoutY="225.0" />
             <TextField fx:id="ExpDateMonthTxt" layoutX="469.0" layoutY="166.0" prefHeight="31.0" prefWidth="35.0" />
-            <TextField fx:id="CVVTxt" layoutX="607.0" layoutY="164.0" prefHeight="31.0" prefWidth="45.0" />
-            <Label fx:id="addressNoLbl" layoutX="355.0" layoutY="309.0" text="No:" />
+            <TextField fx:id="CVVTxt" layoutX="613.0" layoutY="164.0" prefHeight="31.0" prefWidth="45.0" />
+            <Label fx:id="addressNoLbl" layoutX="346.0" layoutY="309.0" text="No:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <Label layoutX="16.0" layoutY="14.0" text="Registration">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Label fx:id="PhoneLbl" layoutX="64.0" layoutY="273.0" text="Phone:" />
-            <Label fx:id="AddressLbl" layoutX="67.0" layoutY="311.0" text="Address:" />
+            <Label fx:id="PhoneLbl" layoutX="64.0" layoutY="273.0" text="Phone:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="AddressLbl" layoutX="67.0" layoutY="311.0" text="Address:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="PhoneTxt" layoutX="189.0" layoutY="266.0" />
             <TextField fx:id="AddressTXt" layoutX="189.0" layoutY="306.0" />
-            <Label fx:id="UserNameLbl" layoutX="67.0" layoutY="351.0" text="User name:" />
+            <Label fx:id="UserNameLbl" layoutX="67.0" layoutY="351.0" text="User name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="UserNameTxt" layoutX="189.0" layoutY="346.0" />
-            <Label fx:id="passwordLbl" layoutX="67.0" layoutY="392.0" text="Password:" />
+            <Label fx:id="passwordLbl" layoutX="67.0" layoutY="392.0" text="Password:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="PasswordTxt" layoutX="189.0" layoutY="387.0" />
-            <Label fx:id="customerTypeLbl" layoutX="400.0" layoutY="64.0" text="Customer Type" />
-            <ComboBox fx:id="customerTypeCombox" layoutX="522.0" layoutY="57.0" onAction="#openCompany" prefWidth="150.0" />
-            <Label fx:id="customercompanyNameLbl" layoutX="399.0" layoutY="100.0" text="Company Name:" />
-            <TextField fx:id="customercompanyNameTxt" layoutX="522.0" layoutY="95.0" />
-            <ImageView fx:id="CVVImage" fitHeight="60.0" fitWidth="104.0" layoutX="586.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+            <Label fx:id="customerTypeLbl" layoutX="400.0" layoutY="64.0" text="Customer Type">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <ComboBox fx:id="customerTypeCombox" layoutX="522.0" layoutY="61.0" onAction="#openCompany" prefWidth="150.0" />
+            <Label fx:id="customercompanyNameLbl" layoutX="399.0" layoutY="100.0" text="Company Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <TextField fx:id="customercompanyNameTxt" layoutX="522.0" layoutY="99.0" />
+            <ImageView fx:id="CVVImage" fitHeight="60.0" fitWidth="104.0" layoutX="592.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Images/CVV.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="helpImage" fitHeight="49.0" fitWidth="69.0" layoutX="659.0" layoutY="161.0" onMousePressed="#openCVVImgae" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="helpImage" fitHeight="49.0" fitWidth="69.0" layoutX="665.0" layoutY="161.0" onMousePressed="#openCVVImgae" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../Images/help.png" />
                </image>
@@ -80,23 +131,41 @@
             <TextField fx:id="ExpDateYearTxt" layoutX="519.0" layoutY="166.0" prefHeight="31.0" prefWidth="49.0" />
          </children>
       </Pane>
-      <Button fx:id="carAndModleBtn" layoutY="226.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Car And Module" />
+      <Button fx:id="carAndModleBtn" layoutY="226.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Car And Module">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="carAndModelPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <Label fx:id="carNumberLbl" layoutX="60.0" layoutY="106.0" text="Car Number:" />
+            <Label fx:id="carNumberLbl" layoutX="60.0" layoutY="106.0" text="Car Number:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="carNumberTxt" layoutX="200.0" layoutY="101.0" />
             <ComboBox fx:id="pricingModelCombox" layoutX="200.0" layoutY="242.0" onAction="#openCompanyChooser" prefHeight="31.0" prefWidth="186.0" />
-            <Label fx:id="pricingModelLbl" layoutX="60.0" layoutY="247.0" text="Pricing Model:" />
-            <Label fx:id="purchaseModelLbl" layoutX="60.0" layoutY="347.0" text="Purchase Model:" />
+            <Label fx:id="pricingModelLbl" layoutX="60.0" layoutY="247.0" text="Pricing Model:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="purchaseModelLbl" layoutX="60.0" layoutY="347.0" text="Purchase Model:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <ComboBox fx:id="purchaseModelCombox" layoutX="200.0" layoutY="342.0" prefHeight="31.0" prefWidth="186.0" />
             <Button fx:id="carAndModelFinishBtn" layoutX="688.0" layoutY="387.0" mnemonicParsing="false" onAction="#updateCarAndModel" prefHeight="31.0" prefWidth="66.0" stylesheets="@styles.css" text="Finish" />
-            <Label fx:id="carAndModelIDLbl" layoutX="60.0" layoutY="58.0" text="ID:" />
+            <Label fx:id="carAndModelIDLbl" layoutX="60.0" layoutY="58.0" text="ID:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="carAndModelIDTxt" layoutX="200.0" layoutY="53.0" />
-            <Label fx:id="fuelTypeLbl" layoutX="60.0" layoutY="200.0" text="Fuel Type:" />
+            <Label fx:id="fuelTypeLbl" layoutX="60.0" layoutY="200.0" text="Fuel Type:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <ComboBox fx:id="FuelTypeCombox" layoutX="200.0" layoutY="195.0" prefHeight="31.0" prefWidth="186.0" />
             <Label fx:id="carAndModelLbl" layoutX="15.0" layoutY="14.0" text="Car And Model">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
             <Button fx:id="uploadCustomerBtn1" layoutX="377.0" layoutY="53.0" mnemonicParsing="false" onAction="#uploadCustomer" stylesheets="@styles.css" text="Check ID" />
@@ -105,49 +174,97 @@
                   <Font size="12.0" />
                </font>
             </Button>
-            <Label fx:id="oldCarNumLbl" layoutX="60.0" layoutY="153.0" text="Old Car number:" />
+            <Label fx:id="oldCarNumLbl" layoutX="60.0" layoutY="153.0" text="Old Car number:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="oldCarNumTxt" layoutX="200.0" layoutY="148.0" />
             <ComboBox fx:id="chooseCompany1" layoutX="200.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
             <ComboBox fx:id="chooseCompany2" layoutX="356.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
             <ComboBox fx:id="chooseCompany3" layoutX="512.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
             <Label fx:id="chooseCompLbl" layoutX="60.0" layoutY="303.0" text="*choose company">
                <font>
-                  <Font name="System Italic" size="12.0" />
+                  <Font size="15.0" />
                </font>
             </Label>
-            <Label fx:id="secondCarLbl" layoutX="60.0" layoutY="392.0" text="Enter second car number:" />
+            <Label fx:id="secondCarLbl" layoutX="60.0" layoutY="392.0" text="Second car number:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="secondCarTxt" layoutX="200.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
-            <Label fx:id="secfuelTypeLbl" layoutX="332.0" layoutY="392.0" text="Fuel Type: " />
-            <ComboBox fx:id="secFuelTypeCombox" layoutX="403.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
+            <Label fx:id="secfuelTypeLbl" layoutX="332.0" layoutY="392.0" text="Fuel Type: ">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <ComboBox fx:id="secFuelTypeCombox" layoutX="405.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
          </children>
       </Pane>
-      <Button fx:id="openUpdateCustomerPane" layoutY="285.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Update Customer" />
+      <Button fx:id="openUpdateCustomerPane" layoutY="285.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Update Customer">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="updateCustomerPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <Label fx:id="updateCustomerLbl" layoutX="12.0" layoutY="14.0" text="Update Customer">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Label fx:id="enterCustomerIDLbl" layoutX="70.0" layoutY="62.0" text="Enter customer ID:" />
+            <Label fx:id="enterCustomerIDLbl" layoutX="53.0" layoutY="62.0" text="Enter customer ID:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="UpdateIdTxt" layoutX="180.0" layoutY="58.0" />
-            <Label fx:id="chExpFormatLbl" layoutX="387.0" layoutY="249.0" text="mm / yyyy" />
+            <Label fx:id="chExpFormatLbl" layoutX="387.0" layoutY="249.0" text="mm / yyyy">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <Button fx:id="uploadCustomerBtn" layoutX="426.0" layoutY="57.0" mnemonicParsing="false" onAction="#showCustomeDetails" stylesheets="@styles.css" text="Upload Customer" />
-            <Label fx:id="upFirstNameLbl" layoutX="70.0" layoutY="144.0" text="First Name:" />
-            <Label fx:id="upPhoneLbl" layoutX="70.0" layoutY="325.0" text="Phone:" />
-            <Label fx:id="upCreditCardLbl" layoutX="70.0" layoutY="279.0" text="Credit card No:" />
-            <Label fx:id="upEmailLbl" layoutX="70.0" layoutY="233.0" text="Email:" />
-            <Label fx:id="upLasttNameLbl" layoutX="70.0" layoutY="188.0" text="Last Name:" />
-            <Label fx:id="upExpDateLbl" layoutX="307.0" layoutY="279.0" text="Exp Date:" />
-            <Label fx:id="upAddressLbl" layoutX="70.0" layoutY="370.0" text="Address:" />
-            <TextField fx:id="upAdrdressNoTxt" layoutX="407.0" layoutY="364.0" prefHeight="31.0" prefWidth="44.0" />
-            <Label fx:id="upAddressNoLbl" layoutX="377.0" layoutY="369.0" text="No:" />
-            <Label fx:id="upCVVLbl" layoutX="507.0" layoutY="279.0" text="CVV:" />
+            <Label fx:id="upFirstNameLbl" layoutX="58.0" layoutY="144.0" text="First Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upPhoneLbl" layoutX="58.0" layoutY="325.0" text="Phone:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upCreditCardLbl" layoutX="58.0" layoutY="279.0" text="Credit card No:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upEmailLbl" layoutX="58.0" layoutY="233.0" text="Email:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upLasttNameLbl" layoutX="58.0" layoutY="188.0" text="Last Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upExpDateLbl" layoutX="307.0" layoutY="279.0" text="Exp Date:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upAddressLbl" layoutX="58.0" layoutY="370.0" text="Address:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <TextField fx:id="upAdrdressNoTxt" layoutX="368.0" layoutY="362.0" prefHeight="31.0" prefWidth="44.0" />
+            <Label fx:id="upAddressNoLbl" layoutX="338.0" layoutY="367.0" text="No:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="upCVVLbl" layoutX="507.0" layoutY="279.0" text="CVV:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="firstNameChangetxt" layoutX="180.0" layoutY="139.0" />
             <TextField fx:id="lastNameChangeTxt" layoutX="180.0" layoutY="183.0" />
             <TextField fx:id="emailChangTxt" layoutX="180.0" layoutY="228.0" />
             <TextField fx:id="CCNChangeTxt" layoutX="180.0" layoutY="274.0" prefHeight="31.0" prefWidth="122.0" />
-            <Label fx:id="dividExpDate1" layoutX="414.0" layoutY="278.0" text="/" />
+            <Label fx:id="dividExpDate1" layoutX="414.0" layoutY="278.0" text="/">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="expChangeYearTxt" layoutX="427.0" layoutY="274.0" prefHeight="31.0" prefWidth="53.0" />
             <TextField fx:id="expChangeMonthTxt" layoutX="375.0" layoutY="274.0" prefHeight="31.0" prefWidth="35.0" />
             <TextField fx:id="CVVChangeTxt" layoutX="549.0" layoutY="274.0" prefHeight="31.0" prefWidth="84.0" />
@@ -171,12 +288,15 @@
             </ImageView>
          </children>
       </Pane>
-      <Button fx:id="salesBtn" layoutY="344.0" mnemonicParsing="false" onAction="#openSalesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales" />
+      <Button fx:id="salesBtn" layoutY="344.0" mnemonicParsing="false" onAction="#openSalesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="salesPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <Label fx:id="saleHeader" layoutX="14.0" layoutY="14.0" text="All sale templates:">
                <font>
-                  <Font size="25.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
             <TableView fx:id="salesTbl" editable="true" layoutX="14.0" layoutY="102.0" prefHeight="261.0" prefWidth="746.0">
@@ -205,30 +325,81 @@
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label fx:id="companyNameLbl" layoutX="110.0" layoutY="94.0" text="Company Name:" />
-            <Label fx:id="FuelTypeLbl" layoutX="110.0" layoutY="129.0" text="Fuel Type:" />
-            <Label fx:id="salePercentsLbl" layoutX="110.0" layoutY="165.0" text="Sale Percents:" />
+            <Label fx:id="companyNameLbl" layoutX="106.0" layoutY="89.0" text="Company Name:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="FuelTypeLbl" layoutX="106.0" layoutY="124.0" text="Fuel Type:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="salePercentsLbl" layoutX="106.0" layoutY="160.0" text="Sale Percents:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="salePercentTxt" layoutX="200.0" layoutY="160.0" />
-            <Label fx:id="startTimeLbl" layoutX="110.0" layoutY="206.0" text="Start Time:" />
-            <Label fx:id="endTimeLbl1" layoutX="110.0" layoutY="248.0" text="End Time:" />
-            <Label fx:id="startDateLbl" layoutX="110.0" layoutY="289.0" text="Start Date:" />
+            <Label fx:id="startTimeLbl" layoutX="106.0" layoutY="201.0" text="Start Time:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="endTimeLbl1" layoutX="106.0" layoutY="243.0" text="End Time:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label fx:id="startDateLbl" layoutX="106.0" layoutY="284.0" text="Start Date:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="startTimeTxt" layoutX="200.0" layoutY="201.0" />
-            <Label fx:id="endDateLbl" layoutX="110.0" layoutY="328.0" text="End Date:" />
+            <Label fx:id="endDateLbl" layoutX="106.0" layoutY="323.0" text="End Date:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <TextField fx:id="endTimeTxt" layoutX="200.0" layoutY="243.0" />
-            <Label fx:id="daysLbl" layoutX="110.0" layoutY="372.0" text="Days:" />
+            <Label fx:id="daysLbl" layoutX="106.0" layoutY="367.0" text="Days:">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
             <ComboBox fx:id="fuelTypesForSaleCombox" layoutX="200.0" layoutY="122.0" prefHeight="31.0" prefWidth="186.0" />
             <Button fx:id="saveSaleBtn" layoutX="698.0" layoutY="393.0" mnemonicParsing="false" onAction="#createNewSale" prefHeight="25.0" prefWidth="56.0" stylesheets="@styles.css" text="Save" />
             <DatePicker fx:id="startDatePicker" layoutX="200.0" layoutY="284.0" prefHeight="31.0" prefWidth="186.0" />
             <DatePicker fx:id="endDatePicker" layoutX="200.0" layoutY="323.0" prefHeight="31.0" prefWidth="186.0" />
-            <CheckBox fx:id="sunday" layoutX="201.0" layoutY="373.0" mnemonicParsing="false" text="Sun" />
-            <CheckBox fx:id="monday" layoutX="258.0" layoutY="373.0" mnemonicParsing="false" text="Mon" />
-            <CheckBox fx:id="tuesday" layoutX="326.0" layoutY="373.0" mnemonicParsing="false" text="Tue" />
-            <CheckBox fx:id="wednesday" layoutX="384.0" layoutY="373.0" mnemonicParsing="false" text="Wed" />
-            <CheckBox fx:id="thuesday" layoutX="451.0" layoutY="373.0" mnemonicParsing="false" text="Thu" />
-            <CheckBox fx:id="friday" layoutX="512.0" layoutY="372.0" mnemonicParsing="false" text="Fri" />
-            <CheckBox fx:id="saturday" layoutX="563.0" layoutY="372.0" mnemonicParsing="false" text="Sat" />
-            <CheckBox fx:id="allCheckBox" layoutX="622.0" layoutY="372.0" mnemonicParsing="false" text="All" />
-            <Text fx:id="companyNameTxt" layoutX="210.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <CheckBox fx:id="sunday" layoutX="197.0" layoutY="368.0" mnemonicParsing="false" text="Sun">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="monday" layoutX="254.0" layoutY="368.0" mnemonicParsing="false" text="Mon">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="tuesday" layoutX="322.0" layoutY="368.0" mnemonicParsing="false" text="Tue">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="wednesday" layoutX="380.0" layoutY="368.0" mnemonicParsing="false" text="Wed">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="thuesday" layoutX="447.0" layoutY="368.0" mnemonicParsing="false" text="Thu">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="friday" layoutX="508.0" layoutY="367.0" mnemonicParsing="false" text="Fri">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="saturday" layoutX="559.0" layoutY="367.0" mnemonicParsing="false" text="Sat">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <CheckBox fx:id="allCheckBox" layoutX="618.0" layoutY="367.0" mnemonicParsing="false" text="All">
+               <font>
+                  <Font size="15.0" />
+               </font></CheckBox>
+            <Text fx:id="companyNameTxt" layoutX="236.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
          </children>
       </Pane>
       <Button layoutX="872.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" stylesheets="@styles.css" text="Log Out" />
@@ -237,5 +408,15 @@
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
+      <Text layoutX="743.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="hellomessage" layoutX="796.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

@@ -65,6 +65,9 @@ public class CustomerGuiController implements Initializable {
 	private Pane myOrdersPane;
 	
 
+    @FXML
+    private Text hellomessage;
+
 	// ORDER TABLE START -------------------------------
 
 	@FXML
@@ -357,6 +360,7 @@ public class CustomerGuiController implements Initializable {
 		// double plp = (double) ClientCC.getMaxPrice("HOME GAS");
 		orderHomeGasPane.setVisible(false);
 		myOrdersPane.setVisible(false);
+		hellomessage.setText(customer.getFirstName());
 		hellotxt.setText("Hello " + customer.getFirstName());
 		orderHomeGasInitialize();
 		myOrdersInitialize();

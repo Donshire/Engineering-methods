@@ -15,7 +15,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.SupplierController">
    <children>
-      <Pane fx:id="SupplierOrdersPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <Pane fx:id="SupplierOrdersPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
             <TableView fx:id="OrdersTbl" editable="true" layoutX="14.0" layoutY="86.0" prefHeight="276.0" prefWidth="742.0">
               <columns>
@@ -29,22 +29,27 @@
                   <TableColumn fx:id="quantity" minWidth="0.0" prefWidth="111.0" text="Quantity" />
               </columns>
             </TableView>
-            <Label fx:id="OrdersLbl" layoutX="14.0" layoutY="19.0" text="Orders List">
+            <Label fx:id="OrdersLbl" layoutX="14.0" layoutY="12.0" text="Orders List">
                <font>
-                  <Font name="System Bold" size="15.0" />
+                  <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Text fx:id="chooseTypeLbl" layoutX="214.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="choose order type to present" />
+            <Text fx:id="chooseTypeLbl" layoutX="214.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="choose order type to present">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <ComboBox fx:id="OrderTypeCombox" layoutX="414.0" layoutY="14.0" onAction="#chooseOrderType" prefWidth="150.0" />
-            <Text fx:id="OrderHeader" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Text fx:id="OrderHeader" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Button fx:id="UpdateBtn" layoutX="682.0" layoutY="393.0" mnemonicParsing="false" onAction="#updateSuppliedOrders" prefHeight="27.0" prefWidth="74.0" stylesheets="@styles.css" text="Update" />
          </children>
       </Pane>
       <Button fx:id="LogOutBtn" layoutX="872.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" stylesheets="@styles.css" text="Log Out" />
       <Button fx:id="MainPaneBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Main Pane" />
       <Button fx:id="OrdersBtn" layoutY="167.0" mnemonicParsing="false" onAction="#openOrdersPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Orders" />
-      <Text fx:id="HelloLbl" layoutX="713.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" wrappingWidth="172.6708984375" />
-      <Pane fx:id="SupplierMainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0">
+      <Pane fx:id="SupplierMainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" visible="false">
          <children>
             <Label fx:id="NotificationLbl" layoutX="14.0" layoutY="14.0" text="Notifications">
                <font>
@@ -59,5 +64,15 @@
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
+      <Text layoutX="761.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="hellomessage" layoutX="816.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

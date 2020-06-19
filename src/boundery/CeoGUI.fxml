@@ -37,6 +37,16 @@
                   <Image url="@../Images/MyFuel.jpg" />
                </image>
             </ImageView>
+            <Text layoutX="721.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text fx:id="ceo_hello" layoutX="774.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
       <AnchorPane fx:id="reportsPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
@@ -49,7 +59,7 @@
                   <TableColumn fx:id="ReportStationId" prefWidth="166.0" text="Station ID" />
               </columns>
             </TableView>
-            <Text layoutX="373.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year:">
+            <Text layoutX="373.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year:">
                <font>
                   <Font size="20.0" />
                </font>
@@ -60,7 +70,7 @@
                   <Font size="14.0" />
                </font></Button>
             <TextField fx:id="ReportsStationID" layoutX="135.0" layoutY="83.0" />
-            <Text layoutX="32.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Station ID:">
+            <Text layoutX="32.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Station ID:">
                <font>
                   <Font size="20.0" />
                </font>

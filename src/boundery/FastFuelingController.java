@@ -37,7 +37,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FastFuelingController implements Initializable {
-	
+	@FXML
+	private Text hellomessage;
 	public static Car car;
 	public static Customer customer;
 	public static CustomerModule customerModule;
@@ -59,7 +60,7 @@ public class FastFuelingController implements Initializable {
 	private Text pricingModelSaleTxt;
 	@FXML
 	private Text salIDTxt;
-	
+
 	@FXML
 	private Text fuelTypeTxt;
 
@@ -104,67 +105,70 @@ public class FastFuelingController implements Initializable {
 
 	@FXML
 	void backToLogInPage(ActionEvent event) {
-		MasterGUIController.getMasterGUIController().
-		switchWindows("LogIn.fxml");
+		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
 	@FXML
 	void handleRadioSelect(ActionEvent event) {
-		if(event.getSource().equals(cashRadio))
+		if (event.getSource().equals(cashRadio))
 			visaRadio.setSelected(false);
-		else cashRadio.setSelected(false);
+		else
+			cashRadio.setSelected(false);
 	}
-	
+
 	@FXML
 	void procedPayment(ActionEvent event) {
 		// create FyelPurchase Object
 		// acording to use and how we want to save sales
 		int sales = 0;
-		int result=-3;
+		int result = -3;
 		if (!salesID.isEmpty())
 			sales = salesID.get(0);
-		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice*amount, "", "",
-				sales, currentPrice*amount, customer.getId());
-		
+		FuelPurchase purchase = new FuelPurchase(null, stationID, car.getCarNumber(), amount, customerPrice * amount,
+				"", "", sales, currentPrice * amount, customer.getId());
+
 		if (visaRadio.isSelected())
-			result=CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,car.getFuelType());
+			result = CustomerCC.commitFuelPurchase(customer.getId(), customer.getVisaNumber(), purchase,
+					car.getFuelType());
 
 		else if (cashRadio.isSelected())
-			result=CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase,car.getFuelType());
+			result = CustomerCC.commitFuelPurchase(customer.getId(), "CASH", purchase, car.getFuelType());
 		else {
-			JOptionPane.showMessageDialog(null,"please select payment method");
+			JOptionPane.showMessageDialog(null, "please select payment method");
 			return;
 		}
 
-		if (result == -1) JOptionPane.showMessageDialog(null,"Purchase succeded");
-		else if (result == -2) JOptionPane.showMessageDialog(null,"Purchase un-succeded");	
-		//isn't needed
+		if (result == -1)
+			JOptionPane.showMessageDialog(null, "Purchase succeded");
+		else if (result == -2)
+			JOptionPane.showMessageDialog(null, "Purchase un-succeded");
+		// isn't needed
 		else if (result >= 0)
-			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %d", result));
-		
-		//back to fastFuiling page
-		MasterGUIController.getMasterGUIController().
-		switchWindows("FastFueling.fxml");
+			JOptionPane.showMessageDialog(null,
+					String.format("Order excede station max qauntity\nthe max quantity is %d", result));
+
+		// back to fastFuiling page
+		MasterGUIController.getMasterGUIController().switchWindows("FastFueling.fxml");
 	}
 
 	@FXML
-	void nextToPayment(ActionEvent event) { 
+	void nextToPayment(ActionEvent event) {
 		companyName = companiesCombo.getValue();
 
-		if(companyName==null){
+		if (companyName == null) {
 			JOptionPane.showMessageDialog(null, "Select company Firsts");
 			return;
 		}
-		
-		if (stationsIDCombo.getValue()==null) {
+
+		if (stationsIDCombo.getValue() == null) {
 			JOptionPane.showMessageDialog(null, "Select station id first");
 			return;
 		}
 		stationID = stationsIDCombo.getValue();
-		
+
 		try {
 			amount = Float.parseFloat(fuelAmount.getText());
-			if(amount<=0) {
+			if (amount <= 0) {
 				JOptionPane.showMessageDialog(null, "please valid numbers above 0");
 				return;
 			}
@@ -177,17 +181,18 @@ public class FastFuelingController implements Initializable {
 		ArrayList<Float> resDetails = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
 				customer.getPricingModel());
 		customerPrice = resDetails.get(0);
-		currentPrice=resDetails.get(1);
+		currentPrice = resDetails.get(1);
 		// get all sales ID
 		int i = 4;
 		while (i < resDetails.size()) {
 			salesID.add(resDetails.get(i).intValue());
 			i++;
 		}
-		//check if there is enough amount in the station
-		float res = CustomerCC.checkStationInventory(stationID,car.getFuelType());
-		if(res-amount<0) {
-			JOptionPane.showMessageDialog(null,String.format("Order excede station max qauntity\nthe max quantity is %.2f", res));
+		// check if there is enough amount in the station
+		float res = CustomerCC.checkStationInventory(stationID, car.getFuelType());
+		if (res - amount < 0) {
+			JOptionPane.showMessageDialog(null,
+					String.format("Order excede station max qauntity\nthe max quantity is %.2f", res));
 			return;
 		}
 		//
@@ -195,7 +200,7 @@ public class FastFuelingController implements Initializable {
 		paymentPane.setVisible(true);
 
 		// set the price
-		totalPrice.setText(String.format("%.2f",amount * customerPrice));
+		totalPrice.setText(String.format("%.2f", amount * customerPrice));
 	}
 
 	@FXML
@@ -203,14 +208,14 @@ public class FastFuelingController implements Initializable {
 		companyName = companiesCombo.getValue();
 		// get all company stations
 		// get the pricing data
-				ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
-						customer.getPricingModel());
+		ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, car.getFuelType(),
+				customer.getPricingModel());
 		// the calculated price
-		if(pricingRes==null) {
-			JOptionPane.showMessageDialog(null,"System bug the data for this company still not finished");
+		if (pricingRes == null) {
+			JOptionPane.showMessageDialog(null, "System bug the data for this company still not finished");
 			return;
 		}
-		
+
 		// set value of StationsIDCombo
 		fillstationsIDCombo(CustomerCC.getAllCompanyFuelStationID(companyName));
 		customerPriceTxt.setText(pricingRes.get(0).toString());
@@ -218,16 +223,16 @@ public class FastFuelingController implements Initializable {
 		fuelPricePL.setText(pricingRes.get(1).toString());
 		// company sales
 		salePercentTxt.setText(pricingRes.get(2).toString());
-		//RatePercent
+		// RatePercent
 		pricingModelSaleTxt.setText(pricingRes.get(3).toString());
-		//SaleID
+		// SaleID
 		salIDTxt.setText(pricingRes.get(4).toString());
 	}
 
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
-		
+
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("FastFueling.fxml"));
 		mainPane = loader.load();
@@ -243,11 +248,11 @@ public class FastFuelingController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
+		hellomessage.setText(customer.getFirstName());
 		// set the visible panes
 		dataPane.setVisible(true);
 		paymentPane.setVisible(false);
-		
+
 		// set the data for the customer
 		carNumberTxt.setText(car.getCarNumber());
 		fuelTypeTxt.setText(car.getFuelType());
@@ -275,31 +280,22 @@ public class FastFuelingController implements Initializable {
 
 		stationsIDCombo.setItems(stationsID);
 	}
-	
+
 	/*
-	private Stage workInProgres() {
-		final Stage dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(savedStage);
-        VBox dialogVbox = new VBox(20);
-        //text
-        Text txt=new Text("Procecing Paiment");
-        txt.setFill(Color.BLUE);
-        txt.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-        dialogVbox.getChildren().add(txt);
-        //progres circle
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        dialogVbox.getChildren().add(progressIndicator);
-        //result of purchase
-        Text resTxt=new Text("");
-        dialogVbox.getChildren().add(resTxt);
-        
-        dialogVbox.setAlignment(Pos.CENTER);
-        Scene dialogScene = new Scene(dialogVbox, 300, 150);
-        dialog.setScene(dialogScene);
-        
-        return dialog;
-	}
-	*/
+	 * private Stage workInProgres() { final Stage dialog = new Stage();
+	 * dialog.initModality(Modality.APPLICATION_MODAL);
+	 * dialog.initOwner(savedStage); VBox dialogVbox = new VBox(20); //text Text
+	 * txt=new Text("Procecing Paiment"); txt.setFill(Color.BLUE);
+	 * txt.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+	 * dialogVbox.getChildren().add(txt); //progres circle ProgressIndicator
+	 * progressIndicator = new ProgressIndicator();
+	 * dialogVbox.getChildren().add(progressIndicator); //result of purchase Text
+	 * resTxt=new Text(""); dialogVbox.getChildren().add(resTxt);
+	 * 
+	 * dialogVbox.setAlignment(Pos.CENTER); Scene dialogScene = new
+	 * Scene(dialogVbox, 300, 150); dialog.setScene(dialogScene);
+	 * 
+	 * return dialog; }
+	 */
 
 }

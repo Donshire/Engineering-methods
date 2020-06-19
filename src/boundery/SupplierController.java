@@ -46,6 +46,9 @@ public class SupplierController implements Initializable {
 	@FXML
 	private Pane SupplierOrdersPane;
 
+    @FXML
+    private Text hellomessage;
+    
 	@FXML
 	private Label OrdersLbl;
 
@@ -237,6 +240,8 @@ public class SupplierController implements Initializable {
 		// show the main pane and hide the others
 		SupplierMainPane.setVisible(true);
 		SupplierOrdersPane.setVisible(false);
+
+		hellomessage.setText(supplier.getFirstName());
 
 		ObservableList<SupplierOrderStatus> orderTypes = FXCollections
 				.observableArrayList(SupplierOrderStatus.confirmed,SupplierOrderStatus.supplied);

@@ -81,6 +81,16 @@
                </font></Text>
             <Text fx:id="salIDTxt" fill="WHITE" layoutX="490.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" />
             <Text fx:id="pricingModelSaleTxt" fill="WHITE" layoutX="490.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text layoutX="386.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text fx:id="hellomessage" layoutX="440.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
       <Pane fx:id="paymentPane" opacity="0.83" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: #e0c0a0;" visible="false">
