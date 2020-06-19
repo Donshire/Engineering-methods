@@ -3,7 +3,6 @@ package client;
 import java.io.IOException;
 
 import boundery.CeoGUIController;
-import boundery.GasHomeController;
 import boundery.LogInController;
 import boundery.MarketingEmployeeController;
 import boundery.MarketingManagerController;

@@ -4,13 +4,10 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
-
 import javax.swing.JOptionPane;
-
 import Entity.Customer;
 import Entity.GasOrder;
 import client.CustomerCC;
@@ -25,19 +22,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -90,11 +82,25 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	private TableColumn<GasOrder, Float> PurchasePricecol;
+	
+   @FXML
+    private TableColumn<GasOrder,String> Status;
 
 	// ORDER TABLE END ------------------------------------
 
+   
+    // ---------------- General Components ----------------------
 	@FXML
 	private Text hellotxt;
+	
+	@FXML
+	private Button orderGasbtn;
+
+	@FXML
+	private Button myOrdersbtn;
+
+	
+	
 	
 	@FXML
 	private Text noteAmount;
@@ -102,11 +108,6 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	private Text noteDate;
 
-	@FXML
-	private Button orderGasbtn;
-
-	@FXML
-	private Button myOrdersbtn;
 
 	@FXML
 	private RadioButton radioImmediat;
@@ -124,9 +125,6 @@ public class CustomerGuiController implements Initializable {
 	private DatePicker filedSupplyDate;
 
 	@FXML
-	private Slider sliderAmount;
-
-	@FXML
 	private TextField textAmount;
 
 	@FXML
@@ -141,20 +139,19 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	private Button buttonBuy;
 
+	
+	
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
-
 		gasAmount = new Float(textAmount.getText());
-		// gasAmount = (double) spinnerAmount.getValue();
-		// sliderAmount.setValue(value);
 		settingDiscount();
 		setPrice();
 	}
 
 	@FXML
 	/**
-	 * Displays or hides the option to select a date according to the selected radio
-	 * button
+	 * Displays or hides the option to select a date <br>
+	 * according to the selected radio button.
 	 */
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
@@ -164,12 +161,7 @@ public class CustomerGuiController implements Initializable {
 		setPrice();
 	}
 
-	private void setPrice() {
-		// double beforeDiscount = priceListPrice * gasAmount;
-		float beforeDiscount = 4.8f * gasAmount;
-		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
-		total.setText(String.format("%.2f", priceOfPurchase));
-	}
+	
 
 	@FXML
 	void logOut(ActionEvent event) {
@@ -192,12 +184,15 @@ public class CustomerGuiController implements Initializable {
 			if (!normalSupply.isSelected())
 				supplyDate = currentDate;
 			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, currentTime, gasAmount, currentDate, priceOfPurchase,
-					!normalSupply.isSelected());
+					!normalSupply.isSelected(), OrderStatus.processing);
 			
 			System.out.println(order.toString());
 			
-			if (CustomerCC.createNewOrder(order)) 
+			if (CustomerCC.createNewOrder(order)) {
 			JOptionPane.showMessageDialog(null,"Order created succesfully");
+			myOrdersClicked(null);
+			orderTable.setItems(getOrders());
+			}
 		else  JOptionPane.showMessageDialog(null,"clouldn't create order");	
 			// HandelMessageResult.handelMessage(CustomerCC.createNewOrder(order), "Order created succesfully",
 			//		"clouldn't create order");
@@ -206,24 +201,14 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	void myOrdersClicked(ActionEvent event) {
-		Button btn = (Button) event.getSource();
-
-		if (btn.equals(myOrdersbtn)) {
 			myOrdersPane.setVisible(true);
 			orderHomeGasPane.setVisible(false);
-			orderTable.setItems(getOrders());
-		}
-
 	}
 
 	@FXML
 	void orderGasClicked(ActionEvent event) {
-		Button btn = (Button) event.getSource();
-
-		if (btn.equals(orderGasbtn)) {
 			myOrdersPane.setVisible(false);
 			orderHomeGasPane.setVisible(true);
-		}
 	}
 
 	public void start(Stage primaryStage) throws Exception {
@@ -232,26 +217,26 @@ public class CustomerGuiController implements Initializable {
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(getClass().getResource("CustomerGUI.fxml"));
-
+		
 		mainPane = loader.load();
-
+	
 		// connect the scene to the file
 		s = new Scene(mainPane);
 
 		primaryStage.setTitle("Order Gas Home");
 		primaryStage.setScene(s);
 		primaryStage.show();
-
+		
 	}
 	
 	
-	public boolean isInputCorrect() {
+	private boolean isInputCorrect() {
 		boolean proper = true;
 		
 		noteDate.setVisible(false);
 		noteAmount.setVisible(false);
 
-		if (normalSupply.isSelected()) {
+		if (normalSupply.isSelected()) {		
 			if (filedSupplyDate.getValue() == null) {
 				noteDate.setText("Delivery date must be set.");
 				noteDate.setVisible(true);
@@ -275,6 +260,10 @@ public class CustomerGuiController implements Initializable {
 
 	private boolean amountIsNumber() {
 		String amountStr = textAmount.getText();
+		String str = amountStr.replaceAll("\\D+","");
+		return (amountStr.compareTo(str) == 0);
+			
+/*		
 		
 		try {
 			@SuppressWarnings("unused")
@@ -284,10 +273,16 @@ public class CustomerGuiController implements Initializable {
 			return false;
 		}
 		return true;
+*/
 	}
 	
+	private void setPrice() {
+		float beforeDiscount = 4.8f * gasAmount;
+		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
+		total.setText(String.format("%.2f", priceOfPurchase));
+	}
 	
-	void settingDiscount() {
+	private void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
 		else {
@@ -298,33 +293,38 @@ public class CustomerGuiController implements Initializable {
 			else
 				discount = 0;
 		}
-		textDiscount.setText(discount.toString());
+		textDiscount.setText(discount.toString() + "%");
 	}
 
 	public void orderHomeGasInitialize() {
-		priceList.setText("4.6");
-		textDiscount.setText("0");
+		
+		// Loading the price of per unit.
+		float pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		priceList.setText(Float.toString(pricePerUnit));
 		
 
 		textAmount.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 
-				try {
-					gasAmount = Float.valueOf(newValue);
-					if(gasAmount>0) noteAmount.setVisible(false);
-					else {
+				
+					
+					String str = newValue.replaceAll("\\D+","");
+					if (newValue.compareTo(str) != 0) {
+						noteAmount.setVisible(true);
 						gasAmount = 0;
 						newValue = "0.0";
-						noteAmount.setText("Must be Number");
-						noteAmount.setVisible(true);
+					} else {
+						try {
+							gasAmount = Float.valueOf(newValue);
+							noteAmount.setVisible(false);
+						} catch (Exception e) {
+							gasAmount = 0;
+							newValue = "0.0";
+							noteAmount.setVisible(true);
+						}
 					}
-				} catch (Exception e) {
-					gasAmount = 0;
-					newValue = "0.0";
-					noteAmount.setText("Must be Number");
-					noteAmount.setVisible(true);
-				}
+				
 				settingDiscount();
 				setPrice();
 			}
@@ -340,7 +340,9 @@ public class CustomerGuiController implements Initializable {
 		urgentcol.setCellValueFactory(new PropertyValueFactory<GasOrder, Boolean>("urgent"));
 		PurchaseTimecol.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("time"));
 		PurchasePricecol.setCellValueFactory(new PropertyValueFactory<GasOrder, Float>("priceOfPurchase"));
-
+		Status.setCellValueFactory(new PropertyValueFactory<GasOrder, String>("status"));
+		
+		orderTable.setItems(getOrders());
 	}
 	
 	
@@ -360,7 +362,8 @@ public class CustomerGuiController implements Initializable {
 		hellotxt.setText("Hello " + customer.getFirstName());
 		orderHomeGasInitialize();
 		myOrdersInitialize();
-		//
+		
+		myOrdersClicked(null);
 
 	}
 
