@@ -46,6 +46,7 @@ public class CustomerGuiController implements Initializable {
 	String supplyDate;
 	float gasAmount;
 	float priceOfPurchase = 0;
+	float pricePerUnit;
 
 	@FXML
 	private Pane CustomerMainPane;
@@ -139,6 +140,12 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	private Button buttonBuy;
 
+    @FXML
+    private Text discount1;
+
+    @FXML
+    private Text discount2;
+
 	
 	
 	@FXML
@@ -156,6 +163,8 @@ public class CustomerGuiController implements Initializable {
 	void radioSelected(ActionEvent event) {
 		textSupplyDate.setVisible(normalSupply.isSelected());
 		filedSupplyDate.setVisible(normalSupply.isSelected());
+		discount1.setVisible(normalSupply.isSelected());
+		discount2.setVisible(normalSupply.isSelected());
 		if(radioImmediat.isSelected()) noteDate.setVisible(false);
 		settingDiscount();
 		setPrice();
@@ -277,7 +286,7 @@ public class CustomerGuiController implements Initializable {
 	}
 	
 	private void setPrice() {
-		float beforeDiscount = 4.8f * gasAmount;
+		float beforeDiscount = pricePerUnit * gasAmount;
 		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
 		total.setText(String.format("%.2f", priceOfPurchase));
 	}
@@ -299,7 +308,7 @@ public class CustomerGuiController implements Initializable {
 	public void orderHomeGasInitialize() {
 		
 		// Loading the price of per unit.
-		float pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
 		priceList.setText(Float.toString(pricePerUnit));
 		
 
