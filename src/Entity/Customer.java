@@ -16,12 +16,14 @@ public class Customer extends User implements Serializable {
 	private String visaNumber;
 	private String expDate;
 	private String CVV;
+	private int fuelTypeAnaleticRank;
 	private String customerType;
 	private String companyName;
 
 	public Customer(String userName, String password, String firstName, String lastName, String mail, String id,
 			String phoneNumber, int online, String adress, int pricingModel, int customerTypeAnaleticRank,
-			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV,String customerType, String companyName) {
+			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV,
+			int fuelTypeAnaleticRank,String customerType, String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber, online);
 		this.adress = adress;
 		this.pricingModel = pricingModel;
@@ -125,5 +127,20 @@ public class Customer extends User implements Serializable {
 		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
 	}
 
+	public int getFuelTypeAnaleticRank() {
+		return fuelTypeAnaleticRank;
+	}
+
+	public void setFuelTypeAnaleticRank(int fuelTypeAnaleticRank) {
+		this.fuelTypeAnaleticRank = fuelTypeAnaleticRank;
+	}
+
+	@Override
+	public String toString() {
+		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
+				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
+				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
+				+ ", fuelTypeAnaleticRank=" + fuelTypeAnaleticRank + "]";
+	}
 
 }

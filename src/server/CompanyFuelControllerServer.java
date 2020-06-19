@@ -443,24 +443,22 @@ public class CompanyFuelControllerServer {
 		return companyFuel;
 	}
 
-	public static ArrayList<String> getAllCompanyFuelTypes(String companyName) {
+	public static ArrayList<CompanyFuel> getAllCompanyFuelTypes(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<String> str = new ArrayList<String>();
+		ArrayList<CompanyFuel> fuels =null;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select fuelType from company where companyName = ? ");
+			stm = ConnectionToDB.conn.prepareStatement("select * from company where companyName = ? ");
 			stm.setString(1, companyName);
 			res = stm.executeQuery();
-
-			while (res.next()) {
-				str.add(res.getString(1));
-			}
+			
+			fuels=BuildObjectByQueryData.BuildCompanyFuel(res);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		return str;
+		if(fuels==null||fuels.isEmpty())return null;
+		return fuels;
 	}
 
 	public static boolean updatePricingModelStatus(PricingModule pricingModule) {
@@ -479,7 +477,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setDouble(4, pricingModule.getSalePercent());
+				stm.setFloat(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 			} catch (Exception e) {
@@ -507,7 +505,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setDouble(4, pricingModule.getSalePercent());
+				stm.setFloat(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 

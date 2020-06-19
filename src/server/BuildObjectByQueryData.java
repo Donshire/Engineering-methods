@@ -336,4 +336,19 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 
+	
+	public static ArrayList<CompanyFuel> BuildCompanyFuel(ResultSet res){
+		ArrayList<CompanyFuel> gasStation = new ArrayList<CompanyFuel>();
+		try {
+			while (res.next() == true)
+				gasStation.add(new CompanyFuel(res.getString(1), res.getString(2),
+						res.getFloat(3)));
+			
+				res.close();
+			return gasStation;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
