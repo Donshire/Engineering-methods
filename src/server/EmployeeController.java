@@ -228,10 +228,7 @@ public class EmployeeController {
 			stm.setString(1, id);
 			res = stm.executeQuery();
 			if (res.next()) {
-				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
-						res.getString(15), res.getString(16), res.getString(17), res.getString(18));
+				Customer customer = BuildObjectByQueryData.BuildCustomer(res).get(1);
 				return customer;
 			}
 		} catch (Exception e) {

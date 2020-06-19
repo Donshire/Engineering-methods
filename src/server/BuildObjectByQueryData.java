@@ -55,7 +55,7 @@ public class BuildObjectByQueryData {
 				customersList.add(new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
 						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
 						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
-						res.getString(15), res.getString(16), res.getString(17), res.getString(18)));
+						res.getString(15), res.getString(16), res.getInt(17) , res.getString(18), res.getString(19)));
 			res.close();
 			return customersList;
 		} catch (SQLException e) {
@@ -336,19 +336,4 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 
-	
-	public static ArrayList<CompanyFuel> BuildCompanyFuel(ResultSet res){
-		ArrayList<CompanyFuel> gasStation = new ArrayList<CompanyFuel>();
-		try {
-			while (res.next() == true)
-				gasStation.add(new CompanyFuel(res.getString(1), res.getString(2),
-						res.getFloat(3)));
-			
-				res.close();
-			return gasStation;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }

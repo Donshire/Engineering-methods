@@ -2,7 +2,7 @@ package Entity;
 
 import java.io.Serializable;
 
-public class CompanyFuel implements Serializable{
+public class CompanyFuel implements Serializable,Comparable<CompanyFuel>{
 
 	/**
 	 * 
@@ -12,7 +12,6 @@ public class CompanyFuel implements Serializable{
 	private Fuel fuel;
 	private String fuelType;
 	private float companyPrice;
-	String fuelType;
 	private String newMaxPrice; // for the GUI not to use
 	
 	/**
@@ -40,20 +39,6 @@ public class CompanyFuel implements Serializable{
 		this.fuelType = fuelType;
 		this.companyPrice = companyPrice;
 		fuel=null;
-	}
-	
-	public String getFuelType() {
-		return fuelType;
-	}
-
-	public void setFuelType(String fuelType) {
-		this.fuelType = fuelType;
-	}
-	
-	public CompanyFuel(String companyName, String fuelType, float companyPrice) {
-		this.companyName = companyName;
-		this.fuelType = fuelType;
-		this.companyPrice = companyPrice;
 	}
 
 	public String getNewMaxPrice() {

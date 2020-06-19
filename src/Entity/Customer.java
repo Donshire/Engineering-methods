@@ -109,16 +109,6 @@ public class Customer extends User implements Serializable {
 		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
 	}
 
-
-
-	@Override
-	public String toString() {
-		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
-				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
-				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
-				+ ", customerType=" + customerType + ", companyName=" + companyName + "]";
-	}
-
 	public int getFuelingHourAnaleticRank() {
 		return fuelingHourAnaleticRank;
 	}
@@ -140,7 +130,8 @@ public class Customer extends User implements Serializable {
 		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
 				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
 				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
-				+ ", fuelTypeAnaleticRank=" + fuelTypeAnaleticRank + "]";
+				+ ", fuelTypeAnaleticRank=" + fuelTypeAnaleticRank + ", customerType=" + customerType + ", companyName="
+				+ companyName + "]";
 	}
 
 }

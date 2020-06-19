@@ -184,22 +184,13 @@ public class FileManagmentSys {
 	public static boolean writeToQuarterReport(File file, String data) {
 		FileWriter myWriter;
 		BufferedWriter br;
-<<<<<<< HEAD
 
-=======
->>>>>>> refs/heads/Analitic_System-Saleem
 		try {
 			myWriter = new FileWriter(file, true);
 			br = new BufferedWriter(myWriter);
-<<<<<<< HEAD
 
 			br.write(String.format("%s", data));
 
-=======
-			
-			br.write(String.format("%-20s_%s\n", QuarterData, data));
-			
->>>>>>> refs/heads/Analitic_System-Saleem
 			br.close();
 			myWriter.close();
 		} catch (IOException e) {

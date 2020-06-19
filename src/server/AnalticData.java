@@ -121,7 +121,7 @@ public class AnalticData implements Runnable {
 		for(String company : companies)
 			fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
 		//sort the fuels prices
-		 Collections.sort(fuels);
+		Collections.sort(fuels);
 
 		 int count=0,currRank;
 		 String currFuel,fuelType="";
@@ -603,11 +603,13 @@ public class AnalticData implements Runnable {
 			while(res.next()) {
 				if(currentCustomer.compareTo(res.getString(1))==0) {
 					//the same customer
-					indexOfRank=KeyplusRank.indexOfHouers(res.getString(2),startHourRank,endHoursRank);
-					if(selectedHoures.add(indexOfRank)) {
-						customerRank=startHourRank.get(indexOfRank).rank;
-						customerTypeAnaleticRank.set(index,customerTypeAnaleticRank.get(index)+customerRank);
-						
+					if (res.getString(2) != null) {
+						indexOfRank = KeyplusRank.indexOfHouers(res.getString(2), startHourRank, endHoursRank);
+						if (selectedHoures.add(indexOfRank)) {
+							customerRank = startHourRank.get(indexOfRank).rank;
+							customerTypeAnaleticRank.set(index, customerTypeAnaleticRank.get(index) + customerRank);
+
+						}
 					}
 				}
 				else {
@@ -680,9 +682,9 @@ public class AnalticData implements Runnable {
 		Duration duration = Duration.between(LocalDateTime.now(),
 				LocalDateTime.of(nextFriday.getYear(), nextFriday.getMonth(),
 						nextFriday.getDayOfMonth(), 18, 0));
-		//return duration.getSeconds();
+		return duration.getSeconds();
 		//for testing
-		return 10;
+		//return 10;
 	}
 	
 }
