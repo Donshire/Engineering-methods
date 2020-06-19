@@ -430,5 +430,21 @@ public class FileManagmentSys {
 
 		return format;
 	}
+	
+//	public static String analiticDataFormat(String week,String month,String year,ArrayList<String> customersID,
+//			ArrayList<Float> fuelTypeRanks,ArrayList<Float> fuelingHourRanks,ArrayList<Integer> customerTypeRank) {
+//
+//		StringBuilder s = new StringBuilder();
+//		s.append(String.format("week : %s   month : %s  year %s\n%-15s%-15s%-15s%-15s",week,month,year,"Id","fuelTypeRanks","fuelingHourRanks","customerTypeRank"));
+//		
+//		for(String v : customersID) {
+//			s.append(String.format("Id : ", args))
+//		}
+//		
+//		
+//		
+//		
+//		return s.toString();
+//	}
 
 }

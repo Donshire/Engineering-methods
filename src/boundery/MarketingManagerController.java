@@ -47,6 +47,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -228,6 +229,54 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private Button showAnaliticDatabtn;
+	
+	
+	//PieChartDiagram start---------------------------
+	
+	private int pie_index = 0;
+	
+	@FXML
+    private Pane piePane;
+
+    @FXML
+    private PieChart pieChart1;
+
+    @FXML
+    private Button backbtn;
+
+    @FXML
+    private Button nextbtn;
+
+    @FXML
+    private Button prevbtn;
+
+    @FXML
+    private PieChart pieChart2;
+
+    @FXML
+    private PieChart pieChart3;
+	
+	//PieChartDiagram end---------------------------
+    
+    @FXML
+    void nextOrPrevWasClicked(ActionEvent event) {
+    	
+    	Button btn = (Button)event.getSource();
+    	
+    	if(btn.equals(nextbtn)) {
+    		pie_index++;
+    		prevbtn.setDisable(false);
+    		if(pie_index == 2)
+    			nextbtn.setDisable(true);
+    	}
+    	
+    	else if(btn.equals(prevbtn)) {
+    		pie_index--;
+    		nextbtn.setDisable(false);
+    		if(pie_index == 0)
+    			prevbtn.setDisable(true);
+    	}
+    }
 
 	public boolean checkInput(String month, String year) {
 		int val, val2=0;
@@ -819,7 +868,7 @@ public class MarketingManagerController implements Initializable {
 		primaryStage.setScene(s);
 		primaryStage.show();
 
-	}
+	} 
 
 	private void switchPanes(Pane newPane) {
 		currentPane.setVisible(false);
@@ -839,6 +888,7 @@ public class MarketingManagerController implements Initializable {
 				if (!row.isEmpty() && ev.getButton() == MouseButton.PRIMARY && ev.getClickCount() == 2) {
 					AnaliticDataReport clickedRow = row.getItem();
 					System.out.println(clickedRow.toString());
+					switchPanes(piePane);
 				}
 			});
 			return row;

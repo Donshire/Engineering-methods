@@ -449,6 +449,8 @@ public class AnalticData implements Runnable {
 	 * <h6>the range is bettwen 10 cause rank is muliplied by 10, and 1 by caculating 10/down ~ 1
 	 * @return
 	 */
+	
+	
 	private ArrayList<Float> calculatefuelingHourAnaleticRank() {
 		PreparedStatement stm;
 		Statement statment;
