@@ -13,6 +13,7 @@ import java.time.LocalTime;
 import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.oracle.xmlns.internal.webservices.jaxws_databinding.ExistingAnnotationsType;
 
+import Entity.AnaliticDataReport;
 import Entity.CompanyFuel;
 import Entity.GasStationOrder;
 import enums.SupplierOrderStatus;
@@ -69,14 +71,26 @@ public class AnalticData implements Runnable {
 					fuelingHourRanks = calculatefuelingHourAnaleticRank(filesStatistic[index],val);
 					customerTypeRanks = calculateCustomerTypeAnaleticRank(filesStatistic[index],val);
 					fuelTypeRanks = calculatefuelTypeAnaleticRank(filesStatistic[index],val);
+					//
+					System.out.println("Houers: " + fuelingHourRanks);
+					System.out.println("CustomerType: " + customerTypeRanks);
+					System.out.println("fuelType: " + fuelTypeRanks);
+					//
+					
 					writeAnalitic(filesRank[index],currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
+					
+					//save file detaile in the db
+					if(getWeekNumber(after.toString()).compareTo("-1")!=0) {
+						CompanyFuelControllerServer.createAnaliticReport(new AnaliticDataReport(filesStatistic[index].getName(),
+								getWeekNumber(after.toString()), getMonthName(after.toString()), after.toString().substring(0, 4), val, FileManagmentSys.statisticData));
+						//
+						CompanyFuelControllerServer.createAnaliticReport(new AnaliticDataReport(filesRank[index].getName(),
+								getWeekNumber(after.toString()), getMonthName(after.toString()), after.toString().substring(0, 4), val, FileManagmentSys.customerAnaliticData));
+					
+					}
 					
 					index++;
 				}
-
-				System.out.println("Houers: " + fuelingHourRanks);
-				System.out.println("CustomerType: " + customerTypeRanks);
-				System.out.println("fuelType: " + fuelTypeRanks);
 
 				//updateCutomersAnaliticdata(currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
 
@@ -90,11 +104,11 @@ public class AnalticData implements Runnable {
 			ArrayList<Float> fuelingHourRanks, ArrayList<Integer> customerTypeRank) {
 		int index =0;
 		StringBuilder str = new StringBuilder();
-		str.append(String.format("%-15s%-15s%-15s%-15s","customerID","fuel Type","fueling Hour","customerType"));
+		str.append(String.format("%-15s%-15s%-15s%-15s\n","customerID","fuel Type","fueling Hour","customerType"));
 		//
 		while (index < customersID.size()) {
-		str.append(String.format("%-15s%-15d%-15d%-15d",customersID.get(index),customerTypeRank.get(index),
-				Math.round(fuelingHourRanks.get(index)),Math.round(fuelTypeRanks.get(index))));
+		str.append(String.format("%-15s%-15d%-15d%-15d\n",customersID.get(index),Math.round(fuelTypeRanks.get(index)),
+				Math.round(fuelingHourRanks.get(index)),customerTypeRank.get(index)));
 			index++;
 		}
 		FileManagmentSys.writeToAnaliticData(filesRank, str.toString());
@@ -153,10 +167,12 @@ public class AnalticData implements Runnable {
 		//
 		ArrayList<CompanyFuel> fuels = new ArrayList<CompanyFuel>();
 		fuels.addAll(CompanyFuelControllerServer.getAllCompanyFuelTypes(company));
+		
+		int countFuelTypes[] = new int [fuels.size()];
 		// sort the fuels prices
 		Collections.sort(fuels);
 
-		int count = 0, currRank;
+		int count = 0, currRank,indexFuel;
 		String currFuel, fuelType = "";
 		
 		// ------------------------------------------------------------------------------
@@ -223,35 +239,55 @@ public class AnalticData implements Runnable {
 				fuelType = res.getString(2);
 				if (fuelType == null)
 					rankPercent = 1f / lower;
-				else
-					rankPercent = rankedFuels.get(KeyplusRank.indexOf(res.getString(2), rankedFuels)).rank;
-				countOfGasStationFuelsPurchased.add(rankPercent + 1f / lower);
+				else {
+					indexFuel = KeyplusRank.indexOf(res.getString(2), rankedFuels);
+					countFuelTypes[indexFuel]++; 
+					rankPercent = rankedFuels.get(indexFuel).rank;
+				}
+				countOfGasStationFuelsPurchased.add(rankPercent);
 			}
 
 			while (res.next()) {
 				if (currentCustomer.compareTo(res.getString(1)) == 0) {
 					// the same customer
-					rankPercent = rankedFuels.get(KeyplusRank.indexOf(res.getString(2), rankedFuels)).rank;
-					countOfGasStationFuelsPurchased.set(index,
-							countOfGasStationFuelsPurchased.get(index) + rankPercent);
+					if(res.getString(2)!=null) {
+						indexFuel = KeyplusRank.indexOf(res.getString(2), rankedFuels);
+						countFuelTypes[indexFuel]++;
+						rankPercent = rankedFuels.get(indexFuel).rank;
+						countOfGasStationFuelsPurchased.set(index,
+								countOfGasStationFuelsPurchased.get(index) + rankPercent);
+					}
 				} else {
 					index++;
 					currentCustomer = res.getString(1);
 					fuelType = res.getString(2);
 					if (fuelType == null)
 						rankPercent = 1f / lower;
-					else
-						rankPercent = rankedFuels.get(KeyplusRank.indexOf(res.getString(2), rankedFuels)).rank;
-					countOfGasStationFuelsPurchased.add(rankPercent + 1f / lower);
+					else {
+						indexFuel = KeyplusRank.indexOf(res.getString(2), rankedFuels);
+						countFuelTypes[indexFuel]++; 
+						rankPercent = rankedFuels.get(indexFuel).rank;
+					}
+					countOfGasStationFuelsPurchased.add(rankPercent);
 				}
 			}
 			
 			//get rank in numbers
-			for(Float flow : countOfGasStationFuelsPurchased) flow*=10;
+			for(int j=0;j<countOfGasStationFuelsPurchased.size();j++)
+				countOfGasStationFuelsPurchased.set(j, countOfGasStationFuelsPurchased.get(j)*10);
 			
 			res.close();
 			stm.close();
-
+			
+			//
+			StringBuilder str = new StringBuilder("count of fuel type purchases\n");
+			str.append(String.format("%-15s%-10s\n","fuel type","count"));
+			
+			for(int j=0;j<countFuelTypes.length;j++)
+				str.append(String.format("%-15s%-10d\n",rankedFuels.get(j).key, countFuelTypes[j]));
+			
+			FileManagmentSys.writeToAnaliticData(filesStatistic, str.toString());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -480,18 +516,18 @@ public class AnalticData implements Runnable {
 			str.append(String.format("%-15s%-10s\n","sum purchase","count"));
 			
 			for(int k=0;k<5;k++) {
-				str.append(String.format("%-15.0f%-10d",purchase,countSumPurchase[k]));
+				str.append(String.format("%-15.0f%-10d\n",purchase,countSumPurchase[k]));
 				if (index % 2 == 0)
 					purchase *= 5;
 				else
 					purchase *= 2;
 			}
 			
-			str.append(String.format("%-15s%-10s\n","car count","count"));
-			str.append(String.format("%-10d%-10d",3,countSumCar[0]));
-			str.append(String.format("%-10d%-10d",9,countSumCar[1]));
-			str.append(String.format("%-10d%-10d",15,countSumCar[2]));
-			str.append(String.format("%-10d%-10d",21,countSumCar[3]));
+			str.append(String.format("%-10s%-10s\n","car count","count"));
+			str.append(String.format("%-10d%-10d\n",3,countSumCar[0]));
+			str.append(String.format("%-10d%-10d\n",9,countSumCar[1]));
+			str.append(String.format("%-10d%-10d\n",15,countSumCar[2]));
+			str.append(String.format("%-10d%-10d\n",21,countSumCar[3]));
 			
 			FileManagmentSys.writeToAnaliticData(filesStatistic, str.toString());
 			
@@ -690,6 +726,58 @@ public class AnalticData implements Runnable {
 
 		return customerTypeAnaleticRank;
 	}
+	
+	
+	
+	public static String getMonthName(String date) {
+		int month =Integer.parseInt(date.substring(5, 7));
+		String monthString;
+		
+		switch (month) {
+        case 1:  monthString = "January";       break;
+        case 2:  monthString = "February";      break;
+        case 3:  monthString = "March";         break;
+        case 4:  monthString = "April";         break;
+        case 5:  monthString = "May";           break;
+        case 6:  monthString = "June";          break;
+        case 7:  monthString = "July";          break;
+        case 8:  monthString = "August";        break;
+        case 9:  monthString = "September";     break;
+        case 10: monthString = "October";       break;
+        case 11: monthString = "November";      break;
+        case 12: monthString = "December";      break;
+        default: monthString = "Invalid month"; break;
+		}
+        return monthString;
+	}
+	
+	public static String getWeekNumber(String date) {
+		Calendar cacheCalendar =  Calendar.getInstance();
+		
+		int month,year,day;
+		year=Integer.parseInt(date.substring(0, 4));
+		month=Integer.parseInt(date.substring(5, 7));
+		day=Integer.parseInt(date.substring(8, 10));
+		
+		cacheCalendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+	    cacheCalendar.set(Calendar.DAY_OF_WEEK_IN_MONTH, 1);
+	    cacheCalendar.set(Calendar.MONTH, month);
+	    cacheCalendar.set(Calendar.YEAR, year);
+	    //
+	    int fisrtSundayInMonth = cacheCalendar.get(Calendar.DATE);
+	    //
+	    int dex;
+	    
+	    if(fisrtSundayInMonth==1) dex=0;
+	    else dex=-1;
+	     
+	    
+	    for(int i=1-dex;i<4;i++) {
+	    	if(((i-1)*7+fisrtSundayInMonth)<=day&&(i*7+fisrtSundayInMonth)>day) return i+"";
+	    }
+	    return "-1";
+	}
+	
 
 	/**
 	 * update cutomers ranks
@@ -728,9 +816,9 @@ public class AnalticData implements Runnable {
 	}
 
 	private long calculateTimeToSleep() {
-		LocalDate nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+		LocalDate nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
 		Duration duration = Duration.between(LocalDateTime.now(),
-				LocalDateTime.of(nextFriday.getYear(), nextFriday.getMonth(), nextFriday.getDayOfMonth(), 18, 0));
+				LocalDateTime.of(nextFriday.getYear(), nextFriday.getMonth(), nextFriday.getDayOfMonth(), 0, 0));
 		return duration.getSeconds();
 		// for testing
 		// return 10;

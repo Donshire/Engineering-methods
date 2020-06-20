@@ -12,12 +12,16 @@ public class AnaliticDataReport implements Serializable {
 	private String week;
 	private String month;
 	private String year;
-
-	public AnaliticDataReport(String fileName, String week, String month, String year) {
+	private String company;
+	private String type;
+	
+	public AnaliticDataReport(String fileName, String week, String month, String year, String company, String type) {
 		this.fileName = fileName;
 		this.week = week;
 		this.month = month;
 		this.year = year;
+		this.company = company;
+		this.type = type;
 	}
 
 	public String getFileName() {
@@ -52,10 +56,30 @@ public class AnaliticDataReport implements Serializable {
 		this.year = year;
 	}
 
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
 		return "AnaliticDataReport [fileName=" + fileName + ", week=" + week + ", month=" + month + ", year=" + year
-				+ "]";
+				+ ", company=" + company + ", type=" + type + "]";
 	}
 
 }

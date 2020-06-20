@@ -69,9 +69,9 @@ public class FileManagmentSys {
 		//
 		curr = temp;
 		curr += "\\" + analiticData;
+		createSingleFolder(curr);
 		createSingleFolder(curr + "\\" + customerAnaliticData);
 		createSingleFolder(curr + "\\" + statisticData);
-		createSingleFolder(curr);
 
 		return true;
 	}

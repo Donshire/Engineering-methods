@@ -643,7 +643,10 @@ public class MyFuelServer extends AbstractServer {
 		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
+		//must be created first before the analitic thread 
 		FileManagmentSys.createSystemWorkSpace();
+		
+		//
 		analticData = new AnalticData(); 
 		thread = new Thread(analticData);
 		thread.start();

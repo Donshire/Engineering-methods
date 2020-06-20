@@ -23,8 +23,6 @@ import enums.SaleStatus;
 
 public class CompanyFuelControllerServer {
 
-	
-	
 	/**
 	 * create periodicReport and save it in a file
 	 * @param companyName String
@@ -863,7 +861,8 @@ public class CompanyFuelControllerServer {
 			res = stm.executeQuery();
 			
 			while(res.next()) {
-				reports.add(new AnaliticDataReport(res.getString(1),res.getString(2),res.getString(3),res.getString(4)));
+				reports.add(new AnaliticDataReport(res.getString(1),res.getString(2),res.getString(3),res.getString(4),
+						res.getString(5),res.getString(6)));
 			}
 			
 		} catch (Exception e) {
@@ -871,6 +870,30 @@ public class CompanyFuelControllerServer {
 		}
 		
 		return reports;
+	}
+
+	
+	
+	public static boolean createAnaliticReport(AnaliticDataReport report) {
+		String query = "insert into analiticdata (filename,week,month,year,company,type) " + "values (?,?,?,?,?,?)";
+		PreparedStatement stm;
+		try {
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, report.getFileName());
+			stm.setString(2, report.getWeek());
+			stm.setString(3, report.getMonth());
+			stm.setString(4, report.getYear());
+			stm.setString(5, report.getCompany());
+			stm.setString(6, report.getType());
+			
+			stm.executeUpdate();
+			stm.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 
 }
