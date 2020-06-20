@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.StationManagerController">
    <children>
-      <AnchorPane fx:id="StationOrdersView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <AnchorPane fx:id="StationOrdersView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <TableView fx:id="StationOrderTable" editable="true" layoutX="28.0" layoutY="144.0" prefHeight="235.0" prefWidth="721.0">
               <columns>
@@ -42,64 +42,68 @@
       </AnchorPane>
       <AnchorPane fx:id="QuantityView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <ComboBox fx:id="ChooseFuelType" layoutX="283.0" layoutY="26.0" prefHeight="31.0" prefWidth="207.0" />
-            <TextField fx:id="enterAmount" layoutX="120.0" layoutY="26.0" prefHeight="31.0" prefWidth="149.0" promptText="enter Amount" />
-            <TableView fx:id="minQuantityTable" layoutX="120.0" layoutY="72.0" prefHeight="346.0" prefWidth="600.0">
+            <ComboBox fx:id="ChooseFuelType" layoutX="283.0" layoutY="49.0" prefHeight="31.0" prefWidth="207.0" />
+            <TextField fx:id="enterAmount" layoutX="120.0" layoutY="49.0" prefHeight="31.0" prefWidth="149.0" promptText="enter Amount" />
+            <TableView fx:id="minQuantityTable" layoutX="120.0" layoutY="103.0" prefHeight="315.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="fuelTypecol" prefWidth="200.0" text="Fuel type" />
-                <TableColumn fx:id="Amountcol" prefWidth="200.0" text="Amount" />
-                  <TableColumn fx:id="minQuantitycol" prefWidth="200.0" text="Min quantity" />
+                <TableColumn fx:id="fuelTypecol" prefWidth="150.0" text="Fuel type" />
+                <TableColumn fx:id="Amountcol" prefWidth="150.0" text="Amount" />
+                  <TableColumn fx:id="minQuantitycol" prefWidth="150.0" text="Min quantity" />
+                  <TableColumn fx:id="tankSizecol" prefWidth="150.0" text="Tank Size" />
               </columns>
             </TableView>
-            <Button fx:id="update" layoutX="504.0" layoutY="25.0" mnemonicParsing="false" onMouseClicked="#mouseClicked" prefHeight="30.0" prefWidth="216.0" stylesheets="@styles.css" text="Update" textFill="WHITE">
+            <Button fx:id="update" layoutX="504.0" layoutY="49.0" mnemonicParsing="false" onMouseClicked="#mouseClicked" prefHeight="30.0" prefWidth="216.0" stylesheets="@styles.css" text="Update" textFill="WHITE">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
+            <Text layoutX="130.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="enter amont" wrappingWidth="108.49658203125" />
+            <Text layoutX="297.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="choose fuel type" wrappingWidth="149.99999478459358" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="StationReportsView" disable="true" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <AnchorPane fx:id="StationReportsView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
-            <TableView fx:id="ReportTable" layoutX="88.0" layoutY="216.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="624.0">
+            <TableView fx:id="ReportTable" layoutX="88.0" layoutY="235.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="624.0">
                <columns>
-                  <TableColumn fx:id="ReportType" prefWidth="221.0" text="Report Type" />
-                  <TableColumn fx:id="ReportYearcol" prefWidth="169.0" text="Year" />
                   <TableColumn fx:id="ReportQuartercol" prefWidth="233.0" text="Quarter" />
+                  <TableColumn fx:id="ReportYearcol" prefWidth="169.0" text="Year" />
+                  <TableColumn fx:id="ReportType" prefWidth="221.0" text="Report Type" />
                </columns>
             </TableView>
-            <Text layoutX="140.0" layoutY="190.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year :">
+            <Text layoutX="140.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Year :">
                <font>
                   <Font size="15.0" />
                </font>
             </Text>
-            <TextField fx:id="enterYeartxt" layoutX="223.0" layoutY="172.0" />
-            <Button fx:id="chooseYearbtn" layoutX="378.0" layoutY="171.0" mnemonicParsing="false" onAction="#getAllReportByYear" stylesheets="@styles.css" text="show" />
+            <TextField fx:id="enterYeartxt" layoutX="223.0" layoutY="182.0" />
+            <Button fx:id="chooseYearbtn" layoutX="432.0" layoutY="181.0" mnemonicParsing="false" onAction="#getAllReportByYear" stylesheets="@styles.css" text="show" />
             <Text layoutX="14.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Report :" wrappingWidth="252.06494140625">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <ComboBox fx:id="reportTypecombo" layoutX="113.0" layoutY="83.0" onAction="#reportTypecomboHandler" prefWidth="150.0" />
-            <Button fx:id="createReportbtn" layoutX="661.0" layoutY="391.0" mnemonicParsing="false" onAction="#CretaeReportByType" stylesheets="@styles.css" text="create" />
-            <Text layoutX="14.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View created reports">
+            <ComboBox fx:id="reportTypecombo" layoutX="113.0" layoutY="69.0" onAction="#reportTypecomboHandler" prefWidth="150.0" />
+            <Button fx:id="createReportbtn" layoutX="655.0" layoutY="117.0" mnemonicParsing="false" onAction="#CretaeReportByType" stylesheets="@styles.css" text="create" />
+            <Text layoutX="14.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="View created reports">
                <font>
                   <Font size="25.0" />
                </font>
             </Text>
-            <ComboBox fx:id="quartercombox" layoutX="339.0" layoutY="83.0" prefWidth="150.0" />
-            <TextField fx:id="enterYearCreatetxt" layoutX="561.0" layoutY="80.0" prefHeight="31.0" prefWidth="157.0" />
-            <Text layoutX="21.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Report Type:" wrappingWidth="100.67089056968689">
+            <ComboBox fx:id="quartercombox" layoutX="339.0" layoutY="69.0" prefWidth="150.0" />
+            <TextField fx:id="enterYearCreatetxt" layoutX="561.0" layoutY="66.0" prefHeight="31.0" prefWidth="157.0" />
+            <Text layoutX="21.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Report Type:" wrappingWidth="100.67089056968689">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Text layoutX="280.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter:" wrappingWidth="70.00000751018524">
+            <Text layoutX="280.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quarter:" wrappingWidth="70.00000751018524">
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Text layoutX="525.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year:" wrappingWidth="73.99999392032623">
+            <Text layoutX="525.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Year:" wrappingWidth="73.99999392032623">
                <font>
                   <Font size="15.0" />
                </font></Text>
+            <Text layoutX="219.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* to see report data click twice on wanted row in the table" />
          </children>
       </AnchorPane>
       <Text layoutX="730.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
