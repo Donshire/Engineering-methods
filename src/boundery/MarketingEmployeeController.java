@@ -868,7 +868,7 @@ public class MarketingEmployeeController implements Initializable {
 			fullAddress.append(" ");
 			fullAddress.append(addressNo);
 			Customer customer = new Customer(userName, password, firstName, lastName, mail, id, phoneNumber, 0,
-					fullAddress.toString(), 0, 0, 0, 0, creditCardNo, expDate.toString(), CVV, 0, cusType.toString(),
+					fullAddress.toString(), 0, 0, creditCardNo, expDate.toString(), CVV, cusType.toString(),
 					companyName);
 
 			System.out.println(customer);
