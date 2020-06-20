@@ -43,6 +43,9 @@ public class AnalticData implements Runnable {
 	private static ArrayList<Integer> customerTypeRanks;
 	private static ArrayList<Float> fuelTypeRanks;
 
+	/**
+	 * the thread work on
+	 */
 	public void run() {
 		while (continueThread) {
 			do {
@@ -100,6 +103,14 @@ public class AnalticData implements Runnable {
 		}
 	}
 	
+	/**
+	 * write the analitic data to file
+	 * @param filesRank
+	 * @param customersID
+	 * @param fuelTypeRanks
+	 * @param fuelingHourRanks
+	 * @param customerTypeRank
+	 */
 	private void writeAnalitic(File filesRank,ArrayList<String> customersID, ArrayList<Float> fuelTypeRanks,
 			ArrayList<Float> fuelingHourRanks, ArrayList<Integer> customerTypeRank) {
 		int index =0;
@@ -114,6 +125,10 @@ public class AnalticData implements Runnable {
 		FileManagmentSys.writeToAnaliticData(filesRank, str.toString());
 	}
 	
+	/**
+	 * sleep to the next sunday 00:00
+	 * @return
+	 */
 	private boolean threadSleep() {
 		boolean flag = false;// didn't finish
 		while (continueThread && !flag)
@@ -127,6 +142,10 @@ public class AnalticData implements Runnable {
 		return false;
 	}
 
+	/**
+	 * get All Customers ID
+	 * @return
+	 */
 	public static ArrayList<String> getAllCustomersID() {
 		Statement stm;
 		ResultSet res;

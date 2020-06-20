@@ -307,6 +307,10 @@ public class MarketingManagerController implements Initializable {
 
 	// ranks table end-------------------------------------------------------
 
+	/**
+	 * handle switching Sale panes next and prev 
+	 * @param event
+	 */
 	@FXML
 	void nextOrPrevWasClicked(ActionEvent event) {
 
@@ -350,6 +354,10 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * handle switching Chart panes next and prev 
+	 * @param index
+	 */
 	public void switchCharts(int index) {
 		switch (index) {
 		case 0:
@@ -368,6 +376,12 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * Checks input year and month if valid
+	 * @param month
+	 * @param year
+	 * @return
+	 */
 	public boolean checkInput(String month, String year) {
 		int val, val2 = 0;
 
@@ -458,6 +472,10 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * show analitic data on click 
+	 * @param event
+	 */
 	@FXML
 	void showAnaliticDataClick(ActionEvent event) {
 		Button btn = (Button) event.getSource();
@@ -478,6 +496,12 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+
+
+	/**
+	 * open pane according to report type
+	 * @param event
+	 */
 	@FXML
 	void selectReportType(ActionEvent event) {
 		if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
@@ -506,6 +530,10 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * handel prev sale button
+	 * @param event
+	 */
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
 		// logics
@@ -517,6 +545,10 @@ public class MarketingManagerController implements Initializable {
 		loadSaleFullDetails(false);
 	}
 
+	/**
+	 * handel next sale button
+	 * @param event
+	 */
 	@FXML
 	void nextSaleDetails(ActionEvent event) {
 		// logics
@@ -578,6 +610,10 @@ public class MarketingManagerController implements Initializable {
 		chooserateType(null);
 	}
 
+	/**
+	 * activate all selected sales
+	 * @param event
+	 */
 	@FXML
 	void activateSale(ActionEvent event) {
 		if (selectedSales.size() <= 0)
@@ -601,6 +637,10 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * select sale status to show in the table
+	 * @param event
+	 */
 	@FXML
 	void chooseSaleType(ActionEvent event) {
 		// GUI-structure
@@ -629,6 +669,9 @@ public class MarketingManagerController implements Initializable {
 		selectedSales.clear();
 	}
 
+	/**
+	 * build Sale Table
+	 */
 	private void buildSaleTable() {
 		GUIBuiltParts.buildCheckBOXForTable(SelectSale, selectedSales);
 
@@ -639,6 +682,10 @@ public class MarketingManagerController implements Initializable {
 		salePercent.setCellValueFactory(new PropertyValueFactory<Sale, Float>("salePercent"));
 	}
 
+	/**
+	 * create new rate
+	 * @param event
+	 */
 	@FXML
 	void createNewRate(ActionEvent event) {
 		// get the data entered
@@ -664,6 +711,11 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * generate report handler
+	 * check the kind of the report and create one accordingly 
+	 * @param event
+	 */
 	@FXML
 	void generateReport(ActionEvent event) {
 		// get data from gui
@@ -726,6 +778,11 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * build Periodic Report Table according to the formate of the report
+	 * @param data
+	 * @param strData
+	 */
 	private void buildPeriodicReportTable(ObservableList<ResponseReportData> data, String[] strData) {
 		TableView<ObservableList<String>> tableView = new TableView<>();
 
@@ -755,6 +812,11 @@ public class MarketingManagerController implements Initializable {
 		PeriodicReportPane.getChildren().add(tableView);
 	}
 
+	/**
+	 * read the string and conert it to arrayList for the Periodic Report formate
+	 * @param str
+	 * @return
+	 */
 	private static ArrayList<String> convertRowToArrayListPeriodicReport(String str) {
 		int i = 0;
 		ArrayList<String> columnData = new ArrayList<String>();
@@ -767,6 +829,9 @@ public class MarketingManagerController implements Initializable {
 		return columnData;
 	}
 
+	/**
+	 * build sale Response Report Table
+	 */
 	private void buildsaleResponseReportTable() {
 		customerIDResponseReport
 				.setCellValueFactory(new PropertyValueFactory<ResponseReportData, String>("customerID"));
@@ -774,6 +839,11 @@ public class MarketingManagerController implements Initializable {
 				.setCellValueFactory(new PropertyValueFactory<ResponseReportData, Float>("amountOfPurchase"));
 	}
 
+	/**
+	 * fill data Object From File resArray 
+	 * @param resArray
+	 * @param data
+	 */
 	private void filldataObjectFromFile(ArrayList<String> resArray, ObservableList<ResponseReportData> data) {
 		// sprerate to lines
 		String[] lines = resArray.get(2).split("\\n");
@@ -799,6 +869,10 @@ public class MarketingManagerController implements Initializable {
 		switchPanes(analiticDataPane);
 	}
 
+	/**
+	 * handle view more sale details
+	 * @param event
+	 */
 	@FXML
 	void viewMoreSaleDetails(ActionEvent event) {
 		currentSaleDataIndex = -1;
@@ -816,6 +890,10 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * log out
+	 * @param event
+	 */
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markitingManager.getId(), markitingManager.getClass().toString());
@@ -824,7 +902,10 @@ public class MarketingManagerController implements Initializable {
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
-//not done
+	/**
+	 * update pricing model rate
+	 * @param event
+	 */
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
 		CustomerRateTypes rateTypeSelected = rateType.getValue();
@@ -837,6 +918,10 @@ public class MarketingManagerController implements Initializable {
 			JOptionPane.showMessageDialog(null, "system bug there isn't data for this report");
 	}
 
+	/**
+	 * choose rate Type
+	 * @param event
+	 */
 	@FXML
 	void chooserateType(ActionEvent event) {
 		RatesStatus selected = rateTypeCombo.getValue();
@@ -863,6 +948,9 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * build Company Rate Table
+	 */
 	private void buildCompanyRateTable() {
 		// create comboBOX
 		GUIBuiltParts.buildCheckBOXForTable(rateCheckBoxSelect, selectedRates);
@@ -880,7 +968,11 @@ public class MarketingManagerController implements Initializable {
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
 	private int currentSaleDataIndex;
 
-	// this class is just to show the table of the report
+	/**
+	 * this class is just to show the table of the report
+	 * @author iamme
+	 *
+	 */
 	protected class ResponseReportData {
 		String customerID;
 		String priceOfPurchase;
@@ -908,6 +1000,10 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * load the selected sales details 
+	 * @param b to move forward or backward
+	 */
 	private void loadSaleFullDetails(boolean b) {
 		Sale sale;
 
@@ -957,6 +1053,9 @@ public class MarketingManagerController implements Initializable {
 		currentPane.setVisible(true);
 	}
 
+	/**
+	 * initialize Analitic Data table
+	 */
 	public void initializeAnaliticData() {
 
 		ObservableList<Month> monthsValues = FXCollections.observableArrayList(Month.values());
@@ -999,6 +1098,13 @@ public class MarketingManagerController implements Initializable {
 		// AnaliticDataTable.setItems(value);
 	}
 
+	
+	/**
+	 * get All Analitic Data By Year And Month
+	 * @param month
+	 * @param year
+	 * @return
+	 */
 	public ObservableList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month, String year) {
 
 		ArrayList<AnaliticDataReport> data = EmployeeCC.getAllAnaliticDataByYearAndMonth(month, year,
@@ -1008,6 +1114,15 @@ public class MarketingManagerController implements Initializable {
 		ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
 		return analiticData;
 	}
+
+	
+	
+	/**
+	 * analitic Data By Year And Month
+	 * @param fileName
+	 * @param type
+	 */
+	public void analiticDataByYearAndMonth(String fileName,String type) {
 
 	public void analiticDataByYearAndMonth(String fileName, String type) {
 
@@ -1085,6 +1200,11 @@ public class MarketingManagerController implements Initializable {
 		//
 	}
 
+	/**
+	 * bar char initilize and fill 
+	 * @param data
+	 * @return
+	 */
 	public ArrayList<XYChart.Series<String, Number>> getpieChartDataForCarNumAndTotalPurchase(String data) {
 		String array[] = data.split("\n");
 		int i;
@@ -1104,6 +1224,11 @@ public class MarketingManagerController implements Initializable {
 		return series1;
 	}
 
+	/**
+	 * get pie Chart Data For Fuel Type
+	 * @param data
+	 * @return
+	 */
 	public ObservableList<PieChart.Data> getpieChartDataForFuelType(String data) {
 		String array[] = data.split("\n");
 		int countArray[] = new int[array.length], sum = 0, i;
@@ -1124,6 +1249,11 @@ public class MarketingManagerController implements Initializable {
 		return pieChartData;
 	}
 
+	/**
+	 * get pie Chart Data For Hours
+	 * @param data
+	 * @return
+	 */
 	public ObservableList<PieChart.Data> getpieChartDataForHours(String data) {
 		String array[] = data.split("\n");
 		int countArray[] = new int[array.length], sum = 0, i;
@@ -1144,6 +1274,9 @@ public class MarketingManagerController implements Initializable {
 		return pieChartData;
 	}
 
+	/**
+	 * initialize Ranks Table
+	 */
 	public void initializeRanksTable() {
 
 		userIDcol.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, String>("userId"));
@@ -1155,6 +1288,9 @@ public class MarketingManagerController implements Initializable {
 				.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, Integer>("fuelTypeAnaleticRank"));
 	}
 
+	/**
+	 * initilize all the data and the structuers of the tabels
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
