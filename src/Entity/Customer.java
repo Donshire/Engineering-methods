@@ -11,28 +11,22 @@ public class Customer extends User implements Serializable {
 	private String adress;
 	private int pricingModel;
 	private int purchaseModule;
-	private int customerTypeAnaleticRank;
-	private int fuelingHourAnaleticRank;
 	private String visaNumber;
 	private String expDate;
 	private String CVV;
-	private int fuelTypeAnaleticRank;
 	private String customerType;
 	private String companyName;
 
 	public Customer(String userName, String password, String firstName, String lastName, String mail, String id,
-			String phoneNumber, int online, String adress, int pricingModel, int customerTypeAnaleticRank,
-			int purchaseModule, int fuelingHourAnaleticRank, String visaNumber, String expDate, String CVV,
-			int fuelTypeAnaleticRank,String customerType, String companyName) {
+			String phoneNumber, int online, String adress, int pricingModel, int purchaseModule, String visaNumber,
+			String expDate, String cVV, String customerType, String companyName) {
 		super(userName, password, firstName, lastName, mail, id, phoneNumber, online);
 		this.adress = adress;
 		this.pricingModel = pricingModel;
 		this.purchaseModule = purchaseModule;
-		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
-		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
 		this.visaNumber = visaNumber;
 		this.expDate = expDate;
-		this.CVV = CVV;
+		CVV = cVV;
 		this.customerType = customerType;
 		this.companyName = companyName;
 	}
@@ -101,37 +95,11 @@ public class Customer extends User implements Serializable {
 		CVV = cVV;
 	}
 
-	public int getCustomerTypeAnaleticRank() {
-		return customerTypeAnaleticRank;
-	}
-
-	public void setCustomerTypeAnaleticRank(int customerTypeAnaleticRank) {
-		this.customerTypeAnaleticRank = customerTypeAnaleticRank;
-	}
-
-	public int getFuelingHourAnaleticRank() {
-		return fuelingHourAnaleticRank;
-	}
-
-	public void setFuelingHourAnaleticRank(int fuelingHourAnaleticRank) {
-		this.fuelingHourAnaleticRank = fuelingHourAnaleticRank;
-	}
-
-	public int getFuelTypeAnaleticRank() {
-		return fuelTypeAnaleticRank;
-	}
-
-	public void setFuelTypeAnaleticRank(int fuelTypeAnaleticRank) {
-		this.fuelTypeAnaleticRank = fuelTypeAnaleticRank;
-	}
-
 	@Override
 	public String toString() {
 		return "Customer [adress=" + adress + ", pricingModel=" + pricingModel + ", purchaseModule=" + purchaseModule
-				+ ", customerTypeAnaleticRank=" + customerTypeAnaleticRank + ", fuelingHourAnaleticRank="
-				+ fuelingHourAnaleticRank + ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV
-				+ ", fuelTypeAnaleticRank=" + fuelTypeAnaleticRank + ", customerType=" + customerType + ", companyName="
-				+ companyName + "]";
+				+ ", visaNumber=" + visaNumber + ", expDate=" + expDate + ", CVV=" + CVV + ", customerType="
+				+ customerType + ", companyName=" + companyName + "]";
 	}
 
 }

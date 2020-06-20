@@ -799,7 +799,7 @@ public class MarketingEmployeeController implements Initializable {
 		cusType = (CustomerTypes) customerTypeCombox.getValue();
 		if (cusType == CustomerTypes.Company) {
 			companyName = customercompanyNameTxt.getText();
-			if (companyName == null)
+			if (companyName == null) {
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 				return;
 			}

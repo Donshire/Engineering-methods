@@ -730,43 +730,6 @@ public class AnalticData implements Runnable {
 	    }
 	    return "-1";
 	}
-	
-
-	/**
-	 * update cutomers ranks
-	 * 
-	 * @param customersID
-	 * @param fuelTypeRanks
-	 * @param fuelingHourRanks
-	 * @param customerTypeRank
-	 * @return
-	 */
-	private static boolean updateCutomersAnaliticdata(ArrayList<String> customersID, ArrayList<Float> fuelTypeRanks,
-			ArrayList<Float> fuelingHourRanks, ArrayList<Integer> customerTypeRank) {
-		PreparedStatement stm;
-		int index = 0;
-		try {
-			stm = ConnectionToDB.conn.prepareStatement(
-					"update myfueldb.customer " + "set customerTypeAnaleticRank = ?, fuelingHourAnaleticRank = ? "
-							+ ", fuelTypeAnaleticRank = ? where id= ?");
-
-			while (index < customersID.size()) {
-				stm.setInt(1, customerTypeRank.get(index));
-				stm.setInt(2, Math.round(fuelingHourRanks.get(index)));
-				stm.setInt(3, Math.round(fuelTypeRanks.get(index)));
-				stm.setString(4, customersID.get(index));
-				stm.addBatch();
-				index++;
-			}
-
-			stm.executeBatch();
-			stm.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 
 	private long calculateTimeToSleep() {
 		LocalDate nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));

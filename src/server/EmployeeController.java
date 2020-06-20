@@ -105,14 +105,12 @@ public class EmployeeController {
 			stm.setInt(8, customer.getOnline());
 			stm.setString(9, customer.getAdress());
 			stm.setInt(10, customer.getPricingModel());
-			stm.setInt(11, customer.getCustomerTypeAnaleticRank());
-			stm.setInt(12, customer.getPurchaseModule());
-			stm.setInt(13, customer.getFuelingHourAnaleticRank());
-			stm.setString(14, customer.getVisaNumber());
-			stm.setString(15, customer.getExpDate());
-			stm.setString(16, customer.getCVV());
-			stm.setString(17, customer.getCustomerType());
-			stm.setString(18, customer.getCompanyName());
+			stm.setInt(11, customer.getPurchaseModule());
+			stm.setString(12, customer.getVisaNumber());
+			stm.setString(13, customer.getExpDate());
+			stm.setString(14, customer.getCVV());
+			stm.setString(15, customer.getCustomerType());
+			stm.setString(16, customer.getCompanyName());
 			stm.executeUpdate();
 
 			stm.close();
@@ -264,24 +262,21 @@ public class EmployeeController {
 	public static Customer getCustomerDetails(String id) {
 		PreparedStatement stm;
 		ResultSet res;
+		ArrayList<Customer> customers=null;
+		
 		try {
 			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.customer where id = ?");
 			stm.setString(1, id);
 			res = stm.executeQuery();
-
-			if (res.next()) {
-				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
-						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
-						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
-						res.getString(15), res.getString(16), res.getInt(17), res.getString(18), res.getString(19));
-				return customer;
-			}
+			
+			customers = BuildObjectByQueryData.BuildCustomer(res);
+			
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			return null;
 		}
-		return null;
+		
+		if(customers==null||customers.isEmpty()) return null;
+		return customers.get(0);
 	}
 
 	/**
