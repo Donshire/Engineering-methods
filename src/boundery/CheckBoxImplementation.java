@@ -2,6 +2,11 @@ package boundery;
 
 import java.io.Serializable;
 
+/**
+ * for the implementaion of the check box
+ * @author iamme
+ *
+ */
 public abstract class CheckBoxImplementation implements Serializable{
 
 	/**

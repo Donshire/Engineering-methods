@@ -60,6 +60,11 @@ public class ServerController implements Initializable {
 	private boolean serverStatus = false;
 	private String serverPortNumber;
 
+	/**
+	 * handle the on of button of the server
+	 * @param event
+	 * @throws Exception
+	 */
 	@FXML
 	public void OnOff(ActionEvent event) throws Exception {
 		if (!serverStatus) {
@@ -77,6 +82,10 @@ public class ServerController implements Initializable {
 		}
 	}
 
+	/**
+	 * when the server start
+	 * @param event
+	 */
 	@FXML
 	public void setServerData(ActionEvent event) {
 		serverPortNumber = portNumber.getText();
@@ -91,6 +100,10 @@ public class ServerController implements Initializable {
 		}
 	}
 
+	/**
+	 * write To Server Console
+	 * @param str
+	 */
 	public static void writeToServerConsole(String str) {
 		StringBuilder sb = new StringBuilder(serverConsoleStatic.getText());
 		sb.append(String.format("<%s><server> %s\n", LocalTime.now(), str));
@@ -132,6 +145,9 @@ public class ServerController implements Initializable {
 
 	}
 
+	/**
+	 * initialize all the data needed
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		serverConsoleStatic=serverConsole;

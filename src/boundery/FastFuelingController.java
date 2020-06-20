@@ -110,11 +110,19 @@ public class FastFuelingController implements Initializable {
 	@FXML
 	private Text totalPrice;
 
+	/**
+	 * return to the main log in pain
+	 * @param event
+	 */
 	@FXML
 	void backToLogInPage(ActionEvent event) {
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
+	/**
+	 * handle Radio Select
+	 * @param event
+	 */
 	@FXML
 	void handleRadioSelect(ActionEvent event) {
 		if (event.getSource().equals(cashRadio))
@@ -123,6 +131,10 @@ public class FastFuelingController implements Initializable {
 			cashRadio.setSelected(false);
 	}
 
+	/**
+	 * proced Payment handler check the validety of the inputs
+	 * @param event
+	 */
 	@FXML
 	void procedPayment(ActionEvent event) {
 		// create FyelPurchase Object
@@ -165,6 +177,10 @@ public class FastFuelingController implements Initializable {
 		MasterGUIController.getMasterGUIController().switchWindows("FastFueling.fxml");
 	}
 
+	/**
+	 * select next to payment and check the validity of the input
+	 * @param event
+	 */
 	@FXML
 	void nextToPayment(ActionEvent event) {
 		companyName = companiesCombo.getValue();
@@ -232,6 +248,10 @@ public class FastFuelingController implements Initializable {
 		pumpNumber.setText(String.format("Pump Number %.0f", resDetails.get(5)));
 	}
 
+	/**
+	 * load data of the company
+	 * @param event
+	 */
 	@FXML
 	void selectCompany(ActionEvent event) {
 		companyName = companiesCombo.getValue();
@@ -277,6 +297,9 @@ public class FastFuelingController implements Initializable {
 
 	}
 
+	/**
+	 * initialize the data and build the tabels
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -300,6 +323,9 @@ public class FastFuelingController implements Initializable {
 		pubmpNumberCombo.setItems(pumpsID);
 	}
 
+	/**
+	 * fill companies Combo
+	 */
 	private void fillcompaniesCombo() {
 		ObservableList<String> companies = FXCollections.observableArrayList();
 		// fill the ObservableList from the set
@@ -309,6 +335,10 @@ public class FastFuelingController implements Initializable {
 		companiesCombo.setItems(companies);
 	}
 
+	/**
+	 * fill stations ID Combo
+	 * @param stationsId
+	 */
 	private void fillstationsIDCombo(ArrayList<Integer> stationsId) {
 		ObservableList<Integer> stationsID = FXCollections.observableArrayList();
 

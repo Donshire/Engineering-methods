@@ -15,6 +15,13 @@ import javafx.util.Callback;
 
 public class GUIBuiltParts {
 
+	/**
+	 * Geniric Check box
+	 * @param <T>
+	 * @param <S>
+	 * @param CheckBoxSelect
+	 * @param selected
+	 */
 	public static <T extends CheckBoxImplementation,S> void buildCheckBOXForTable(TableColumn<T,S> CheckBoxSelect,ArrayList<T> selected) {
 		CheckBoxSelect
 				.setCellValueFactory(new Callback<CellDataFeatures<T,S>, ObservableValue<S>>() {

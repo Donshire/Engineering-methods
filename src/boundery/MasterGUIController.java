@@ -12,6 +12,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 
+/**
+ * MasterGUIController is singleton
+ * manage the system Main panes FXML 
+ * @author iamme
+ *
+ */
 public class MasterGUIController {
 
 	private static MasterGUIController single = new MasterGUIController(); 
