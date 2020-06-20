@@ -517,17 +517,17 @@ public class AnalticData implements Runnable {
 			
 			for(int k=0;k<5;k++) {
 				str.append(String.format("%-15.0f%-10d\n",purchase,countSumPurchase[k]));
-				if (index % 2 == 0)
+				if (k % 2 == 0)
 					purchase *= 5;
 				else
 					purchase *= 2;
 			}
 			
-			str.append(String.format("%-10s%-10s\n","car count","count"));
-			str.append(String.format("%-10d%-10d\n",3,countSumCar[0]));
-			str.append(String.format("%-10d%-10d\n",9,countSumCar[1]));
-			str.append(String.format("%-10d%-10d\n",15,countSumCar[2]));
-			str.append(String.format("%-10d%-10d\n",21,countSumCar[3]));
+			str.append(String.format("%-15s%-10s\n","car count","count"));
+			str.append(String.format("%-15d%-10d\n",3,countSumCar[0]));
+			str.append(String.format("%-15d%-10d\n",9,countSumCar[1]));
+			str.append(String.format("%-15d%-10d\n",15,countSumCar[2]));
+			str.append(String.format("%-15d%-10d\n",21,countSumCar[3]));
 			
 			FileManagmentSys.writeToAnaliticData(filesStatistic, str.toString());
 			

@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -51,7 +52,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -259,7 +264,13 @@ public class MarketingManagerController implements Initializable {
 	private Button prevbtn;
 
 	@FXML
-	private PieChart pieChart2;
+	private BarChart barChart;
+	
+	@FXML
+	private NumberAxis numberAxis;
+	
+	@FXML
+	private CategoryAxis categoryAxis;
 
 	@FXML
 	private PieChart pieChart3;
@@ -295,6 +306,7 @@ public class MarketingManagerController implements Initializable {
 
 		if (btn.equals(nextbtn)) {
 			pie_index++;
+			switchCharts(pie_index);
 			prevbtn.setDisable(false);
 			if (pie_index == 2)
 				nextbtn.setDisable(true);
@@ -302,9 +314,28 @@ public class MarketingManagerController implements Initializable {
 
 		else if (btn.equals(prevbtn)) {
 			pie_index--;
+			switchCharts(pie_index);
 			nextbtn.setDisable(false);
 			if (pie_index == 0)
 				prevbtn.setDisable(true);
+		}
+	}
+	
+	public void switchCharts(int index) {
+		switch(index) {
+		case 0:
+			pieChart1.setVisible(true);
+			barChart.setVisible(false);
+			break;
+		case 1:
+			pieChart1.setVisible(false);
+			barChart.setVisible(true);
+			pieChart3.setVisible(false);
+			break;
+		case 2:
+			pieChart3.setVisible(true);
+			barChart.setVisible(false);
+			break;
 		}
 	}
 
@@ -923,8 +954,9 @@ public class MarketingManagerController implements Initializable {
 					}
 						
 					else {
-						
 						switchPanes(analiticRankPane);
+						analiticDataByYearAndMonth(
+								clickedRow.getFileName(),FileManagmentSys.customerAnaliticData);
 					}
 				}
 			});
@@ -974,8 +1006,8 @@ public class MarketingManagerController implements Initializable {
 				try {
 					fr = new FileReader(fily);
 					br = new BufferedReader(fr); // creates a buffering character input stream
+					
 					while ((str = br.readLine()) != null) {
-						
 						if(lineCounter>=3&&lineCounter<=10)firstData.append(str + "\n");
 						if(lineCounter>=14&&lineCounter<=18)secondData.append(str + "\n");
 						if(lineCounter>=20&&lineCounter<=23)secondData.append(str + "\n");
@@ -984,6 +1016,10 @@ public class MarketingManagerController implements Initializable {
 						lineCounter++;
 					}
 					pieChart1.setData(getpieChartDataForHours(firstData.toString()));
+					pieChart3.setData(getpieChartDataForFuelType(thirdData.toString()));
+					barChart.getData().addAll(getpieChartDataForCarNumAndTotalPurchase(secondData.toString()));
+					
+					//
 				}
 				catch (IOException e) {
 					e.printStackTrace();
@@ -992,15 +1028,74 @@ public class MarketingManagerController implements Initializable {
 			}
 			//
 			else {
-				
+				try {
+					fr = new FileReader(fily);
+					br = new BufferedReader(fr); // creates a buffering character input stream
+					ArrayList<UserAnaliticRanks> userDtails= new ArrayList<UserAnaliticRanks>();
+					
+					while ((str = br.readLine()) != null) {
+						if(lineCounter>=2) {
+							userDtails.add(new UserAnaliticRanks(
+									str.substring(0,15).replaceAll(" ", ""), Integer.parseInt(str.substring(15,30).replaceAll(" ", "")),
+									Integer.parseInt(str.substring(30,45).replaceAll(" ", "")), Integer.parseInt(str.substring(45,60).replaceAll(" ", ""))));
+						}
+						lineCounter++;
+					}
+					
+					//
+					System.out.println(userDtails);
+					ObservableList<UserAnaliticRanks> analiticData = FXCollections.observableArrayList(userDtails);
+					analiticRanksTable.setItems(analiticData);
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		//ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
-		
-		//for all the charts
-		
+		//
 	}
 
+	public ArrayList<XYChart.Series<String, Number>> getpieChartDataForCarNumAndTotalPurchase(String data) {
+		String array[] = data.split("\n");
+		int i;
+		
+		ArrayList<XYChart.Series<String, Number>> series1 = new ArrayList<XYChart.Series<String, Number>>(); 
+		//
+		for(i=0;i<array.length;i++) {
+			XYChart.Series<String, Number> temp = new XYChart.Series<String, Number>();
+			//
+			temp.setName(array[i].substring(0,15).replaceAll(" ", ""));
+			
+			temp.getData().add(new XYChart.Data<>(
+					array[i].substring(0,15).replaceAll(" ", ""),
+							Integer.parseInt(array[i].substring(15,array[i].length()).replaceAll(" ", ""))));
+			series1.add(temp);
+		}
+		
+		return series1;
+	}
+	
+	public ObservableList<PieChart.Data> getpieChartDataForFuelType(String data) {
+		String array[] = data.split("\n");
+		int countArray[] =new int[array.length],sum=0,i;
+		
+		ObservableList<PieChart.Data> pieChartData =
+				FXCollections.observableArrayList();
+		
+		for(i=0;i<array.length;i++) {
+			countArray[i]= Integer.parseInt(array[i].substring(15).replaceAll(" ", ""));
+			sum+=countArray[i];
+		}
+		
+		//
+		for(i=0;i<array.length;i++) {
+			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)",array[i].substring(0,15).replaceAll(" ", ""),
+					(int)(((float)countArray[i]/sum)*100),"%"),countArray[i]));
+		}
+
+		return pieChartData;
+	}
+	
 	public ObservableList<PieChart.Data> getpieChartDataForHours(String data) {
 		String array[] = data.split("\n");
 		int countArray[] =new int[array.length],sum=0,i;
@@ -1094,6 +1189,8 @@ public class MarketingManagerController implements Initializable {
 				.observableArrayList(MarkitingManagerReport.values());
 		reportKindCombo.setItems(MarkitingReportType);
 
+		pieChart1.setVisible(true);
+		
 	}
 	
 
