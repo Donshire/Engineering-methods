@@ -111,7 +111,7 @@ public class LogInController {
 						switchWindows("StationManagerGUI.fxml");
 						break;
 						
-					case "markitig employee":
+					case "marketig employee":
 						MarketingEmployeeController.markem=employee;
 						//
 						MasterGUIController.getMasterGUIController().

@@ -62,469 +62,626 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MarketingEmployeeController.
+ */
 public class MarketingEmployeeController implements Initializable {
 
+	/** The hellomessage. */
 	@FXML
 	private Text hellomessage;
 
-	@FXML
-	private Button MainPaneBtn;
-
-	@FXML
-	private Pane MainPane;
-
+	/** The Notifications lbl. */
 	@FXML
 	private Label NotificationsLbl;
 
+	/** The add customer btn. */
 	@FXML
 	private Button addCustomerBtn;
 
+	/** The New client pane. */
 	@FXML
 	private Pane NewClientPane;
 
+	/** The Id lbl. */
 	@FXML
 	private Label IdLbl;
 
+	/** The First name lbl. */
 	@FXML
 	private Label FirstNameLbl;
 
+	/** The Last name lbl. */
 	@FXML
 	private Label LastNameLbl;
 
+	/** The Email lbl. */
 	@FXML
 	private Label EmailLbl;
 
+	/** The Credit card no lbl. */
 	@FXML
 	private Label CreditCardNoLbl;
 
+	/** The Exp date lbl. */
 	@FXML
 	private Label ExpDateLbl;
 
+	/** The CVV lbl. */
 	@FXML
 	private Label CVVLbl;
 
+	/** The Registration next btn. */
 	@FXML
 	private Button RegistrationNextBtn;
 
+	/** The OR lbl. */
 	@FXML
 	private Label ORLbl;
 
+	/** The Registration finish btn. */
 	@FXML
 	private Button RegistrationFinishBtn;
 
+	/** The ID txt. */
 	@FXML
 	private TextField IDTxt;
 
+	/** The First name txt. */
 	@FXML
 	private TextField FirstNameTxt;
 
+	/** The Last name txt. */
 	@FXML
 	private TextField LastNameTxt;
 
+	/** The Email txt. */
 	@FXML
 	private TextField EmailTxt;
 
+	/** The Credit card txt. */
 	@FXML
 	private TextField CreditCardTxt;
 
+	/** The Exp date txt. */
 	@FXML
 	private TextField ExpDateTxt;
 
+	/** The CVV txt. */
 	@FXML
 	private TextField CVVTxt;
 
+	/** The Phone lbl. */
 	@FXML
 	private Label PhoneLbl;
 
+	/** The Address lbl. */
 	@FXML
 	private Label AddressLbl;
 
+	/** The Phone txt. */
 	@FXML
 	private TextField PhoneTxt;
 
+	/** The Address T xt. */
 	@FXML
 	private TextField AddressTXt;
 
+	/** The User name lbl. */
 	@FXML
 	private Label UserNameLbl;
 
+	/** The User name txt. */
 	@FXML
 	private TextField UserNameTxt;
 
+	/** The password lbl. */
 	@FXML
 	private Label passwordLbl;
 
+	/** The Password txt. */
 	@FXML
 	private TextField PasswordTxt;
 
+	/** The car and modle btn. */
 	@FXML
 	private Button carAndModleBtn;
 
+	/** The car and model pane. */
 	@FXML
 	private Pane carAndModelPane;
 
+	/** The car number lbl. */
 	@FXML
 	private Label carNumberLbl;
 
+	/** The car number txt. */
 	@FXML
 	private TextField carNumberTxt;
 
+	/** The pricing model combox. */
 	@FXML
 	private ComboBox<PricingModel> pricingModelCombox;
 
+	/** The pricing model lbl. */
 	@FXML
 	private Label pricingModelLbl;
 
+	/** The purchase model lbl. */
 	@FXML
 	private Label purchaseModelLbl;
 
+	/** The purchase model combox. */
 	@FXML
 	private ComboBox<PurchaseModel> purchaseModelCombox;
 
+	/** The car and model finish btn. */
 	@FXML
 	private Button carAndModelFinishBtn;
 
+	/** The car and model ID lbl. */
 	@FXML
 	private Label carAndModelIDLbl;
 
+	/** The car and model ID txt. */
 	@FXML
 	private TextField carAndModelIDTxt;
 
+	/** The fuel type lbl. */
 	@FXML
 	private Label fuelTypeLbl;
 
+	/** The Fuel type combox. */
 	@FXML
 	private ComboBox<String> FuelTypeCombox;
 
+	/** The car and model lbl. */
 	@FXML
 	private Label carAndModelLbl;
 
+	/** The upload customer btn. */
 	@FXML
 	private Button uploadCustomerBtn;
 
+	/** The open update customer pane. */
 	@FXML
 	private Button openUpdateCustomerPane;
 
+	/** The update customer pane. */
 	@FXML
 	private Pane updateCustomerPane;
 
+	/** The update customer lbl. */
 	@FXML
 	private Label updateCustomerLbl;
 
+	/** The enter customer ID lbl. */
 	@FXML
 	private Label enterCustomerIDLbl;
 
+	/** The Update id txt. */
 	@FXML
 	private TextField UpdateIdTxt;
 
+	/** The up first name lbl. */
 	@FXML
 	private Label upFirstNameLbl;
 
+	/** The up phone lbl. */
 	@FXML
 	private Label upPhoneLbl;
 
+	/** The up credit card lbl. */
 	@FXML
 	private Label upCreditCardLbl;
 
+	/** The up email lbl. */
 	@FXML
 	private Label upEmailLbl;
 
+	/** The up lastt name lbl. */
 	@FXML
 	private Label upLasttNameLbl;
 
+	/** The up exp date lbl. */
 	@FXML
 	private Label upExpDateLbl;
 
+	/** The up address lbl. */
 	@FXML
 	private Label upAddressLbl;
 
+	/** The up CVV lbl. */
 	@FXML
 	private Label upCVVLbl;
 
+	/** The id change txt. */
 	@FXML
 	private TextField idChangeTxt;
 
+	/** The first name changetxt. */
 	@FXML
 	private TextField firstNameChangetxt;
 
+	/** The last name change txt. */
 	@FXML
 	private TextField lastNameChangeTxt;
 
+	/** The email chang txt. */
 	@FXML
 	private TextField emailChangTxt;
 
+	/** The CCN change txt. */
 	@FXML
 	private TextField CCNChangeTxt;
 
+	/** The exp change txt. */
 	@FXML
 	private TextField expChangeTxt;
 
+	/** The CVV change txt. */
 	@FXML
 	private TextField CVVChangeTxt;
 
+	/** The phone change txt. */
 	@FXML
 	private TextField phoneChangeTxt;
 
+	/** The address change txt. */
 	@FXML
 	private TextField addressChangeTxt;
 
+	/** The save changes btn. */
 	@FXML
 	private Button saveChangesBtn;
 
+	/** The change header. */
 	@FXML
 	private Text changeHeader;
 
+	/** The sales pane. */
 	@FXML
 	private Pane salesPane;
 
+	/** The sale header. */
 	@FXML
 	private Label saleHeader;
 
+	/** The sales tbl. */
 	@FXML
 	private TableView<Sale> salesTbl;
 
+	/** The select column. */
 	@FXML
 	private TableColumn<Sale, Boolean> selectColumn;
 
+	/** The Sale ID column. */
 	@FXML
 	private TableColumn<Sale, Integer> SaleIDColumn;
 
+	/** The status column. */
 	@FXML
 	private TableColumn<Sale, String> statusColumn;
 
+	/** The company column. */
 	@FXML
 	private TableColumn<Sale, String> companyColumn;
 
+	/** The fuel type column. */
 	@FXML
 	private TableColumn<Sale, String> fuelTypeColumn;
 
+	/** The purchase mo column. */
 	@FXML
 	private TableColumn<Sale, String> purchaseMoColumn;
 
+	/** The sale precent column. */
 	@FXML
 	private TableColumn<Sale, Float> salePrecentColumn;
 
+	/** The start T column. */
 	@FXML
 	private TableColumn<Sale, String> startTColumn;
 
+	/** The end T column. */
 	@FXML
 	private TableColumn<Sale, String> endTColumn;
 
+	/** The start D column. */
 	@FXML
 	private TableColumn<Sale, String> startDColumn;
 
+	/** The end D column. */
 	@FXML
 	private TableColumn<Sale, String> endDColumn;
 
+	/** The days column. */
 	@FXML
 	private TableColumn<Sale, String> daysColumn;
 
+	/** The create new sale pane. */
 	@FXML
 	private Pane createNewSalePane;
 
+	/** The customer type lbl. */
 	@FXML
 	private Label customerTypeLbl;
 
+	/** The customer type combox. */
 	@FXML
 	private ComboBox<CustomerTypes> customerTypeCombox;
 
+	/** The customercompany name lbl. */
 	@FXML
 	private Label customercompanyNameLbl;
 
+	/** The customercompany name txt. */
 	@FXML
 	private TextField customercompanyNameTxt;
 
+	/** The new sale lbl. */
 	@FXML
 	private Label newSaleLbl;
 
+	/** The company name lbl. */
 	@FXML
 	private Label companyNameLbl;
 
+	/** The Fuel type lbl. */
 	@FXML
 	private Label FuelTypeLbl;
 
+	/** The sale percents lbl. */
 	@FXML
 	private Label salePercentsLbl;
 
+	/** The sale percent txt. */
 	@FXML
 	private TextField salePercentTxt;
 
+	/** The start time lbl. */
 	@FXML
 	private Label startTimeLbl;
 
+	/** The start time txt. */
 	@FXML
 	private TextField startTimeTxt;
 
+	/** The end time lbl 1. */
 	@FXML
 	private Label endTimeLbl1;
 
+	/** The end time txt. */
 	@FXML
 	private TextField endTimeTxt;
 
+	/** The fuel type txt. */
 	@FXML
 	private TextField fuelTypeTxt;
 
+	/** The start date lbl. */
 	@FXML
 	private Label startDateLbl;
 
+	/** The end date lbl. */
 	@FXML
 	private Label endDateLbl;
 
+	/** The start date picker. */
 	@FXML
 	private DatePicker startDatePicker;
 
+	/** The end date picker. */
 	@FXML
 	private DatePicker endDatePicker;
 
+	/** The days lbl. */
 	@FXML
 	private Label daysLbl;
 
+	/** The sunday. */
 	@FXML
 	private CheckBox sunday;
 
+	/** The monday. */
 	@FXML
 	private CheckBox monday;
 
+	/** The tuesday. */
 	@FXML
 	private CheckBox tuesday;
 
+	/** The wednesday. */
 	@FXML
 	private CheckBox wednesday;
 
+	/** The thuesday. */
 	@FXML
 	private CheckBox thuesday;
 
+	/** The friday. */
 	@FXML
 	private CheckBox friday;
 
+	/** The saturday. */
 	@FXML
 	private CheckBox saturday;
 
+	/** The all check box. */
 	@FXML
 	private CheckBox allCheckBox;
 
+	/** The CVV image 1. */
 	@FXML
 	private ImageView CVVImage1;
 
+	/** The divid exp date lbl. */
 	@FXML
 	private Label dividExpDateLbl;
 
+	/** The up address no lbl. */
 	@FXML
 	private Label upAddressNoLbl;
 
+	/** The up adrdress no txt. */
 	@FXML
 	private TextField upAdrdressNoTxt;
 
+	/** The ch exp format lbl. */
 	@FXML
 	private Label chExpFormatLbl;
 
+	/** The divid exp date 1. */
 	@FXML
 	private Label dividExpDate1;
 
+	/** The exp change year txt. */
 	@FXML
 	private TextField expChangeYearTxt;
 
+	/** The exp change month txt. */
 	@FXML
 	private TextField expChangeMonthTxt;
 
+	/** The Exp date year txt. */
 	@FXML
 	private TextField ExpDateYearTxt;
 
+	/** The Exp date month txt. */
 	@FXML
 	private TextField ExpDateMonthTxt;
 
+	/** The help image 1. */
 	@FXML
 	private ImageView helpImage1;
 
+	/** The save sale btn. */
 	@FXML
 	private Button saveSaleBtn;
 
+	/** The address no txt. */
 	@FXML
 	private TextField addressNoTxt;
 
+	/** The address no lbl. */
 	@FXML
 	private Label addressNoLbl;
 
+	/** The delete sale btn. */
 	@FXML
 	private Button deleteSaleBtn;
 
+	/** The date format lbl. */
 	@FXML
 	private Label dateFormatLbl;
 
+	/** The sales btn. */
 	@FXML
 	private Button salesBtn;
 
+	/** The create sale btn. */
 	@FXML
 	private Button createSaleBtn;
 
+	/** The CVV image. */
 	@FXML
 	private ImageView CVVImage;
 
+	/** The company name txt. */
 	@FXML
 	private Text companyNameTxt;
 
+	/** The help image. */
 	@FXML
 	private ImageView helpImage;
 
+	/** The help CVV btn. */
 	@FXML
 	private Button helpCVVBtn;
 
+	/** The fuel types for sale combox. */
 	@FXML
 	private ComboBox<String> fuelTypesForSaleCombox;
 
+	/** The replace car btn. */
 	@FXML
 	private Button replaceCarBtn;
 
+	/** The old car num lbl. */
 	@FXML
 	private Label oldCarNumLbl;
 
+	/** The old car num txt. */
 	@FXML
 	private TextField oldCarNumTxt;
 
+	/** The choose company 1. */
 	@FXML
 	private ComboBox<String> chooseCompany1;
 
+	/** The choose company 2. */
 	@FXML
 	private ComboBox<String> chooseCompany2;
 
+	/** The choose company 3. */
 	@FXML
 	private ComboBox<String> chooseCompany3;
 
+	/** The second car lbl. */
 	@FXML
 	private Label secondCarLbl;
 
+	/** The second car txt. */
 	@FXML
 	private TextField secondCarTxt;
 
+	/** The choose comp lbl. */
 	@FXML
 	private Label chooseCompLbl;
 
+	/** The secfuel type lbl. */
 	@FXML
 	private Label secfuelTypeLbl;
 
+	/** The sec fuel type combox. */
 	@FXML
 	private ComboBox<String> secFuelTypeCombox;
 
+	/** The current pane. */
 	private Pane currentPane;
+	
+	/** The markem. */
 	public static Employee markem;
+	
+	/** The enter 2 cars flag. */
 	public boolean replaceCarFlag = false, enter2CarsFlag = false;
+	
+	/** The sec car 2. */
 	Car secCar2 = null;
+	
+	/** The date formatter. */
 	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+	/** The fuel types. */
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
+	
+	/** The selected sales. */
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
+	
+	/** The fuel types for sale. */
 	private ArrayList<String> fuelTypesForSale = new ArrayList<String>();
+	
+	/** The companys. */
 	private ArrayList<String> companys = new ArrayList<String>();
 
-	
-
 	/**
-	 * Define the scene of the marketing employee and load the fxml file
-	 * 
-	 * @param primaryStage
-	 * @throws Exception
+	 * Define the scene of the marketing employee and load the fxml file.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
 	 */
-	
+
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -542,20 +699,21 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * This function is to sigh out the user from the system
-	 * @param event
+	 * This function is to sigh out the user from the system.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markem.getId(), markem.getClass().toString());
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
-	
 	/**
-	 * Switching Pans - hide the current pane and make the new pane visible
-	 * @param newPane
+	 * Switching Pans - hide the current pane and make the new pane visible.
+	 *
+	 * @param newPane the new pane
 	 */
 
 	private void switchPanes(Pane newPane) {
@@ -564,15 +722,11 @@ public class MarketingEmployeeController implements Initializable {
 		currentPane.setVisible(true);
 	}
 
-	// switch to the main pane
-	@FXML
-	void openMainPane(ActionEvent event) {
-		switchPanes(MainPane);
-	}
 
 	/**
-	 * Switch to the registration pane
-	 * @param event
+	 * Switch to the registration pane.
+	 *
+	 * @param event the event
 	 */
 	@FXML
 	void openNewClientPane(ActionEvent event) {
@@ -585,10 +739,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * When the user click on the help button (?) in the registration pane the
-	 * function set the CVV image as visible/not visible
-	 * @param event
+	 * function set the CVV image as visible/not visible.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openCVVImgae(MouseEvent event) {
 		if (CVVImage.isVisible())
@@ -599,10 +754,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * When the user click on the help button (?) in the update customer pane the
-	 * function set the CVV image as visible/not visible
-	 * @param event
+	 * function set the CVV image as visible/not visible.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openCVVImgae1(MouseEvent event) {
 		if (CVVImage1.isVisible())
@@ -612,10 +768,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Switch to the creating new sale pane
-	 * @param event
-	 **/
-	
+	 * Switch to the creating new sale pane.
+	 *
+	 * @param event the event
+	 */
+
 	@FXML
 	void openNewSalePane(ActionEvent event) {
 		switchPanes(createNewSalePane);
@@ -624,10 +781,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Switch to update customers pane - for detail update
-	 * @param event
+	 * Switch to update customers pane - for detail update.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openUpdateCustomerPane(ActionEvent event) {
 		upFirstNameLbl.setVisible(false);
@@ -659,10 +817,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Switch to car and model pane
-	 * @param event
+	 * Switch to car and model pane.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openCarAndModelPane(ActionEvent event) {
 		carNumberTxt.setDisable(true);
@@ -684,10 +843,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Switch to sales view pane
-	 * @param event
+	 * Switch to sales view pane.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openSalesPane(ActionEvent event) {
 		switchPanes(salesPane);
@@ -698,8 +858,11 @@ public class MarketingEmployeeController implements Initializable {
 	 * Initializing the scene and define the current pane. Set values into
 	 * pricingModel, purchaseModel, FuelType, customerType, fuelTypesForSale combo
 	 * boxes Define data pickers
+	 *
+	 * @param location the location
+	 * @param resources the resources
 	 */
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("employee:  " + markem);
@@ -710,10 +873,10 @@ public class MarketingEmployeeController implements Initializable {
 		System.out.println("hello");
 		System.out.println(markem);
 		// set the current pane as the main
-		currentPane = MainPane;
+		currentPane = NewClientPane;
 		// show the main pane and hide the others
-		MainPane.setVisible(true);
-		NewClientPane.setVisible(false);
+
+		NewClientPane.setVisible(true);
 		carAndModelPane.setVisible(false);
 		updateCustomerPane.setVisible(false);
 		salesPane.setVisible(false);
@@ -763,10 +926,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Receive all the registration date from the user Check all the input for
-	 * validation Create new customer object and send to server for update
-	 * @param event
+	 * validation Create new customer object and send to server for update.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void registration(ActionEvent event) {
 		int res;
@@ -791,9 +955,7 @@ public class MarketingEmployeeController implements Initializable {
 		expDateMon = ExpDateMonthTxt.getText();
 		expDateYear = ExpDateYearTxt.getText();
 		System.out.println(expDateMon + "  " + expDateYear);
-		expDate.append(expDateMon);
-		expDate.append("/");
-		expDate.append(expDateYear);
+
 		CVV = CVVTxt.getText();
 
 		cusType = (CustomerTypes) customerTypeCombox.getValue();
@@ -810,6 +972,13 @@ public class MarketingEmployeeController implements Initializable {
 				|| expDateMon.isEmpty() || expDateYear.isEmpty() || CVV == null || addressNo == null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
+		}
+
+		if (expDateMon.length() == 1) {
+			StringBuilder build = new StringBuilder();
+			build.append(0);
+			build.append(expDateMon);
+			expDateMon = build.toString();
 		}
 
 		if (!testId(id)) {
@@ -864,6 +1033,10 @@ public class MarketingEmployeeController implements Initializable {
 
 		// creating new Customer object and sending to server
 		else {
+			expDate.append(expDateMon);
+			expDate.append("/");
+			expDate.append(expDateYear);
+
 			fullAddress.append(address);
 			fullAddress.append(" ");
 			fullAddress.append(addressNo);
@@ -902,10 +1075,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Open / hide the company fields according to the customer type
-	 * @param event
+	 * Open / hide the company fields according to the customer type.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openCompany(ActionEvent event) {
 		CustomerTypes type = customerTypeCombox.getValue();
@@ -921,10 +1095,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Receives id , send to server and notify the user if the customer exist in the
-	 * system
-	 * @param event
+	 * system.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void uploadCustomer(ActionEvent event) {
 		String id;
@@ -956,10 +1131,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Open / hide the replacing car fields when the user clicks on the replacing
-	 * car button
-	 * @param event
+	 * car button.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openReplaceCar(ActionEvent event) {
 		if (oldCarNumTxt.isDisable()) {
@@ -978,10 +1154,11 @@ public class MarketingEmployeeController implements Initializable {
 	/**
 	 * Receive all the car and module data from the user Check all the input for
 	 * validation Create new car object and send to server for update Send all the
-	 * module data to the server for update
-	 * @param event
+	 * module data to the server for update.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void updateCarAndModel(ActionEvent event) {
 		String id, carNumber, company1, company2, company3;
@@ -1039,13 +1216,13 @@ public class MarketingEmployeeController implements Initializable {
 			}
 			if (company3 == null) {
 				companyNames.append(company1);
-				companyNames.append(", ");
+				companyNames.append(",");
 				companyNames.append(company2);
 			} else {
 				companyNames.append(company1);
-				companyNames.append(", ");
+				companyNames.append(",");
 				companyNames.append(company2);
-				companyNames.append(", ");
+				companyNames.append(",");
 				companyNames.append(company3);
 			}
 		}
@@ -1148,10 +1325,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Open one or three company comboBoxes according to the selected pricing model
-	 * by the user
-	 * @param event
+	 * by the user.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void openCompanyChooser(ActionEvent event) {
 
@@ -1171,10 +1349,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Receive customer id, send to server to check if exist Upload all the user
-	 * data to the gui for the user
-	 * @param event
+	 * data to the gui for the user.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void showCustomeDetails(ActionEvent event) {
 		String id = UpdateIdTxt.getText();
@@ -1233,10 +1412,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Receive customer data from the user Check all the input for validation Send
-	 * to server for update details of existing customer
-	 * @param event
+	 * to server for update details of existing customer.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void changeCustomerDetails(ActionEvent event) {
 		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
@@ -1253,9 +1433,7 @@ public class MarketingEmployeeController implements Initializable {
 		chCreditNo = CCNChangeTxt.getText();
 		String expDateMon = expChangeMonthTxt.getText();
 		String expDateYear = expChangeYearTxt.getText();
-		expDate.append(expDateMon);
-		expDate.append("/");
-		expDate.append(expDateYear);
+
 		chCvv = CVVChangeTxt.getText();
 		chPhone = phoneChangeTxt.getText();
 		chAddress = addressChangeTxt.getText();
@@ -1267,7 +1445,16 @@ public class MarketingEmployeeController implements Initializable {
 				|| expDateYear.isEmpty() || chCvv == null || chPhone == null || chAddress == null || chId == null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
+
 		}
+
+		if (expDateMon.length() == 1) {
+			StringBuilder build = new StringBuilder();
+			build.append(0);
+			build.append(expDateMon);
+			expDateMon = build.toString();
+		}
+
 		if (!testId(chId)) {
 			inputMsg.append("ID - 9 digits, " + "\n");
 			flag = true;
@@ -1318,6 +1505,10 @@ public class MarketingEmployeeController implements Initializable {
 		fullAddress.append(" ");
 		fullAddress.append(chAddressNo);
 
+		expDate.append(expDateMon);
+		expDate.append("/");
+		expDate.append(expDateYear);
+
 		upCustomer.add(chId);
 		upCustomer.add(chFirst);
 		upCustomer.add(chLast);
@@ -1336,12 +1527,11 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error ! could not update customer, try again");
 	}
 
-
 	/**
 	 * Initialize the sales table ,using getSales() function to get all the data
-	 * from the server Display all the sales
+	 * from the server Display all the sales.
 	 */
-	
+
 	@FXML
 	void uploadSalesToTable() {
 		// checkBox initializing
@@ -1394,10 +1584,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * This function asks for all the sales data from the server and return it to
-	 * uploadSalesToTable()
+	 * uploadSalesToTable().
+	 *
 	 * @return ObservableList<Sale>
 	 */
-	
+
 	public ObservableList<Sale> getSales() {
 		ArrayList<Sale> sale = EmployeeCC.getAllSales();
 		ObservableList<Sale> sales = FXCollections.observableArrayList(sale);
@@ -1406,10 +1597,11 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Sends array list of sales to the server to delete them from the DB
-	 * @param event
+	 * Sends array list of sales to the server to delete them from the DB.
+	 *
+	 * @param event the event
 	 */
-	
+
 	@FXML
 	void deleteSals(ActionEvent event) {
 		if (EmployeeCC.deleteSales(selectedSales)) {
@@ -1421,11 +1613,12 @@ public class MarketingEmployeeController implements Initializable {
 
 	/**
 	 * Receive data for new sale from the user Check all the input for validation
-	 * Create new sale object and send to sever to insert to the DB
-	 * @param event
-	 * @throws ParseException
+	 * Create new sale object and send to sever to insert to the DB.
+	 *
+	 * @param event the event
+	 * @throws ParseException the parse exception
 	 */
-	
+
 	@FXML
 	void createNewSale(ActionEvent event) throws ParseException {
 		String fuelType, startTime, endTime, startDate = null, endDate = null;
@@ -1449,10 +1642,8 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
-		percent = Float.parseFloat(salePercentTxt.getText());
-		StringBuilder p = new StringBuilder();
-		p.append(percent);
-		if (!checkIfStringContainsOnlyNumbersInFloatType(p.toString())) {
+
+		if (!checkIfStringContainsOnlyNumbersInFloatType(salePercentTxt.getText())) {
 			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: 0.xx");
 			return;
 		}
@@ -1468,12 +1659,17 @@ public class MarketingEmployeeController implements Initializable {
 			inputMsg.append("end time");
 			flag = true;
 		}
+		if (startDate.compareTo(endDate) == 0) {
+			if (startTime.compareTo(endTime) > 0)
+				JOptionPane.showMessageDialog(null, "End time is earlier than start time in the same day");
+			return;
+		}
 
 		if (startDate.compareTo(endDate) > 0) {
 			JOptionPane.showMessageDialog(null, "End date is earlier than start date");
 			return;
 		}
-		
+
 		if (flag) {
 			JOptionPane.showMessageDialog(null, inputMsg.toString());
 			return;
@@ -1498,6 +1694,7 @@ public class MarketingEmployeeController implements Initializable {
 			days.delete(0, days.length());
 			days.append("All");
 		}
+		percent = Float.parseFloat(salePercentTxt.getText());
 		Sale newSale = new Sale(null, SaleStatus.not_Activated.toString(), markem.getCompanyName(), fuelType, percent,
 				startTime, endTime, startDate, endDate, days.toString());
 		if (EmployeeCC.addNewSaleTemp(newSale)) {
@@ -1525,11 +1722,12 @@ public class MarketingEmployeeController implements Initializable {
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * Check if the string is build as float number type
-	 * @param str
+	 * Check if the string is build as float number type.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean checkIfStringContainsOnlyNumbersInFloatType(String str) {
 		boolean flag = false;
 		for (int i = 0; i < str.length(); i++) {
@@ -1540,8 +1738,7 @@ public class MarketingEmployeeController implements Initializable {
 				}
 				flag = false;
 				break;
-			}
-			else if (!flag) {
+			} else if (!flag) {
 				if (str.charAt(i) != '0')
 					return false;
 			}
@@ -1550,11 +1747,12 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Check if the string contains only numbers
-	 * @param str
+	 * Check if the string contains only numbers.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean checkIfStringContainsOnlyNumbers(String str) {
 		boolean flag = true;
 		for (int i = 0; i < str.length(); i++) {
@@ -1567,11 +1765,12 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Test ID format
-	 * @param str
+	 * Test ID format.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean testId(String str) {
 		if ((str.length() == 9) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
@@ -1579,11 +1778,12 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Check if the string contains only characters
-	 * @param str
+	 * Check if the string contains only characters.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean checkIfStringContainsOnlyCharacter(String str) {
 		boolean flag = true;
 		for (int i = 0; i < str.length(); i++) {
@@ -1598,11 +1798,12 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Test phone number format
-	 * @param str
+	 * Test phone number format.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean testPhone(String str) {
 		if ((str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
@@ -1610,37 +1811,38 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Test car number format
-	 * @param str
+	 * Test car number format.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean testCar(String str) {
 		if ((str.length() == 7 || str.length() == 8) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
-
 	/**
-	 * Test credit card number format
-	 * @param str
+	 * Test credit card number format.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean testCreditCard(String str) {
 		if ((str.length() == 16 || str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
-
 	/**
-	 * Test CVV number format
-	 * @param str
+	 * Test CVV number format.
+	 *
+	 * @param str the str
 	 * @return true or false
 	 */
-	
+
 	public static boolean testCVV(String str) {
 		if ((str.length() == 3) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
@@ -1648,38 +1850,43 @@ public class MarketingEmployeeController implements Initializable {
 	}
 
 	/**
-	 * Check id user name exist in the DB
-	 * @param userName
+	 * Check id user name exist in the DB.
+	 *
+	 * @param userName the user name
 	 * @return true or false
 	 */
-	
+
 	public static boolean checkIfUserNameExist(String userName) {
 		return EmployeeCC.checkIfUserNameExist(userName);
 	}
 
 	/**
-	 * Test Expire Date values
-	 * @param month
-	 * @param year
+	 * Test Expire Date values.
+	 *
+	 * @param month the month
+	 * @param year the year
 	 * @return true or false
 	 */
-	
+
 	public static boolean testDateOfExp(String month, String year) {
 		if ((!checkIfStringContainsOnlyNumbers(month)) || (!checkIfStringContainsOnlyNumbers(year)))
 			return false;
 		if ((Integer.parseInt(month) < 1) || (Integer.parseInt(month) > 12))
 			return false;
-		if (Integer.parseInt(year) < 2020)
+		if ((Integer.parseInt(year) == 2020) && (Integer.parseInt(month) < 6))
+			return false;
+		if (Integer.parseInt(year) < 2020 || year.length() > 4)
 			return false;
 		return true;
 	}
 
 	/**
-	 * \ Test time value
-	 * @param time
+	 * \ Test time value.
+	 *
+	 * @param time the time
 	 * @return true or false
 	 */
-	
+
 	public static boolean testTime(String time) {
 		if (Integer.parseInt(time.substring(0, 2)) > 23 || Integer.parseInt(time.substring(0, 2)) < 0)
 			return false;

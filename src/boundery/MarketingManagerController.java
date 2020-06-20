@@ -584,7 +584,7 @@ public class MarketingManagerController implements Initializable {
 		// GUI-structure
 		if (salesTypeCombo.getValue() == SaleStatus.activated) {
 			deActivateSaleBtn.setVisible(true);
-			deActivateSaleBtn.setLayoutX(43);
+			deActivateSaleBtn.setLayoutX(146);
 			activateSaleBtn.setVisible(false);
 			salesHeader.setText("Available Activated Sales:");
 		} else {

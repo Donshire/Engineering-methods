@@ -205,7 +205,7 @@ public class StationManagerController implements Initializable {
 	@FXML
 	void LogOut(ActionEvent event) {
 		//markiting manager
-		//UserCC.logOut(markem.getId(), markem.getClass().toString());
+		UserCC.logOut(stationManager.getId(), stationManager.getClass().toString());
 		
 		//logOut
 		MasterGUIController.getMasterGUIController().
@@ -333,6 +333,8 @@ public class StationManagerController implements Initializable {
 					JOptionPane.showMessageDialog(null, "input must be greater then 0");
 					return;
 				}
+			
+				//need queru------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@------------------------------------------
 
 				// All tests passed. Input is correct
 				EmployeeCC.updateFuelMinQuantitybyType(stationManager.getStationID(), ChooseFuelType.getValue(), val);

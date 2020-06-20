@@ -419,7 +419,6 @@ public class AnalticData implements Runnable {
 		ResultSet res;
 		ArrayList<Integer> customerTypeAnaleticRank = new ArrayList<Integer>();
 		int countSumPurchase[] = new int[5];
-		int countSumCar[] = new int[4];
 
 		try {
 			// Totale purchases
@@ -456,13 +455,8 @@ public class AnalticData implements Runnable {
 
 			while (res.next()) {
 				price = res.getInt(2);
-				if (price == null)
-					rankPercent = 1;
-				else {
-					rankPercent = (int) rankedFuels.get(KeyplusRank.indexOfRang(price, rankedFuels)).rank;
-					countSumPurchase[rankPercent]++;
-				}
-				
+				rankPercent = (int) rankedFuels.get(KeyplusRank.indexOfRang(price, rankedFuels)).rank;
+				countSumPurchase[KeyplusRank.indexOfRang(price, rankedFuels)]++;
 				customerTypeAnaleticRank.add(rankPercent);
 			}
 

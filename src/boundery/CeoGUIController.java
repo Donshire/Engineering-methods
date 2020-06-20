@@ -122,8 +122,7 @@ public class CeoGUIController implements Initializable {
 	CheckBoxImplementation selecting;
 
 	/** The Main pane. */
-	@FXML
-	private AnchorPane MainPane;
+
 
 	/** The reports pane. */
 	@FXML
@@ -466,9 +465,7 @@ public class CeoGUIController implements Initializable {
 		if (event.getSource() == logOut) {
 			UserCC.logOut(ceo.getId(), ceo.getClass().toString());
 			MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
-		} else if (event.getSource() == MainPaneButton) {
-			switchPanes(MainPane);
-		}
+		} 
 
 	}
 
@@ -573,11 +570,10 @@ public class CeoGUIController implements Initializable {
 				.observableArrayList(new EmployeeCC().getBuildRateApprovalDetails(ceo.getCompanyName()));
 		RequestListTable.setItems(data1);
 		// ArrayList<PricingModule> companyPricingModuleByStatus;
-		currentPane = MainPane;
+		currentPane = RateApprovalPane;
 		ceo_hello.setText(ceo.getFirstName());
 		// show the main pane and hide the others1
 		currentPane.setVisible(true);
-		RateApprovalPane.setVisible(false);
 		reportsPane.setVisible(false);
 		SetMaxPriceOfGasPane.setVisible(false);
 	}

@@ -46,7 +46,7 @@ public class MyFuelServer extends AbstractServer {
 	//
 	private AutoMaticPurchaseModel3Calc autoMaticPurchaseModel3Calc;
 	private Thread secThread;
-	
+
 	ArrayList<GasStationOrder> orders;
 	String status;
 
@@ -106,6 +106,16 @@ public class MyFuelServer extends AbstractServer {
 		case logOut:
 			arr = (ArrayList<String>) (message.getObj());
 			String tableName = arr.get(1).toLowerCase().substring(13, arr.get(1).length());
+
+			switch (tableName) {
+			case "customer":
+				break;
+			case "supplier":
+				break;
+			default:
+				tableName = "employee";
+			}
+
 			try {
 				LogINController.updateUserOnlineStatus(tableName, arr.get(0), 0);
 			} catch (SQLException e) {
@@ -126,20 +136,21 @@ public class MyFuelServer extends AbstractServer {
 			break;
 
 		case getPurchasePriceDetails:
-			str =(ArrayList<Object>)message.getObj();
-			sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel
-					((String)str.get(0),(String)str.get(1),(String)str.get(2),(int)str.get(3),(int)str.get(4),dateFormat.format(date),timeDBFormat.format(date)), client);
+			str = (ArrayList<Object>) message.getObj();
+			sendToClientArrayList(FastFuelController.priceCalculationAndPricingModel((String) str.get(0),
+					(String) str.get(1), (String) str.get(2), (int) str.get(3), (int) str.get(4),
+					dateFormat.format(date), timeDBFormat.format(date)), client);
 			break;
 
 		case commitFuelPurchase:
-			str =(ArrayList<Object>)message.getObj();
-			FuelPurchase fuelPurchase = (FuelPurchase)str.get(3);
+			str = (ArrayList<Object>) message.getObj();
+			FuelPurchase fuelPurchase = (FuelPurchase) str.get(3);
 			fuelPurchase.setTime(timeDBFormat.format(date));
 			fuelPurchase.setDate(dateFormat.format(date));
-			
-			sendToClientObject(FastFuelController.commitFuelPurchase(
-					(String)str.get(0),(int)str.get(1),(String)str.get(2),fuelPurchase,(String)str.get(4)),client);
-            break;
+
+			sendToClientObject(FastFuelController.commitFuelPurchase((String) str.get(0), (int) str.get(1),
+					(String) str.get(2), fuelPurchase, (String) str.get(4)), client);
+			break;
 
 		case updatePricingModel:
 			ArrayList<PricingModule> pricingModules = (ArrayList<PricingModule>) message.getObj();
@@ -524,56 +535,57 @@ public class MyFuelServer extends AbstractServer {
 
 		case addModule:
 			ArrayList<Object> param = (ArrayList<Object>) message.getObj();
-				sendToClientObject(EmployeeController.addModule((String) param.get(0), (String) param.get(1),
-						(String) param.get(2)), client);
+			sendToClientObject(
+					EmployeeController.addModule((String) param.get(0), (String) param.get(1), (String) param.get(2)),
+					client);
 			break;
 
 		case updateCar:
 			ArrayList<Object> parame = (ArrayList<Object>) message.getObj();
 			try {
-			sendToClientObject(EmployeeController.updateCar((Car) parame.get(0), (String) parame.get(1)), client);
-			}catch (Exception e) {
+				sendToClientObject(EmployeeController.updateCar((Car) parame.get(0), (String) parame.get(1)), client);
+			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 			}
 			break;
-			
+
 		case getCarCount:
-			 String idForCount = (String)message.getObj();
-			 try {
-					sendToClientObject(EmployeeController.getCarCount(idForCount), client);
-			 }catch (Exception e) {
-				// TODO: handle exception
-				 e.printStackTrace();
-			}
-			 break;
-			 
-		case getAllAnaliticDataByYearAndMonth:
-		ArrayList<String> parameters = (ArrayList<String>) message.getObj();
-		String m=parameters.get(0);
-		String y=parameters.get(1);
-		String company=parameters.get(2);
-		try {
-			sendToClientObject(CompanyFuelControllerServer.getAllAnaliticDataByYearAndMonth(m, y,company),client);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		break;
-		
-		case getAnaliticFile:
-			ArrayList<String> parameters2 = (ArrayList<String>) message.getObj();
-			String fileName=parameters2.get(0);
-			String company2=parameters2.get(1);
-			String type=parameters2.get(2);
+			String idForCount = (String) message.getObj();
 			try {
-				client.sendToClient(
-						new Message(convertFileToSeializable(CompanyFuelControllerServer.getAnaliticFile(fileName,company2,type)),
-								Commands.reciveFile));
+				sendToClientObject(EmployeeController.getCarCount(idForCount), client);
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+			break;
+
+		case getAllAnaliticDataByYearAndMonth:
+			ArrayList<String> parameters = (ArrayList<String>) message.getObj();
+			String m = parameters.get(0);
+			String y = parameters.get(1);
+			String company = parameters.get(2);
+			try {
+				sendToClientObject(CompanyFuelControllerServer.getAllAnaliticDataByYearAndMonth(m, y, company), client);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
-		
+
+		case getAnaliticFile:
+			ArrayList<String> parameters2 = (ArrayList<String>) message.getObj();
+			String fileName = parameters2.get(0);
+			String company2 = parameters2.get(1);
+			String type = parameters2.get(2);
+			try {
+				client.sendToClient(new Message(
+						convertFileToSeializable(CompanyFuelControllerServer.getAnaliticFile(fileName, company2, type)),
+						Commands.reciveFile));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		default:
 			System.out.println("default");
 		}
@@ -653,51 +665,51 @@ public class MyFuelServer extends AbstractServer {
 		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
 		// port " + getPort());
-		//must be created first before the analitic thread 
+		// must be created first before the analitic thread
 		FileManagmentSys.createSystemWorkSpace();
-		
+
 		//
-		analticData = new AnalticData(); 
+		analticData = new AnalticData();
 		thread = new Thread(analticData);
 		thread.start();
-		
+
 		System.out.println("Server listening for connections on port " + getPort());
-		
+
 		//
-		autoMaticPurchaseModel3Calc = new AutoMaticPurchaseModel3Calc(); 
+		autoMaticPurchaseModel3Calc = new AutoMaticPurchaseModel3Calc();
 		secThread = new Thread(autoMaticPurchaseModel3Calc);
 		secThread.start();
 	}
 
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
-	    // connections.");
-		analticData.continueThread=false;
+		// connections.");
+		analticData.continueThread = false;
 		try {
 			thread.interrupt();
 			thread.join(1000);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
 			ConnectionToDB.conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		System.out.println("Server has stopped listening for connections.");
-		
+
 		//
-		autoMaticPurchaseModel3Calc.continueThread=false;
+		autoMaticPurchaseModel3Calc.continueThread = false;
 		try {
 			secThread.interrupt();
 			secThread.join(1000);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// log out all the users
 		int i = 0, size = usersOnline.size();
 		UserOnline users;

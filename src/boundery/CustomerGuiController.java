@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import Entity.Customer;
 import Entity.GasOrder;
 import client.CustomerCC;
+import client.UserCC;
 import enums.OrderStatus;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -177,6 +178,7 @@ public class CustomerGuiController implements Initializable {
 
 	@FXML
 	void logOut(ActionEvent event) {
+		UserCC.logOut(customer.getId(), customer.getClass().toString());
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 	
