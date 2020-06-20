@@ -466,68 +466,21 @@ public class AnalticData implements Runnable {
 				customerTypeAnaleticRank.add(rankPercent);
 			}
 
-			// ---------------------------------------------------------------------------
-
-			// Number of cars
-			ArrayList<KeyplusRank> rankedCarsNum = new ArrayList<KeyplusRank>();
-			rankedFuels.add(new KeyplusRank("3", 1));
-			rankedFuels.add(new KeyplusRank("9", 2));
-			rankedFuels.add(new KeyplusRank("15", 3));
-			rankedFuels.add(new KeyplusRank("21", 4));
-
-			statment = ConnectionToDB.conn.createStatement();
-			res = statment.executeQuery("Select cus.id,count(carNumber),companyNamesSubscribed\r\n" + 
-					"from myfueldb.customer as cus\r\n" + 
-					"left join myfueldb.car as car \r\n" + 
-					"on car.CustomerID=cus.id \r\n" + 
-					"left join myfueldb.customermodule as cum \r\n" + 
-					"on cum.CustomerID=cus.id \r\n" + 
-					"group by cus.id order by cus.id");
-
-			int carNumber,j;
-			index = 0;
-			String[] lines;
-			
-			while (res.next()) {
-				carNumber = res.getInt(2);
-				//
-				if (carNumber > 0) {
-					if(res.getString(3)!=null) {
-						lines = res.getString(3).split(",");
-						for(j=0;j<lines.length;j++) {
-							if(lines[j].compareTo(company)==0) {
-								customerTypeAnaleticRank.set(index, (int) (customerTypeAnaleticRank.get(index)
-										+ rankedFuels.get(KeyplusRank.indexOfRang(carNumber, rankedFuels)).rank));
-								countSumCar[KeyplusRank.indexOfRang(carNumber, rankedFuels)]++;
-							}
-						}
-					}//inner if
-					
-				}
-				//
-					index++;
-			}
-			
+			// --------------------------------------------------------------------------
 			//write statistics to file
 			StringBuilder str = new StringBuilder();
 			purchase = 1000;
 			
 			str.append("car number and total purchase\n");
-			str.append(String.format("%-15s%-10s\n","sum purchase","count"));
+			str.append(String.format("%-15s%-10s","sum purchase","count"));
 			
 			for(int k=0;k<5;k++) {
-				str.append(String.format("%-15.0f%-10d\n",purchase,countSumPurchase[k]));
+				str.append(String.format("\n%-15.0f%-10d",purchase,countSumPurchase[k]));
 				if (k % 2 == 0)
 					purchase *= 5;
 				else
 					purchase *= 2;
 			}
-			
-			str.append(String.format("%-15s%-10s\n","car count","count"));
-			str.append(String.format("%-15d%-10d\n",3,countSumCar[0]));
-			str.append(String.format("%-15d%-10d\n",9,countSumCar[1]));
-			str.append(String.format("%-15d%-10d\n",15,countSumCar[2]));
-			str.append(String.format("%-15d%-10d\n",21,countSumCar[3]));
 			
 			FileManagmentSys.writeToAnaliticData(filesStatistic, str.toString());
 			

@@ -949,6 +949,15 @@ public class MarketingManagerController implements Initializable {
 					AnaliticDataReport clickedRow = row.getItem();
 					if(clickedRow.getType().compareTo(FileManagmentSys.statisticData)==0) {
 						switchPanes(piePane);
+						
+						pie_index=0;
+						pieChart1.setVisible(true);
+						pieChart3.setVisible(false);
+						barChart.setVisible(false);
+						
+						nextbtn.setDisable(false);
+						prevbtn.setDisable(true);
+						
 						analiticDataByYearAndMonth(
 								clickedRow.getFileName(),FileManagmentSys.statisticData);
 					}
@@ -1010,11 +1019,14 @@ public class MarketingManagerController implements Initializable {
 					while ((str = br.readLine()) != null) {
 						if(lineCounter>=3&&lineCounter<=10)firstData.append(str + "\n");
 						if(lineCounter>=14&&lineCounter<=18)secondData.append(str + "\n");
-						if(lineCounter>=20&&lineCounter<=23)secondData.append(str + "\n");
-						if(lineCounter>=27)thirdData.append(str + "\n");
+						if(lineCounter>=21)thirdData.append(str + "\n");
 						
 						lineCounter++;
 					}
+					pieChart1.getData().clear();
+					pieChart3.getData().clear();
+					barChart.getData().clear();
+					
 					pieChart1.setData(getpieChartDataForHours(firstData.toString()));
 					pieChart3.setData(getpieChartDataForFuelType(thirdData.toString()));
 					barChart.getData().addAll(getpieChartDataForCarNumAndTotalPurchase(secondData.toString()));
@@ -1064,7 +1076,7 @@ public class MarketingManagerController implements Initializable {
 		for(i=0;i<array.length;i++) {
 			XYChart.Series<String, Number> temp = new XYChart.Series<String, Number>();
 			//
-			temp.setName(array[i].substring(0,15).replaceAll(" ", ""));
+			temp.setName(array[i].substring(0,15).replaceAll(" ", "")+"ILS");
 			
 			temp.getData().add(new XYChart.Data<>(
 					array[i].substring(0,15).replaceAll(" ", ""),
