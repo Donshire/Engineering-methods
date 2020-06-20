@@ -148,8 +148,13 @@ public class GasStationControllerServer {
 		return 0;
 	}
 	
-// update the order status and the fuel inventory according to the order
-
+	/**
+	 * The function update the orders status to supplied
+	 * The function sends mail to the station manager to inform that the order was update
+	 * @param orders
+	 * @return true or false
+	 */
+	
 	public static boolean updateOrderStatus(GasStationOrder orders) {
 		PreparedStatement stm1, stm2, stm3;
 		ResultSet res1, res2 = null;

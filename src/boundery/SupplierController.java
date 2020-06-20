@@ -1,5 +1,10 @@
 package boundery;
 
+
+/**
+ * This class contains all the supplier gui functionality
+ */
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -116,6 +121,13 @@ public class SupplierController implements Initializable {
 	public static Supplier supplier;
 	private ArrayList<GasStationOrder> selectedOrders = new ArrayList<GasStationOrder>();
 
+	/**
+	 * Define the scene of the supplier and load the fxml file
+	 * 
+	 * @param primaryStage
+	 * @throws Exception
+	 */
+	
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -133,6 +145,14 @@ public class SupplierController implements Initializable {
 
 	}
 
+	/**
+	 * Show the suitable data in the table according to the selected status the
+	 * function ask for all the orders according to the selected status (
+	 * supplied/confirmed) from the DB and insert to the orders table and display to
+	 * the user
+	 * @param event
+	 */
+	
 	@FXML
 	void chooseOrderType(ActionEvent event) {
 		//show the suitable data according to the selected status
@@ -192,6 +212,14 @@ public class SupplierController implements Initializable {
 		OrdersTbl.setItems(getOrders(supplier.getId(), orderType));
 	}
 
+	/**
+	 * This function send suplierId and the chosen order type to server to
+	 * get back all matching orders The chooseOrderType() function activate it
+	 * @param supplierId
+	 * @param orderType
+	 * @return
+	 */
+	
 	public ObservableList<GasStationOrder> getOrders(String supplierId, String orderType) {
 		ArrayList<GasStationOrder> newOrders = SupplierCC.getAllOrdersByStatus(supplierId, orderType);
 
@@ -199,6 +227,11 @@ public class SupplierController implements Initializable {
 		return orders;
 	}
 
+	/**
+	 * This function is to sigh out the user from the system
+	 * @param event
+	 */
+	
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(supplier.getId(), supplier.getClass().toString());
@@ -208,27 +241,45 @@ public class SupplierController implements Initializable {
 		switchWindows("LogIn.fxml");
 	}
 
-	// Switching Pans - hide the other
+	/**
+	 * Switching Pans - hide the current pane and make the new pane visible
+	 * 
+	 * @param newPane
+	 */
+	
 	private void switchPanes(Pane newPane) {
 		currentPane.setVisible(false);
 		currentPane = newPane;
 		currentPane.setVisible(true);
 	}
 
+	/**
+	 * Switch to the main pane
+	 * 
+	 * @param event
+	 */
 	
-	// switch to the main pane
 	@FXML
 	void openMainPane(ActionEvent event) {
 		switchPanes(SupplierMainPane);
 	}
 
-	// switch to orders pane
+	/**
+	 * Switch to orders pane
+	 * 
+	 * @param event
+	 */
+	
 	@FXML
 	void openOrdersPane(ActionEvent event) {
 		switchPanes(SupplierOrdersPane);
 	}
 
-	// initializing the scene
+	/**
+	 * Initializing the scene and define the current pane.
+	 * Set values into the order type combo box
+	 */
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -247,6 +298,12 @@ public class SupplierController implements Initializable {
 				.observableArrayList(SupplierOrderStatus.confirmed,SupplierOrderStatus.supplied);
 		OrderTypeCombox.setItems(orderTypes);
 	}
+	
+	/**
+	 * The function send all the orders that was selected by the user to the server
+	 * and update their status
+	 * @param event
+	 */
 	
 	@FXML
 	void updateSuppliedOrders(ActionEvent event) {

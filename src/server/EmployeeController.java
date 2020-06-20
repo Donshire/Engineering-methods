@@ -82,6 +82,13 @@ public class EmployeeController {
 		return null;
 	}
 
+	/**
+	 * Inert to the DB all the information for a new customer
+	 * 
+	 * @param customer
+	 * @return true or false
+	 */
+	
 	public static boolean addNewCustmer(Customer customer) {
 		PreparedStatement stm;
 		try {
@@ -118,6 +125,12 @@ public class EmployeeController {
 		return true;
 	}
 
+	/**
+	 * Check if the received customer id exist in the DB
+	 * @param id
+	 * @return int res 0= doen't exist, 1= exist, -1 = error
+	 */
+	
 	public static int checkIfExist(String id) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -137,6 +150,13 @@ public class EmployeeController {
 		}
 	}
 
+
+	/**
+	 * Inert to the DB all the information for a new car
+	 * @param car
+	 * @return true or false
+	 */
+	
 	public static boolean addNewCar(Car car) {
 		PreparedStatement stm;
 		try {
@@ -154,6 +174,15 @@ public class EmployeeController {
 		return true;
 	}
 
+	/**
+	 * Update pricing model and purchase model in the DB for the customer id that
+	 * was received
+	 * @param pricing
+	 * @param purchase
+	 * @param id
+	 * @return true or false
+	 */
+	
 	public static boolean updateModels(String pricing, String purchase, String id) {
 		PreparedStatement stm;
 		int pricingNum = 0, purchaseNum = 0;
@@ -196,6 +225,12 @@ public class EmployeeController {
 		return true;
 	}
 
+	/**
+	 * Select all the details of specific employee according to the received id
+	 * @param workerId
+	 * @return employee object
+	 */
+	
 	public static Employee getEmployeeByWorkerID(int workerId) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -220,6 +255,12 @@ public class EmployeeController {
 		return null;
 	}
 
+	/**
+	 *  Select all the details of specific customer according to the received id
+	 * @param id
+	 * @return customer object
+	 */
+	
 	public static Customer getCustomerDetails(String id) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -227,8 +268,12 @@ public class EmployeeController {
 			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.customer where id = ?");
 			stm.setString(1, id);
 			res = stm.executeQuery();
+
 			if (res.next()) {
-				Customer customer = BuildObjectByQueryData.BuildCustomer(res).get(1);
+				Customer customer = new Customer(res.getString(1), res.getString(2), res.getString(3), res.getString(4),
+						res.getString(5), res.getString(6), res.getString(7), res.getInt(8), res.getString(9),
+						res.getInt(10), res.getInt(11), res.getInt(12), res.getInt(13), res.getString(14),
+						res.getString(15), res.getString(16), res.getInt(17), res.getString(18), res.getString(19));
 				return customer;
 			}
 		} catch (Exception e) {
@@ -239,6 +284,12 @@ public class EmployeeController {
 		return null;
 	}
 
+	/**
+	 * Receive data of a customer to update, and insert the changes to the DB according to the id
+	 * @param update
+	 * @return true or false
+	 */
+	
 	public static boolean updateCustomerDetails(ArrayList<String> update) {
 		PreparedStatement stm;
 		System.out.println(update);
@@ -264,6 +315,12 @@ public class EmployeeController {
 		return true;
 	}
 
+
+	/**
+	 * Create ArrayList<Sale> of all the sales that are in the DB
+	 * @return ArrayList<Sale>
+	 */
+	
 	public static ArrayList<Sale> getAllSales() {
 		PreparedStatement stm;
 		ResultSet res;
@@ -287,6 +344,12 @@ public class EmployeeController {
 		return sales;
 	}
 
+	/**
+	 * Receive sale from client and delete all the sale from DB according to Id 
+	 * @param sale
+	 * @return true or false
+	 */
+	
 	public static boolean deleteSales(Sale sale) {
 		PreparedStatement stm;
 		try {
@@ -302,6 +365,13 @@ public class EmployeeController {
 		return true;
 	}
 
+
+	/**
+	 * Receive sale object from the client and insert it to the DB
+	 * @param sale
+	 * @return true or false
+	 */
+	
 	public static boolean addNewSaleTemp(Sale sale) {
 		PreparedStatement stm;
 		try {
@@ -326,6 +396,12 @@ public class EmployeeController {
 		return true;
 	}
 
+	/**
+	 * Receive company name and return the fuel types that are related to this company name
+	 * @param companyName
+	 * @return ArrayList<String>
+	 */
+	
 	public static ArrayList<String> getFuelTypesByCompany(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -350,19 +426,37 @@ public class EmployeeController {
 		return fuelTypes;
 	}
 
+
+	/**
+	 * Receive user name and check in the customer table in the DB if exist
+	 * @param userName
+	 * @return true or false
+	 */
+	
 	public static boolean checkIfUserNameExist(String userName) {
-		PreparedStatement stm;
-		ResultSet res;
-		System.out.println("user name:  " + userName);
-		String id = null;
+		PreparedStatement stm, stm2, stm3;
+		ResultSet res, res2, res3;
+		String id = null, id2 =null, id3=null;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement("select id from myfueldb.customer where userName=?");
 			stm.setString(1, userName);
 			res = stm.executeQuery();
 			if (res.next())
 				id = res.getString(1);
-			System.out.println("id: " + id);
-			if (!id.isEmpty())
+
+			stm2 = ConnectionToDB.conn.prepareStatement("select id from myfueldb.employee where userName=?");
+			stm2.setString(1, userName);
+			res2 = stm2.executeQuery();
+			if (res2.next())
+				id2 = res2.getString(1);
+
+			stm3 = ConnectionToDB.conn.prepareStatement("select id from myfueldb.supplier where userName=?");
+			stm3.setString(1, userName);
+			res3 = stm3.executeQuery();
+			if (res3.next())
+				id3 = res3.getString(1);
+			
+			if (id != null || id2 != null || id3 != null)
 				return true;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -370,6 +464,11 @@ public class EmployeeController {
 		return false;
 	}
 
+	/**
+	 * Inert all the company names that exist in the DB (without duplicates) to ArrayList
+	 * @return ArrayList<String>
+	 */
+	
 	public static ArrayList<String> getCompanyNames() {
 		ArrayList<String> companyNames = new ArrayList<String>();
 		PreparedStatement stm;
@@ -390,6 +489,14 @@ public class EmployeeController {
 		return companyNames;
 	}
 
+	/**
+	 * Receive details of purchase model and update the customermodule table in the DB
+	 * @param id
+	 * @param purchM
+	 * @param companyNames
+	 * @return true or false
+	 */
+	
 	public static boolean addModule(String id, String purchM, String companyNames) {
 		PreparedStatement stm, stm1;
 		ResultSet res;
@@ -424,8 +531,8 @@ public class EmployeeController {
 				stm1.executeUpdate();
 				return true;
 			} else {
-				stm1 = ConnectionToDB.conn
-						.prepareStatement("insert into myfueldb.customermodule (CustomerID,modelNumber,companyNamesSubscribed) "
+				stm1 = ConnectionToDB.conn.prepareStatement(
+						"insert into myfueldb.customermodule (CustomerID,modelNumber,companyNamesSubscribed) "
 								+ "values (?,?,?)");
 
 				stm1.setString(1, id);
@@ -443,47 +550,61 @@ public class EmployeeController {
 		return false;
 
 	}
+
+	/**
+	 * Receive new car object and old car number and insert the new car details instead of the old one in the DB
+	 * @param car
+	 * @param oldCar
+	 * @return true or false
+	 */
 	
-	public static boolean updateCar(Car car,String oldCar) {
-		PreparedStatement stm,stm1;
+	public static boolean updateCar(Car car, String oldCar) {
+		PreparedStatement stm, stm1;
 		ResultSet res;
 		try {
-			stm1 =ConnectionToDB.conn.prepareStatement(
-					"select carNumber from myfueldb.car where carNumber = ? and CustomerID = ?");
-			stm1.setString(1,oldCar);
+			stm1 = ConnectionToDB.conn
+					.prepareStatement("select carNumber from myfueldb.car where carNumber = ? and CustomerID = ?");
+			stm1.setString(1, oldCar);
 			stm1.setString(2, car.getCarCustomerId());
 			res = stm1.executeQuery();
-			if(res.next()) {
-			stm = ConnectionToDB.conn.prepareStatement(
-					"update myfueldb.car set carNumber=?,fuelType=? where carNumber = ?");
-			stm.setString(1, car.getCarNumber());
-			stm.setString(2, car.getFuelType());
-			stm.setString(3, oldCar);
-			stm.executeUpdate();
-			
-			}
-			else 
+			if (res.next()) {
+				stm = ConnectionToDB.conn
+						.prepareStatement("update myfueldb.car set carNumber=?,fuelType=? where carNumber = ?");
+				stm.setString(1, car.getCarNumber());
+				stm.setString(2, car.getFuelType());
+				stm.setString(3, oldCar);
+				stm.executeUpdate();
+
+			} else
 				return false;
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			return false;
 		}
 		return true;
 	}
+
+
+	/**
+	 * Count the number of car that are connected to the received is
+	 * @param idForCount
+	 * @return int count of cars
+	 */
 	
 	public static int getCarCount(String idForCount) {
 		PreparedStatement stm;
 		ResultSet res;
 		int count = 0;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select count(carNumber) from myfueldb.car where CustomerID = ?");
+			stm = ConnectionToDB.conn
+					.prepareStatement("select count(carNumber) from myfueldb.car where CustomerID = ?");
 			stm.setString(1, idForCount);
-			res=stm.executeQuery();
-			if(res.next())
+			res = stm.executeQuery();
+			if (res.next())
 				count = Integer.parseInt(res.getString(1));
-		}catch (Exception e) {
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		return count;

@@ -1,5 +1,9 @@
 package boundery;
 
+/**
+ * This class contains all the marketing employee gui functionality
+ */
+
 import java.net.URL;
 import java.sql.Date;
 import java.sql.Time;
@@ -512,6 +516,15 @@ public class MarketingEmployeeController implements Initializable {
 	private ArrayList<String> fuelTypesForSale = new ArrayList<String>();
 	private ArrayList<String> companys = new ArrayList<String>();
 
+	
+
+	/**
+	 * Define the scene of the marketing employee and load the fxml file
+	 * 
+	 * @param primaryStage
+	 * @throws Exception
+	 */
+	
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -528,13 +541,23 @@ public class MarketingEmployeeController implements Initializable {
 		primaryStage.show();
 	}
 
+	/**
+	 * This function is to sigh out the user from the system
+	 * @param event
+	 */
+	
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(markem.getId(), markem.getClass().toString());
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 
-	// Switching Pans - hide the other
+	
+	/**
+	 * Switching Pans - hide the current pane and make the new pane visible
+	 * @param newPane
+	 */
+
 	private void switchPanes(Pane newPane) {
 		currentPane.setVisible(false);
 		currentPane = newPane;
@@ -547,7 +570,10 @@ public class MarketingEmployeeController implements Initializable {
 		switchPanes(MainPane);
 	}
 
-	// switch to registration pane
+	/**
+	 * Switch to the registration pane
+	 * @param event
+	 */
 	@FXML
 	void openNewClientPane(ActionEvent event) {
 		customercompanyNameLbl.setVisible(false);
@@ -557,6 +583,12 @@ public class MarketingEmployeeController implements Initializable {
 		switchPanes(NewClientPane);
 	}
 
+	/**
+	 * When the user click on the help button (?) in the registration pane the
+	 * function set the CVV image as visible/not visible
+	 * @param event
+	 */
+	
 	@FXML
 	void openCVVImgae(MouseEvent event) {
 		if (CVVImage.isVisible())
@@ -565,6 +597,12 @@ public class MarketingEmployeeController implements Initializable {
 			CVVImage.setVisible(true);
 	}
 
+	/**
+	 * When the user click on the help button (?) in the update customer pane the
+	 * function set the CVV image as visible/not visible
+	 * @param event
+	 */
+	
 	@FXML
 	void openCVVImgae1(MouseEvent event) {
 		if (CVVImage1.isVisible())
@@ -573,7 +611,11 @@ public class MarketingEmployeeController implements Initializable {
 			CVVImage1.setVisible(true);
 	}
 
-	// switch to creating new sale pane
+	/**
+	 * Switch to the creating new sale pane
+	 * @param event
+	 **/
+	
 	@FXML
 	void openNewSalePane(ActionEvent event) {
 		switchPanes(createNewSalePane);
@@ -581,7 +623,11 @@ public class MarketingEmployeeController implements Initializable {
 		companyNameTxt.setText(company);
 	}
 
-	// switch to customers pane - for detail update
+	/**
+	 * Switch to update customers pane - for detail update
+	 * @param event
+	 */
+	
 	@FXML
 	void openUpdateCustomerPane(ActionEvent event) {
 		upFirstNameLbl.setVisible(false);
@@ -612,7 +658,11 @@ public class MarketingEmployeeController implements Initializable {
 
 	}
 
-	// switch to car and model pane
+	/**
+	 * Switch to car and model pane
+	 * @param event
+	 */
+	
 	@FXML
 	void openCarAndModelPane(ActionEvent event) {
 		carNumberTxt.setDisable(true);
@@ -633,14 +683,23 @@ public class MarketingEmployeeController implements Initializable {
 		switchPanes(carAndModelPane);
 	}
 
-	// switch to sales pane
+	/**
+	 * Switch to sales view pane
+	 * @param event
+	 */
+	
 	@FXML
 	void openSalesPane(ActionEvent event) {
 		switchPanes(salesPane);
 		uploadSalesToTable();
 	}
 
-	// initializing the scene
+	/**
+	 * Initializing the scene and define the current pane. Set values into
+	 * pricingModel, purchaseModel, FuelType, customerType, fuelTypesForSale combo
+	 * boxes Define data pickers
+	 */
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		System.out.println("employee:  " + markem);
@@ -702,7 +761,12 @@ public class MarketingEmployeeController implements Initializable {
 		endDatePicker.setDayCellFactory(datePicker);
 	}
 
-	// this method is for new client registration
+	/**
+	 * Receive all the registration date from the user Check all the input for
+	 * validation Create new customer object and send to server for update
+	 * @param event
+	 */
+	
 	@FXML
 	void registration(ActionEvent event) {
 		int res;
@@ -737,7 +801,8 @@ public class MarketingEmployeeController implements Initializable {
 			companyName = customercompanyNameTxt.getText();
 			if (companyName == null)
 				JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
-			return;
+				return;
+			}
 		}
 		// check that all the data was entered
 		if (id == null || firstName == null || lastName == null || mail == null || phoneNumber == null
@@ -748,35 +813,35 @@ public class MarketingEmployeeController implements Initializable {
 		}
 
 		if (!testId(id)) {
-			inputMsg.append("ID, " + "\n");
+			inputMsg.append("ID - 9 digits, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(firstName)) {
-			inputMsg.append("first name, " + "\n");
+			inputMsg.append("first name - only characters, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(lastName)) {
-			inputMsg.append("last name, " + "\n");
+			inputMsg.append("last name - only characters, " + "\n");
 			flag = true;
 		}
 		if (!testPhone(phoneNumber)) {
-			inputMsg.append("phone, " + "\n");
+			inputMsg.append("phone - 10 digits, " + "\n");
 			flag = true;
 		}
 		if (!mail.matches(EMAIL_REGEX)) {
-			inputMsg.append("mail, " + "\n");
+			inputMsg.append("mail - CC@CC.CC, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(address)) {
-			inputMsg.append("address, " + "\n");
+			inputMsg.append("address - only characters, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyNumbers(addressNo)) {
-			inputMsg.append("address no, " + "\n");
+			inputMsg.append("address no - only digits, " + "\n");
 			flag = true;
 		}
 		if (!testCreditCard(creditCardNo)) {
-			inputMsg.append("credit card no, " + "\n");
+			inputMsg.append("credit card no - 10 or 16 digits, " + "\n");
 			flag = true;
 		}
 		if (!testDateOfExp(expDateMon, expDateYear)) {
@@ -784,7 +849,7 @@ public class MarketingEmployeeController implements Initializable {
 			flag = true;
 		}
 		if (!testCVV(CVV)) {
-			inputMsg.append("CVV, " + "\n");
+			inputMsg.append("CVV - 3 digits, " + "\n");
 			flag = true;
 		}
 		if (checkIfUserNameExist(userName)) {
@@ -803,7 +868,7 @@ public class MarketingEmployeeController implements Initializable {
 			fullAddress.append(" ");
 			fullAddress.append(addressNo);
 			Customer customer = new Customer(userName, password, firstName, lastName, mail, id, phoneNumber, 0,
-					fullAddress.toString(), 0, 0, 0, 0, creditCardNo, expDate.toString(), CVV,0, cusType.toString(),
+					fullAddress.toString(), 0, 0, 0, 0, creditCardNo, expDate.toString(), CVV, 0, cusType.toString(),
 					companyName);
 
 			System.out.println(customer);
@@ -836,6 +901,11 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
+	/**
+	 * Open / hide the company fields according to the customer type
+	 * @param event
+	 */
+	
 	@FXML
 	void openCompany(ActionEvent event) {
 		CustomerTypes type = customerTypeCombox.getValue();
@@ -849,7 +919,12 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
-	// this method is to find if a specific customer exist in the system
+	/**
+	 * Receives id , send to server and notify the user if the customer exist in the
+	 * system
+	 * @param event
+	 */
+	
 	@FXML
 	void uploadCustomer(ActionEvent event) {
 		String id;
@@ -879,7 +954,12 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
-	// open the option to change car that exist
+	/**
+	 * Open / hide the replacing car fields when the user clicks on the replacing
+	 * car button
+	 * @param event
+	 */
+	
 	@FXML
 	void openReplaceCar(ActionEvent event) {
 		if (oldCarNumTxt.isDisable()) {
@@ -895,7 +975,13 @@ public class MarketingEmployeeController implements Initializable {
 
 	}
 
-	// this method is to update the car and / or model to the user we uploaded
+	/**
+	 * Receive all the car and module data from the user Check all the input for
+	 * validation Create new car object and send to server for update Send all the
+	 * module data to the server for update
+	 * @param event
+	 */
+	
 	@FXML
 	void updateCarAndModel(ActionEvent event) {
 		String id, carNumber, company1, company2, company3;
@@ -1060,6 +1146,12 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
+	/**
+	 * Open one or three company comboBoxes according to the selected pricing model
+	 * by the user
+	 * @param event
+	 */
+	
 	@FXML
 	void openCompanyChooser(ActionEvent event) {
 
@@ -1077,7 +1169,12 @@ public class MarketingEmployeeController implements Initializable {
 		}
 	}
 
-	// this method id to upload all the details of a specific customer
+	/**
+	 * Receive customer id, send to server to check if exist Upload all the user
+	 * data to the gui for the user
+	 * @param event
+	 */
+	
 	@FXML
 	void showCustomeDetails(ActionEvent event) {
 		String id = UpdateIdTxt.getText();
@@ -1134,14 +1231,19 @@ public class MarketingEmployeeController implements Initializable {
 
 	}
 
-	// this method is for updating customers details
+	/**
+	 * Receive customer data from the user Check all the input for validation Send
+	 * to server for update details of existing customer
+	 * @param event
+	 */
+	
 	@FXML
 	void changeCustomerDetails(ActionEvent event) {
 		String EMAIL_REGEX = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
 		ArrayList<String> upCustomer = new ArrayList<String>();
 		String chFirst, chLast, chEmail, chCreditNo, chExpDate, chCvv, chPhone, chAddress, chId, chAddressNo;
 		StringBuilder fullAddress = new StringBuilder();
-		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: ");
+		StringBuilder inputMsg = new StringBuilder("The next filleds are in inccorect format: " + "\n");
 		StringBuilder expDate = new StringBuilder();
 		boolean flag = false;
 		// get all the data that the user entered
@@ -1167,36 +1269,36 @@ public class MarketingEmployeeController implements Initializable {
 			return;
 		}
 		if (!testId(chId)) {
-			inputMsg.append("ID, ");
+			inputMsg.append("ID - 9 digits, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(chFirst)) {
-			inputMsg.append("first name, ");
+			inputMsg.append("first name - only characters, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(chLast)) {
-			inputMsg.append("last name, ");
+			inputMsg.append("last name - only characters, " + "\n");
 			flag = true;
 		}
 		if (!testPhone(chPhone)) {
-			inputMsg.append("phone, ");
+			inputMsg.append("phone - 10 digits, " + "\n");
 			flag = true;
 		}
 		if (!chEmail.matches(EMAIL_REGEX)) {
-			inputMsg.append("mail, ");
+			inputMsg.append("mail - CC@CC.CC, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyCharacter(chAddress)) {
-			inputMsg.append("address, " + "\n");
+			inputMsg.append("address - only characters, " + "\n");
 			flag = true;
 		}
 		if (!checkIfStringContainsOnlyNumbers(chAddressNo)) {
-			inputMsg.append("address no, " + "\n");
+			inputMsg.append("address no - only digits, " + "\n");
 			flag = true;
 		}
 
 		if (!testCreditCard(chCreditNo)) {
-			inputMsg.append("credit card no, ");
+			inputMsg.append("credit card no - 10 or 16 digits, " + "\n");
 			flag = true;
 		}
 		if (!testDateOfExp(expDateMon, expDateYear)) {
@@ -1204,7 +1306,7 @@ public class MarketingEmployeeController implements Initializable {
 			flag = true;
 		}
 		if (!testCVV(chCvv)) {
-			inputMsg.append("CVV, ");
+			inputMsg.append("CVV - 3 digits, " + "\n");
 			flag = true;
 		}
 		if (flag) {
@@ -1234,8 +1336,12 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "Error ! could not update customer, try again");
 	}
 
-	// this method is for uploading all the sales templates that exist in the DB to
-	// the gui table
+
+	/**
+	 * Initialize the sales table ,using getSales() function to get all the data
+	 * from the server Display all the sales
+	 */
+	
 	@FXML
 	void uploadSalesToTable() {
 		// checkBox initializing
@@ -1286,7 +1392,12 @@ public class MarketingEmployeeController implements Initializable {
 		salesTbl.setItems(getSales());
 	}
 
-	// this method bring the sale data from DB
+	/**
+	 * This function asks for all the sales data from the server and return it to
+	 * uploadSalesToTable()
+	 * @return ObservableList<Sale>
+	 */
+	
 	public ObservableList<Sale> getSales() {
 		ArrayList<Sale> sale = EmployeeCC.getAllSales();
 		ObservableList<Sale> sales = FXCollections.observableArrayList(sale);
@@ -1294,18 +1405,27 @@ public class MarketingEmployeeController implements Initializable {
 		return sales;
 	}
 
-	// this method if for deleting sales from DB
+	/**
+	 * Sends array list of sales to the server to delete them from the DB
+	 * @param event
+	 */
+	
 	@FXML
 	void deleteSals(ActionEvent event) {
 		if (EmployeeCC.deleteSales(selectedSales)) {
 			JOptionPane.showMessageDialog(null, "Sales deleted!");
 			uploadSalesToTable();
-		}
-		else
+		} else
 			JOptionPane.showMessageDialog(null, "Error! sales could not be deleted, try again");
 	}
 
-	// this method if for creating new sale in DB
+	/**
+	 * Receive data for new sale from the user Check all the input for validation
+	 * Create new sale object and send to sever to insert to the DB
+	 * @param event
+	 * @throws ParseException
+	 */
+	
 	@FXML
 	void createNewSale(ActionEvent event) throws ParseException {
 		String fuelType, startTime, endTime, startDate = null, endDate = null;
@@ -1329,8 +1449,11 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
 			return;
 		}
-		if (!checkIfStringContainsOnlyNumbersInFloatType(salePercentTxt.getText())) {
-			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: xx.xx");
+		percent = Float.parseFloat(salePercentTxt.getText());
+		StringBuilder p = new StringBuilder();
+		p.append(percent);
+		if (!checkIfStringContainsOnlyNumbersInFloatType(p.toString())) {
+			JOptionPane.showMessageDialog(null, "You need to enter sale percent in the following format: 0.xx");
 			return;
 		}
 		if (!startTime.matches(TIME_REGEX) || !endTime.matches(TIME_REGEX)) {
@@ -1345,9 +1468,8 @@ public class MarketingEmployeeController implements Initializable {
 			inputMsg.append("end time");
 			flag = true;
 		}
-		
-		if(startDate.compareTo(endDate) > 0)
-		{
+
+		if (startDate.compareTo(endDate) > 0) {
 			JOptionPane.showMessageDialog(null, "End date is earlier than start date");
 			return;
 		}
@@ -1356,8 +1478,6 @@ public class MarketingEmployeeController implements Initializable {
 			JOptionPane.showMessageDialog(null, inputMsg.toString());
 			return;
 		}
-		percent = Float.parseFloat(salePercentTxt.getText());
-
 		StringBuilder days = new StringBuilder();
 
 		if (sunday.isSelected())
@@ -1396,8 +1516,7 @@ public class MarketingEmployeeController implements Initializable {
 			friday.setSelected(false);
 			saturday.setSelected(false);
 			allCheckBox.setSelected(false);
-		}
-		else
+		} else
 			JOptionPane.showMessageDialog(null, "Error! sales could not be added, try again");
 	}
 
@@ -1405,8 +1524,14 @@ public class MarketingEmployeeController implements Initializable {
 	///////////////////////////////////////// INPUTTESTS///////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Check if the string is build as float number type
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean checkIfStringContainsOnlyNumbersInFloatType(String str) {
-		boolean flag = true;
+		boolean flag = false;
 		for (int i = 0; i < str.length(); i++) {
 			if (!Character.isDigit(str.charAt(i))) {
 				if (str.charAt(i) == '.') {
@@ -1416,10 +1541,20 @@ public class MarketingEmployeeController implements Initializable {
 				flag = false;
 				break;
 			}
+			else if (!flag) {
+				if (str.charAt(i) != '0')
+					return false;
+			}
 		}
 		return flag;
 	}
 
+	/**
+	 * Check if the string contains only numbers
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean checkIfStringContainsOnlyNumbers(String str) {
 		boolean flag = true;
 		for (int i = 0; i < str.length(); i++) {
@@ -1431,12 +1566,24 @@ public class MarketingEmployeeController implements Initializable {
 		return flag;
 	}
 
+	/**
+	 * Test ID format
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean testId(String str) {
 		if ((str.length() == 9) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
+	/**
+	 * Check if the string contains only characters
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean checkIfStringContainsOnlyCharacter(String str) {
 		boolean flag = true;
 		for (int i = 0; i < str.length(); i++) {
@@ -1450,34 +1597,73 @@ public class MarketingEmployeeController implements Initializable {
 		return flag;
 	}
 
+	/**
+	 * Test phone number format
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean testPhone(String str) {
 		if ((str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
+	/**
+	 * Test car number format
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean testCar(String str) {
 		if ((str.length() == 7 || str.length() == 8) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
+
+	/**
+	 * Test credit card number format
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean testCreditCard(String str) {
 		if ((str.length() == 16 || str.length() == 10) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
+
+	/**
+	 * Test CVV number format
+	 * @param str
+	 * @return true or false
+	 */
+	
 	public static boolean testCVV(String str) {
 		if ((str.length() == 3) && (checkIfStringContainsOnlyNumbers(str)))
 			return true;
 		return false;
 	}
 
+	/**
+	 * Check id user name exist in the DB
+	 * @param userName
+	 * @return true or false
+	 */
+	
 	public static boolean checkIfUserNameExist(String userName) {
 		return EmployeeCC.checkIfUserNameExist(userName);
 	}
 
+	/**
+	 * Test Expire Date values
+	 * @param month
+	 * @param year
+	 * @return true or false
+	 */
+	
 	public static boolean testDateOfExp(String month, String year) {
 		if ((!checkIfStringContainsOnlyNumbers(month)) || (!checkIfStringContainsOnlyNumbers(year)))
 			return false;
@@ -1488,6 +1674,12 @@ public class MarketingEmployeeController implements Initializable {
 		return true;
 	}
 
+	/**
+	 * \ Test time value
+	 * @param time
+	 * @return true or false
+	 */
+	
 	public static boolean testTime(String time) {
 		if (Integer.parseInt(time.substring(0, 2)) > 23 || Integer.parseInt(time.substring(0, 2)) < 0)
 			return false;

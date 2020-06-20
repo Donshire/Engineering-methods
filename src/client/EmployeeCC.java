@@ -176,31 +176,62 @@ public class EmployeeCC {
 		return (File) MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * The function create a new message to the server which contains id
+	 * @param id
+	 * @return customer object
+	 */
+	
 	public static Customer getCustomerDetails(String id) {
 		ClientUI.client.accept(new Message(id,Commands.getCustomerDetails));
 		return (Customer)MyFuelClient.ServerRetObj;
 	}
+	
+	/**
+	 * The function create a new message to the server which contains ArrayList of string that represent customers
+	 * @param upCutomer
+	 * @return true or false
+	 */
 	
 	public static boolean updateCustomerDetails(ArrayList<String> upCutomer) {
 		ClientUI.client.accept(new Message(upCutomer,Commands.updateCustomerDetails));
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * The function create a new message to the server
+	 * @return ArrayList<Sale>
+	 */
+	
 	public static ArrayList<Sale> getAllSales(){
 		ClientUI.client.accept(new Message(null, Commands.getAllSales));
 		return(ArrayList<Sale>)MyFuelClient.ServerRetObj;
 	}
+	
+	/**
+	 * The function create a new message to the server which contains ArrayList of sales
+	 * @param sales
+	 * @return true or false
+	 */
 	
 	public static boolean deleteSales(ArrayList<Sale> sales) {
 		ClientUI.client.accept(new Message(sales, Commands.deleteSales));
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * The function create a new message to the server which contains sale object
+	 * @param sale
+	 * @return true or false
+	 */
+	
 	public static boolean addNewSaleTemp(Sale sale) {
 		ClientUI.client.accept(new Message(sale,Commands.addNewSaleTemp));
 		return (boolean)MyFuelClient.ServerRetObj;
 	}
 
+	
+	
 	public static ArrayList<CompanyFuel> getFuelMaxPriceDetails(String companyName) {
 		ClientUI.client.accept(new Message(companyName, Commands.getFuelMaxPriceDetails));
 
@@ -242,21 +273,47 @@ public class EmployeeCC {
 		return (File) MyFuelClient.ServerRetObj;
 	}
 
+	/**
+	 * The function create a new message to the server which contains company name
+	 * @param companyName
+	 * @return ArrayList<String>
+	 */
+	
 	public static ArrayList<String> getFuelTypesByCompany(String companyName){
 		ClientUI.client.accept(new Message(companyName, Commands.getFuelTypesByCompany));
 		return(ArrayList<String>)MyFuelClient.ServerRetObj;
 	}
+	
+	/**
+	 * The function create a new message to the server which contains user name
+	 * @param userName
+	 * @return boolean
+	 */
 	
 	public static boolean checkIfUserNameExist(String userName) {
 		ClientUI.client.accept(new Message(userName, Commands.checkIfUserNameExist));
 		return(boolean)MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * The function create a new message to the server 
+	 * @return ArrayList<String>
+	 */
+
 	public static ArrayList<String> getCompanyNames() {
 		ClientUI.client.accept(new Message(null, Commands.getCompanyNames));
 		return(ArrayList<String>)MyFuelClient.ServerRetObj;
 		
 	}
+	
+	/**
+	 * The function create a new message to the server which contains arrayList<object> - id, purchase model, company name
+	 * @param id
+	 * @param purchaseM
+	 * @param companyNames
+	 * @return boolean
+	 */
+	
 	public static boolean addModule(String id,String purchaseM,String companyNames) {
 		ArrayList<Object> parameters = new ArrayList<Object>();
 		parameters.add(id);
@@ -266,6 +323,13 @@ public class EmployeeCC {
 		return(boolean)MyFuelClient.ServerRetObj;
 	}
 	
+	/**
+	 * The function create a new message to the server which contains arrayList<object> - car and old car
+	 * @param car
+	 * @param oldCar
+	 * @return boolean
+	 */
+	
 	public static boolean updateCar(Car car,String oldCar) {
 		ArrayList<Object> parameters = new ArrayList<Object>();
 		parameters.add(car);
@@ -273,6 +337,12 @@ public class EmployeeCC {
 		ClientUI.client.accept(new Message(parameters, Commands.updateCar));
 		return(boolean)MyFuelClient.ServerRetObj;
 	}
+	
+	/**
+	 * The function create a new message to the server which contains id number
+	 * @param id
+	 * @return int value
+	 */
 	
 	public static int getCarCount(String id) {
 		ClientUI.client.accept(new Message(id,Commands.getCarCount));
