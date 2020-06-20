@@ -849,15 +849,16 @@ public class CompanyFuelControllerServer {
 		return reports;
 	}
 	
-	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year){
+	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year, String company){
 		ArrayList<AnaliticDataReport> reports = new ArrayList<AnaliticDataReport>();
 		PreparedStatement stm;
 		ResultSet res;
 		
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from analiticdata WHERE month = ? and year = ?");
+			stm = ConnectionToDB.conn.prepareStatement("select * from analiticdata WHERE month = ? and year = ? and company = ?");
 			stm.setString(1, month);
 			stm.setString(2,year);
+			stm.setString(3,company);
 			res = stm.executeQuery();
 			
 			while(res.next()) {
@@ -894,6 +895,11 @@ public class CompanyFuelControllerServer {
 		}
 
 		return true;
+	}
+	
+	public static File getAnaliticFile(String fileName,String company,String type) {
+		return FileManagmentSys.getFile(FileManagmentSys.createLocation(company, FileManagmentSys.analiticData
+				, type), fileName);
 	}
 
 }

@@ -1,6 +1,10 @@
 package boundery;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -23,6 +27,7 @@ import Entity.GenericReport;
 import Entity.PricingModule;
 import Entity.Rates;
 import Entity.Sale;
+import Entity.UserAnaliticRanks;
 import client.ClientUI;
 import client.CustomerCC;
 import client.EmployeeCC;
@@ -220,6 +225,9 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private TableColumn<AnaliticDataReport, String> yearCol;
+	
+	@FXML
+	private TableColumn<AnaliticDataReport, String> typeAnaliticCol;
 	// analitic data tabel end------------------
 
 	@FXML
@@ -257,6 +265,28 @@ public class MarketingManagerController implements Initializable {
 	private PieChart pieChart3;
 
 	// PieChartDiagram end---------------------------
+
+	// ranks table start---------------------------------------------------
+
+	@FXML
+	private Pane analiticRankPane;
+	
+	@FXML
+	private TableView<UserAnaliticRanks> analiticRanksTable;
+
+	@FXML
+	private TableColumn<UserAnaliticRanks, String> userIDcol;
+
+	@FXML
+	private TableColumn<UserAnaliticRanks, Integer> customerTypeAnaleticcol;
+
+	@FXML
+	private TableColumn<UserAnaliticRanks, Integer> fuelingHourAnaleticcol;
+
+	@FXML
+	private TableColumn<UserAnaliticRanks, Integer> fuelTypeAnaleticcol;
+
+	// ranks table end-------------------------------------------------------
 
 	@FXML
 	void nextOrPrevWasClicked(ActionEvent event) {
@@ -387,6 +417,8 @@ public class MarketingManagerController implements Initializable {
 			getYeartxt.clear();
 		}
 	}
+
+
 
 	@FXML
 	void selectReportType(ActionEvent event) {
@@ -884,8 +916,16 @@ public class MarketingManagerController implements Initializable {
 			row.setOnMouseClicked(ev -> {
 				if (!row.isEmpty() && ev.getButton() == MouseButton.PRIMARY && ev.getClickCount() == 2) {
 					AnaliticDataReport clickedRow = row.getItem();
-					System.out.println(clickedRow.toString());
-					switchPanes(piePane);
+					if(clickedRow.getType().compareTo(FileManagmentSys.statisticData)==0) {
+						switchPanes(piePane);
+						analiticDataByYearAndMonth(
+								clickedRow.getFileName(),FileManagmentSys.statisticData);
+					}
+						
+					else {
+						
+						switchPanes(analiticRankPane);
+					}
 				}
 			});
 			return row;
@@ -894,41 +934,104 @@ public class MarketingManagerController implements Initializable {
 		weekCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("week"));
 		monthCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("month"));
 		yearCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("year"));
+		typeAnaliticCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("type"));
+		
+		//AnaliticDataTable.setItems(value);
 	}
-
+	
+	
 	public ObservableList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month, String year) {
 
-		ArrayList<AnaliticDataReport> data = EmployeeCC.getAllAnaliticDataByYearAndMonth(month, year);
+		ArrayList<AnaliticDataReport> data = EmployeeCC.getAllAnaliticDataByYearAndMonth(month, year,markitingManager.getCompanyName());
 		if (data.isEmpty())
 			JOptionPane.showMessageDialog(null, "there is no data in this year");
 		ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
 		return analiticData;
 	}
+	
+	
+	
+	public void analiticDataByYearAndMonth(String fileName,String type) {
 
-	public ObservableList <PieChart.Data> getpieChartData(){
+		File fily = EmployeeCC.getAllAnaliticFileByYearAndMonth(
+				fileName,markitingManager.getCompanyName(),type);
 		
-		final Label caption = new Label("");
-		caption.setTextFill(Color.DARKORANGE);
-		caption.setStyle("-fx-font: 24 arial;");
-		
-		ObservableList<PieChart.Data> pieChartData = 
+		if (fily==null)
+			JOptionPane.showMessageDialog(null, "there is no data in this period");
+		else{
+			String array [] ;
+			FileReader fr;
+			BufferedReader br;
+			StringBuilder firstData,secondData,thirdData;
+			String str;
+			int lineCounter=0;
+			
+			firstData= new StringBuilder();
+			secondData= new StringBuilder();
+			thirdData= new StringBuilder();
+			//
+			if(type.compareTo(FileManagmentSys.statisticData)==0) {
+				try {
+					fr = new FileReader(fily);
+					br = new BufferedReader(fr); // creates a buffering character input stream
+					while ((str = br.readLine()) != null) {
+						
+						if(lineCounter>=3&&lineCounter<=10)firstData.append(str + "\n");
+						if(lineCounter>=14&&lineCounter<=18)secondData.append(str + "\n");
+						if(lineCounter>=20&&lineCounter<=23)secondData.append(str + "\n");
+						if(lineCounter>=27)thirdData.append(str + "\n");
+						
+						lineCounter++;
+					}
+					pieChart1.setData(getpieChartDataForHours(firstData.toString()));
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+				//
+			}
+			//
+			else {
 				
-				FXCollections.observableArrayList(
-		                new PieChart.Data("00:00 - 03:00", 13),
-		                new PieChart.Data("03:00 - 06:00", 25),
-		                new PieChart.Data("06:00 - 09:00", 10),
-		                new PieChart.Data("09:00 - 12:00", 22),
-		                new PieChart.Data("12:00 - 15:00", 30),
-						new PieChart.Data("15:00 - 18:00", 30),
-						new PieChart.Data("18:00 - 21:00", 30),
-						new PieChart.Data("21:00 - 00:00", 30));
+			}
+		}
+		//ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
 		
+		//for all the charts
 		
-		return pieChartData;
-
 	}
 
-	
+	public ObservableList<PieChart.Data> getpieChartDataForHours(String data) {
+		String array[] = data.split("\n");
+		int countArray[] =new int[array.length],sum=0,i;
+		
+		ObservableList<PieChart.Data> pieChartData =
+				FXCollections.observableArrayList();
+		
+		for(i=0;i<array.length;i++) {
+			countArray[i]= Integer.parseInt(array[i].substring(11).replaceAll(" ", ""));
+			sum+=countArray[i];
+		}
+		
+		//
+		for(i=0;i<array.length;i++) {
+			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)",array[i].substring(0,11),
+					(int)(((float)countArray[i]/sum)*100),"%"),countArray[i]));
+		}
+
+		return pieChartData;
+	}
+
+	public void initializeRanksTable() {
+
+		userIDcol.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, String>("userId"));
+		customerTypeAnaleticcol
+				.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, Integer>("customerTypeAnaleticRank"));
+		fuelingHourAnaleticcol
+				.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, Integer>("fuelingHourAnaleticRank"));
+		fuelTypeAnaleticcol
+				.setCellValueFactory(new PropertyValueFactory<UserAnaliticRanks, Integer>("fuelTypeAnaleticRank"));
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -967,19 +1070,20 @@ public class MarketingManagerController implements Initializable {
 		// build company Rate Table
 		buildCompanyRateTable();
 		// call server and get fuel types from company
-		CustomerRateTypes customerArray[] = new CustomerRateTypes[3]; 
+		CustomerRateTypes customerArray[] = new CustomerRateTypes[3];
 		CustomerRateTypes customerArray1[] = CustomerRateTypes.values();
-		for(int i=0;i<3;i++) {
-			customerArray[i]=customerArray1[i+1];
+		for (int i = 0; i < 3; i++) {
+			customerArray[i] = customerArray1[i + 1];
 		}
-		
+
 		ObservableList<CustomerRateTypes> fuelTypes = FXCollections.observableArrayList(customerArray);
 		rateType.setItems(fuelTypes);
 
 		// build Analitic data Table
 		initializeAnaliticData();
 
-		pieChart1.setData(getpieChartData());
+		// build Analitic Ranks table
+		initializeRanksTable();
 
 		// initialize rateTypeCombo comboBox
 		ObservableList<RatesStatus> rateType = FXCollections.observableArrayList(RatesStatus.values());
@@ -991,5 +1095,6 @@ public class MarketingManagerController implements Initializable {
 		reportKindCombo.setItems(MarkitingReportType);
 
 	}
+	
 
 }

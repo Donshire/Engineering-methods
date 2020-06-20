@@ -275,11 +275,12 @@
       <Button fx:id="analiticDatabtn" layoutX="14.0" layoutY="510.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="144.0" text="AnaliticData" />
       <Pane fx:id="analiticDataPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
          <children>
-            <TableView fx:id="AnaliticDataTable" layoutX="109.0" layoutY="243.0" prefHeight="210.0" prefWidth="450.0">
+            <TableView fx:id="AnaliticDataTable" layoutX="25.0" layoutY="243.0" prefHeight="210.0" prefWidth="600.0">
               <columns>
                 <TableColumn fx:id="weekCol" prefWidth="150.0" text="Week" />
                 <TableColumn fx:id="monthCol" prefWidth="150.0" text="Month" />
                   <TableColumn fx:id="yearCol" prefWidth="150.0" text="Year" />
+                  <TableColumn fx:id="typeAnaliticCol" minWidth="-Infinity" prefWidth="150.0" text="type" />
               </columns>
             </TableView>
             <TextField fx:id="getYeartxt" layoutX="288.0" layoutY="170.0" />
@@ -287,6 +288,11 @@
             <Button fx:id="showAnaliticDatabtn" layoutX="494.0" layoutY="170.0" mnemonicParsing="false" onAction="#showAnaliticDataClick" text="show" />
             <Text layoutX="109.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Month" wrappingWidth="116.63817688822746" />
             <Text layoutX="288.0" layoutY="147.0" strokeType="OUTSIDE" strokeWidth="0.0" text="enter year" wrappingWidth="143.99998486042023" />
+            <Text layoutX="39.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analitic Data">
+               <font>
+                  <Font name="System Bold" size="35.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
       <Pane fx:id="piePane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
@@ -300,6 +306,26 @@
             <Text layoutX="169.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analitic Diagram" textAlignment="CENTER" wrappingWidth="269.1347717791796">
                <font>
                   <Font name="System Bold Italic" size="32.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+      <Pane fx:id="analiticRankPane" layoutX="170.0" layoutY="100.0" prefHeight="500.0" prefWidth="650.0" visible="false">
+         <children>
+            <TableView fx:id="analiticRanksTable" layoutX="90.0" layoutY="63.0" prefHeight="354.0" prefWidth="500.0">
+              <columns>
+                <TableColumn fx:id="userIDcol" prefWidth="125.0" text="Customer Id" />
+                <TableColumn fx:id="customerTypeAnaleticcol" prefWidth="125.0" text="Customer Type" />
+                  <TableColumn fx:id="fuelingHourAnaleticcol" prefWidth="125.0" text="Fueling Hours" />
+                  <TableColumn fx:id="fuelTypeAnaleticcol" prefWidth="125.0" text="Fuel Type" />
+              </columns>
+            </TableView>
+            <Text layoutX="27.0" layoutY="439.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Customer type rank is givven by total purchases and the total number of cars" />
+            <Text layoutX="25.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- According to the price of the fuel purchased as the price is higher the is higher" />
+            <Text layoutX="27.0" layoutY="460.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Fuel consumption during these hours is smaller get higher ranks" />
+            <Text layoutX="205.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analitic Rank Data" wrappingWidth="269.13476899266243">
+               <font>
+                  <Font name="System Bold Italic" size="27.0" />
                </font>
             </Text>
          </children>

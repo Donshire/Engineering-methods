@@ -279,11 +279,22 @@ public class EmployeeCC {
 		return (int)MyFuelClient.ServerRetObj;
 	}
 	
-	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year){
+	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year,String company){
 		ArrayList<Object> params = new ArrayList<Object>();
 		params.add(month);
 		params.add(year);
+		params.add(company);
 		ClientUI.client.accept(new Message(params,Commands.getAllAnaliticDataByYearAndMonth));
 		return (ArrayList<AnaliticDataReport>) MyFuelClient.ServerRetObj;
+	}
+	
+	public static File getAllAnaliticFileByYearAndMonth(String fileName,String company,String type){
+		ArrayList<Object> params = new ArrayList<Object>();
+		params.add(fileName);
+		params.add(company);
+		params.add(type);
+		
+		ClientUI.client.accept(new Message(params,Commands.getAnaliticFile));
+		return (File) MyFuelClient.ServerRetObj;
 	}
 }

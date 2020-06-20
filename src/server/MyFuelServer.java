@@ -524,13 +524,8 @@ public class MyFuelServer extends AbstractServer {
 
 		case addModule:
 			ArrayList<Object> param = (ArrayList<Object>) message.getObj();
-			try {
 				sendToClientObject(EmployeeController.addModule((String) param.get(0), (String) param.get(1),
 						(String) param.get(2)), client);
-			} catch (Exception e) {
-				// TODO: handle exception
-				e.printStackTrace();
-			}
 			break;
 
 		case updateCar:
@@ -551,18 +546,33 @@ public class MyFuelServer extends AbstractServer {
 				// TODO: handle exception
 				 e.printStackTrace();
 			}
+			 break;
 			 
 		case getAllAnaliticDataByYearAndMonth:
 		ArrayList<String> parameters = (ArrayList<String>) message.getObj();
 		String m=parameters.get(0);
 		String y=parameters.get(1);
+		String company=parameters.get(2);
 		try {
-			sendToClientObject(CompanyFuelControllerServer.getAllAnaliticDataByYearAndMonth(m, y),client);
+			sendToClientObject(CompanyFuelControllerServer.getAllAnaliticDataByYearAndMonth(m, y,company),client);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-			
 		break;
+		
+		case getAnaliticFile:
+			ArrayList<String> parameters2 = (ArrayList<String>) message.getObj();
+			String fileName=parameters2.get(0);
+			String company2=parameters2.get(1);
+			String type=parameters2.get(2);
+			try {
+				client.sendToClient(
+						new Message(convertFileToSeializable(CompanyFuelControllerServer.getAnaliticFile(fileName,company2,type)),
+								Commands.reciveFile));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
 		
 		default:
 			System.out.println("default");

@@ -407,11 +407,15 @@ public class FileManagmentSys {
 		return String.format("%-12s %s", CutomerID, totalePurchases) + "\n";
 	}
 
+	
+	
 	public static String buildHeader(String year, String stationId, String reportType, String quarter) {
 
 		return String.format("%s %s %s Quarter station_id : %-4s\n\n", reportType, year, quarter, stationId);
 	}
 
+	
+	
 	public static String incomeReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, incomeReport, quarter);
@@ -419,6 +423,8 @@ public class FileManagmentSys {
 				res.getFloat(1));
 	}
 
+	
+	
 	public static String purchaseReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, purchasesReport, quarter);
