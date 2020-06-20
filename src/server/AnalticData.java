@@ -671,6 +671,7 @@ public class AnalticData implements Runnable {
 				}
 			}
 			// the last one
+			if(!customerTypeAnaleticRank.isEmpty())
 			customerTypeAnaleticRank.set(index, Math.max(1, customerTypeAnaleticRank.get(index) * countRank));
 
 		} catch (Exception e) {
