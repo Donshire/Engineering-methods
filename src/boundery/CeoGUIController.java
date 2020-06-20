@@ -215,6 +215,10 @@ public class CeoGUIController implements Initializable {
 			RequestListTable.setItems(data1);
 		}
 		if (event.getSource() == RequestListConfirmBtn) {
+			if(selectPricingModuleList.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Please select at least one rate");
+				return;
+			}
 			if (EmployeeCC.confirmBuildRateApprovalDetails(selectPricingModuleList)) {
 				JOptionPane.showMessageDialog(null, "Success");
 				
@@ -231,6 +235,10 @@ public class CeoGUIController implements Initializable {
 			}
 		}
 		if (event.getSource() == RequestListRejectBtn) {
+			if(selectPricingModuleList.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Please select at least one rate");
+				return;
+			}
 			if (EmployeeCC.rejectBuildRateApprovalDetails(selectPricingModuleList)) {
 				JOptionPane.showMessageDialog(null, "Success");
 				//
