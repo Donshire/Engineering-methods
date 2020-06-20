@@ -39,7 +39,7 @@
                   <Font size="15.0" />
                </font></Text>
             <ComboBox fx:id="OrderTypeCombox" layoutX="414.0" layoutY="14.0" onAction="#chooseOrderType" prefWidth="150.0" />
-            <Text fx:id="OrderHeader" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+            <Text fx:id="OrderHeader" layoutX="14.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0">
                <font>
                   <Font size="15.0" />
                </font></Text>
@@ -47,8 +47,10 @@
          </children>
       </Pane>
       <Button fx:id="LogOutBtn" layoutX="872.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="74.0" stylesheets="@styles.css" text="Log Out" />
-      <Button fx:id="MainPaneBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Main Pane" />
-      <Button fx:id="OrdersBtn" layoutY="167.0" mnemonicParsing="false" onAction="#openOrdersPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Orders" />
+      <Button fx:id="OrdersBtn" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#openOrdersPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Orders">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="SupplierMainPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" visible="false">
          <children>
             <Label fx:id="NotificationLbl" layoutX="14.0" layoutY="14.0" text="Notifications">

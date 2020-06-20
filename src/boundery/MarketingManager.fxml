@@ -10,7 +10,6 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -22,15 +21,10 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.MarketingManagerController">
    <children>
       <Button fx:id="logOutBtn" layoutX="864.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOut" prefHeight="31.0" prefWidth="67.0" stylesheets="@styles.css" text="Log Out" />
-      <Button fx:id="mainPane" layoutY="287.0" mnemonicParsing="false" onAction="#openMainPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Main Pane" />
-      <Pane fx:id="markitingManagerNofPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
-         <children>
-            <Text fx:id="helloUserTxt" layoutX="475.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="hello" />
-            <Text layoutX="28.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Notifications" />
-            <TextArea fx:id="NotificationsTextArea" editable="false" layoutX="28.0" layoutY="81.0" prefHeight="200.0" prefWidth="546.0" />
-         </children>
-      </Pane>
-      <Button fx:id="fuelRatesWindowBtn" layoutY="168.0" mnemonicParsing="false" onAction="#openFuelRatesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Fuel Rates" />
+      <Button fx:id="fuelRatesWindowBtn" alignment="BASELINE_LEFT" layoutY="168.0" mnemonicParsing="false" onAction="#openFuelRatesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Fuel Rates">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="fuelRatesPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
             <Text layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create new Company Rate">
@@ -39,12 +33,21 @@
                </font>
             </Text>
             <ComboBox fx:id="rateType" layoutX="120.0" layoutY="49.0" onAction="#chooseFuelTypeForNewRate" prefHeight="31.0" prefWidth="322.0" promptText="Rate Type" />
-            <Text layoutX="23.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rate Types" />
-            <Text layoutX="23.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Rate" />
+            <Text layoutX="23.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rate Types">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
+            <Text layoutX="23.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Rate">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <TextField fx:id="newRatetxt" layoutX="120.0" layoutY="97.0" promptText="0.00" />
-            <Text fx:id="maxFuelPricetxt" layoutX="449.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The old rate was" />
+            <Text fx:id="maxFuelPricetxt" layoutX="449.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The old rate was">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <ComboBox fx:id="rateTypeCombo" layoutX="534.0" layoutY="156.0" onAction="#chooserateType" prefWidth="150.0" promptText="Rate Status" />
-            <TableView fx:id="companyRatesTable" editable="true" layoutX="55.0" layoutY="189.0" prefHeight="200.0" prefWidth="630.0">
+            <TableView fx:id="companyRatesTable" editable="true" layoutX="55.0" layoutY="189.0" prefHeight="200.0" prefWidth="631.0">
               <columns>
                   <TableColumn fx:id="rateCheckBoxSelect" minWidth="-1.0" prefWidth="100.0" text="Select Rates" />
                 <TableColumn fx:id="modelNameRate" minWidth="250.0" prefWidth="75.0" text="Model Name" />
@@ -58,11 +61,17 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Text>
-            <Text layoutX="424.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Rate status" />
+            <Text layoutX="395.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Rate status">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Button fx:id="updateRates" layoutX="624.0" layoutY="397.0" mnemonicParsing="false" onAction="#UpdateSelectedRates" stylesheets="@styles.css" text="Activate" />
          </children>
       </Pane>
-      <Button fx:id="SalesWindowBtn" layoutY="227.0" mnemonicParsing="false" onAction="#OpenSalePane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales" />
+      <Button fx:id="SalesWindowBtn" alignment="BASELINE_LEFT" layoutY="227.0" mnemonicParsing="false" onAction="#OpenSalePane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="saleDataPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
             <VBox layoutX="70.0" layoutY="50.0" prefHeight="400.0" prefWidth="200.0" spacing="10.0">
@@ -200,7 +209,7 @@
             <Text fx:id="saleDataViewIndex" layoutX="488.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </Pane>
-      <Pane fx:id="salePane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c">
+      <Pane fx:id="salePane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
             <TableView fx:id="salesDetailsTable" editable="true" layoutX="23.0" layoutY="158.0" prefHeight="200.0" prefWidth="600.0">
               <columns>
@@ -225,11 +234,17 @@
                   <Font size="24.0" />
                </font>
             </Text>
-            <Text layoutX="23.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Sale Type" />
+            <Text layoutX="23.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Sale Type">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Button fx:id="deActivateSaleBtn" layoutX="218.0" layoutY="369.0" mnemonicParsing="false" onAction="#activateSale" stylesheets="@styles.css" text="de-Activate" />
          </children>
       </Pane>
-      <Button fx:id="reportGenerationWindowBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openReportGenerationPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Report generation" />
+      <Button fx:id="reportGenerationWindowBtn" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#openReportGenerationPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Report generation">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="reportsPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
             <Text layoutX="24.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Report To Generate:">
@@ -238,7 +253,10 @@
                </font>
             </Text>
             <ComboBox fx:id="reportKindCombo" layoutX="363.0" layoutY="20.0" onAction="#selectReportType" prefWidth="150.0" promptText="report Type" />
-            <Text fx:id="enterSaleTxt" layoutX="36.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Sale ID/Number" />
+            <Text fx:id="enterSaleTxt" layoutX="36.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Sale ID/Number">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <TextField fx:id="reportsaleNumber" layoutX="203.0" layoutY="73.0" />
             <Button fx:id="generateReportBtn" layoutX="446.0" layoutY="72.0" mnemonicParsing="false" onAction="#generateReport" stylesheets="@styles.css" text="Generate" />
             <Pane fx:id="PeriodicReportPane" layoutX="25.0" layoutY="120.0" prefHeight="370.0" prefWidth="620.0" visible="false" />
@@ -277,25 +295,39 @@
             <Text fx:id="selectDateTxt" layoutX="14.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Dates" visible="false" />
          </children>
       </Pane>
-      <Button fx:id="analiticDatabtn" layoutY="346.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="AnaliticData" />
+      <Button fx:id="analiticDatabtn" alignment="BASELINE_LEFT" layoutY="286.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="AnaliticData">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Pane fx:id="analiticDataPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
-            <TableView fx:id="AnaliticDataTable" layoutX="84.0" layoutY="174.0" prefHeight="243.0" prefWidth="600.0">
+            <TableView fx:id="AnaliticDataTable" layoutX="84.0" layoutY="146.0" prefHeight="243.0" prefWidth="600.0">
               <columns>
-                <TableColumn fx:id="weekCol" prefWidth="150.0" text="Week" />
-                <TableColumn fx:id="monthCol" prefWidth="150.0" text="Month" />
-                  <TableColumn fx:id="yearCol" prefWidth="150.0" text="Year" />
-                  <TableColumn fx:id="typeAnaliticCol" minWidth="-Infinity" prefWidth="150.0" text="type" />
+                <TableColumn fx:id="weekCol" prefWidth="126.0" text="Week" />
+                <TableColumn fx:id="monthCol" prefWidth="174.0" text="Month" />
+                  <TableColumn fx:id="yearCol" prefWidth="155.0" text="Year" />
+                  <TableColumn fx:id="typeAnaliticCol" minWidth="-Infinity" prefWidth="144.0" text="type" />
               </columns>
             </TableView>
-            <TextField fx:id="getYeartxt" layoutX="263.0" layoutY="137.0" />
-            <ComboBox fx:id="monthComboBox" layoutX="84.0" layoutY="137.0" prefWidth="150.0" />
-            <Button fx:id="showAnaliticDatabtn" layoutX="469.0" layoutY="137.0" mnemonicParsing="false" onAction="#showAnaliticDataClick" stylesheets="@styles.css" text="show" />
-            <Text layoutX="84.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Month" wrappingWidth="116.63817688822746" />
-            <Text layoutX="263.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="enter year" wrappingWidth="143.99998486042023" />
+            <TextField fx:id="getYeartxt" layoutX="263.0" layoutY="109.0" promptText="yyyy" />
+            <ComboBox fx:id="monthComboBox" layoutX="84.0" layoutY="109.0" prefWidth="150.0" />
+            <Button fx:id="showAnaliticDatabtn" layoutX="469.0" layoutY="109.0" mnemonicParsing="false" onAction="#showAnaliticDataClick" stylesheets="@styles.css" text="show" />
+            <Text layoutX="84.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Month" wrappingWidth="116.63817688822746">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
+            <Text layoutX="265.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="enter year" wrappingWidth="143.99998486042023">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analitic Data">
                <font>
                   <Font name="System Bold" size="35.0" />
+               </font>
+            </Text>
+            <Text fill="RED" layoutX="84.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-Double click to choose analitic data diagrams">
+               <font>
+                  <Font size="15.0" />
                </font>
             </Text>
          </children>
@@ -312,7 +344,7 @@
                   <Font name="System Bold Italic" size="32.0" />
                </font>
             </Text>
-            <BarChart fx:id="barChart" layoutX="124.0" layoutY="31.0" visible="false">
+            <BarChart fx:id="barChart" layoutX="124.0" layoutY="77.0" prefHeight="354.0" prefWidth="500.0" visible="false">
               <xAxis>
                 <CategoryAxis fx:id="categoryAxis" side="BOTTOM" />
               </xAxis>
@@ -320,16 +352,31 @@
                 <NumberAxis fx:id="numberAxis" side="LEFT" />
               </yAxis>
             </BarChart>
+            <Text fx:id="purchase_hours" layoutX="259.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purchase hours - purchase count">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="piechart2" layoutX="240.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Y : Purchase price - X : Purchase count" visible="false">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
+            <Text fx:id="piechart3" layoutX="275.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fuel type - purchase count " visible="false">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
       <Pane fx:id="analiticRankPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" styleClass="c" visible="false">
          <children>
             <TableView fx:id="analiticRanksTable" layoutX="49.0" layoutY="63.0" prefHeight="273.0" prefWidth="661.0">
               <columns>
-                <TableColumn fx:id="userIDcol" prefWidth="125.0" text="Customer Id" />
-                <TableColumn fx:id="customerTypeAnaleticcol" prefWidth="125.0" text="Customer Type" />
-                  <TableColumn fx:id="fuelingHourAnaleticcol" prefWidth="125.0" text="Fueling Hours" />
-                  <TableColumn fx:id="fuelTypeAnaleticcol" prefWidth="125.0" text="Fuel Type" />
+                <TableColumn fx:id="userIDcol" prefWidth="173.0" text="Customer Id" />
+                <TableColumn fx:id="customerTypeAnaleticcol" prefWidth="170.0" text="Customer Type" />
+                  <TableColumn fx:id="fuelingHourAnaleticcol" prefWidth="168.0" text="Fueling Hours" />
+                  <TableColumn fx:id="fuelTypeAnaleticcol" prefWidth="149.0" text="Fuel Type" />
               </columns>
             </TableView>
             <Text fill="RED" layoutX="51.0" layoutY="353.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Customer type rank is givven by total purchases and the total number of cars">
@@ -356,5 +403,10 @@
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
+      <Text fx:id="hellomessage" layoutX="697.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

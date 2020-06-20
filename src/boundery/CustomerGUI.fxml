@@ -17,14 +17,20 @@
 <Pane fx:id="CustomerMainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.CustomerGuiController">
    <children>
       <Button layoutX="887.0" layoutY="15.0" mnemonicParsing="false" onAction="#logOut" stylesheets="@styles.css" text="Log Out" />
-      <Button fx:id="orderGasbtn" layoutY="108.0" mnemonicParsing="false" onAction="#orderGasClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Order Home Gas" />
-      <Button fx:id="myOrdersbtn" layoutY="167.0" mnemonicParsing="false" onAction="#myOrdersClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="View My Orders" />
-      <Text fx:id="hellotxt" layoutX="230.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+      <Button fx:id="orderGasbtn" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#orderGasClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Order Home Gas">
          <font>
-            <Font size="32.0" />
+            <Font size="18.0" />
+         </font></Button>
+      <Button fx:id="myOrdersbtn" alignment="BASELINE_LEFT" layoutY="167.0" mnemonicParsing="false" onAction="#myOrdersClicked" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="View My Orders">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
+      <Text fx:id="hellotxt" layoutX="755.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hello">
+         <font>
+            <Font size="20.0" />
          </font>
       </Text>
-      <Pane fx:id="myOrdersPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <Pane fx:id="myOrdersPane" layoutX="192.0" layoutY="108.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <TableView fx:id="orderTable" layoutX="15.0" layoutY="66.0" prefHeight="343.0" prefWidth="741.0">
               <columns>
@@ -44,7 +50,7 @@
                </font>
             </Text>
          </children></Pane>
-      <Pane fx:id="orderHomeGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <Pane fx:id="orderHomeGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
             <RadioButton fx:id="radioImmediat" layoutX="21.0" layoutY="67.0" mnemonicParsing="false" onAction="#radioSelected" selected="true" text="Immediate">
                <toggleGroup>
@@ -62,7 +68,7 @@
                   <ColorAdjust />
                </effect>
             </Text>
-            <RadioButton fx:id="normalSupply" layoutX="18.0" layoutY="104.0" mnemonicParsing="false" onAction="#radioSelected" text="normal" toggleGroup="$DeliveryDateRadio">
+            <RadioButton fx:id="normalSupply" layoutX="20.0" layoutY="104.0" mnemonicParsing="false" onAction="#radioSelected" text="normal" toggleGroup="$DeliveryDateRadio">
                <font>
                   <Font size="15.0" />
                </font></RadioButton>
@@ -134,5 +140,10 @@
             <Image url="@../Images/MyFuel.jpg" />
          </image>
       </ImageView>
+      <Text fx:id="hellomessage" layoutX="808.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
    </children>
 </Pane>

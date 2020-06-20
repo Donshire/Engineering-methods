@@ -93,8 +93,6 @@ public class SupplierController implements Initializable {
 	@FXML
 	private TableColumn<GasStationOrder, Float> quantity;
 
-	@FXML
-	private Pane SupplierMainPane;
 
 	@FXML
 	private Label NotificationLbl;
@@ -104,9 +102,6 @@ public class SupplierController implements Initializable {
 
 	@FXML
 	private Button LogOutBtn;
-
-	@FXML
-	private Button MainPaneBtn;
 
 	@FXML
 	private Button OrdersBtn;
@@ -254,17 +249,6 @@ public class SupplierController implements Initializable {
 	}
 
 	/**
-	 * Switch to the main pane
-	 * 
-	 * @param event
-	 */
-	
-	@FXML
-	void openMainPane(ActionEvent event) {
-		switchPanes(SupplierMainPane);
-	}
-
-	/**
 	 * Switch to orders pane
 	 * 
 	 * @param event
@@ -287,10 +271,9 @@ public class SupplierController implements Initializable {
 		System.out.println("hello");
 		System.out.println(supplier);
 		// set the current pane as the main
-		currentPane = SupplierMainPane;
+		currentPane = SupplierOrdersPane;
 		// show the main pane and hide the others
-		SupplierMainPane.setVisible(true);
-		SupplierOrdersPane.setVisible(false);
+		SupplierOrdersPane.setVisible(true);
 
 		hellomessage.setText(supplier.getFirstName());
 

@@ -82,6 +82,16 @@ import javafx.util.Callback;
 import server.FileManagmentSys;
 
 public class MarketingManagerController implements Initializable {
+	@FXML
+	private Text purchase_hours;
+
+	@FXML
+	private Text hellomessage;
+	@FXML
+	private Text piechart2;
+
+	@FXML
+	private Text piechart3;
 
 	@FXML
 	private VBox vboxPeriodicGuiTable;
@@ -119,8 +129,6 @@ public class MarketingManagerController implements Initializable {
 	private Button fuelRatesWindowBtn;
 	@FXML
 	private Button reportGenerationWindowBtn;
-	@FXML
-	private Pane markitingManagerNofPane;
 	@FXML
 	private Text helloUserTxt;
 	@FXML
@@ -230,7 +238,7 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private TableColumn<AnaliticDataReport, String> yearCol;
-	
+
 	@FXML
 	private TableColumn<AnaliticDataReport, String> typeAnaliticCol;
 	// analitic data tabel end------------------
@@ -265,10 +273,10 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private BarChart barChart;
-	
+
 	@FXML
 	private NumberAxis numberAxis;
-	
+
 	@FXML
 	private CategoryAxis categoryAxis;
 
@@ -281,7 +289,7 @@ public class MarketingManagerController implements Initializable {
 
 	@FXML
 	private Pane analiticRankPane;
-	
+
 	@FXML
 	private TableView<UserAnaliticRanks> analiticRanksTable;
 
@@ -306,23 +314,44 @@ public class MarketingManagerController implements Initializable {
 
 		if (btn.equals(nextbtn)) {
 			pie_index++;
+			// purchase_hours
 			switchCharts(pie_index);
 			prevbtn.setDisable(false);
-			if (pie_index == 2)
+			if (pie_index == 2) {
 				nextbtn.setDisable(true);
+			}
 		}
 
 		else if (btn.equals(prevbtn)) {
 			pie_index--;
 			switchCharts(pie_index);
 			nextbtn.setDisable(false);
-			if (pie_index == 0)
+			if (pie_index == 0) {
 				prevbtn.setDisable(true);
+			}
 		}
+		switch (pie_index) {
+		case 0:
+			purchase_hours.setVisible(true);
+			piechart2.setVisible(false);
+			piechart3.setVisible(false);
+			break;
+		case 1:
+			purchase_hours.setVisible(false);
+			piechart2.setVisible(true);
+			piechart3.setVisible(false);
+			break;
+		case 2:
+			purchase_hours.setVisible(false);
+			piechart2.setVisible(false);
+			piechart3.setVisible(true);
+			break;
+		}
+
 	}
-	
+
 	public void switchCharts(int index) {
-		switch(index) {
+		switch (index) {
 		case 0:
 			pieChart1.setVisible(true);
 			barChart.setVisible(false);
@@ -449,8 +478,6 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
-
-
 	@FXML
 	void selectReportType(ActionEvent event) {
 		if (reportKindCombo.getValue() == MarkitingManagerReport.PeriodicReport) {
@@ -504,11 +531,6 @@ public class MarketingManagerController implements Initializable {
 	@FXML
 	void finishViweingSaleDetails(ActionEvent event) {
 		switchPanes(salePane);
-	}
-
-	@FXML
-	void openMainPane(ActionEvent event) {
-		switchPanes(markitingManagerNofPane);
 	}
 
 	@FXML
@@ -629,11 +651,10 @@ public class MarketingManagerController implements Initializable {
 		else if (sFuelNewRate.isEmpty() == true)
 			JOptionPane.showMessageDialog(null, "please enter the new rate");
 		else {
-			if(!MarketingEmployeeController.checkIfStringContainsOnlyNumbersInFloatType(sFuelNewRate)) {
+			if (!MarketingEmployeeController.checkIfStringContainsOnlyNumbersInFloatType(sFuelNewRate)) {
 				JOptionPane.showMessageDialog(null, "Please enter numbers 0.XX");
 				return;
-			}
-			else {
+			} else {
 				if (EmployeeCC.craeteNewPricingModel(new PricingModule(rateType.getValue().ordinal(), sFuelNewRate,
 						markitingManager.getCompanyName(), RatesStatus.created)))
 					JOptionPane.showMessageDialog(null, "Creating New Rate done succesfully");
@@ -811,7 +832,7 @@ public class MarketingManagerController implements Initializable {
 		PricingModule pricingModule = EmployeeCC.getCompanyActiveRateAccordingPriceModel(
 				new PricingModule(rateTypeSelected.ordinal(), "", markitingManager.getCompanyName(), null));
 		if (pricingModule != null)
-			maxFuelPricetxt.setText(String.format("the current rate is : %.2f", pricingModule.getSalePercent()));
+			maxFuelPricetxt.setText(String.format("the current rate is : %s", pricingModule.getSalePercent()));
 		else
 			JOptionPane.showMessageDialog(null, "system bug there isn't data for this report");
 	}
@@ -830,10 +851,10 @@ public class MarketingManagerController implements Initializable {
 		// set the table according to comboBox
 		if (selected.equals(RatesStatus.confirmed)) {
 			rateCheckBoxSelect.setVisible(true);
-			companyRatesTable.setPrefWidth(550);
+			companyRatesTable.setPrefWidth(631);
 		} else {
 			rateCheckBoxSelect.setVisible(false);
-			companyRatesTable.setPrefWidth(550 - rateCheckBoxSelect.getPrefWidth());
+			companyRatesTable.setPrefWidth(631 - rateCheckBoxSelect.getPrefWidth());
 		}
 		// fill table data
 		companyRatesTable.getItems().setAll(data);
@@ -947,25 +968,23 @@ public class MarketingManagerController implements Initializable {
 			row.setOnMouseClicked(ev -> {
 				if (!row.isEmpty() && ev.getButton() == MouseButton.PRIMARY && ev.getClickCount() == 2) {
 					AnaliticDataReport clickedRow = row.getItem();
-					if(clickedRow.getType().compareTo(FileManagmentSys.statisticData)==0) {
+					if (clickedRow.getType().compareTo(FileManagmentSys.statisticData) == 0) {
 						switchPanes(piePane);
-						
-						pie_index=0;
+
+						pie_index = 0;
 						pieChart1.setVisible(true);
 						pieChart3.setVisible(false);
 						barChart.setVisible(false);
-						
+
 						nextbtn.setDisable(false);
 						prevbtn.setDisable(true);
-						
-						analiticDataByYearAndMonth(
-								clickedRow.getFileName(),FileManagmentSys.statisticData);
+
+						analiticDataByYearAndMonth(clickedRow.getFileName(), FileManagmentSys.statisticData);
 					}
-						
+
 					else {
 						switchPanes(analiticRankPane);
-						analiticDataByYearAndMonth(
-								clickedRow.getFileName(),FileManagmentSys.customerAnaliticData);
+						analiticDataByYearAndMonth(clickedRow.getFileName(), FileManagmentSys.customerAnaliticData);
 					}
 				}
 			});
@@ -976,64 +995,63 @@ public class MarketingManagerController implements Initializable {
 		monthCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("month"));
 		yearCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("year"));
 		typeAnaliticCol.setCellValueFactory(new PropertyValueFactory<AnaliticDataReport, String>("type"));
-		
-		//AnaliticDataTable.setItems(value);
+
+		// AnaliticDataTable.setItems(value);
 	}
-	
-	
+
 	public ObservableList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month, String year) {
 
-		ArrayList<AnaliticDataReport> data = EmployeeCC.getAllAnaliticDataByYearAndMonth(month, year,markitingManager.getCompanyName());
+		ArrayList<AnaliticDataReport> data = EmployeeCC.getAllAnaliticDataByYearAndMonth(month, year,
+				markitingManager.getCompanyName());
 		if (data.isEmpty())
 			JOptionPane.showMessageDialog(null, "there is no data in this year");
 		ObservableList<AnaliticDataReport> analiticData = FXCollections.observableArrayList(data);
 		return analiticData;
 	}
-	
-	
-	
-	public void analiticDataByYearAndMonth(String fileName,String type) {
 
-		File fily = EmployeeCC.getAllAnaliticFileByYearAndMonth(
-				fileName,markitingManager.getCompanyName(),type);
-		
-		if (fily==null)
+	public void analiticDataByYearAndMonth(String fileName, String type) {
+
+		File fily = EmployeeCC.getAllAnaliticFileByYearAndMonth(fileName, markitingManager.getCompanyName(), type);
+
+		if (fily == null)
 			JOptionPane.showMessageDialog(null, "there is no data in this period");
-		else{
-			String array [] ;
+		else {
+			String array[];
 			FileReader fr;
 			BufferedReader br;
-			StringBuilder firstData,secondData,thirdData;
+			StringBuilder firstData, secondData, thirdData;
 			String str;
-			int lineCounter=0;
-			
-			firstData= new StringBuilder();
-			secondData= new StringBuilder();
-			thirdData= new StringBuilder();
+			int lineCounter = 0;
+
+			firstData = new StringBuilder();
+			secondData = new StringBuilder();
+			thirdData = new StringBuilder();
 			//
-			if(type.compareTo(FileManagmentSys.statisticData)==0) {
+			if (type.compareTo(FileManagmentSys.statisticData) == 0) {
 				try {
 					fr = new FileReader(fily);
 					br = new BufferedReader(fr); // creates a buffering character input stream
-					
+
 					while ((str = br.readLine()) != null) {
-						if(lineCounter>=3&&lineCounter<=10)firstData.append(str + "\n");
-						if(lineCounter>=14&&lineCounter<=18)secondData.append(str + "\n");
-						if(lineCounter>=21)thirdData.append(str + "\n");
-						
+						if (lineCounter >= 3 && lineCounter <= 10)
+							firstData.append(str + "\n");
+						if (lineCounter >= 14 && lineCounter <= 18)
+							secondData.append(str + "\n");
+						if (lineCounter >= 21)
+							thirdData.append(str + "\n");
+
 						lineCounter++;
 					}
 					pieChart1.getData().clear();
 					pieChart3.getData().clear();
 					barChart.getData().clear();
-					
+
 					pieChart1.setData(getpieChartDataForHours(firstData.toString()));
 					pieChart3.setData(getpieChartDataForFuelType(thirdData.toString()));
 					barChart.getData().addAll(getpieChartDataForCarNumAndTotalPurchase(secondData.toString()));
-					
+
 					//
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 				//
@@ -1043,23 +1061,23 @@ public class MarketingManagerController implements Initializable {
 				try {
 					fr = new FileReader(fily);
 					br = new BufferedReader(fr); // creates a buffering character input stream
-					ArrayList<UserAnaliticRanks> userDtails= new ArrayList<UserAnaliticRanks>();
-					
+					ArrayList<UserAnaliticRanks> userDtails = new ArrayList<UserAnaliticRanks>();
+
 					while ((str = br.readLine()) != null) {
-						if(lineCounter>=2) {
-							userDtails.add(new UserAnaliticRanks(
-									str.substring(0,15).replaceAll(" ", ""), Integer.parseInt(str.substring(15,30).replaceAll(" ", "")),
-									Integer.parseInt(str.substring(30,45).replaceAll(" ", "")), Integer.parseInt(str.substring(45,60).replaceAll(" ", ""))));
+						if (lineCounter >= 2) {
+							userDtails.add(new UserAnaliticRanks(str.substring(0, 15).replaceAll(" ", ""),
+									Integer.parseInt(str.substring(15, 30).replaceAll(" ", "")),
+									Integer.parseInt(str.substring(30, 45).replaceAll(" ", "")),
+									Integer.parseInt(str.substring(45, 60).replaceAll(" ", ""))));
 						}
 						lineCounter++;
 					}
-					
+
 					//
 					System.out.println(userDtails);
 					ObservableList<UserAnaliticRanks> analiticData = FXCollections.observableArrayList(userDtails);
 					analiticRanksTable.setItems(analiticData);
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -1070,60 +1088,57 @@ public class MarketingManagerController implements Initializable {
 	public ArrayList<XYChart.Series<String, Number>> getpieChartDataForCarNumAndTotalPurchase(String data) {
 		String array[] = data.split("\n");
 		int i;
-		
-		ArrayList<XYChart.Series<String, Number>> series1 = new ArrayList<XYChart.Series<String, Number>>(); 
+
+		ArrayList<XYChart.Series<String, Number>> series1 = new ArrayList<XYChart.Series<String, Number>>();
 		//
-		for(i=0;i<array.length;i++) {
+		for (i = 0; i < array.length; i++) {
 			XYChart.Series<String, Number> temp = new XYChart.Series<String, Number>();
 			//
-			temp.setName(array[i].substring(0,15).replaceAll(" ", "")+"ILS");
-			
-			temp.getData().add(new XYChart.Data<>(
-					array[i].substring(0,15).replaceAll(" ", ""),
-							Integer.parseInt(array[i].substring(15,array[i].length()).replaceAll(" ", ""))));
+			temp.setName(array[i].substring(0, 15).replaceAll(" ", "") + "ILS");
+
+			temp.getData().add(new XYChart.Data<>(array[i].substring(0, 15).replaceAll(" ", ""),
+					Integer.parseInt(array[i].substring(15, array[i].length()).replaceAll(" ", ""))));
 			series1.add(temp);
 		}
-		
+
 		return series1;
 	}
-	
+
 	public ObservableList<PieChart.Data> getpieChartDataForFuelType(String data) {
 		String array[] = data.split("\n");
-		int countArray[] =new int[array.length],sum=0,i;
-		
-		ObservableList<PieChart.Data> pieChartData =
-				FXCollections.observableArrayList();
-		
-		for(i=0;i<array.length;i++) {
-			countArray[i]= Integer.parseInt(array[i].substring(15).replaceAll(" ", ""));
-			sum+=countArray[i];
+		int countArray[] = new int[array.length], sum = 0, i;
+
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+		for (i = 0; i < array.length; i++) {
+			countArray[i] = Integer.parseInt(array[i].substring(15).replaceAll(" ", ""));
+			sum += countArray[i];
 		}
-		
+
 		//
-		for(i=0;i<array.length;i++) {
-			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)",array[i].substring(0,15).replaceAll(" ", ""),
-					(int)(((float)countArray[i]/sum)*100),"%"),countArray[i]));
+		for (i = 0; i < array.length; i++) {
+			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)", array[i].substring(0, 15).replaceAll(" ", ""),
+					(int) (((float) countArray[i] / sum) * 100), "%"), countArray[i]));
 		}
 
 		return pieChartData;
 	}
-	
+
 	public ObservableList<PieChart.Data> getpieChartDataForHours(String data) {
 		String array[] = data.split("\n");
-		int countArray[] =new int[array.length],sum=0,i;
-		
-		ObservableList<PieChart.Data> pieChartData =
-				FXCollections.observableArrayList();
-		
-		for(i=0;i<array.length;i++) {
-			countArray[i]= Integer.parseInt(array[i].substring(11).replaceAll(" ", ""));
-			sum+=countArray[i];
+		int countArray[] = new int[array.length], sum = 0, i;
+
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+		for (i = 0; i < array.length; i++) {
+			countArray[i] = Integer.parseInt(array[i].substring(11).replaceAll(" ", ""));
+			sum += countArray[i];
 		}
-		
+
 		//
-		for(i=0;i<array.length;i++) {
-			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)",array[i].substring(0,11),
-					(int)(((float)countArray[i]/sum)*100),"%"),countArray[i]));
+		for (i = 0; i < array.length; i++) {
+			pieChartData.add(new PieChart.Data(String.format("%s(%d%s)", array[i].substring(0, 11),
+					(int) (((float) countArray[i] / sum) * 100), "%"), countArray[i]));
 		}
 
 		return pieChartData;
@@ -1146,13 +1161,14 @@ public class MarketingManagerController implements Initializable {
 		System.out.println("hello");
 		// if agreed we can use a file to load and save the nofitications
 
-		helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " + markitingManager.getLastName());
+		// helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " +
+		// markitingManager.getLastName());
 
-		currentPane = markitingManagerNofPane;
-
+		currentPane = fuelRatesPane;
+		hellomessage.setText("Hello "+ markitingManager.getFirstName());
 		// show the main pane and hide the others
-		markitingManagerNofPane.setVisible(true);
-		fuelRatesPane.setVisible(false);
+
+		fuelRatesPane.setVisible(true);
 		saleDataPane.setVisible(false);
 		salePane.setVisible(false);
 		reportsPane.setVisible(false);
@@ -1202,8 +1218,8 @@ public class MarketingManagerController implements Initializable {
 		reportKindCombo.setItems(MarkitingReportType);
 
 		pieChart1.setVisible(true);
-		
+		purchase_hours.setVisible(true);
+
 	}
-	
 
 }

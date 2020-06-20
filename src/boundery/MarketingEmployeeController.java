@@ -650,28 +650,28 @@ public class MarketingEmployeeController implements Initializable {
 
 	/** The current pane. */
 	private Pane currentPane;
-	
+
 	/** The markem. */
 	public static Employee markem;
-	
+
 	/** The enter 2 cars flag. */
 	public boolean replaceCarFlag = false, enter2CarsFlag = false;
-	
+
 	/** The sec car 2. */
 	Car secCar2 = null;
-	
+
 	/** The date formatter. */
 	DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	/** The fuel types. */
 	private ArrayList<String> fuelTypes = new ArrayList<String>();
-	
+
 	/** The selected sales. */
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
-	
+
 	/** The fuel types for sale. */
 	private ArrayList<String> fuelTypesForSale = new ArrayList<String>();
-	
+
 	/** The companys. */
 	private ArrayList<String> companys = new ArrayList<String>();
 
@@ -721,7 +721,6 @@ public class MarketingEmployeeController implements Initializable {
 		currentPane = newPane;
 		currentPane.setVisible(true);
 	}
-
 
 	/**
 	 * Switch to the registration pane.
@@ -859,12 +858,14 @@ public class MarketingEmployeeController implements Initializable {
 	 * pricingModel, purchaseModel, FuelType, customerType, fuelTypesForSale combo
 	 * boxes Define data pickers
 	 *
-	 * @param location the location
+	 * @param location  the location
 	 * @param resources the resources
 	 */
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		CVVImage.setVisible(false);
+		CVVImage1.setVisible(false);
 		System.out.println("employee:  " + markem);
 		fuelTypes.add("95");
 		fuelTypes.add("MOTOR CYCLES");
@@ -1864,7 +1865,7 @@ public class MarketingEmployeeController implements Initializable {
 	 * Test Expire Date values.
 	 *
 	 * @param month the month
-	 * @param year the year
+	 * @param year  the year
 	 * @return true or false
 	 */
 

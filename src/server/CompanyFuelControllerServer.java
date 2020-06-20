@@ -21,14 +21,23 @@ import Entity.Sale;
 import enums.RatesStatus;
 import enums.SaleStatus;
 
+
+/**
+ * The Class CompanyFuelControllerServer is a server controller that sends and receives data
+ * from and to the database the functions use queries for that purpose.
+ */
 public class CompanyFuelControllerServer {
 
+	
 	/**
-	 * create periodicReport and save it in a file
+	 * create periodicReport and save it in a file.
+	 * 
 	 * @param companyName String
+	 * @param startDate the start date
+	 * @param endDate the end date
 	 * @param date String
 	 * @param time String
-	 * @return
+	 * @return the file
 	 */
 	public static File periodicReport(String companyName,String startDate,String endDate,String date, String time) {
 		File file = null;
@@ -98,6 +107,13 @@ public class CompanyFuelControllerServer {
 		return file;
 	}
 
+	/**
+	 * Customers total purchases.
+	 *
+	 * @param start the start
+	 * @param end the end
+	 * @return the array list
+	 */
 	public static ArrayList<customerTotalPurchase> customersTotalPurchases(String start,String end) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -130,8 +146,10 @@ public class CompanyFuelControllerServer {
 
 	/**
 	 * create an ArrayList containig for each customer purchase diversion by
-	 * companies
-	 * 
+	 * companies.
+	 *
+	 * @param start the start
+	 * @param end the end
 	 * @return that ArrayList
 	 */
 	public static ArrayList<customerCompaniesDiversion> customerCompaniesDiversion(String start,String end) {
@@ -189,7 +207,8 @@ public class CompanyFuelControllerServer {
 	}
 
 	/**
-	 * 
+	 * Gets the all companies.
+	 *
 	 * @return all the distinct(companyName) in myfueldb.company
 	 */
 	public static ArrayList<String> getAllCompanies() {
@@ -210,13 +229,23 @@ public class CompanyFuelControllerServer {
 		return result;
 	}
 
+	/**
+	 * The Class rankedcustomer.
+	 */
 	private static class rankedcustomer implements Comparable<rankedcustomer> {
+		
+		/** The purchas. */
 		customerTotalPurchase purchas;
+		
+		/** The companies. */
 		customerCompaniesDiversion companies;
 
+		/** The real rank. */
 		int customerTotalPurchaseRank, customerCompaniesDiversionRank,realRank;
+		
 		/**
-		 * 
+		 * Instantiates a new rankedcustomer.
+		 *
 		 * @param purchas customerTotalPurchase
 		 * @param companies customerCompaniesDiversion
 		 * @param customerTotalPurchaseRank int
@@ -232,6 +261,12 @@ public class CompanyFuelControllerServer {
 			this.realRank=customerCompaniesDiversionRank + customerTotalPurchaseRank;
 		}
 
+		/**
+		 * Compare to.
+		 *
+		 * @param o the o
+		 * @return the int
+		 */
 		@Override
 		public int compareTo(rankedcustomer o) {
 			if (this.realRank > o.realRank)
@@ -243,15 +278,34 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * The Class customerTotalPurchase.
+	 */
 	private static class customerTotalPurchase implements Comparable<customerTotalPurchase> {
+		
+		/** The customer id. */
 		String customerId;
+		
+		/** The total purchase. */
 		float totalPurchase;
 
+		/**
+		 * Instantiates a new customer total purchase.
+		 *
+		 * @param customerId the customer id
+		 * @param totalPurchase the total purchase
+		 */
 		public customerTotalPurchase(String customerId, float totalPurchase) {
 			this.customerId = customerId;
 			this.totalPurchase = totalPurchase;
 		}
 
+		/**
+		 * Compare to.
+		 *
+		 * @param o the o
+		 * @return the int
+		 */
 		@Override
 		public int compareTo(customerTotalPurchase o) {
 			if (this.totalPurchase > o.totalPurchase)
@@ -261,6 +315,11 @@ public class CompanyFuelControllerServer {
 			return 0;
 		}
 
+		/**
+		 * To string.
+		 *
+		 * @return the string
+		 */
 		@Override
 		public String toString() {
 			return "customerTotalPurchase [customerId=" + customerId + ", totalPurchase=" + totalPurchase + "]";
@@ -268,17 +327,40 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * The Class customerCompaniesDiversion.
+	 */
 	private static class customerCompaniesDiversion implements Comparable<customerCompaniesDiversion> {
+		
+		/** The customer id. */
 		String customerId;
+		
+		/** The total num of purchaese. */
 		int totalNumOfPurchaese;
+		
+		/** The num of purchaese by companies. */
 		int numOfPurchaeseByCompanies[];
 		
+		/**
+		 * Instantiates a new customer companies diversion.
+		 *
+		 * @param customerId the customer id
+		 * @param totalNumOfPurchaese the total num of purchaese
+		 * @param numOfPurchaeseByCompanies the num of purchaese by companies
+		 */
 		public customerCompaniesDiversion(String customerId, int totalNumOfPurchaese, int[] numOfPurchaeseByCompanies) {
 			this.customerId = customerId;
 			this.totalNumOfPurchaese = totalNumOfPurchaese;
 			this.numOfPurchaeseByCompanies = numOfPurchaeseByCompanies;
 		}
 
+		/**
+		 * Gets the purchase percent.
+		 *
+		 * @param purchases the purchases
+		 * @param numOfPurchaese the num of purchaese
+		 * @return the purchase percent
+		 */
 		public static float[] getPurchasePercent(int []purchases,int numOfPurchaese) {
 			float[] res = new float[purchases.length];
 			for(int i=0;i<purchases.length;i++)
@@ -286,6 +368,12 @@ public class CompanyFuelControllerServer {
 			return res;
 		}
 		
+		/**
+		 * Calculate rank.
+		 *
+		 * @param o the o
+		 * @return the int
+		 */
 		// The ALG
 		private static int calculateRank(customerCompaniesDiversion o) {
 			int numOfCompanies = o.numOfPurchaeseByCompanies.length;
@@ -296,6 +384,12 @@ public class CompanyFuelControllerServer {
 			return rank;
 		}
 
+		/**
+		 * Compare to.
+		 *
+		 * @param o the o
+		 * @return the int
+		 */
 		@Override
 		public int compareTo(customerCompaniesDiversion o) {
 			if (calculateRank(this) > calculateRank(o))
@@ -305,6 +399,11 @@ public class CompanyFuelControllerServer {
 			return 0;
 		}
 
+		/**
+		 * To string.
+		 *
+		 * @return the string
+		 */
 		@Override
 		public String toString() {
 			return "customerCompaniesDiversion [customerId=" + customerId + ", totalNumOfPurchaese="
@@ -314,12 +413,13 @@ public class CompanyFuelControllerServer {
 	}
 
 	/**
-	 * 
+	 * Response report.
+	 *
 	 * @param saleid      int
 	 * @param companyName String
 	 * @param date        String
 	 * @param time        String
-	 * @return
+	 * @return the file
 	 */
 	public static File responseReport(int saleid, String companyName, String date, String time) {
 		PreparedStatement stm;
@@ -390,6 +490,12 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * Creates the generic report.
+	 *
+	 * @param report the report
+	 * @return true, if successful
+	 */
 	public static boolean createGenericReport(GenericReport report) {
 		String query = "insert into genericreport (year,quarter,Filename,reportType,companyname,stationId) " + "values (?,?,?,?,?,?)";
 		PreparedStatement stm;
@@ -411,6 +517,13 @@ public class CompanyFuelControllerServer {
 		return true;
 	}
 
+	/**
+	 * Gets the company fuel.
+	 *
+	 * @param companyName the company name
+	 * @param fuelType the fuel type
+	 * @return the company fuel
+	 */
 	public static Object getCompanyFuel(String companyName, String fuelType) {
 
 		PreparedStatement stm;
@@ -442,6 +555,12 @@ public class CompanyFuelControllerServer {
 		return companyFuel;
 	}
 
+	/**
+	 * Gets the all company fuel types.
+	 *
+	 * @param companyName the company name
+	 * @return the all company fuel types
+	 */
 	public static ArrayList<CompanyFuel> getAllCompanyFuelTypes(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -460,6 +579,12 @@ public class CompanyFuelControllerServer {
 		return fuels;
 	}
 
+	/**
+	 * Update pricing model status.
+	 *
+	 * @param pricingModule the pricing module
+	 * @return true, if successful
+	 */
 	public static boolean updatePricingModelStatus(PricingModule pricingModule) {
 
 		PreparedStatement stm;
@@ -528,6 +653,13 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * Gets the all company rates by status.
+	 *
+	 * @param companyName the company name
+	 * @param status the status
+	 * @return the all company rates by status
+	 */
 	public static ArrayList<PricingModule> getAllCompanyRatesByStatus(String companyName,RatesStatus status) {
 
 		PreparedStatement stm;
@@ -547,6 +679,13 @@ public class CompanyFuelControllerServer {
 		return null;
 	}
 	
+	/**
+	 * Gets the company active pricing rate.
+	 *
+	 * @param companyName the company name
+	 * @param modelNumber the model number
+	 * @return the company active pricing rate
+	 */
 	public static PricingModule getCompanyActivePricingRate(String companyName,int modelNumber) {
 
 		PreparedStatement stm;
@@ -568,6 +707,12 @@ public class CompanyFuelControllerServer {
 		return null;
 	}
 
+	/**
+	 * Save pricing model.
+	 *
+	 * @param pricingModel the pricing model
+	 * @return true, if successful
+	 */
 	public static boolean savePricingModel(PricingModule pricingModel) {
 		String query = "insert into pricingmodule (modelNumber,salePercent,company,status) " + "values (?,?,?,?)";
 		PreparedStatement stm;
@@ -587,6 +732,12 @@ public class CompanyFuelControllerServer {
 		}
 	}
 
+	/**
+	 * Update sale.
+	 *
+	 * @param sale the sale
+	 * @return true, if successful
+	 */
 	public static boolean updateSale(Sale sale) {
 
 		PreparedStatement stm;
@@ -616,6 +767,12 @@ public class CompanyFuelControllerServer {
 		return true;
 	}
 
+	/**
+	 * Adds the new sale.
+	 *
+	 * @param sale the sale
+	 * @return the object
+	 */
 	public static Object addNewSale(Sale sale) {
 
 		PreparedStatement stm;
@@ -647,6 +804,12 @@ public class CompanyFuelControllerServer {
 		return true;
 	}
 
+	/**
+	 * Delete sale.
+	 *
+	 * @param sale the sale
+	 * @return the object
+	 */
 	public static Object deleteSale(Sale sale) {
 
 		PreparedStatement stm;
@@ -665,6 +828,13 @@ public class CompanyFuelControllerServer {
 	}
 
 
+	/**
+	 * Gets the all company sales by status.
+	 *
+	 * @param companyName the company name
+	 * @param status the status
+	 * @return the all company sales by status
+	 */
 	public static ArrayList<Sale> getAllCompanySalesByStatus(String companyName, SaleStatus status) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -697,7 +867,8 @@ public class CompanyFuelControllerServer {
 	}
 
 	/**
-	 * a function to get the current price for the gas of the CEO companies
+	 * a function to get the current price for the gas of the CEO companies.
+	 *
 	 * @param companyName is the name of the company CEO runs
 	 * @return returns an arraylist of the details of the gas for the ceo's company
 	 */
@@ -726,9 +897,10 @@ public class CompanyFuelControllerServer {
 	}
 	
 	/**
-	 * this function updates the max price of the chosen gas after update is pressed
-	 * @param list with the details 
-	 * @return
+	 * this function updates the max price of the chosen gas after update is pressed.
+	 *
+	 * @param list with the details
+	 * @return true, if successful
 	 */
 	public static boolean updateAllFuelMaxPriceDetails(ArrayList<CompanyFuel> list) {
 		PreparedStatement stm;
@@ -752,7 +924,8 @@ public class CompanyFuelControllerServer {
 	}
 	
 	/**
-	 * this function is for the list that is selected by the ceo for those to approve
+	 * this function is for the list that is selected by the ceo for those to approve.
+	 *
 	 * @param list the selected rates to be rejected
 	 * @return returns true if change or false if not
 	 */
@@ -785,7 +958,8 @@ public class CompanyFuelControllerServer {
 	}
 
 	/**
-	 * this function is for the list that is selected by the ceo for those to reject
+	 * this function is for the list that is selected by the ceo for those to reject.
+	 *
 	 * @param list the selected rates to be rejected
 	 * @return returns true or false
 	 */
@@ -816,10 +990,12 @@ public class CompanyFuelControllerServer {
 		return true;
 
 	}
+	
 	/**
 	 * this function gets the rates from the database to show the CEO
 	 * the function returns an arraylist with all the details of the ceo companies
-	 * the details return are those with "created" status
+	 * the details return are those with "created" status.
+	 *
 	 * @param companyName the ceo company name
 	 * @return an array list with the details
 	 */
@@ -849,6 +1025,13 @@ public class CompanyFuelControllerServer {
 	}
 	
 
+	/**
+	 * Gets the all report by yearand station id.
+	 *
+	 * @param year the year
+	 * @param stationID the station ID
+	 * @return the all report by yearand station id
+	 */
 	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationID) {
 
 		ArrayList<GenericReport> reports = new ArrayList<GenericReport>();
@@ -876,6 +1059,14 @@ public class CompanyFuelControllerServer {
 		return reports;
 	}
 	
+	/**
+	 * Gets the all analitic data by year and month.
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @param company the company
+	 * @return the all analitic data by year and month
+	 */
 	public static ArrayList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month,String year, String company){
 		ArrayList<AnaliticDataReport> reports = new ArrayList<AnaliticDataReport>();
 		PreparedStatement stm;
@@ -902,6 +1093,12 @@ public class CompanyFuelControllerServer {
 
 	
 	
+	/**
+	 * Creates the analitic report.
+	 *
+	 * @param report the report
+	 * @return true, if successful
+	 */
 	public static boolean createAnaliticReport(AnaliticDataReport report) {
 		String query = "insert into analiticdata (filename,week,month,year,company,type) " + "values (?,?,?,?,?,?)";
 		PreparedStatement stm;
@@ -924,6 +1121,14 @@ public class CompanyFuelControllerServer {
 		return true;
 	}
 	
+	/**
+	 * Gets the analitic file.
+	 *
+	 * @param fileName the file name
+	 * @param company the company
+	 * @param type the type
+	 * @return the analitic file
+	 */
 	public static File getAnaliticFile(String fileName,String company,String type) {
 		return FileManagmentSys.getFile(FileManagmentSys.createLocation(company, FileManagmentSys.analiticData
 				, type), fileName);

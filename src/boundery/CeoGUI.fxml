@@ -15,15 +15,15 @@
    <children>
       <Pane prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;">
          <children>
-            <Button fx:id="MaxPriceOfGasButton" layoutY="226.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Set max price of gas" textFill="WHITE">
+            <Button fx:id="MaxPriceOfGasButton" alignment="BASELINE_LEFT" layoutY="226.0" mnemonicParsing="false" onAction="#SetMaxPriceOfGasHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Set max price of gas" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="RateApprovalButton" layoutY="108.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Rate approval" textFill="WHITE">
+            <Button fx:id="RateApprovalButton" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#RateApprovalHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Rate approval" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="ReportsHandler" layoutY="167.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Station reports" textFill="WHITE">
+            <Button fx:id="ReportsHandler" alignment="BASELINE_LEFT" layoutY="167.0" mnemonicParsing="false" onAction="#ReportFunctionHandler" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Station reports" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
@@ -77,9 +77,12 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="SetMaxPriceOfGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <AnchorPane fx:id="SetMaxPriceOfGasPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
-            <Text layoutX="14.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* double click on the new max  price row to enter a new max price" />
+            <Text layoutX="14.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="* double click on the new max  price row to enter a new max price">
+               <font>
+                  <Font size="15.0" />
+               </font></Text>
             <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Maximum price list:">
                <font>
                   <Font size="25.0" />

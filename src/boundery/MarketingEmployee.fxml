@@ -16,7 +16,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="960.0" style="-fx-background-color: #e0c0a0;" styleClass="c" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boundery.MarketingEmployeeController">
    <children>
-      <Button fx:id="addCustomerBtn" layoutY="108.0" mnemonicParsing="false" onAction="#openNewClientPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Add Customer">
+      <Button fx:id="addCustomerBtn" alignment="BASELINE_LEFT" layoutY="108.0" mnemonicParsing="false" onAction="#openNewClientPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Add Customer">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -116,7 +116,7 @@
             <TextField fx:id="ExpDateYearTxt" layoutX="519.0" layoutY="166.0" prefHeight="31.0" prefWidth="49.0" />
          </children>
       </Pane>
-      <Button fx:id="carAndModleBtn" layoutY="167.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Car And Module">
+      <Button fx:id="carAndModleBtn" alignment="BASELINE_LEFT" layoutY="167.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Car And Module">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -184,7 +184,7 @@
             <ComboBox fx:id="secFuelTypeCombox" layoutX="405.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
          </children>
       </Pane>
-      <Button fx:id="openUpdateCustomerPane" layoutY="226.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Update Customer">
+      <Button fx:id="openUpdateCustomerPane" alignment="BASELINE_LEFT" layoutY="226.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Update Customer">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -273,7 +273,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Button fx:id="salesBtn" layoutY="285.0" mnemonicParsing="false" onAction="#openSalesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales">
+      <Button fx:id="salesBtn" alignment="BASELINE_LEFT" layoutY="285.0" mnemonicParsing="false" onAction="#openSalesPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Sales">
          <font>
             <Font size="18.0" />
          </font></Button>
