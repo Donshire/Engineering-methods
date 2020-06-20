@@ -104,6 +104,9 @@ public class StationManagerController implements Initializable {
 	@FXML
 	private TableColumn<StationFuel, Float> minQuantitycol;
 
+	@FXML
+	private TableColumn<StationFuel, Integer> tankSizecol;
+
 	//// qutatity table end
 
 	@FXML
@@ -204,14 +207,13 @@ public class StationManagerController implements Initializable {
 
 	@FXML
 	void LogOut(ActionEvent event) {
-		//markiting manager
+		// markiting manager
 		UserCC.logOut(stationManager.getId(), stationManager.getClass().toString());
-		
-		//logOut
-		MasterGUIController.getMasterGUIController().
-		switchWindows("LogIn.fxml");
+
+		// logOut
+		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
-	
+
 	@FXML
 	void ChooseOrdersStatus(ActionEvent event) {
 
@@ -295,6 +297,8 @@ public class StationManagerController implements Initializable {
 	void mouseClicked(MouseEvent event) {
 
 		Button b = (Button) event.getSource();
+		float amout;
+		int tankSize;
 
 		if (b == quantity) {
 			changeCurrAncorPane(QuantityView);
@@ -333,8 +337,23 @@ public class StationManagerController implements Initializable {
 					JOptionPane.showMessageDialog(null, "input must be greater then 0");
 					return;
 				}
-			
-				//need queru------------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@------------------------------------------
+
+				amout = EmployeeCC.getFuelAmountByFuelType(ChooseFuelType.getValue().toString(),
+						stationManager.getStationID());
+				tankSize = EmployeeCC.getFuelTanksizebyType(ChooseFuelType.getValue().toString(),
+						stationManager.getStationID());
+
+				if (val > tankSize) {
+					JOptionPane.showMessageDialog(null,
+							"the minimun quantity you enterd is bigger\nthen the tank size of this fuel type");
+					return;
+				}
+
+				if (val > amout) {
+					JOptionPane.showMessageDialog(null,
+							"Order was created because the new\nminimum amount is greater then the current amount");
+					EmployeeCC.createOrder(ChooseFuelType.getValue().toString(), stationManager.getStationID());
+				}
 
 				// All tests passed. Input is correct
 				EmployeeCC.updateFuelMinQuantitybyType(stationManager.getStationID(), ChooseFuelType.getValue(), val);
@@ -392,19 +411,22 @@ public class StationManagerController implements Initializable {
 		// all passed
 		return true;
 	}
-	
-	public Quarter getCurrentQuarter(){
-		
+
+	public Quarter getCurrentQuarter() {
+
 		int currentquareter = LocalDate.now().getMonthValue();
-		
-		if(currentquareter >=1 && currentquareter <= 3 ) return Quarter.first;
-		
-		else if (currentquareter >=4 && currentquareter <= 6 ) return Quarter.second;
-		
-		else if(currentquareter >=7 && currentquareter <= 10 ) return Quarter.third;
-		
+
+		if (currentquareter >= 1 && currentquareter <= 3)
+			return Quarter.first;
+
+		else if (currentquareter >= 4 && currentquareter <= 6)
+			return Quarter.second;
+
+		else if (currentquareter >= 7 && currentquareter <= 10)
+			return Quarter.third;
+
 		return Quarter.fourth;
-		
+
 	}
 
 	@FXML
@@ -437,39 +459,38 @@ public class StationManagerController implements Initializable {
 					JOptionPane.showMessageDialog(null, "You must enter a year");
 					return;
 				}
-			
 
-			try {
-				val = Integer.parseInt(enterYearCreatetxt.getText());
-				if (val <= 0) {
-					JOptionPane.showMessageDialog(null, "Year Value must be greater then zero");
+				try {
+					val = Integer.parseInt(enterYearCreatetxt.getText());
+					if (val <= 0) {
+						JOptionPane.showMessageDialog(null, "Year Value must be greater then zero");
+						enterYearCreatetxt.clear();
+						return;
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "input error try again");
 					enterYearCreatetxt.clear();
 					return;
 				}
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "input error try again");
-				enterYearCreatetxt.clear();
-				return;
-			}
 
-			check = isValid(val, q);
+				check = isValid(val, q);
 
-			if (check == true) {
+				if (check == true) {
 
-				f = EmployeeCC.createFuelStationReports(stationManager.getStationID(), stationManager.getCompanyName(),
-						s, q, val + "");
-				if (f == null)
-					JOptionPane.showMessageDialog(null, "report already exist");
+					f = EmployeeCC.createFuelStationReports(stationManager.getStationID(),
+							stationManager.getCompanyName(), s, q, val + "");
+					if (f == null)
+						JOptionPane.showMessageDialog(null, "report already exist");
+					else
+						showReport(f, null);
+
+				}
+
 				else
-					showReport(f, null);
-
+					JOptionPane.showMessageDialog(null,
+							"There is an error , you try create a report On dates that have not yet arrived");
 			}
 
-			else
-				JOptionPane.showMessageDialog(null,
-						"There is an error , you try create a report On dates that have not yet arrived");
-			}
-			
 			else {
 				f = EmployeeCC.createFuelStationReports(stationManager.getStationID(), stationManager.getCompanyName(),
 						s, getCurrentQuarter(), LocalDate.now().getYear() + "");
@@ -567,6 +588,7 @@ public class StationManagerController implements Initializable {
 		fuelTypecol.setCellValueFactory(new PropertyValueFactory<StationFuel, String>("fuelType"));
 		Amountcol.setCellValueFactory(new PropertyValueFactory<StationFuel, Float>("amount"));
 		minQuantitycol.setCellValueFactory(new PropertyValueFactory<StationFuel, Float>("minQuantity"));
+		tankSizecol.setCellValueFactory(new PropertyValueFactory<StationFuel, Integer>("tankSize"));
 
 		ObservableList<StationFuel> fuels = getAllStationFuel(stationManager.getStationID());
 		minQuantityTable.setItems(fuels);
@@ -601,7 +623,6 @@ public class StationManagerController implements Initializable {
 			return row;
 		});
 		// ----------------------
-		
 
 		// set up comboxbox with types of reports start--------------
 		ObservableList<StationManagerReportsTypes> reportTypes = FXCollections

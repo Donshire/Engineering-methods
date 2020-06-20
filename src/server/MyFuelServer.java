@@ -586,6 +586,48 @@ public class MyFuelServer extends AbstractServer {
 			}
 			break;
 
+		case getFuelAmountByFuelType:
+			ArrayList<Object> values = (ArrayList<Object>) message.getObj();
+
+			try {
+
+				client.sendToClient(new Message(
+						GasStationControllerServer.getFuelAmountByFuelType((String) values.get(0), (int) values.get(1)),
+						Commands.defaultRes));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case getFuelTanksizebyType:
+			ArrayList<Object> values1 = (ArrayList<Object>) message.getObj();
+
+			try {
+
+				client.sendToClient(new Message(
+						GasStationControllerServer.getFuelTanksizebyType((String) values1.get(0), (int) values1.get(1)),
+						Commands.defaultRes));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
+		case createOrder:
+			ArrayList<Object> values2 = (ArrayList<Object>) message.getObj();
+
+			try {
+				GasStationControllerServer.createOrder((int) values2.get(1), (String) values2.get(0));
+				client.sendToClient(new Message(null, Commands.defaultRes));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			break;
+
 		default:
 			System.out.println("default");
 		}
@@ -595,7 +637,7 @@ public class MyFuelServer extends AbstractServer {
 	/**
 	 * Generic function that send to client any arrayList
 	 * 
-	 * @param <T>
+	 * @param        <T>
 	 * @param obj
 	 * @param client
 	 */
@@ -620,7 +662,7 @@ public class MyFuelServer extends AbstractServer {
 	/**
 	 * sends to the client single object from the arrayList
 	 * 
-	 * @param <T>
+	 * @param        <T>
 	 * @param obj
 	 * @param client
 	 */

@@ -37,7 +37,7 @@ import enums.SupplierOrderStatus;
 
 public class GasStationControllerServer {
 
-		/**
+	/**
 	 * return all the orders to the supplier according to the supplierId and the
 	 * status
 	 * 
@@ -98,18 +98,19 @@ public class GasStationControllerServer {
 
 		return orders;
 	}
-	
-	
+
 	/**
 	 * update specific Gas Station fuel
+	 * 
 	 * @param newAmount is what will be stored in the db
 	 * @param stationID
 	 * @param fuelType
 	 */
-	public static void updateFuelQuantity(float newAmount,int stationID,String fuelType) {
+	public static void updateFuelQuantity(float newAmount, int stationID, String fuelType) {
 		PreparedStatement stm;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("update myfueldb.stationfuel set amount=? where stationId=? and fuelType=?");
+			stm = ConnectionToDB.conn
+					.prepareStatement("update myfueldb.stationfuel set amount=? where stationId=? and fuelType=?");
 			stm.setFloat(1, newAmount);
 			stm.setInt(2, stationID);
 			stm.setString(3, fuelType);
@@ -119,17 +120,18 @@ public class GasStationControllerServer {
 			e.printStackTrace();
 		}
 	}
-	
-		/**
+
+	/**
 	 * get Station Fuel Quantity
+	 * 
 	 * @param stationID
 	 * @param fuelType
 	 * @return
 	 */
-	public static float getStationFuelQuantity(int stationID,String fuelType) {
+	public static float getStationFuelQuantity(int stationID, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
-		
+
 		try {
 			stm = ConnectionToDB.conn
 					.prepareStatement("select amount from myfueldb.stationfuel where stationId=? and fuelType=?");
@@ -141,25 +143,26 @@ public class GasStationControllerServer {
 			}
 			res.close();
 			stm.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
-	
+
 	/**
-	 * The function update the orders status to supplied
-	 * The function sends mail to the station manager to inform that the order was update
+	 * The function update the orders status to supplied The function sends mail to
+	 * the station manager to inform that the order was update
+	 * 
 	 * @param orders
 	 * @return true or false
 	 */
-	
+
 	public static boolean updateOrderStatus(GasStationOrder orders) {
 		PreparedStatement stm1, stm2, stm3;
 		ResultSet res1, res2 = null;
 		Employee stationMan = null;
-		int workerID =0;
+		int workerID = 0;
 		float amount;
 		try {
 			// return the current amount from the table
@@ -180,27 +183,28 @@ public class GasStationControllerServer {
 			stm2.setInt(1, orders.getStationID());
 			res1 = stm2.executeQuery();
 			if (res1.next()) {
-			 workerID = res1.getInt(1);
-			 System.out.println("worker id:   " + workerID);
+				workerID = res1.getInt(1);
+				System.out.println("worker id:   " + workerID);
 			}
 			stm3 = ConnectionToDB.conn.prepareStatement("select * from myfueldb.employee where workerId=?");
 			stm3.setInt(1, workerID);
 			res2 = stm3.executeQuery();
-	
-			
-			if(res2.next()) {
-			stationMan = new Employee(res2.getString(1), res2.getString(2), res2.getString(3), res2.getNString(4),
-					res2.getNString(5), res2.getNString(6), res2.getNString(7), res2.getNString(8), res2.getNString(9),
-					res2.getInt(10), res2.getInt(11), res2.getNString(12));
-			System.out.println(stationMan);
+
+			if (res2.next()) {
+				stationMan = new Employee(res2.getString(1), res2.getString(2), res2.getString(3), res2.getNString(4),
+						res2.getNString(5), res2.getNString(6), res2.getNString(7), res2.getNString(8),
+						res2.getNString(9), res2.getInt(10), res2.getInt(11), res2.getNString(12));
+				System.out.println(stationMan);
 			}
-			
+
 			Thread sendMail = new Thread(new SendMail(orders.getStationID(), orders.getFuelType(), stationMan.getMail(),
 					String.format("Fuel type %s has supplied by the supplier !", orders.getFuelType()),
-					String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
-			          		+ " has supplied, the supplier updated the order status to: Supplied.\n"
-			          		+ "\n\nMYFUEL 2020 LTM",
-			          		stationMan.getFirstName(),stationMan.getLastName(),orders.getFuelType(),orders.getStationID())));
+					String.format(
+							"Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
+									+ " has supplied, the supplier updated the order status to: Supplied.\n"
+									+ "\n\nMYFUEL 2020 LTM",
+							stationMan.getFirstName(), stationMan.getLastName(), orders.getFuelType(),
+							orders.getStationID())));
 			sendMail.start();
 
 		} catch (SQLException e) {
@@ -210,8 +214,6 @@ public class GasStationControllerServer {
 
 		return true;
 	}
-	
-
 
 	/**
 	 * the function updates orders status in the db and return true if Succeeded ,
@@ -245,7 +247,6 @@ public class GasStationControllerServer {
 
 	}
 
-
 	/**
 	 * the function get station id and return all statin fuel types in arraylist
 	 * 
@@ -266,7 +267,8 @@ public class GasStationControllerServer {
 
 			while (res.next()) {
 
-				StationFuel s = new StationFuel(res.getString(2), res.getInt(1), res.getFloat(3), res.getFloat(4), res.getInt(5));
+				StationFuel s = new StationFuel(res.getString(2), res.getInt(1), res.getFloat(3), res.getFloat(4),
+						res.getInt(5));
 				fuel.add(s);
 
 			}
@@ -277,7 +279,6 @@ public class GasStationControllerServer {
 
 		return fuel;
 	}
-
 
 	/**
 	 * the function get stationid , and new min quantity and update
@@ -308,7 +309,6 @@ public class GasStationControllerServer {
 
 		return true;
 	}
-
 
 	/**
 	 * the fucntion calculate the profit of the station in the demand quater and
@@ -388,25 +388,23 @@ public class GasStationControllerServer {
 		return file;
 
 	}
-	
-	
+
 	public static int getAllAlreadyCreatedOrder(int stationId, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
-		int count=0;
+		int count = 0;
 
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("select count(*) from myfueldb.gasstationorder " + 
-							"where (status = ? or status = ?) and gasStationID = ?"
-							+ " and fuelType = ?");
+			stm = ConnectionToDB.conn.prepareStatement("select count(*) from myfueldb.gasstationorder "
+					+ "where (status = ? or status = ?) and gasStationID = ?" + " and fuelType = ?");
 			stm.setString(1, SupplierOrderStatus.created.toString());
 			stm.setString(2, SupplierOrderStatus.confirmed.toString());
 			stm.setInt(3, stationId);
 			stm.setString(4, fuelType);
 			res = stm.executeQuery();
 
-			if(res.next())count=res.getInt(1);
+			if (res.next())
+				count = res.getInt(1);
 
 			res.close();
 			stm.close();
@@ -417,8 +415,6 @@ public class GasStationControllerServer {
 
 		return count;
 	}
-	
-
 
 	/**
 	 * the fucntion calculate How much each fuel is consumed in the Desired quarter
@@ -499,18 +495,18 @@ public class GasStationControllerServer {
 		return file;
 	}
 
-	public static void ReachedMinemumQuantityHandler(int stationID,String fuelType,float stationCurrInventory) {
+	public static void ReachedMinemumQuantityHandler(int stationID, String fuelType, float stationCurrInventory) {
 		float stationMinQuantity = getStationMinQuantityForFuel(stationID, fuelType);
-		//check if there is already order created
+		// check if there is already order created
 		if (getAllAlreadyCreatedOrder(stationID, fuelType) == 0)
 			if (stationMinQuantity >= stationCurrInventory)
 				createOrder(stationID, fuelType);
 	}
-	
-	public static float getStationMinQuantityForFuel(int stationID,String fuelType) {
+
+	public static float getStationMinQuantityForFuel(int stationID, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
-		
+
 		try {
 			stm = ConnectionToDB.conn
 					.prepareStatement("select minQuantity from myfueldb.stationfuel where stationId=? and fuelType=?");
@@ -522,40 +518,39 @@ public class GasStationControllerServer {
 			}
 			res.close();
 			stm.close();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
 	}
-	
-	private static void createOrder(int stationID,String fuelType) {
-		Supplier supplier=getSupplierByFuelType(fuelType);
+
+	public static void createOrder(int stationID, String fuelType) {
+		Supplier supplier = getSupplierByFuelType(fuelType);
 		StationFuel stationFuel = getStationfuel(stationID, fuelType);
-		
-		if(supplier==null||stationFuel==null) {
+
+		if (supplier == null || stationFuel == null) {
 			System.out.println("there is no supplier or stationFuel for creating Gas station Order");
 			return;
 		}
-		
-		float amountNeeded=stationFuel.getTankSize()-stationFuel.getAmount();
+
+		float amountNeeded = stationFuel.getTankSize() - stationFuel.getAmount();
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		PreparedStatement stm;
-		
+
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("insert into gasstationorder (supplierID,"+
-			"gasStationID,status,date,orderPrice,fuelType,fuelAmount) " + "values (?,?,?,?,?,?,?)");
-			
+			stm = ConnectionToDB.conn.prepareStatement("insert into gasstationorder (supplierID,"
+					+ "gasStationID,status,date,orderPrice,fuelType,fuelAmount) " + "values (?,?,?,?,?,?,?)");
+
 			stm.setString(1, supplier.getId());
 			stm.setInt(2, stationID);
 			stm.setString(3, SupplierOrderStatus.created.toString());
 			stm.setString(4, dateFormat.format(date));
-			stm.setFloat(5, 0);//orderPrice
+			stm.setFloat(5, 0);// orderPrice
 			stm.setString(6, fuelType);
 			stm.setString(7, Float.toString(amountNeeded));
-			
+
 			stm.executeUpdate();
 			stm.close();
 		} catch (SQLException e) {
@@ -563,90 +558,90 @@ public class GasStationControllerServer {
 		}
 		//
 		GasStation gasStation = getGasStation(stationID);
-		if(gasStation==null) {
+		if (gasStation == null) {
 			System.out.println("cloud not found station by id to create order");
 			return;
 		}
 		Employee employee = EmployeeController.getEmployeeByWorkerID(gasStation.getStationMangerWorkerID());
-		if(employee==null) {
+		if (employee == null) {
 			System.out.println("cloud not found station manager to create order");
 			return;
 		}
 		//
 		Thread sendMail = new Thread(new SendMail(stationID, fuelType, employee.getMail(),
 				String.format("Fuel type %s reached minemum quantity !!!!", fuelType),
-				String.format("Hello %s %s\nThe fuel type \"%s\" in station with id : %d"
-		          		+ " reached minemum quantity.\n"
-		          		+ "The system created the Fuel Order, and it is Waiting you'r approvale."
-		          		+ "\n\nMYFUEL 2020 LTM",
-		          		employee.getFirstName(),employee.getLastName(),fuelType,stationID)));
+				String.format(
+						"Hello %s %s\nThe fuel type \"%s\" in station with id : %d" + " reached minemum quantity.\n"
+								+ "The system created the Fuel Order, and it is Waiting you'r approvale."
+								+ "\n\nMYFUEL 2020 LTM",
+						employee.getFirstName(), employee.getLastName(), fuelType, stationID)));
 		sendMail.start();
 	}
-	
-		public static Supplier getSupplierByFuelType (String fuelType) {
+
+	public static Supplier getSupplierByFuelType(String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
 		Supplier supplier;
 		try {
-			stm = ConnectionToDB.conn
-					.prepareStatement("select * from myfueldb.supplier where fuelType=?");
+			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.supplier where fuelType=?");
 			stm.setString(1, fuelType);
 			res = stm.executeQuery();
-			supplier=BuildObjectByQueryData.BuildSupplier(res).get(0);
+			supplier = BuildObjectByQueryData.BuildSupplier(res).get(0);
 			res.close();
 			stm.close();
-			
+
 			return supplier;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public static StationFuel getStationfuel (int stationID,String fuelType) {
+
+	public static StationFuel getStationfuel(int stationID, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<StationFuel> stationFuel=null;
+		ArrayList<StationFuel> stationFuel = null;
 		try {
-			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.stationfuel"+
-		          " where stationId = ? AND fuelType=?");
+			stm = ConnectionToDB.conn
+					.prepareStatement("select * from myfueldb.stationfuel" + " where stationId = ? AND fuelType=?");
 			stm.setInt(1, stationID);
 			stm.setString(2, fuelType);
-			
+
 			res = stm.executeQuery();
-			stationFuel=BuildObjectByQueryData.BuildStationfuel(res,true);
-			
+			stationFuel = BuildObjectByQueryData.BuildStationfuel(res, true);
+
 			res.close();
 			stm.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(stationFuel!=null) return stationFuel.get(0);
+		if (stationFuel != null)
+			return stationFuel.get(0);
 		return null;
 	}
-	
-	
+
 	public static GasStation getGasStation(int stationID) {
 		PreparedStatement stm;
 		ResultSet res;
-		ArrayList<GasStation> gasStation=null;
+		ArrayList<GasStation> gasStation = null;
 		try {
 			stm = ConnectionToDB.conn.prepareStatement("select * from myfueldb.gasstation where stationId = ?");
 			stm.setInt(1, stationID);
-			
+
 			res = stm.executeQuery();
-			gasStation=BuildObjectByQueryData.BuildGasStation(res,true);
-			
+			gasStation = BuildObjectByQueryData.BuildGasStation(res, true);
+
 			res.close();
 			stm.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(gasStation==null|| gasStation.isEmpty()) return null;
+		if (gasStation == null || gasStation.isEmpty())
+			return null;
 		return gasStation.get(0);
 	}
-	
-		/**
+
+	/**
 	 * the fucntion calculate the quantity of each fuel in the staion and write the
 	 * result into file
 	 * 
@@ -725,5 +720,67 @@ public class GasStationControllerServer {
 
 		return reports;
 	}
-	
+
+	/**
+	 * the function retruns fuel amount by statinid and fueltype
+	 * 
+	 * @param FuelType
+	 * @param stationId
+	 * @return amount
+	 */
+
+	public static float getFuelAmountByFuelType(String fuelType, int stationId) {
+
+		PreparedStatement stm;
+		ResultSet res;
+		float amount = 0;
+
+		try {
+			stm = ConnectionToDB.conn
+					.prepareStatement("select amount from stationfuel where fuelType = ? and stationId = ?");
+			stm.setString(1, fuelType);
+			stm.setInt(2, stationId);
+			res = stm.executeQuery();
+
+			if (res.next())
+				amount = res.getFloat(1);
+
+			res.close();
+			stm.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return amount;
+
+	}
+
+	public static int getFuelTanksizebyType(String fuelType, int stationId) {
+
+		PreparedStatement stm;
+		ResultSet res;
+		int tanksize = 0;
+
+		try {
+			stm = ConnectionToDB.conn
+					.prepareStatement("select tanksize from stationfuel where fuelType=? and stationId = ?");
+			stm.setString(1, fuelType);
+			stm.setInt(2, stationId);
+			res = stm.executeQuery();
+
+			if (res.next())
+				tanksize = res.getInt(1);
+
+			res.close();
+			stm.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return tanksize;
+
+	}
+
 }
