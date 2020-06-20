@@ -159,7 +159,7 @@ public class FastFuelController {
 			break;
 
 		case 1:
-			returnSalePercent = 1 - rate.getSalePercent();
+			returnSalePercent = 1 - Float.valueOf(rate.getSalePercent());
 			break;
 
 		case 2:
@@ -172,7 +172,7 @@ public class FastFuelController {
 				System.out.println("rate has not been created");
 				return null;
 			}
-			returnSalePercent = (calculateRate2(secRate, customerID, companyName)) * (1 - rate.getSalePercent());
+			returnSalePercent = (calculateRate2(secRate, customerID, companyName)) * (1 - Float.valueOf(rate.getSalePercent()));
 			break;
 		}
 		return returnSalePercent;
@@ -186,7 +186,7 @@ public class FastFuelController {
 			return null;
 		}
 		// (1-rate1*carCount)*(1-rate2)
-		return (1 - carCount * secRate.getSalePercent()) * (1 - rate.getSalePercent());
+		return (1 - carCount * Float.valueOf(secRate.getSalePercent())) * (1 - Float.valueOf(rate.getSalePercent()));
 	}
 
 	/**

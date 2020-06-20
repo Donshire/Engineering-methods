@@ -629,12 +629,12 @@ public class MarketingManagerController implements Initializable {
 		else if (sFuelNewRate.isEmpty() == true)
 			JOptionPane.showMessageDialog(null, "please enter the new rate");
 		else {
-			float fFuelNewRate = Float.valueOf(sFuelNewRate);
-			if (fFuelNewRate <= 0)
-				JOptionPane.showMessageDialog(null, "Unvalid value for the new rate");
+			if(!MarketingEmployeeController.checkIfStringContainsOnlyNumbersInFloatType(sFuelNewRate)) {
+				JOptionPane.showMessageDialog(null, "Please enter numbers 0.XX");
+				return;
+			}
 			else {
-
-				if (EmployeeCC.craeteNewPricingModel(new PricingModule(rateType.getValue().ordinal(), fFuelNewRate,
+				if (EmployeeCC.craeteNewPricingModel(new PricingModule(rateType.getValue().ordinal(), sFuelNewRate,
 						markitingManager.getCompanyName(), RatesStatus.created)))
 					JOptionPane.showMessageDialog(null, "Creating New Rate done succesfully");
 				else
@@ -809,7 +809,7 @@ public class MarketingManagerController implements Initializable {
 		CustomerRateTypes rateTypeSelected = rateType.getValue();
 
 		PricingModule pricingModule = EmployeeCC.getCompanyActiveRateAccordingPriceModel(
-				new PricingModule(rateTypeSelected.ordinal(), 0, markitingManager.getCompanyName(), null));
+				new PricingModule(rateTypeSelected.ordinal(), "", markitingManager.getCompanyName(), null));
 		if (pricingModule != null)
 			maxFuelPricetxt.setText(String.format("the current rate is : %.2f", pricingModule.getSalePercent()));
 		else
@@ -826,7 +826,7 @@ public class MarketingManagerController implements Initializable {
 
 		// get company pricing model rates
 		ObservableList<PricingModule> data = FXCollections.observableArrayList(EmployeeCC
-				.getAllCompanyRatesByStatus(new PricingModule(0, 0, markitingManager.getCompanyName(), selected)));
+				.getAllCompanyRatesByStatus(new PricingModule(0, "", markitingManager.getCompanyName(), selected)));
 		// set the table according to comboBox
 		if (selected.equals(RatesStatus.confirmed)) {
 			rateCheckBoxSelect.setVisible(true);

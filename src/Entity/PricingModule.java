@@ -10,27 +10,27 @@ public class PricingModule extends CheckBoxImplementation implements Serializabl
 	 * 
 	 */
 	private static final long serialVersionUID = 3160490784670591070L;
-	
+
 	private int modelNumber;
-	private float salePercent;
+	private String salePercent;
 	private String companyName;
 	private RatesStatus status;
-	//just for tables 
+	// just for tables
 	private String modelname;
-	
-	public PricingModule(int modelNumber, float salePercent) {
+
+	public PricingModule(int modelNumber, String salePercent) {
 		this.modelNumber = modelNumber;
 		this.salePercent = salePercent;
 	}
 
-	public PricingModule(int modelNumber, float salePercent, String companyName,RatesStatus status) {
+	public PricingModule(int modelNumber, String salePercent, String companyName, RatesStatus status) {
 		this.modelNumber = modelNumber;
 		this.salePercent = salePercent;
 		this.companyName = companyName;
-		this.status=status;
-		this.modelname=CustomerRateTypes.values()[modelNumber].toString();
+		this.status = status;
+		this.modelname = CustomerRateTypes.values()[modelNumber].toString();
 	}
-	
+
 	public RatesStatus getStatus() {
 		return status;
 	}
@@ -49,14 +49,14 @@ public class PricingModule extends CheckBoxImplementation implements Serializabl
 
 	public void setModelNumber(int modelNumber) {
 		this.modelNumber = modelNumber;
-		this.modelname=CustomerRateTypes.values()[modelNumber].toString();
+		this.modelname = CustomerRateTypes.values()[modelNumber].toString();
 	}
 
-	public float getSalePercent() {
+	public String getSalePercent() {
 		return salePercent;
 	}
 
-	public void setSalePercent(float salePercent) {
+	public void setSalePercent(String salePercent) {
 		this.salePercent = salePercent;
 	}
 
@@ -73,5 +73,5 @@ public class PricingModule extends CheckBoxImplementation implements Serializabl
 		return "PricingModule [modelNumber=" + modelNumber + ", salePercent=" + salePercent + ", CompanyName="
 				+ companyName + "]";
 	}
-	
+
 }

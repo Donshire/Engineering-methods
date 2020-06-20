@@ -74,7 +74,7 @@ public class BuildObjectByQueryData {
 		ArrayList<PricingModule> purchaseModuleList = new ArrayList<PricingModule>();
 		try {
 			while (res.next() == true)
-				purchaseModuleList.add(new PricingModule(res.getInt(1), Float.valueOf(res.getString(2))));
+				purchaseModuleList.add(new PricingModule(res.getInt(1),res.getString(2)));
 				res.close();
 			return purchaseModuleList;
 		} catch (SQLException e) {
@@ -128,7 +128,7 @@ public class BuildObjectByQueryData {
 		ArrayList<PricingModule> pricingModelRatesList = new ArrayList<PricingModule>();
 		try {
 			while (res.next() == true)
-				pricingModelRatesList.add(new PricingModule(res.getInt(1), res.getFloat(2)
+				pricingModelRatesList.add(new PricingModule(res.getInt(1), res.getString(2)
 						, res.getString(3), RatesStatus.valueOf(res.getString(4))));
 				res.close();
 			return pricingModelRatesList;
@@ -312,7 +312,7 @@ public class BuildObjectByQueryData {
 		ArrayList<PricingModule> RateApprovalDetails = new ArrayList<PricingModule>();
 		try {
 			while (res.next() == true) {
-				RateApprovalDetails.add(new PricingModule(res.getInt(1), Float.valueOf(res.getString(2)), res.getString(3),
+				RateApprovalDetails.add(new PricingModule(res.getInt(1), res.getString(2), res.getString(3),
 						RatesStatus.valueOf(res.getString(4))));
 			}
 			res.close();

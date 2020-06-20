@@ -476,7 +476,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setFloat(4, pricingModule.getSalePercent());
+				stm.setString(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 			} catch (Exception e) {
@@ -504,7 +504,7 @@ public class CompanyFuelControllerServer {
 				//Key
 				stm.setInt(2, pricingModule.getModelNumber());
 				stm.setString(3, pricingModule.getCompanyName());
-				stm.setFloat(4, pricingModule.getSalePercent());
+				stm.setString(4, pricingModule.getSalePercent());
 				
 				stm.executeUpdate();
 
@@ -574,7 +574,7 @@ public class CompanyFuelControllerServer {
 		try {
 			stm = ConnectionToDB.conn.prepareStatement(query);
 			stm.setInt(1, pricingModel.getModelNumber());
-			stm.setDouble(2, pricingModel.getSalePercent());
+			stm.setString(2, pricingModel.getSalePercent());
 			stm.setString(3, pricingModel.getCompanyName());
 			stm.setString(4, pricingModel.getStatus().toString());
 			
@@ -768,7 +768,7 @@ public class CompanyFuelControllerServer {
 				stm.setString(1, String.valueOf(RatesStatus.confirmed.toString()));
 				stm.setString(2, fuellist.getCompanyName());
 				stm.setInt(3, fuellist.getModelNumber());
-				stm.setString(4, Float.toString(fuellist.getSalePercent()));
+				stm.setString(4, fuellist.getSalePercent());
 				
 				stm.executeUpdate();
 
@@ -801,7 +801,7 @@ public class CompanyFuelControllerServer {
 				stm.setString(1, String.valueOf(RatesStatus.rejected.toString()));
 				stm.setString(2, fuellist.getCompanyName());
 				stm.setInt(3, fuellist.getModelNumber());
-				stm.setString(4, Float.toString(fuellist.getSalePercent()));
+				stm.setString(4, fuellist.getSalePercent());
 				
 				stm.executeUpdate();
 
