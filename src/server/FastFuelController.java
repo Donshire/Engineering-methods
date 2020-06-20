@@ -291,10 +291,14 @@ public class FastFuelController {
 			return null;
 		}
 		Set<String> days = new HashSet<String>();
-		for (Sale sale : sales) {
-			days = BuildObjectByQueryData.converStringToSet(sale.getSaleDays());
+		
+		for (int i=0; i<sales.size();i++) {
+			days = BuildObjectByQueryData.converStringToSet(sales.get(i).getSaleDays());
 			if (!days.contains(dayOfWeek.toUpperCase()))
-				sales.remove(sale);
+				if(!days.contains("ALL")) {
+				   sales.remove(sales.get(i));
+				   i--;
+				}
 		}
 
 		// get the max sale percent
@@ -305,6 +309,8 @@ public class FastFuelController {
 				maxSale = sales.get(i).getSalePercent();
 				maxSaleIndex = i;
 			}
+		
+		if(sales.isEmpty())return null;
 		return sales.get(maxSaleIndex);
 	}
 

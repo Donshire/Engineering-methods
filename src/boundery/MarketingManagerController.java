@@ -1122,7 +1122,6 @@ public class MarketingManagerController implements Initializable {
 	 * @param fileName
 	 * @param type
 	 */
-	public void analiticDataByYearAndMonth(String fileName,String type) {
 
 	public void analiticDataByYearAndMonth(String fileName, String type) {
 

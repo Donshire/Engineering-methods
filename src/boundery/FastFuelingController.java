@@ -257,8 +257,6 @@ public class FastFuelingController implements Initializable {
 		companyName = companiesCombo.getValue();
 		// get all company stations
 		// get the pricing data
-		System.out.println(
-				companyName + " " + customer.getId() + " " + car.getFuelType() + " " + customer.getPricingModel());
 		ArrayList<Float> pricingRes = CustomerCC.getPurchasePriceDetails(companyName, customer.getId(),
 				car.getFuelType(), customer.getPricingModel(), 0);
 		// the calculated price
