@@ -291,7 +291,6 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 	
-
 	public static ArrayList<Fuel> BuildFuel(ResultSet res) {
 		ArrayList<Fuel> maxPriceDetails = new ArrayList<Fuel>();
 		try {
@@ -305,7 +304,10 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	/**
+	 * a function that gets the details of the rates for the ceo from the server
+	 * @return returns arraylist of the details or null if they don't exist
+	 */
 	public static ArrayList<PricingModule> getBuildRateApprovalDetails(ResultSet res) {
 		ArrayList<PricingModule> RateApprovalDetails = new ArrayList<PricingModule>();
 		try {

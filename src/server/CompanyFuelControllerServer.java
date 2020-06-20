@@ -666,6 +666,7 @@ public class CompanyFuelControllerServer {
 		return true;
 	}
 
+
 	public static ArrayList<Sale> getAllCompanySalesByStatus(String companyName, SaleStatus status) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -697,6 +698,11 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * a function to get the current price for the gas of the CEO companies
+	 * @param companyName is the name of the company CEO runs
+	 * @return returns an arraylist of the details of the gas for the ceo's company
+	 */
 	public static ArrayList<CompanyFuel> getAllFuelMaxPriceDetails(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -720,7 +726,12 @@ public class CompanyFuelControllerServer {
 		return companyFuel;
 
 	}
-
+	
+	/**
+	 * this function updates the max price of the chosen gas after update is pressed
+	 * @param list with the details 
+	 * @return
+	 */
 	public static boolean updateAllFuelMaxPriceDetails(ArrayList<CompanyFuel> list) {
 		PreparedStatement stm;
 
@@ -741,7 +752,12 @@ public class CompanyFuelControllerServer {
 		return true;
 
 	}
-
+	
+	/**
+	 * this function is for the list that is selected by the ceo for those to approve
+	 * @param list the selected rates to be rejected
+	 * @return returns true if change or false if not
+	 */
 	public static boolean checkBoxRateApproval(ArrayList<PricingModule> list) {
 		PreparedStatement stm;
 
@@ -770,6 +786,11 @@ public class CompanyFuelControllerServer {
 
 	}
 
+	/**
+	 * this function is for the list that is selected by the ceo for those to reject
+	 * @param list the selected rates to be rejected
+	 * @return returns true or false
+	 */
 	public static boolean checkBoxRateReject(ArrayList<PricingModule> list) {
 		PreparedStatement stm;
 
@@ -797,7 +818,13 @@ public class CompanyFuelControllerServer {
 		return true;
 
 	}
-
+	/**
+	 * this function gets the rates from the database to show the CEO
+	 * the function returns an arraylist with all the details of the ceo companies
+	 * the details return are those with "created" status
+	 * @param companyName the ceo company name
+	 * @return an array list with the details
+	 */
 	public static ArrayList<PricingModule> getBuildRateApprovalDetails(String companyName) {
 		PreparedStatement stm;
 		ResultSet res;
