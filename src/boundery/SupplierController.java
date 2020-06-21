@@ -248,6 +248,7 @@ public class SupplierController implements Initializable {
 		currentPane.setVisible(true);
 	}
 
+	
 	/**
 	 * Switch to orders pane
 	 * 
