@@ -45,7 +45,7 @@ public class MasterGUIController {
 				//the last pane was main
 				mainStage.hide();
 			}
-			newStage.initStyle(StageStyle.UNDECORATED);
+			newStage.setResizable(false);
 			loader.setLocation(getClass().getResource(windowFXML));
 			//
 			try {
