@@ -35,26 +35,51 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CustomerGuiController controls all the customer interface button and operations.
+ */
 public class CustomerGuiController implements Initializable {
 
+	/** The customer. */
 	public static Customer customer;
+	
+	/** The date format. */
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	
+	/** The time DB format. */
 	DateFormat timeDBFormat = new SimpleDateFormat("HH:mm:ss");
+	
+	/** The formatter. */
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
+	/** The discount. */
 	Integer discount = 0;
+	
+	/** The Price per unit. */
 	float PricePerUnit;
+	
+	/** The supply date. */
 	String supplyDate;
+	
+	/** The gas amount. */
 	float gasAmount;
+	
+	/** The price of purchase. */
 	float priceOfPurchase = 0;
+	
+	/** The price per unit. */
 	float pricePerUnit;
 
+	/** The Customer main pane. */
 	@FXML
 	private Pane CustomerMainPane;
 
+	/** The order home gas pane. */
 	@FXML
 	private Pane orderHomeGasPane;
 
+	/** The my orders pane. */
 	@FXML
 	private Pane myOrdersPane;
 	
@@ -64,94 +89,125 @@ public class CustomerGuiController implements Initializable {
 
 	// ORDER TABLE START -------------------------------
 
-	@FXML
+	/** The order table. */
+   @FXML
 	private TableView<GasOrder> orderTable;
 
+	/** The purchase I dcol. */
 	@FXML
 	private TableColumn<GasOrder, Integer> purchaseIDcol;
 
+	/** The supply datecol. */
 	@FXML
 	private TableColumn<GasOrder, String> supplyDatecol;
 
+	/** The Purchase datecol. */
 	@FXML
 	private TableColumn<GasOrder, String> PurchaseDatecol;
 
+	/** The gas amountcol. */
 	@FXML
 	private TableColumn<GasOrder, Float> gasAmountcol;
 
+	/** The urgentcol. */
 	@FXML
 	private TableColumn<GasOrder, Boolean> urgentcol;
 
+	/** The Purchase timecol. */
 	@FXML
 	private TableColumn<GasOrder,String> PurchaseTimecol;
 
+	/** The Purchase pricecol. */
 	@FXML
 	private TableColumn<GasOrder, Float> PurchasePricecol;
 	
+   /** The Status. */
    @FXML
     private TableColumn<GasOrder,String> Status;
 
 	// ORDER TABLE END ------------------------------------
 
    
-    // ---------------- General Components ----------------------
+    /** The hellotxt. */
+	// ---------------- General Components ----------------------
 	@FXML
 	private Text hellotxt;
 	
+	/** The order gasbtn. */
 	@FXML
 	private Button orderGasbtn;
 
+	/** The my ordersbtn. */
 	@FXML
 	private Button myOrdersbtn;
 
 	
 	
 	
+	/** The note amount. */
 	@FXML
 	private Text noteAmount;
 	
+	/** The note date. */
 	@FXML
 	private Text noteDate;
 
 
+	/** The radio immediat. */
 	@FXML
 	private RadioButton radioImmediat;
 
+	/** The Delivery date radio. */
 	@FXML
 	private ToggleGroup DeliveryDateRadio;
 
+	/** The normal supply. */
 	@FXML
 	private RadioButton normalSupply;
 
+	/** The text supply date. */
 	@FXML
 	private Text textSupplyDate;
 
+	/** The filed supply date. */
 	@FXML
 	private DatePicker filedSupplyDate;
 
+	/** The text amount. */
 	@FXML
 	private TextField textAmount;
 
+	/** The price list. */
 	@FXML
 	private Text priceList;
 
+	/** The text discount. */
 	@FXML
 	private Text textDiscount;
 
+	/** The total. */
 	@FXML
 	private Text total;
 
+	/** The button buy. */
 	@FXML
 	private Button buttonBuy;
 
+    /** The discount 1. */
     @FXML
     private Text discount1;
 
+    /** The discount 2. */
     @FXML
     private Text discount2;
 
 	
 	
+	/**
+	 * Text amount changed.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void TextAmountChanged(InputMethodEvent event) {
 		gasAmount = new Float(textAmount.getText());
@@ -159,6 +215,11 @@ public class CustomerGuiController implements Initializable {
 		setPrice();
 	}
 
+	/**
+	 * Radio selected.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	/**
 	 * Displays or hides the option to select a date <br>
@@ -176,18 +237,33 @@ public class CustomerGuiController implements Initializable {
 
 	
 
+	/**
+	 * Log out.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void logOut(ActionEvent event) {
 		UserCC.logOut(customer.getId(), customer.getClass().toString());
 		MasterGUIController.getMasterGUIController().switchWindows("LogIn.fxml");
 	}
 	
+	/**
+	 * Supply date selected.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void supplyDateSelected(ActionEvent event) {
 		supplyDate=formatter.format(filedSupplyDate.getValue());
 		System.out.println(supplyDate);
 	}
 
+	/**
+	 * Make purchase.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void makePurchase(ActionEvent event) {
 		Date date = new Date();
@@ -213,18 +289,34 @@ public class CustomerGuiController implements Initializable {
 		}
 	}
 
+	/**
+	 * My orders clicked.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void myOrdersClicked(ActionEvent event) {
 			myOrdersPane.setVisible(true);
 			orderHomeGasPane.setVisible(false);
 	}
 
+	/**
+	 * Order gas clicked.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void orderGasClicked(ActionEvent event) {
 			myOrdersPane.setVisible(false);
 			orderHomeGasPane.setVisible(true);
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
+	 */
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -244,6 +336,11 @@ public class CustomerGuiController implements Initializable {
 	}
 	
 	
+	/**
+	 * Checks if is input correct.
+	 *
+	 * @return true, if is input correct
+	 */
 	private boolean isInputCorrect() {
 		boolean proper = true;
 		
@@ -273,6 +370,11 @@ public class CustomerGuiController implements Initializable {
 	}
 	
 
+	/**
+	 * Amount is number.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean amountIsNumber() {
 		String amountStr = textAmount.getText();
 		String str = amountStr.replaceAll("\\D+","");
@@ -291,12 +393,18 @@ public class CustomerGuiController implements Initializable {
 */
 	}
 	
+	/**
+	 * Sets the price.
+	 */
 	private void setPrice() {
 		float beforeDiscount = pricePerUnit * gasAmount;
 		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
 		total.setText(String.format("%.2f", priceOfPurchase));
 	}
 	
+	/**
+	 * Setting discount.
+	 */
 	private void settingDiscount() {
 		if (radioImmediat.isSelected())
 			discount = 2;
@@ -311,6 +419,9 @@ public class CustomerGuiController implements Initializable {
 		textDiscount.setText(discount.toString() + "%");
 	}
 
+	/**
+	 * Order home gas initialize.
+	 */
 	public void orderHomeGasInitialize() {
 		
 		// Loading the price of per unit.
@@ -346,6 +457,9 @@ public class CustomerGuiController implements Initializable {
 		});
 	}
 
+	/**
+	 * My orders initialize.
+	 */
 	public void myOrdersInitialize() {
 
 		purchaseIDcol.setCellValueFactory(new PropertyValueFactory<GasOrder, Integer>("purchaseID"));
@@ -361,6 +475,11 @@ public class CustomerGuiController implements Initializable {
 	}
 	
 	
+	/**
+	 * Gets the orders.
+	 *
+	 * @return the orders
+	 */
 	public ObservableList<GasOrder> getOrders() {
 		ObservableList<GasOrder> orders = FXCollections.observableArrayList(CustomerCC.GasOrderList(customer.getId()));
 		return orders;
@@ -369,6 +488,12 @@ public class CustomerGuiController implements Initializable {
 	
 
 
+	/**
+	 * Initialize.
+	 *
+	 * @param location the location
+	 * @param resources the resources
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// double plp = (double) ClientCC.getMaxPrice("HOME GAS");

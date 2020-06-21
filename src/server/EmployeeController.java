@@ -15,13 +15,16 @@ import Entity.Car;
 import Entity.Customer;
 import Entity.Employee;
 import Entity.Sale;
-
+/**
+ * The Class EmployeeController controlls all the employee details and functions 
+ * from the database and to the client.
+ */
 public class EmployeeController {
 
 	/**
-	 * to check if car exist
-	 * 
-	 * @param carNumber
+	 * to check if car exist.
+	 * this function checks if the car exists in the database
+	 * @param carNumber the car number
 	 * @return car object if exist ,else return null in case of exeption or car
 	 *         wasn't found
 	 */
@@ -51,9 +54,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * to check if customer exist changed the name-saleem
-	 * 
-	 * @param customerId
+	 * to check if customer exist changed the name-saleem.
+	 * @param customerId the customer id
 	 * @return customer object if exist ,else return null in case of exeption or car
 	 *         wasn't found
 	 */
@@ -83,9 +85,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Inert to the DB all the information for a new customer
-	 * 
-	 * @param customer
+	 * Inert to the DB all the information for a new customer.
+	 * @param customer the customer
 	 * @return true or false
 	 */
 
@@ -123,9 +124,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Check if the received customer id exist in the DB
-	 * 
-	 * @param id
+	 * Check if the received customer id exist in the DB.
+	 * @param id the id
 	 * @return int res 0= doen't exist, 1= exist, -1 = error
 	 */
 
@@ -149,9 +149,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Inert to the DB all the information for a new car
-	 * 
-	 * @param car
+	 * Inert to the DB all the information for a new car.
+	 * @param car the car
 	 * @return true or false
 	 */
 
@@ -174,11 +173,10 @@ public class EmployeeController {
 
 	/**
 	 * Update pricing model and purchase model in the DB for the customer id that
-	 * was received
-	 * 
-	 * @param pricing
-	 * @param purchase
-	 * @param id
+	 * was received.
+	 * @param pricing the pricing
+	 * @param purchase the purchase
+	 * @param id the id
 	 * @return true or false
 	 */
 
@@ -225,9 +223,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Select all the details of specific employee according to the received id
-	 * 
-	 * @param workerId
+	 * Select all the details of specific employee according to the received id.
+	 * @param workerId the worker id
 	 * @return employee object
 	 */
 
@@ -256,9 +253,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Select all the details of specific customer according to the received id
-	 * 
-	 * @param id
+	 * Select all the details of specific customer according to the received id.
+	 * @param id the id
 	 * @return customer object
 	 */
 
@@ -284,10 +280,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Receive data of a customer to update, and insert the changes to the DB
-	 * according to the id
-	 * 
-	 * @param update
+	 * Receive data of a customer to update, and insert the changes to the DB according to the id.
+	 * @param update the update
 	 * @return true or false
 	 */
 
@@ -304,7 +298,6 @@ public class EmployeeController {
 			stm.setString(5, update.get(8));
 			stm.setString(6, update.get(4));
 			stm.setString(7, update.get(5));
-			System.out.println("server @@@@@@@@@@@@@@@@@@@@@@@ " + update.get(5));
 			stm.setString(8, update.get(6));
 			stm.setString(9, update.get(0));
 			stm.executeUpdate();
@@ -318,8 +311,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Create ArrayList<Sale> of all the sales that are in the DB
-	 * 
+	 * Create ArrayList<Sale> of all the sales that are in the DB.
+	 *
 	 * @return ArrayList<Sale>
 	 */
 
@@ -347,9 +340,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Receive sale from client and delete all the sale from DB according to Id
-	 * 
-	 * @param sale
+	 * Receive sale from client and delete all the sale from DB according to Id.
+	 * @param sale the sale
 	 * @return true or false
 	 */
 
@@ -369,9 +361,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Receive sale object from the client and insert it to the DB
-	 * 
-	 * @param sale
+	 * Receive sale object from the client and insert it to the DB.
+	 * @param sale the sale
 	 * @return true or false
 	 */
 
@@ -401,9 +392,8 @@ public class EmployeeController {
 
 	/**
 	 * Receive company name and return the fuel types that are related to this
-	 * company name
-	 * 
-	 * @param companyName
+	 * company name.
+	 * @param companyName the company name
 	 * @return ArrayList<String>
 	 */
 
@@ -432,9 +422,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Receive user name and check in the customer table in the DB if exist
-	 * 
-	 * @param userName
+	 * Receive user name and check in the customer table in the DB if exist.
+	 * @param userName the user name
 	 * @return true or false
 	 */
 
@@ -471,8 +460,7 @@ public class EmployeeController {
 
 	/**
 	 * Inert all the company names that exist in the DB (without duplicates) to
-	 * ArrayList
-	 * 
+	 * ArrayList.
 	 * @return ArrayList<String>
 	 */
 
@@ -498,11 +486,10 @@ public class EmployeeController {
 
 	/**
 	 * Receive details of purchase model and update the customermodule table in the
-	 * DB
-	 * 
-	 * @param id
-	 * @param purchM
-	 * @param companyNames
+	 * DB.
+	 * @param id the id
+	 * @param purchM the purch M
+	 * @param companyNames the company names
 	 * @return true or false
 	 */
 
@@ -562,10 +549,9 @@ public class EmployeeController {
 
 	/**
 	 * Receive new car object and old car number and insert the new car details
-	 * instead of the old one in the DB
-	 * 
-	 * @param car
-	 * @param oldCar
+	 * instead of the old one in the DB.
+	 * @param car the car
+	 * @param oldCar the old car
 	 * @return true or false
 	 */
 
@@ -598,9 +584,8 @@ public class EmployeeController {
 	}
 
 	/**
-	 * Count the number of car that are connected to the received is
-	 * 
-	 * @param idForCount
+	 * Count the number of car that are connected to the received is.
+	 * @param idForCount the id for count
 	 * @return int count of cars
 	 */
 

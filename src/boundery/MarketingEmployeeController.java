@@ -62,7 +62,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class MarketingEmployeeController.
  */

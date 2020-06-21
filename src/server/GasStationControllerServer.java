@@ -35,14 +35,17 @@ import enums.GasStationOrderFromSupplier;
 import enums.Quarter;
 import enums.SupplierOrderStatus;
 
+/**
+ * The Class GasStationControllerServer controls the gas station order.
+ */
 public class GasStationControllerServer {
 
 	/**
 	 * return all the orders to the supplier according to the supplierId and the
-	 * status
-	 * 
-	 * @param supplierId
-	 * @param status
+	 * status.
+	 *
+	 * @param supplierId the supplier id
+	 * @param status the status
 	 * @return ArrayList<GasStationOrder>
 	 */
 	public static ArrayList<GasStationOrder> getAllOrdersByStatus(String supplierId, String status) {
@@ -70,10 +73,10 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * the function return all station orders by stationId and status
-	 * 
-	 * @param stationId
-	 * @param status
+	 * the function return all station orders by stationId and status.
+	 *
+	 * @param stationId the station id
+	 * @param status the status
 	 * @return ArrayList<GasStationOrder>
 	 */
 
@@ -100,11 +103,11 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * update specific Gas Station fuel
-	 * 
+	 * update specific Gas Station fuel.
+	 *
 	 * @param newAmount is what will be stored in the db
-	 * @param stationID
-	 * @param fuelType
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
 	 */
 	public static void updateFuelQuantity(float newAmount, int stationID, String fuelType) {
 		PreparedStatement stm;
@@ -122,11 +125,11 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * get Station Fuel Quantity
-	 * 
-	 * @param stationID
-	 * @param fuelType
-	 * @return
+	 * get Station Fuel Quantity.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 * @return the station fuel quantity
 	 */
 	public static float getStationFuelQuantity(int stationID, String fuelType) {
 		PreparedStatement stm;
@@ -152,9 +155,9 @@ public class GasStationControllerServer {
 
 	/**
 	 * The function update the orders status to supplied The function sends mail to
-	 * the station manager to inform that the order was update
-	 * 
-	 * @param orders
+	 * the station manager to inform that the order was update.
+	 *
+	 * @param orders the orders
 	 * @return true or false
 	 */
 
@@ -217,9 +220,9 @@ public class GasStationControllerServer {
 
 	/**
 	 * the function updates orders status in the db and return true if Succeeded ,
-	 * else false
-	 * 
-	 * @param orders
+	 * else false.
+	 *
+	 * @param orders the orders
 	 * @return true or false if succeeded or not
 	 */
 
@@ -248,9 +251,9 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * the function get station id and return all statin fuel types in arraylist
-	 * 
-	 * @param stationId
+	 * the function get station id and return all statin fuel types in arraylist.
+	 *
+	 * @param stationId the station id
 	 * @return ArrayList<StationFuel> - all fuel types of the station
 	 */
 
@@ -281,11 +284,11 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * the function get stationid , and new min quantity and update
-	 * 
-	 * @param stationid
-	 * @param fueltype
-	 * @param minQuantity
+	 * the function get stationid , and new min quantity and update.
+	 *
+	 * @param stationid the stationid
+	 * @param fueltype the fueltype
+	 * @param minQuantity the min quantity
 	 * @return Boolean - return true if update succeeded else flase
 	 */
 
@@ -312,12 +315,12 @@ public class GasStationControllerServer {
 
 	/**
 	 * the fucntion calculate the profit of the station in the demand quater and
-	 * write the result into file
-	 * 
-	 * @param stationId
-	 * @param companyName
-	 * @param quarter
-	 * @param year
+	 * write the result into file.
+	 *
+	 * @param stationId the station id
+	 * @param companyName the company name
+	 * @param quarter the quarter
+	 * @param year the year
 	 * @return file if created succeeded else return null
 	 */
 	public static File createFuelStationIncmomeReport(int stationId, String companyName, Quarter quarter, String year) {
@@ -389,6 +392,13 @@ public class GasStationControllerServer {
 
 	}
 
+	/**
+	 * Gets the all already created order.
+	 *
+	 * @param stationId the station id
+	 * @param fuelType the fuel type
+	 * @return the all already created order
+	 */
 	public static int getAllAlreadyCreatedOrder(int stationId, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -418,12 +428,12 @@ public class GasStationControllerServer {
 
 	/**
 	 * the fucntion calculate How much each fuel is consumed in the Desired quarter
-	 * and write the result into file
-	 * 
-	 * @param stationId
-	 * @param companyName
-	 * @param quarter
-	 * @param year
+	 * and write the result into file.
+	 *
+	 * @param stationId the station id
+	 * @param companyName the company name
+	 * @param quarter the quarter
+	 * @param year the year
 	 * @return file if created succeeded else return null
 	 */
 
@@ -495,6 +505,13 @@ public class GasStationControllerServer {
 		return file;
 	}
 
+	/**
+	 * Reached minemum quantity handler.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 * @param stationCurrInventory the station curr inventory
+	 */
 	public static void ReachedMinemumQuantityHandler(int stationID, String fuelType, float stationCurrInventory) {
 		float stationMinQuantity = getStationMinQuantityForFuel(stationID, fuelType);
 		// check if there is already order created
@@ -503,6 +520,13 @@ public class GasStationControllerServer {
 				createOrder(stationID, fuelType);
 	}
 
+	/**
+	 * Gets the station min quantity for fuel.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 * @return the station min quantity for fuel
+	 */
 	public static float getStationMinQuantityForFuel(int stationID, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -525,6 +549,12 @@ public class GasStationControllerServer {
 		return 0;
 	}
 
+	/**
+	 * Creates the order.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 */
 	public static void createOrder(int stationID, String fuelType) {
 		Supplier supplier = getSupplierByFuelType(fuelType);
 		StationFuel stationFuel = getStationfuel(stationID, fuelType);
@@ -578,6 +608,12 @@ public class GasStationControllerServer {
 		sendMail.start();
 	}
 
+	/**
+	 * Gets the supplier by fuel type.
+	 *
+	 * @param fuelType the fuel type
+	 * @return the supplier by fuel type
+	 */
 	public static Supplier getSupplierByFuelType(String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -597,6 +633,13 @@ public class GasStationControllerServer {
 		return null;
 	}
 
+	/**
+	 * Gets the stationfuel.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 * @return the stationfuel
+	 */
 	public static StationFuel getStationfuel(int stationID, String fuelType) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -620,6 +663,12 @@ public class GasStationControllerServer {
 		return null;
 	}
 
+	/**
+	 * Gets the gas station.
+	 *
+	 * @param stationID the station ID
+	 * @return the gas station
+	 */
 	public static GasStation getGasStation(int stationID) {
 		PreparedStatement stm;
 		ResultSet res;
@@ -643,13 +692,13 @@ public class GasStationControllerServer {
 
 	/**
 	 * the fucntion calculate the quantity of each fuel in the staion and write the
-	 * result into file
-	 * 
-	 * @param stationId
-	 * @param companyName
-	 * @param quarter
-	 * @param year
-	 * @return
+	 * result into file.
+	 *
+	 * @param stationId the station id
+	 * @param companyName the company name
+	 * @param quarter the quarter
+	 * @param year the year
+	 * @return the file
 	 */
 	public static File createInventoryReporteport(int stationId, String companyName, Quarter quarter, String year) {
 		PreparedStatement stm;
@@ -688,10 +737,10 @@ public class GasStationControllerServer {
 
 	/**
 	 * the function find all the report of station by id and by year and return the
-	 * result in arraylist
-	 * 
-	 * @param year
-	 * @param stationId
+	 * result in arraylist.
+	 *
+	 * @param year the year
+	 * @param stationId the station id
 	 * @return ArrayList<GenericReport> - the report
 	 */
 	public static ArrayList<GenericReport> getAllReportByYearandStationId(String year, int stationId) {
@@ -722,10 +771,10 @@ public class GasStationControllerServer {
 	}
 
 	/**
-	 * the function retruns fuel amount by statinid and fueltype
-	 * 
-	 * @param FuelType
-	 * @param stationId
+	 * the function retruns fuel amount by statinid and fueltype.
+	 *
+	 * @param fuelType the fuel type
+	 * @param stationId the station id
 	 * @return amount
 	 */
 
@@ -756,6 +805,13 @@ public class GasStationControllerServer {
 
 	}
 
+	/**
+	 * Gets the fuel tanksizeby type.
+	 *
+	 * @param fuelType the fuel type
+	 * @param stationId the station id
+	 * @return the fuel tanksizeby type
+	 */
 	public static int getFuelTanksizebyType(String fuelType, int stationId) {
 
 		PreparedStatement stm;

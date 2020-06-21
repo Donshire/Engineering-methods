@@ -26,11 +26,15 @@ import Entity.Sale;
 import client.EmployeeCC;
 import enums.SaleStatus;
 
+/**
+ * The Class FastFuelController controls the fast fuelling mechanics.
+ */
 public class FastFuelController {
 
 	/**
-	 * 
-	 * @param carNumber
+	 * Fast fueling log in.
+	 *
+	 * @param carNumber the car number
 	 * @return ArrayList of Objects containig objects car,customer,cutomer purchase
 	 *         model
 	 */
@@ -64,12 +68,15 @@ public class FastFuelController {
 	 * calculate the current price of the company fuel and the customer price
 	 * according to his subsection,and the current sale also return percent of
 	 * sale,percent of rate, and the current sales id## the calculation are done by
-	 * other functions
-	 * 
+	 * other functions.
+	 *
 	 * @param companyName       String
-	 * @param model             CustomerModule
+	 * @param customerID the customer ID
+	 * @param fuelType the fuel type
 	 * @param prcingModelNumber int
-	 * @param amount            float
+	 * @param pumpNum the pump num
+	 * @param date the date
+	 * @param time the time
 	 * @return purchasePrice,SalePercent,RatePercent,Sale ID,pumpChoosen.
 	 */
 	public static ArrayList<Float> priceCalculationAndPricingModel(String companyName, String customerID,
@@ -111,10 +118,10 @@ public class FastFuelController {
 	}
 
 	/**
-	 * round float and get the first two decimals
-	 * 
-	 * @param d
-	 * @return
+	 * round float and get the first two decimals.
+	 *
+	 * @param d the d
+	 * @return the float
 	 */
 	public static float roundTwoDecimals(float d) {
 		DecimalFormat twoDForm = new DecimalFormat("#.##");
@@ -122,10 +129,10 @@ public class FastFuelController {
 	}
 
 	/**
-	 * round float and get the first three decimals
-	 * 
-	 * @param d
-	 * @return
+	 * round float and get the first three decimals.
+	 *
+	 * @param d the d
+	 * @return the float
 	 */
 	public static float roundThreeDecimals(float d) {
 		DecimalFormat twoDForm = new DecimalFormat("#.###");
@@ -141,11 +148,11 @@ public class FastFuelController {
 	 * carCount). <br>
 	 * the fourth model return the value of (1-rate percent)*(third model rate(for
 	 * just one car)). <br>
-	 * 
-	 * @param rate
-	 * @param customerID
-	 * @param prcingModelNumber
-	 * @param companyName
+	 *
+	 * @param rate the rate
+	 * @param customerID the customer ID
+	 * @param prcingModelNumber the prcing model number
+	 * @param companyName the company name
 	 * @return null if any rate is missing from company db.
 	 */
 	public static Float getVAlueOfRate(PricingModule rate, String customerID, int prcingModelNumber,
@@ -178,6 +185,14 @@ public class FastFuelController {
 		return returnSalePercent;
 	}
 
+	/**
+	 * Calculate rate 2.
+	 *
+	 * @param rate the rate
+	 * @param customerID the customer ID
+	 * @param companyName the company name
+	 * @return the float
+	 */
 	private static Float calculateRate2(PricingModule rate, String customerID, String companyName) {
 		int carCount = customerCarsNumber(customerID);
 		PricingModule secRate = getPricingModule(companyName, 1);
@@ -190,10 +205,10 @@ public class FastFuelController {
 	}
 
 	/**
-	 * get customer cars number
-	 * 
-	 * @param customerID
-	 * @return
+	 * get customer cars number.
+	 *
+	 * @param customerID the customer ID
+	 * @return the int
 	 */
 	public static int customerCarsNumber(String customerID) {
 		PreparedStatement stm;
@@ -217,11 +232,11 @@ public class FastFuelController {
 	}
 
 	/**
-	 * get the max price of fuel in company
-	 * 
-	 * @param companyName
-	 * @param fuelType
-	 * @return
+	 * get the max price of fuel in company.
+	 *
+	 * @param companyName the company name
+	 * @param fuelType the fuel type
+	 * @return the max price
 	 */
 	public static float getMaxPrice(String companyName, String fuelType) {
 		PreparedStatement stm;
@@ -247,13 +262,13 @@ public class FastFuelController {
 
 	/**
 	 * get active sale in the current time if there is more than one <br>
-	 * return the max sale percent
-	 * 
-	 * @param companyName
-	 * @param fuelType
+	 * return the max sale percent.
+	 *
+	 * @param companyName the company name
+	 * @param fuelType the fuel type
 	 * @param dateS       in the formate of yyyy-MM-dd
 	 * @param time        in the fornmate of HH:mm:ss
-	 * @return
+	 * @return the curents sale
 	 */
 	public static Sale getCurentsSale(String companyName, String fuelType, String dateS, String time) {
 		PreparedStatement stm;
@@ -316,10 +331,12 @@ public class FastFuelController {
 	 * it will return the max amount for purchase <br>
 	 * else it will updates the station fuel and check for a need for gas Station
 	 * Order
-	 * 
+	 *
 	 * @param customerId    String
+	 * @param pricingModelNumber the pricing model number
 	 * @param paymentOption if visa must contain visa number if cash "cash"
 	 * @param purchase      FuelPurchase
+	 * @param fuelType the fuel type
 	 * @return -1 if succeded -2 if un-succeded
 	 */
 	public static int commitFuelPurchase(String customerId, int pricingModelNumber, String paymentOption,
@@ -355,10 +372,10 @@ public class FastFuelController {
 	}
 
 	/**
-	 * gets customer pricing model number and purchase model
-	 * 
-	 * @param customerId
-	 * @return
+	 * gets customer pricing model number and purchase model.
+	 *
+	 * @param customerId the customer id
+	 * @return the cutomer model
 	 */
 	public static CustomerModule getCutomerModel(String customerId) {
 		PreparedStatement stm;
@@ -382,11 +399,11 @@ public class FastFuelController {
 	}
 
 	/**
-	 * get company pricing percent according to modelNumber
-	 * 
-	 * @param company
-	 * @param modelNumber
-	 * @return
+	 * get company pricing percent according to modelNumber.
+	 *
+	 * @param company the company
+	 * @param modelNumber the model number
+	 * @return the pricing module
 	 */
 	public static PricingModule getPricingModule(String company, int modelNumber) {
 		PreparedStatement stm;
@@ -413,10 +430,10 @@ public class FastFuelController {
 	}
 
 	/**
-	 * get all company stations ID
-	 * 
-	 * @param company
-	 * @return
+	 * get all company stations ID.
+	 *
+	 * @param company the company
+	 * @return the all company fuel station ID
 	 */
 	public static ArrayList<Integer> getAllCompanyFuelStationID(String company) {
 		PreparedStatement stm;
@@ -443,14 +460,9 @@ public class FastFuelController {
 	}
 
 	/**
-	 * save Purchase Details
-	 * 
-	 * @param carNumber     String
-	 * @param customerID    String
-	 * @param amont         float
-	 * @param purchasePrice float
-	 * @param Date          String
-	 * @param time          String
+	 * save Purchase Details.
+	 *
+	 * @param purchase the purchase
 	 * @return in case of succed return true else false
 	 */
 	private static boolean savePurchaseDetails(FuelPurchase purchase) {
@@ -473,12 +485,12 @@ public class FastFuelController {
 	/**
 	 * simulating payment in CASH always return true, in visa just chech the <br>
 	 * exp date if valid true else false.
-	 * 
-	 * @param customerId
-	 * @param paymentOption
-	 * @param priceOfPurchase
-	 * @param currentDate
-	 * @return
+	 *
+	 * @param customerId the customer id
+	 * @param paymentOption the payment option
+	 * @param priceOfPurchase the price of purchase
+	 * @param currentDate the current date
+	 * @return true, if successful
 	 */
 	public static boolean payment(String customerId, String paymentOption, float priceOfPurchase, String currentDate) {
 		Customer customer = EmployeeController.getCutomerByCustomerID(customerId);

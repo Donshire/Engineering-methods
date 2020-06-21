@@ -29,22 +29,37 @@ import Entity.CompanyFuel;
 import Entity.GasStationOrder;
 import enums.SupplierOrderStatus;
 
+/**
+ * The Class AnalticData works for the employees data and saves them in the database.
+ */
 public class AnalticData implements Runnable {
 
+	/** The Scheduled Executor Service. */
 	private ScheduledExecutorService ses;
 
+	/** The continue thread. */
 	public boolean continueThread = true;
 
+	/** The old date. */
 	private LocalDate before;
+	
+	/** The late date. */
 	private LocalDate after;
 
+	/** The current customers. */
 	private static ArrayList<String> currentCustomers;
+	
+	/** The fueling hour ranks. */
 	private static ArrayList<Float> fuelingHourRanks;
+	
+	/** The customer type ranks. */
 	private static ArrayList<Integer> customerTypeRanks;
+	
+	/** The fuel type ranks. */
 	private static ArrayList<Float> fuelTypeRanks;
 
 	/**
-	 * the thread work on
+	 * the thread work on.
 	 */
 	public void run() {
 		while (continueThread) {
@@ -104,12 +119,13 @@ public class AnalticData implements Runnable {
 	}
 	
 	/**
-	 * write the analitic data to file
-	 * @param filesRank
-	 * @param customersID
-	 * @param fuelTypeRanks
-	 * @param fuelingHourRanks
-	 * @param customerTypeRank
+	 * write the analitic data to file.
+	 *
+	 * @param filesRank the files rank
+	 * @param customersID the customers ID
+	 * @param fuelTypeRanks the fuel type ranks
+	 * @param fuelingHourRanks the fueling hour ranks
+	 * @param customerTypeRank the customer type rank
 	 */
 	private void writeAnalitic(File filesRank,ArrayList<String> customersID, ArrayList<Float> fuelTypeRanks,
 			ArrayList<Float> fuelingHourRanks, ArrayList<Integer> customerTypeRank) {
@@ -126,8 +142,8 @@ public class AnalticData implements Runnable {
 	}
 	
 	/**
-	 * sleep to the next sunday 00:00
-	 * @return
+	 * sleep to the next sunday 00:00.
+	 * @return true, if successful
 	 */
 	private boolean threadSleep() {
 		boolean flag = false;// didn't finish
@@ -143,8 +159,8 @@ public class AnalticData implements Runnable {
 	}
 
 	/**
-	 * get All Customers ID
-	 * @return
+	 * get All Customers ID.
+	 * @return the all customers ID
 	 */
 	public static ArrayList<String> getAllCustomersID() {
 		Statement stm;
@@ -175,8 +191,10 @@ public class AnalticData implements Runnable {
 	 * amount of fuel type.<br>
 	 * for each customer a rank will be given according to which fuel types he
 	 * purchased
-	 * 
-	 * @return
+	 *
+	 * @param filesStatistic the files statistic
+	 * @param company the company
+	 * @return the array list
 	 */
 	private ArrayList<Float> calculatefuelTypeAnaleticRank(File filesStatistic,String company) {
 		PreparedStatement stm;
@@ -314,38 +332,83 @@ public class AnalticData implements Runnable {
 		return countOfGasStationFuelsPurchased;
 	}
 
+	/**
+	 * Sumto.
+	 *
+	 * @param num the num
+	 * @return the int
+	 */
 	private static int sumto(int num) {
 		return (int) ((num + 1) * (num / 2f));
 	}
 
+	/**
+	 * The Class KeyplusRank.
+	 */
 	// for sorting customers ranks
 	private static class KeyplusRank implements Comparable<KeyplusRank> {
+		
+		/** The key. */
 		String key;
+		
+		/** The rank. */
 		float rank;
 
+		/**
+		 * Instantiates a new keyplus rank.
+		 *
+		 * @param key the key
+		 * @param rank the rank
+		 */
 		//
 		public KeyplusRank(String key, float rank) {
 			this.key = key;
 			this.rank = rank;
 		}
 
+		/**
+		 * Gets the key.
+		 *
+		 * @return the key
+		 */
 		//
 		public String getKey() {
 			return key;
 		}
 
+		/**
+		 * Sets the key.
+		 *
+		 * @param key the new key
+		 */
 		public void setKey(String key) {
 			this.key = key;
 		}
 
+		/**
+		 * Gets the rank.
+		 *
+		 * @return the rank
+		 */
 		public float getRank() {
 			return rank;
 		}
 
+		/**
+		 * Sets the rank.
+		 *
+		 * @param rank the new rank
+		 */
 		public void setRank(float rank) {
 			this.rank = rank;
 		}
 
+		/**
+		 * Compare to.
+		 *
+		 * @param o the o
+		 * @return the int
+		 */
 		//
 		@Override
 		public int compareTo(KeyplusRank o) {
@@ -356,6 +419,13 @@ public class AnalticData implements Runnable {
 			return 0;
 		}
 
+		/**
+		 * Index of.
+		 *
+		 * @param key the key
+		 * @param keys the keys
+		 * @return the int
+		 */
 		//
 		public static int indexOf(String key, ArrayList<KeyplusRank> keys) {
 			for (int i = 0; i < keys.size(); i++)
@@ -364,6 +434,13 @@ public class AnalticData implements Runnable {
 			return -1;
 		}
 
+		/**
+		 * Index of rang.
+		 *
+		 * @param key the key
+		 * @param keys the keys
+		 * @return the int
+		 */
 		public static int indexOfRang(int key, ArrayList<KeyplusRank> keys) {
 			for (int i = 0; i < keys.size(); i++)
 				if (Float.valueOf(keys.get(i).getKey()) - key >= 0)
@@ -371,6 +448,14 @@ public class AnalticData implements Runnable {
 			return keys.size() - 1;
 		}
 
+		/**
+		 * Index of houers.
+		 *
+		 * @param key the key
+		 * @param before the before
+		 * @param after the after
+		 * @return the int
+		 */
 		public static int indexOfHouers(String key, ArrayList<KeyplusRank> before, ArrayList<KeyplusRank> after) {
 			// after<key<before
 			for (int i = 0; i < before.size(); i++)
@@ -384,6 +469,11 @@ public class AnalticData implements Runnable {
 			return -1;
 		}
 
+		/**
+		 * To string.
+		 *
+		 * @return the string
+		 */
 		@Override
 		public String toString() {
 			return "KeyplusRank [key=" + key + ", rank=" + rank + "]";
@@ -391,6 +481,11 @@ public class AnalticData implements Runnable {
 
 	}
 
+	/**
+	 * Gets the all companies.
+	 *
+	 * @return the all companies
+	 */
 	public static ArrayList<String> getAllCompanies() {
 		ArrayList<String> companies = new ArrayList<String>();
 		Statement stm;
@@ -427,9 +522,11 @@ public class AnalticData implements Runnable {
 	 * 10000<= shekel 3 points<br>
 	 * 50000<= shekel 4 points<br>
 	 * 100000+ shekel 5 points<br>
-	 * and the calculation is 1,2 divided by 2
-	 * 
-	 * @return
+	 * and the calculation is 1,2 divided by 2.
+	 *
+	 * @param filesStatistic the files statistic
+	 * @param company the company
+	 * @return the array list
 	 */
 	private ArrayList<Integer> calculateCustomerTypeAnaleticRank(File filesStatistic,String company) {
 
@@ -513,9 +610,11 @@ public class AnalticData implements Runnable {
 	 * index/down<br>
 	 * index will decrese in a loop min rank is 1/down and max is 1<br>
 	 * <h6>the range is bettwen 10 cause rank is muliplied by 10, and 1 by
-	 * caculating 10/down ~ 1
-	 * 
-	 * @return
+	 * caculating 10/down ~ 1.
+	 *
+	 * @param filesStatistic the files statistic
+	 * @param company the company
+	 * @return the array list
 	 */
 
 	private ArrayList<Float> calculatefuelingHourAnaleticRank(File filesStatistic,String company) {
@@ -696,6 +795,12 @@ public class AnalticData implements Runnable {
 	
 	
 	
+	/**
+	 * Gets the month name.
+	 *
+	 * @param date the date
+	 * @return the month name
+	 */
 	public static String getMonthName(String date) {
 		int month =Integer.parseInt(date.substring(5, 7));
 		String monthString;
@@ -718,6 +823,12 @@ public class AnalticData implements Runnable {
         return monthString;
 	}
 	
+	/**
+	 * Gets the week number.
+	 *
+	 * @param date the date
+	 * @return the week number
+	 */
 	public static String getWeekNumber(String date) {
 		Calendar cacheCalendar =  Calendar.getInstance();
 		
@@ -745,6 +856,11 @@ public class AnalticData implements Runnable {
 	    return "-1";
 	}
 
+	/**
+	 * Calculate time to sleep.
+	 *
+	 * @return the long
+	 */
 	private long calculateTimeToSleep() {
 		LocalDate nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
 		Duration duration = Duration.between(LocalDateTime.now(),

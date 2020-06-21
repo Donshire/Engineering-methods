@@ -654,7 +654,6 @@ public class StationManagerController implements Initializable {
 		try {
 			c.start(st);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

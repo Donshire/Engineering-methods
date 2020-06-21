@@ -20,7 +20,7 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Pane fx:id="NewClientPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <Pane fx:id="NewClientPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <Label fx:id="IdLbl" layoutX="69.0" layoutY="64.0" prefHeight="24.0" prefWidth="52.0" text="ID:" textAlignment="RIGHT">
                <font>
@@ -55,15 +55,15 @@
                   <Font size="15.0" />
                </font></Label>
             <Button fx:id="RegistrationFinishBtn" layoutX="692.0" layoutY="385.0" mnemonicParsing="false" onAction="#registration" prefHeight="31.0" prefWidth="62.0" stylesheets="@styles.css" text="Finish" />
-            <TextField fx:id="IDTxt" layoutX="189.0" layoutY="61.0" />
+            <TextField fx:id="IDTxt" layoutX="189.0" layoutY="61.0" promptText="9 digits" />
             <TextField fx:id="FirstNameTxt" layoutX="189.0" layoutY="102.0" />
             <TextField fx:id="LastNameTxt" layoutX="189.0" layoutY="143.0" />
-            <TextField fx:id="EmailTxt" layoutX="189.0" layoutY="184.0" />
+            <TextField fx:id="EmailTxt" layoutX="189.0" layoutY="184.0" promptText="example@example.com" />
             <Label fx:id="dividExpDateLbl" layoutX="509.0" layoutY="171.0" text="/" />
             <TextField fx:id="addressNoTxt" layoutX="377.0" layoutY="303.0" prefHeight="31.0" prefWidth="39.0" />
-            <TextField fx:id="CreditCardTxt" layoutX="189.0" layoutY="225.0" />
-            <TextField fx:id="ExpDateMonthTxt" layoutX="469.0" layoutY="166.0" prefHeight="31.0" prefWidth="35.0" />
-            <TextField fx:id="CVVTxt" layoutX="613.0" layoutY="164.0" prefHeight="31.0" prefWidth="45.0" />
+            <TextField fx:id="CreditCardTxt" layoutX="189.0" layoutY="225.0" promptText="10 or 16 digits" />
+            <TextField fx:id="ExpDateMonthTxt" layoutX="469.0" layoutY="166.0" prefHeight="31.0" prefWidth="35.0" promptText="mm" />
+            <TextField fx:id="CVVTxt" layoutX="613.0" layoutY="164.0" prefHeight="31.0" prefWidth="45.0" promptText="XXX" />
             <Label fx:id="addressNoLbl" layoutX="346.0" layoutY="309.0" text="No:">
                <font>
                   <Font size="15.0" />
@@ -81,7 +81,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="PhoneTxt" layoutX="189.0" layoutY="266.0" />
+            <TextField fx:id="PhoneTxt" layoutX="189.0" layoutY="266.0" promptText="10 digits" />
             <TextField fx:id="AddressTXt" layoutX="189.0" layoutY="306.0" />
             <Label fx:id="UserNameLbl" layoutX="67.0" layoutY="351.0" text="User name:">
                <font>
@@ -113,20 +113,20 @@
                   <Image url="@../Images/help.png" />
                </image>
             </ImageView>
-            <TextField fx:id="ExpDateYearTxt" layoutX="519.0" layoutY="166.0" prefHeight="31.0" prefWidth="49.0" />
+            <TextField fx:id="ExpDateYearTxt" layoutX="519.0" layoutY="166.0" prefHeight="31.0" prefWidth="49.0" promptText="yyyy" />
          </children>
       </Pane>
       <Button fx:id="carAndModleBtn" alignment="BASELINE_LEFT" layoutY="167.0" mnemonicParsing="false" onAction="#openCarAndModelPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Car And Module">
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Pane fx:id="carAndModelPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
+      <Pane fx:id="carAndModelPane" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
          <children>
             <Label fx:id="carNumberLbl" layoutX="60.0" layoutY="106.0" text="Car Number:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="carNumberTxt" layoutX="200.0" layoutY="101.0" />
+            <TextField fx:id="carNumberTxt" layoutX="200.0" layoutY="101.0" promptText="7 or 8 digits" />
             <ComboBox fx:id="pricingModelCombox" layoutX="200.0" layoutY="242.0" onAction="#openCompanyChooser" prefHeight="31.0" prefWidth="186.0" />
             <Label fx:id="pricingModelLbl" layoutX="60.0" layoutY="247.0" text="Pricing Model:">
                <font>
@@ -142,7 +142,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="carAndModelIDTxt" layoutX="200.0" layoutY="53.0" />
+            <TextField fx:id="carAndModelIDTxt" layoutX="200.0" layoutY="53.0" promptText="9 digits" />
             <Label fx:id="fuelTypeLbl" layoutX="60.0" layoutY="200.0" text="Fuel Type:">
                <font>
                   <Font size="15.0" />
@@ -163,7 +163,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="oldCarNumTxt" layoutX="200.0" layoutY="148.0" />
+            <TextField fx:id="oldCarNumTxt" layoutX="200.0" layoutY="148.0" promptText="7 or 8 digits" />
             <ComboBox fx:id="chooseCompany1" layoutX="200.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
             <ComboBox fx:id="chooseCompany2" layoutX="356.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
             <ComboBox fx:id="chooseCompany3" layoutX="512.0" layoutY="296.0" prefHeight="31.0" prefWidth="124.0" />
@@ -176,7 +176,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="secondCarTxt" layoutX="200.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
+            <TextField fx:id="secondCarTxt" layoutX="200.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" promptText="7 or 8 digits" />
             <Label fx:id="secfuelTypeLbl" layoutX="332.0" layoutY="392.0" text="Fuel Type: ">
                <font>
                   <Font size="15.0" />
@@ -199,7 +199,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="UpdateIdTxt" layoutX="180.0" layoutY="58.0" />
+            <TextField fx:id="UpdateIdTxt" layoutX="180.0" layoutY="58.0" promptText="9 digits" />
             <Label fx:id="chExpFormatLbl" layoutX="387.0" layoutY="249.0" text="mm / yyyy">
                <font>
                   <Font size="15.0" />
@@ -244,16 +244,16 @@
                </font></Label>
             <TextField fx:id="firstNameChangetxt" layoutX="180.0" layoutY="139.0" />
             <TextField fx:id="lastNameChangeTxt" layoutX="180.0" layoutY="183.0" />
-            <TextField fx:id="emailChangTxt" layoutX="180.0" layoutY="228.0" />
-            <TextField fx:id="CCNChangeTxt" layoutX="180.0" layoutY="274.0" prefHeight="31.0" prefWidth="122.0" />
+            <TextField fx:id="emailChangTxt" layoutX="180.0" layoutY="228.0" promptText="example@example.com" />
+            <TextField fx:id="CCNChangeTxt" layoutX="180.0" layoutY="274.0" prefHeight="31.0" prefWidth="122.0" promptText="10 or 16 digits" />
             <Label fx:id="dividExpDate1" layoutX="414.0" layoutY="278.0" text="/">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="expChangeYearTxt" layoutX="427.0" layoutY="274.0" prefHeight="31.0" prefWidth="53.0" />
-            <TextField fx:id="expChangeMonthTxt" layoutX="375.0" layoutY="274.0" prefHeight="31.0" prefWidth="35.0" />
-            <TextField fx:id="CVVChangeTxt" layoutX="549.0" layoutY="274.0" prefHeight="31.0" prefWidth="84.0" />
-            <TextField fx:id="phoneChangeTxt" layoutX="180.0" layoutY="320.0" />
+            <TextField fx:id="expChangeYearTxt" layoutX="427.0" layoutY="274.0" prefHeight="31.0" prefWidth="53.0" promptText="yyyy" />
+            <TextField fx:id="expChangeMonthTxt" layoutX="375.0" layoutY="274.0" prefHeight="31.0" prefWidth="35.0" promptText="mm" />
+            <TextField fx:id="CVVChangeTxt" layoutX="549.0" layoutY="274.0" prefHeight="31.0" prefWidth="84.0" promptText="XXX" />
+            <TextField fx:id="phoneChangeTxt" layoutX="180.0" layoutY="320.0" promptText="10 digits" />
             <TextField fx:id="addressChangeTxt" layoutX="180.0" layoutY="365.0" />
             <Button fx:id="saveChangesBtn" layoutX="689.0" layoutY="390.0" mnemonicParsing="false" onAction="#changeCustomerDetails" prefHeight="27.0" prefWidth="59.0" stylesheets="@styles.css" text="Save" />
             <Text fx:id="changeHeader" layoutX="137.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please change only the filleds you want to update">
@@ -322,7 +322,7 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="salePercentTxt" layoutX="200.0" layoutY="160.0" />
+            <TextField fx:id="salePercentTxt" layoutX="200.0" layoutY="160.0" promptText="0.XX" />
             <Label fx:id="startTimeLbl" layoutX="106.0" layoutY="201.0" text="Start Time:">
                <font>
                   <Font size="15.0" />
@@ -335,12 +335,12 @@
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="startTimeTxt" layoutX="200.0" layoutY="201.0" />
+            <TextField fx:id="startTimeTxt" layoutX="200.0" layoutY="201.0" promptText="hh:mm" />
             <Label fx:id="endDateLbl" layoutX="106.0" layoutY="323.0" text="End Date:">
                <font>
                   <Font size="15.0" />
                </font></Label>
-            <TextField fx:id="endTimeTxt" layoutX="200.0" layoutY="243.0" />
+            <TextField fx:id="endTimeTxt" layoutX="200.0" layoutY="243.0" promptText="hh:mm" />
             <Label fx:id="daysLbl" layoutX="106.0" layoutY="367.0" text="Days:">
                <font>
                   <Font size="15.0" />

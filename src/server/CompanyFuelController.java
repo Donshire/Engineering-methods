@@ -3,9 +3,17 @@ package server;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * The Class CompanyFuelController.
+ */
 public class CompanyFuelController {
 
 
+	/**
+	 * Gets the max price.
+	 * @param type the type
+	 * @return the max price
+	 */
 	public static Object getMaxPrice(String type) {
 		float maxPrice = -1;
 

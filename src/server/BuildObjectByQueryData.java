@@ -22,13 +22,17 @@ import Entity.Supplier;
 import enums.OrderStatus;
 import enums.RatesStatus;
 
+/**
+ * The Class BuildObjectByQueryData.
+ */
 public class BuildObjectByQueryData {
 
 	/**
-	 * build car object and closes res
+	 * build car object and closes res.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @return
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<Car> BuildCar(ResultSet res) {
 		ArrayList<Car> carsList = new ArrayList<Car>();
@@ -44,9 +48,10 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * build Customer object and closes res
-	 * @param res
-	 * @return
+	 * build Customer object and closes res.
+	 *
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<Customer> BuildCustomer(ResultSet res) {
 		ArrayList<Customer> customersList = new ArrayList<Customer>();
@@ -65,10 +70,11 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * build PricingModule object and closes res
+	 * build PricingModule object and closes res.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @return
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<PricingModule> BuildPricingModule(ResultSet res) {
 		ArrayList<PricingModule> purchaseModuleList = new ArrayList<PricingModule>();
@@ -84,10 +90,11 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * build CustomerModule object and closes res
+	 * build CustomerModule object and closes res.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @return
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<CustomerModule> BuildCustomerModule(ResultSet res) {
 		ArrayList<CustomerModule> customerModuleList = new ArrayList<CustomerModule>();
@@ -104,10 +111,11 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * Convert String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW] 
+	 * Convert String such as PAZ,YELLOW to SET Containing[PAZ][YELLOW] .
+	 *
 	 * @author iamme
-	 * @param companies
-	 * @return
+	 * @param str the str
+	 * @return the sets the
 	 */
 	public static Set<String> converStringToSet (String str){
 		Set<String> sets = new HashSet<String>();
@@ -118,9 +126,10 @@ public class BuildObjectByQueryData {
 	}
 	
 	/**
-	 * Build Pricing Model Rates according to res 
+	 * Build Pricing Model Rates according to res .
+	 *
 	 * @author iamme
-	 * @param res
+	 * @param res the res
 	 * @return arrayList of the object
 	 * there is three cases 1)ArrayList empty 2)ArrayList not empty 3)null in case of exeption
 	 */
@@ -140,9 +149,11 @@ public class BuildObjectByQueryData {
 	
 	
 	/**
+	 * Builds the supplier.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @return
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<Supplier> BuildSupplier(ResultSet res){
 		ArrayList<Supplier> supplierList = new ArrayList<Supplier>();
@@ -160,10 +171,11 @@ public class BuildObjectByQueryData {
 	}
 
 	/**
-	 * Build GasStationOrder Object
+	 * Build GasStationOrder Object.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @return
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<GasStationOrder> BuildGasStationOrder(ResultSet res){
 		ArrayList<GasStationOrder> orders = new ArrayList<GasStationOrder>();
@@ -184,11 +196,12 @@ public class BuildObjectByQueryData {
 	 * Build Stationfuel object
 	 * it uses one of the two constructors according to the cunstructorType<br>
 	 * if cunstructorType true uses the constructor without refrence objects<br>
-	 * uses the other constructor with refrence objects
+	 * uses the other constructor with refrence objects.
+	 *
 	 * @author iamme
-	 * @param res
-	 * @param cunstructorType
-	 * @return
+	 * @param res the res
+	 * @param cunstructorType the cunstructor type
+	 * @return the array list
 	 */
 	public static ArrayList<StationFuel> BuildStationfuel(ResultSet res,boolean cunstructorType){
 		ArrayList<StationFuel> stationFuel = new ArrayList<StationFuel>();
@@ -209,9 +222,10 @@ public class BuildObjectByQueryData {
 
 	
 	/**
-	 * Build Employee object
-	 * @param res
-	 * @return
+	 * Build Employee object.
+	 *
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<Employee> BuildEmployee(ResultSet res){
 		ArrayList<Employee> employees = new ArrayList<Employee>();
@@ -233,10 +247,11 @@ public class BuildObjectByQueryData {
 	 * Build GasStation object
 	 * it uses one of the two constructors according to the cunstructorType<br>
 	 * if cunstructorType true uses the constructor without refrence objects<br>
-	 * uses the other constructor with refrence objects
-	 * @param res
-	 * @param cunstructorType
-	 * @return
+	 * uses the other constructor with refrence objects.
+	 *
+	 * @param res the res
+	 * @param cunstructorType the cunstructor type
+	 * @return the array list
 	 */
 	public static ArrayList<GasStation> BuildGasStation(ResultSet res,boolean cunstructorType){
 		ArrayList<GasStation> gasStation = new ArrayList<GasStation>();
@@ -257,9 +272,10 @@ public class BuildObjectByQueryData {
 	
 	
 	/**
-	 * build Sale object
-	 * @param res
-	 * @return
+	 * build Sale object.
+	 *
+	 * @param res the res
+	 * @return the array list
 	 */
 	public static ArrayList<Sale> BuildSale(ResultSet res){
 		ArrayList<Sale> sales = new ArrayList<Sale>();
@@ -276,6 +292,12 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 	
+	/**
+	 * Builds the gas order.
+	 *
+	 * @param res the res
+	 * @return the array list
+	 */
 	public static ArrayList<GasOrder> BuildGasOrder(ResultSet res){
 		ArrayList<GasOrder> sales = new ArrayList<GasOrder>();
 		try {
@@ -291,6 +313,12 @@ public class BuildObjectByQueryData {
 		return null;
 	}
 	
+	/**
+	 * Builds the fuel.
+	 *
+	 * @param res the res
+	 * @return the array list
+	 */
 	public static ArrayList<Fuel> BuildFuel(ResultSet res) {
 		ArrayList<Fuel> maxPriceDetails = new ArrayList<Fuel>();
 		try {
@@ -305,7 +333,9 @@ public class BuildObjectByQueryData {
 	}
 
 	/**
-	 * a function that gets the details of the rates for the ceo from the server
+	 * a function that gets the details of the rates for the ceo from the server.
+	 *
+	 * @param res the res
 	 * @return returns arraylist of the details or null if they don't exist
 	 */
 	public static ArrayList<PricingModule> getBuildRateApprovalDetails(ResultSet res) {
@@ -324,6 +354,12 @@ public class BuildObjectByQueryData {
 	}
 
 	
+	/**
+	 * Builds the company fuel.
+	 *
+	 * @param res the res
+	 * @return the array list
+	 */
 	public static ArrayList<CompanyFuel> BuildCompanyFuel(ResultSet res) {
 		ArrayList<CompanyFuel> companyFuels = new ArrayList<CompanyFuel>();
 		try {

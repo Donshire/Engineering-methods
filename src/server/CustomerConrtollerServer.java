@@ -9,11 +9,16 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-
+/**
+ * The Class CustomerConrtollerServer controls all the customer orders.
+ */
 public class CustomerConrtollerServer  {
 
 	/**
-	 * 
+	 * Gets the orders.
+	 *
+	 * @param customerId the customer id
+	 * @return the orders
 	 */
 
 

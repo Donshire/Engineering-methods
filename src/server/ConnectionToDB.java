@@ -7,10 +7,20 @@ import java.sql.SQLException;
 
 import boundery.ServerController;
 
+/**
+ * The Class ConnectionToDB connects the java to database (mySql database).
+ */
 public class ConnectionToDB {
 
+	/** The conn. */
 	public static Connection conn;
 
+	/**
+	 * Connect to DB.
+	 *
+	 * @param schema of user
+	 * @param passWord of user
+	 */
 	public static void connectToDB(String schema, String passWord) {
 
 		try {

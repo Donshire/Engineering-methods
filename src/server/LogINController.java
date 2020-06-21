@@ -13,10 +13,23 @@ import Entity.StationManager;
 import Entity.Supplier;
 import enums.Commands;
 
+/**
+ * The Class LogINController controls the users log in if the user is logged in it displays
+ * appropriate message to the user
+ * else it logs in.
+ */
 public class LogINController {
 
+	/** The stm. */
 	private static PreparedStatement stm;
 	
+	/**
+	 * Log in.
+	 *
+	 * @param userName the user name
+	 * @param password the password
+	 * @return the object
+	 */
 	public static Object LogIn(String userName, String password) {
 		ResultSet res;
 
@@ -80,6 +93,15 @@ public class LogINController {
 		return null;
 	}
 
+	/**
+	 * Log in.
+	 *
+	 * @param tableName the table name
+	 * @param userName the user name
+	 * @param password the password
+	 * @return the result set
+	 * @throws SQLException the SQL exception
+	 */
 	private static ResultSet logIn(String tableName, String userName, String password) throws SQLException {
 		stm = ConnectionToDB.conn.prepareStatement("select * from "+ tableName +" where userName = ? and passWord = ?");
 		stm.setString(1, userName);
@@ -87,6 +109,13 @@ public class LogINController {
 		return stm.executeQuery();
 	}
 
+	/**
+	 * Gets the station manager by id.
+	 *
+	 * @param emp the emp
+	 * @return the station manager by id
+	 * @throws SQLException the SQL exception
+	 */
 	private static StationManager getStationManagerById(Employee emp) throws SQLException {
 		ResultSet res;
 		stm = ConnectionToDB.conn.prepareStatement("select stationId from stationmanager " + "where workerId = ?");
@@ -101,6 +130,14 @@ public class LogINController {
 		return null;
 	}
 
+	/**
+	 * Update user online status.
+	 *
+	 * @param tableName the table name
+	 * @param userID the user ID
+	 * @param status the status
+	 * @throws SQLException the SQL exception
+	 */
 	public static void updateUserOnlineStatus(String tableName, String userID, int status) throws SQLException {
 		stm = ConnectionToDB.conn.prepareStatement("update " + tableName + " set online = ? where id = ?");
 		stm.setInt(1, status);

@@ -97,8 +97,7 @@ public class MyFuelClient extends AbstractClient {
 			fos.flush();
 			return new File("C:\\MyFuel_Client\\temp.txt");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+						e.printStackTrace();
 		}
 		return null;
 	}

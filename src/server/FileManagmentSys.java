@@ -17,29 +17,57 @@ import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * The Class FileManagmentSys manages all the files from the user computer.
+ */
 public class FileManagmentSys {
 
+	/** The main foler. */
 	private static File mainFoler;
+	
+	/** The Constant curWorkingDir. */
 	private static final String curWorkingDir = "C:\\MyFuel_Server";
 
+	/** The Constant responseReport. */
 	public static final String responseReport = "responseReport";
+	
+	/** The Constant periodicReport. */
 	public static final String periodicReport = "periodicReport";
+	
+	/** The Constant incomeReport. */
 	public static final String incomeReport = "incomeReport";
+	
+	/** The Constant purchasesReport. */
 	public static final String purchasesReport = "purchasesReport";
+	
+	/** The Constant inventoryReport. */
 	public static final String inventoryReport = "inventoryReport";
 	
+	/** The Constant customerAnaliticData. */
 	public static final String customerAnaliticData = "customerAnaliticData";
+	
+	/** The Constant statisticData. */
 	public static final String statisticData = "statisticData";
 
+	/** The Constant marketingManagerReports. */
 	public static final String marketingManagerReports = "marketingManagerReports";
+	
+	/** The Constant stationManagerReports. */
 	public static final String stationManagerReports = "stationManagerReports";
 
+	/** The Constant analiticData. */
 	public static final String analiticData = "analiticData";
 
+	/**
+	 * Creates the system work space.
+	 */
 	public static void createSystemWorkSpace() {
 		createSystemFolders();
 	}
 
+	/**
+	 * Creates the system folders.
+	 */
 	private static void createSystemFolders() {
 		// Create the main System directory(Folder)
 		mainFoler = createSingleFolder(curWorkingDir);
@@ -50,6 +78,12 @@ public class FileManagmentSys {
 		//
 	}
 
+	/**
+	 * Creates the company folder system.
+	 *
+	 * @param CompanyName the company name
+	 * @return true, if successful
+	 */
 	public static boolean createCompanyFolderSystem(String CompanyName) {
 		String curr = curWorkingDir + "\\" + CompanyName + "_Fuel_Company";
 		String temp;
@@ -76,6 +110,12 @@ public class FileManagmentSys {
 		return true;
 	}
 
+	/**
+	 * Creates the single folder.
+	 *
+	 * @param workingDir the working dir
+	 * @return the file
+	 */
 	public static File createSingleFolder(String workingDir) {
 		File file = new File(workingDir);
 		if (!Files.isDirectory(Paths.get(workingDir))) {
@@ -88,11 +128,13 @@ public class FileManagmentSys {
 	 * There is three types of Files All of them require "fileType" : One for
 	 * Marketing manager reports witch requires (), Second for station manager
 	 * reports witch requires (stationID), Third for the analytic data witch
-	 * requires ()
-	 * 
+	 * requires ().
+	 *
 	 * @param loc       String the file path
 	 * @param fileType  String must be one of the class static types
 	 * @param stationID int
+	 * @param quarter the quarter
+	 * @param year the year
 	 * @return the created File
 	 */
 	public static File createFile(String loc, String fileType, int stationID, String quarter, String year) {
@@ -119,6 +161,15 @@ public class FileManagmentSys {
 
 	}
 
+	/**
+	 * Creates the file name.
+	 *
+	 * @param fileType the file type
+	 * @param stationID the station ID
+	 * @param quarter the quarter
+	 * @param year the year
+	 * @return the string
+	 */
 	public static String createFileName(String fileType, int stationID, String quarter, String year) {
 		String fileName = "";
 
@@ -148,12 +199,10 @@ public class FileManagmentSys {
 
 	/**
 	 * return the File accoring to the givven data,return null if the file doesn't
-	 * exist
-	 * 
+	 * exist.
+	 *
 	 * @param loc         String
-	 * @param fileType    String
-	 * @param companyName String
-	 * @param stationID   int
+	 * @param fileName the file name
 	 * @return File object String
 	 */
 
@@ -171,8 +220,8 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * return the file path according to the data sent ,it doesn't end with \\
-	 * 
+	 * return the file path according to the data sent ,it doesn't end with \\.
+	 *
 	 * @param ComapnayName String
 	 * @param Owner        String as markiting manager or analitic data
 	 * @param fileType     String
@@ -190,6 +239,13 @@ public class FileManagmentSys {
 
 	}
 
+	/**
+	 * Write to quarter report.
+	 *
+	 * @param file the file
+	 * @param data the data
+	 * @return true, if successful
+	 */
 	public static boolean writeToQuarterReport(File file, String data) {
 		FileWriter myWriter;
 		BufferedWriter br;
@@ -212,11 +268,10 @@ public class FileManagmentSys {
 	/**
 	 * this func will return line of file data to be returned each line of data is
 	 * Quarter report result cloud be changed to lines for all year Quarters or more
-	 * but for simlification QuarterData must be sorted
-	 * 
-	 * @param file
-	 * @param QuarterData
-	 * @return
+	 * but for simlification QuarterData must be sorted.
+	 *
+	 * @param file the file
+	 * @return the string
 	 */
 	public static String readQuarterReport(File file) {
 		StringBuilder s = new StringBuilder();
@@ -243,15 +298,15 @@ public class FileManagmentSys {
 
 	/**
 	 * responseReport doesn't requier companies periodicReport doesn't requier
-	 * numberOfCustomers,totalPurchases
-	 * 
-	 * @param file
-	 * @param data
-	 * @param reportType
-	 * @param numberOfCustomers
-	 * @param totalPurchases
-	 * @param companies
-	 * @return
+	 * numberOfCustomers,totalPurchases.
+	 *
+	 * @param file the file
+	 * @param data the data
+	 * @param reportType the report type
+	 * @param numberOfCustomers the number of customers
+	 * @param totalPurchases the total purchases
+	 * @param companies the companies
+	 * @return true, if successful
 	 */
 
 	public static boolean writeToMarkitingManagerReport(File file, String data, String reportType,
@@ -286,10 +341,11 @@ public class FileManagmentSys {
 
 	/**
 	 * the ArrayList contains first Number of customers, Second Total purchases
-	 * ,third all the customers
-	 * 
-	 * @param file
-	 * @return
+	 * ,third all the customers.
+	 *
+	 * @param file the file
+	 * @param reportType the report type
+	 * @return the array list
 	 */
 	public static ArrayList<String> readMarkitingManagerReport(File file, String reportType) {
 		FileReader fr;
@@ -331,11 +387,11 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * Writes data to analict data file
-	 * 
-	 * @param file
-	 * @param data
-	 * @return
+	 * Writes data to analict data file.
+	 *
+	 * @param file the file
+	 * @param data the data
+	 * @return true, if successful
 	 */
 	public static boolean writeToAnaliticData(File file, String data) {
 
@@ -354,6 +410,12 @@ public class FileManagmentSys {
 		return true;
 	}
 
+	/**
+	 * Read analitic data.
+	 *
+	 * @param file the file
+	 * @return the string
+	 */
 	public static String readAnaliticData(File file) {
 		FileReader fr;
 		String str;
@@ -373,17 +435,27 @@ public class FileManagmentSys {
 		return strBuilder.toString();
 	}
 
+	/**
+	 * Analitic file formate.
+	 *
+	 * @param CutomerID the cutomer ID
+	 * @param CutomerType the cutomer type
+	 * @param purchaseHoures the purchase houres
+	 * @param FuelTypePuchased the fuel type puchased
+	 * @return the string
+	 */
 	public static String analiticFileFormate(String CutomerID, String CutomerType, String purchaseHoures,
 			String FuelTypePuchased) {
 		return String.format("%-12s %-15s %-15s %s", CutomerID, CutomerType, purchaseHoures, FuelTypePuchased) + "\n";
 	}
 
 	/**
-	 * build string according to the file formate
-	 * 
-	 * @param CutomerID
-	 * @param CustomerRank
-	 * @param numOfComapnies
+	 * build string according to the file formate.
+	 *
+	 * @param CutomerID the cutomer ID
+	 * @param CustomerRank the customer rank
+	 * @param numOfComapnies the num of comapnies
+	 * @param totalPurchases the total purchases
 	 * @return the string containing /n
 	 */
 	public static String periodicReportFileFormate(String CutomerID, float[] CustomerRank, int numOfComapnies,
@@ -397,10 +469,10 @@ public class FileManagmentSys {
 	}
 
 	/**
-	 * build string according to the file formate
-	 * 
-	 * @param CutomerID
-	 * @param totalePurchases
+	 * build string according to the file formate.
+	 *
+	 * @param CutomerID the cutomer ID
+	 * @param totalePurchases the totale purchases
 	 * @return the string containing /n
 	 */
 	public static String responseReportFileFormate(String CutomerID, String totalePurchases) {
@@ -409,6 +481,15 @@ public class FileManagmentSys {
 
 	
 	
+	/**
+	 * Builds the header.
+	 *
+	 * @param year the year
+	 * @param stationId the station id
+	 * @param reportType the report type
+	 * @param quarter the quarter
+	 * @return the string
+	 */
 	public static String buildHeader(String year, String stationId, String reportType, String quarter) {
 
 		return String.format("%s %s %s Quarter station_id : %-4s\n\n", reportType, year, quarter, stationId);
@@ -416,6 +497,16 @@ public class FileManagmentSys {
 
 	
 	
+	/**
+	 * Income report format.
+	 *
+	 * @param res the res
+	 * @param stationId the station id
+	 * @param year the year
+	 * @param quarter the quarter
+	 * @return the string
+	 * @throws SQLException the SQL exception
+	 */
 	public static String incomeReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, incomeReport, quarter);
@@ -425,6 +516,16 @@ public class FileManagmentSys {
 
 	
 	
+	/**
+	 * Purchase report format.
+	 *
+	 * @param res the res
+	 * @param stationId the station id
+	 * @param year the year
+	 * @param quarter the quarter
+	 * @return the string
+	 * @throws SQLException the SQL exception
+	 */
 	public static String purchaseReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, purchasesReport, quarter);
@@ -438,6 +539,16 @@ public class FileManagmentSys {
 		return format;
 	}
 
+	/**
+	 * Inventory report format.
+	 *
+	 * @param res the res
+	 * @param stationId the station id
+	 * @param year the year
+	 * @param quarter the quarter
+	 * @return the string
+	 * @throws SQLException the SQL exception
+	 */
 	public static String inventoryReportFormat(ResultSet res, String stationId, String year, String quarter)
 			throws SQLException {
 		String format = buildHeader(year, stationId, inventoryReport, quarter);

@@ -11,9 +11,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+/**
+ * The Class CustomerGasOrderController controlls the home order gas for the customers.
+ */
 public class CustomerGasOrderController {
 
+	/**
+	 * Gets the orders.
+	 * @param customerId the customer id
+	 * @return the orders
+	 */
 	public static ArrayList<GasOrder> getOrders(String customerId) {
 
 		PreparedStatement stm;
@@ -56,7 +63,7 @@ public class CustomerGasOrderController {
 	}
 
 	/**
-	 * Create new purchase of gas to home
+	 * Create new purchase of gas to home.
 	 * @param obj - order to create.
 	 * @return true - if the purchase was successful.
 	 */
