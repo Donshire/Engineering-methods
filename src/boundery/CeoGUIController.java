@@ -48,7 +48,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-// TODO: Auto-generated Javadoc
 
 /**
  * This is a simple class for the interface of the CEO
@@ -374,7 +373,6 @@ public class CeoGUIController implements Initializable {
 		try {
 			c.start(st);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

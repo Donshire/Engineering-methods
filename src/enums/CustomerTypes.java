@@ -1,8 +1,13 @@
 package enums;
 
+/**
+ * The Enum CustomerTypes.
+ */
 public enum CustomerTypes {
 
-	Private, Company;
+	/** The Private. */
+	Private, /** The Company. */
+ Company;
 
 
 }

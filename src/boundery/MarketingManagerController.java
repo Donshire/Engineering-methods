@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package boundery;
 
 import java.io.BufferedReader;
@@ -81,205 +84,357 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import server.FileManagmentSys;
 
+/**
+ * The Class MarketingManagerController.
+ */
 public class MarketingManagerController implements Initializable {
+	
+	/** The purchase hours. */
 	@FXML
 	private Text purchase_hours;
 
+	/** The hellomessage. */
 	@FXML
 	private Text hellomessage;
+	
+	/** The piechart 2. */
 	@FXML
 	private Text piechart2;
 
+	/** The piechart 3. */
 	@FXML
 	private Text piechart3;
 
+	/** The vbox periodic gui table. */
 	@FXML
 	private VBox vboxPeriodicGuiTable;
+	
+	/** The Sale ID sale D ata. */
 	@FXML
 	private Text SaleIDSaleDAta;
+	
+	/** The status sale D ata. */
 	@FXML
 	private Text statusSaleDAta;
+	
+	/** The Company name sale D ata. */
 	@FXML
 	private Text CompanyNameSaleDAta;
+	
+	/** The fuel type sale D ata. */
 	@FXML
 	private Text fuelTypeSaleDAta;
+	
+	/** The purchase module sale D ata. */
 	@FXML
 	private Text purchaseModuleSaleDAta;
+	
+	/** The sale percent sale D ata. */
 	@FXML
 	private Text salePercentSaleDAta;
+	
+	/** The start time sale D ata. */
 	@FXML
 	private Text startTimeSaleDAta;
+	
+	/** The end time sale D ata. */
 	@FXML
 	private Text endTimeSaleDAta;
+	
+	/** The sale data view index. */
 	@FXML
 	private Text saleDataViewIndex;
+	
+	/** The enter sale txt. */
 	@FXML
 	private Text enterSaleTxt;
+	
+	/** The start date sale D ata. */
 	@FXML
 	private Text startDateSaleDAta;
+	
+	/** The end date sale D ata. */
 	@FXML
 	private Text endDateSaleDAta;
+	
+	/** The sale days sale D ata. */
 	@FXML
 	private Text saleDaysSaleDAta;
+	
+	/** The Sales window btn. */
 	@FXML
 	private Button SalesWindowBtn;
+	
+	/** The de activate sale btn. */
 	@FXML
 	private Button deActivateSaleBtn;
+	
+	/** The fuel rates window btn. */
 	@FXML
 	private Button fuelRatesWindowBtn;
+	
+	/** The report generation window btn. */
 	@FXML
 	private Button reportGenerationWindowBtn;
+	
+	/** The hello user txt. */
 	@FXML
 	private Text helloUserTxt;
+	
+	/** The sales header. */
 	@FXML
 	private Text salesHeader;
+	
+	/** The Notifications text area. */
 	@FXML
 	private TextArea NotificationsTextArea;
+	
+	/** The fuel rates pane. */
 	@FXML
 	private Pane fuelRatesPane;
+	
+	/** The rate type. */
 	@FXML
 	private ComboBox<CustomerRateTypes> rateType;
+	
+	/** The new ratetxt. */
 	@FXML
 	private TextField newRatetxt;
+	
+	/** The max fuel pricetxt. */
 	@FXML
 	private Text maxFuelPricetxt;
+	
+	/** The rate type combo. */
 	@FXML
 	private ComboBox<RatesStatus> rateTypeCombo;
+	
+	/** The company rates table. */
 	@FXML
 	private TableView<PricingModule> companyRatesTable;
+	
+	/** The rate check box select. */
 	@FXML
 	private TableColumn<PricingModule, Boolean> rateCheckBoxSelect;
+	
+	/** The model name rate. */
 	@FXML
 	private TableColumn<PricingModule, String> modelNameRate;
+	
+	/** The rate new rate. */
 	@FXML
 	private TableColumn<PricingModule, Float> rateNewRate;
+	
+	/** The rate status. */
 	@FXML
 	private TableColumn<PricingModule, RatesStatus> rateStatus;
+	
+	/** The update rates. */
 	@FXML
 	private Button updateRates;
+	
+	/** The sale pane. */
 	@FXML
 	private Pane salePane;
+	
+	/** The sales details table. */
 	@FXML
 	private TableView<Sale> salesDetailsTable;
+	
+	/** The Select sale. */
 	@FXML
 	private TableColumn<Sale, Boolean> SelectSale;
+	
+	/** The sale number. */
 	@FXML
 	private TableColumn<Sale, String> saleNumber;
+	
+	/** The Sale fuel type. */
 	@FXML
 	private TableColumn<Sale, String> SaleFuelType;
+	
+	/** The Sale start date. */
 	@FXML
 	private TableColumn<Sale, String> SaleStartDate;
+	
+	/** The sale end date. */
 	@FXML
 	private TableColumn<Sale, String> saleEndDate;
+	
+	/** The sale percent. */
 	@FXML
 	private TableColumn<Sale, Float> salePercent;
+	
+	/** The view more sale details btn. */
 	@FXML
 	private Button viewMoreSaleDetailsBtn;
+	
+	/** The activate sale btn. */
 	@FXML
 	private Button activateSaleBtn;
+	
+	/** The log out btn. */
 	@FXML
 	private Button logOutBtn;
+	
+	/** The main pane. */
 	@FXML
 	private Button mainPane;
+	
+	/** The sales type combo. */
 	@FXML
 	private ComboBox<SaleStatus> salesTypeCombo;
+	
+	/** The reports pane. */
 	@FXML
 	private Pane reportsPane;
+	
+	/** The report kind combo. */
 	@FXML
 	private ComboBox<MarkitingManagerReport> reportKindCombo;
+	
+	/** The reportsale number. */
 	@FXML
 	private TextField reportsaleNumber;
+	
+	/** The generate report btn. */
 	@FXML
 	private Button generateReportBtn;
+	
+	/** The Periodic report pane. */
 	@FXML
 	private Pane PeriodicReportPane;
+	
+	/** The sale response report pane. */
 	@FXML
 	private Pane saleResponseReportPane;
+	
+	/** The sale data pane. */
 	@FXML
 	private Pane saleDataPane;
+	
+	/** The sale response report table. */
 	// response report table
 	@FXML
 	private TableView<ResponseReportData> saleResponseReportTable;
+	
+	/** The customer ID response report. */
 	@FXML
 	private TableColumn<ResponseReportData, String> customerIDResponseReport;
+	
+	/** The amount of purchaseresponse report. */
 	@FXML
 	private TableColumn<ResponseReportData, Float> amountOfPurchaseresponseReport;
+	
+	/** The totale number of customers response report. */
 	@FXML
 	private Text totaleNumberOfCustomersResponseReport;
+	
+	/** The totale purchases response report. */
 	@FXML
 	private Text totalePurchasesResponseReport;
+	
+	/** The Prev sale details btn. */
 	@FXML
 	private Button PrevSaleDetailsBtn;
+	
+	/** The next sale details btn. */
 	@FXML
 	private Button nextSaleDetailsBtn;
+	
+	/** The select date txt. */
 	@FXML
 	private Text selectDateTxt;
+	
+	/** The start date. */
 	@FXML
 	private DatePicker startDate;
+	
+	/** The end date. */
 	@FXML
 	private DatePicker endDate;
 
+	/** The analitic databtn. */
 	/// added
 	@FXML
 	private Button analiticDatabtn;
 
+	/** The analitic data pane. */
 	@FXML
 	private Pane analiticDataPane;
 
+	/** The Analitic data table. */
 	// analitic data tabel start------------------
 	@FXML
 	private TableView<AnaliticDataReport> AnaliticDataTable;
 
+	/** The week col. */
 	@FXML
 	private TableColumn<AnaliticDataReport, String> weekCol;
 
+	/** The month col. */
 	@FXML
 	private TableColumn<AnaliticDataReport, String> monthCol;
 
+	/** The year col. */
 	@FXML
 	private TableColumn<AnaliticDataReport, String> yearCol;
 
+	/** The type analitic col. */
 	@FXML
 	private TableColumn<AnaliticDataReport, String> typeAnaliticCol;
 	// analitic data tabel end------------------
 
+	/** The get yeartxt. */
 	@FXML
 	private TextField getYeartxt;
 
+	/** The month combo box. */
 	@FXML
 	private ComboBox<Month> monthComboBox;
 
+	/** The show analitic databtn. */
 	@FXML
 	private Button showAnaliticDatabtn;
 
 	// PieChartDiagram start---------------------------
 
+	/** The pie index. */
 	private int pie_index = 0;
 
+	/** The pie pane. */
 	@FXML
 	private Pane piePane;
 
+	/** The pie chart 1. */
 	@FXML
 	private PieChart pieChart1;
 
+	/** The backbtn. */
 	@FXML
 	private Button backbtn;
 
+	/** The nextbtn. */
 	@FXML
 	private Button nextbtn;
 
+	/** The prevbtn. */
 	@FXML
 	private Button prevbtn;
 
+	/** The bar chart. */
 	@FXML
 	private BarChart barChart;
 
+	/** The number axis. */
 	@FXML
 	private NumberAxis numberAxis;
 
+	/** The category axis. */
 	@FXML
 	private CategoryAxis categoryAxis;
 
+	/** The pie chart 3. */
 	@FXML
 	private PieChart pieChart3;
 
@@ -287,29 +442,36 @@ public class MarketingManagerController implements Initializable {
 
 	// ranks table start---------------------------------------------------
 
+	/** The analitic rank pane. */
 	@FXML
 	private Pane analiticRankPane;
 
+	/** The analitic ranks table. */
 	@FXML
 	private TableView<UserAnaliticRanks> analiticRanksTable;
 
+	/** The user I dcol. */
 	@FXML
 	private TableColumn<UserAnaliticRanks, String> userIDcol;
 
+	/** The customer type analeticcol. */
 	@FXML
 	private TableColumn<UserAnaliticRanks, Integer> customerTypeAnaleticcol;
 
+	/** The fueling hour analeticcol. */
 	@FXML
 	private TableColumn<UserAnaliticRanks, Integer> fuelingHourAnaleticcol;
 
+	/** The fuel type analeticcol. */
 	@FXML
 	private TableColumn<UserAnaliticRanks, Integer> fuelTypeAnaleticcol;
 
 	// ranks table end-------------------------------------------------------
 
 	/**
-	 * handle switching Sale panes next and prev 
-	 * @param event
+	 * handle switching Sale panes next and prev .
+	 *
+	 * @param event the event
 	 */
 	@FXML
 	void nextOrPrevWasClicked(ActionEvent event) {
@@ -355,8 +517,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * handle switching Chart panes next and prev 
-	 * @param index
+	 * handle switching Chart panes next and prev .
+	 * this function changes between the analytic charts and diagrams and display them
+	 * @param index the index
 	 */
 	public void switchCharts(int index) {
 		switch (index) {
@@ -377,10 +540,11 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * Checks input year and month if valid
-	 * @param month
-	 * @param year
-	 * @return
+	 * Checks input year and month if valid.
+	 * this function checks input of the month and year if they are numbers or correct format
+	 * @param month the month
+	 * @param year the year
+	 * @return true, if successful
 	 */
 	public boolean checkInput(String month, String year) {
 		int val, val2 = 0;
@@ -473,8 +637,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * show analitic data on click 
-	 * @param event
+	 * show analitic data on click .
+	 * this function handles the analytic data buttons
+	 * @param event the event
 	 */
 	@FXML
 	void showAnaliticDataClick(ActionEvent event) {
@@ -499,8 +664,9 @@ public class MarketingManagerController implements Initializable {
 
 
 	/**
-	 * open pane according to report type
-	 * @param event
+	 * open pane according to report type.
+	 * this fucntion displays the chosen reports and displays data
+	 * @param event the event
 	 */
 	@FXML
 	void selectReportType(ActionEvent event) {
@@ -531,8 +697,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * handel prev sale button
-	 * @param event
+	 * handel prev sale button.
+	 * this function handles the previous sales and displays their details
+	 * @param event the event
 	 */
 	@FXML
 	void PrevSaleDetails(ActionEvent event) {
@@ -546,8 +713,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * handel next sale button
-	 * @param event
+	 * handel next sale button.
+	 *
+	 * @param event the event
 	 */
 	@FXML
 	void nextSaleDetails(ActionEvent event) {
@@ -560,11 +728,21 @@ public class MarketingManagerController implements Initializable {
 		loadSaleFullDetails(true);
 	}
 
+	/**
+	 * Finish viweing sale details.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void finishViweingSaleDetails(ActionEvent event) {
 		switchPanes(salePane);
 	}
 
+	/**
+	 * Open sale pane.
+	 *
+	 * @param event the event
+	 */
 	@FXML
 	void OpenSalePane(ActionEvent event) {
 		switchPanes(salePane);
@@ -575,9 +753,9 @@ public class MarketingManagerController implements Initializable {
 	/**
 	 * update the selected Pricing models status to active in this case if there is
 	 * two rates selected to the same Pricing model it wouldn't update the status
-	 * and return
-	 * 
-	 * @param event
+	 * and return.
+	 *
+	 * @param event the event
 	 */
 
 	@FXML
@@ -611,8 +789,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * activate all selected sales
-	 * @param event
+	 * activate all selected sales.
+	 *
+	 * @param event the event
 	 */
 	@FXML
 	void activateSale(ActionEvent event) {
@@ -638,8 +817,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * select sale status to show in the table
-	 * @param event
+	 * select sale status to show in the table.
+	 * this function choose sale type and show available and not available sales
+	 * @param event the event
 	 */
 	@FXML
 	void chooseSaleType(ActionEvent event) {
@@ -670,7 +850,8 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * build Sale Table
+	 * build Sale Table.
+	 * this function builds the sales table and displays on the gui
 	 */
 	private void buildSaleTable() {
 		GUIBuiltParts.buildCheckBOXForTable(SelectSale, selectedSales);
@@ -683,8 +864,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * create new rate
-	 * @param event
+	 * create new rate.
+	 * this function creates new rates for the marketing manager and displays them to him
+	 * @param event the event
 	 */
 	@FXML
 	void createNewRate(ActionEvent event) {
@@ -713,8 +895,8 @@ public class MarketingManagerController implements Initializable {
 
 	/**
 	 * generate report handler
-	 * check the kind of the report and create one accordingly 
-	 * @param event
+	 * check the kind of the report and create one accordingly .
+	 * @param event the event
 	 */
 	@FXML
 	void generateReport(ActionEvent event) {
@@ -779,9 +961,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * build Periodic Report Table according to the formate of the report
-	 * @param data
-	 * @param strData
+	 * build Periodic Report Table according to the formate of the report.
+	 * @param data the data
+	 * @param strData the str data
 	 */
 	private void buildPeriodicReportTable(ObservableList<ResponseReportData> data, String[] strData) {
 		TableView<ObservableList<String>> tableView = new TableView<>();
@@ -813,9 +995,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * read the string and conert it to arrayList for the Periodic Report formate
-	 * @param str
-	 * @return
+	 * read the string and conert it to arrayList for the Periodic Report formate.
+	 * @param str the str
+	 * @return the array list
 	 */
 	private static ArrayList<String> convertRowToArrayListPeriodicReport(String str) {
 		int i = 0;
@@ -830,7 +1012,7 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * build sale Response Report Table
+	 * build sale Response Report Table.
 	 */
 	private void buildsaleResponseReportTable() {
 		customerIDResponseReport
@@ -840,9 +1022,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * fill data Object From File resArray 
-	 * @param resArray
-	 * @param data
+	 * fill data Object From File resArray .
+	 * @param resArray the res array
+	 * @param data the data
 	 */
 	private void filldataObjectFromFile(ArrayList<String> resArray, ObservableList<ResponseReportData> data) {
 		// sprerate to lines
@@ -854,16 +1036,31 @@ public class MarketingManagerController implements Initializable {
 		}
 	}
 
+	/**
+	 * Open fuel rates pane.
+	 * displays the fuel rates pane
+	 * @param event the event
+	 */
 	@FXML
 	void openFuelRatesPane(ActionEvent event) {
 		switchPanes(fuelRatesPane);
 	}
 
+	/**
+	 * Open report generation pane.
+	 * displays the reports pane
+	 * @param event the event
+	 */
 	@FXML
 	void openReportGenerationPane(ActionEvent event) {
 		switchPanes(reportsPane);
 	}
 
+	/**
+	 * Open analytic data pane.
+	 * displays the analytic pane
+	 * @param event the event
+	 */
 	@FXML
 	void openAnaliticDataPane(ActionEvent event) {
 		switchPanes(analiticDataPane);
@@ -871,7 +1068,7 @@ public class MarketingManagerController implements Initializable {
 
 	/**
 	 * handle view more sale details
-	 * @param event
+	 * @param event the event
 	 */
 	@FXML
 	void viewMoreSaleDetails(ActionEvent event) {
@@ -891,8 +1088,9 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * log out
-	 * @param event
+	 * log out.
+	 * this function performs log out from the system
+	 * @param event the event
 	 */
 	@FXML
 	void logOut(ActionEvent event) {
@@ -903,8 +1101,8 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * update pricing model rate
-	 * @param event
+	 * this function displays the pricing module and updates it according to current rate
+	 * @param event the event
 	 */
 	@FXML
 	void chooseFuelTypeForNewRate(ActionEvent event) {
@@ -919,8 +1117,8 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * choose rate Type
-	 * @param event
+	 * choose rate type from check box
+	 * @param event the event
 	 */
 	@FXML
 	void chooserateType(ActionEvent event) {
@@ -949,7 +1147,7 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * build Company Rate Table
+	 * build Company Rate Table.
 	 */
 	private void buildCompanyRateTable() {
 		// create comboBOX
@@ -962,38 +1160,77 @@ public class MarketingManagerController implements Initializable {
 		rateStatus.setCellValueFactory(new PropertyValueFactory<PricingModule, RatesStatus>("status"));
 	}
 
+	/** The current pane. */
 	private Pane currentPane;
+	
+	/** The markiting manager. */
 	public static Employee markitingManager;
+	
+	/** The selected rates. */
 	private ArrayList<PricingModule> selectedRates = new ArrayList<PricingModule>();
+	
+	/** The selected sales. */
 	private ArrayList<Sale> selectedSales = new ArrayList<Sale>();
+	
+	/** The current sale data index. */
 	private int currentSaleDataIndex;
 
 	/**
-	 * this class is just to show the table of the report
-	 * @author iamme
+	 * this class is just to show the table of the report.
 	 *
+	 * @author iamme
 	 */
 	protected class ResponseReportData {
+		
+		/** The customer ID. */
 		String customerID;
+		
+		/** The price of purchase. */
 		String priceOfPurchase;
 
+		/**
+		 * Instantiates a new response report data.
+		 *
+		 * @param customerID the customer ID
+		 * @param priceOfPurchase the price of purchase
+		 */
 		public ResponseReportData(String customerID, String priceOfPurchase) {
 			this.customerID = customerID;
 			this.priceOfPurchase = priceOfPurchase;
 		}
 
+		/**
+		 * Gets the customer ID.
+		 *
+		 * @return the customer ID
+		 */
 		public String getCustomerID() {
 			return customerID;
 		}
 
+		/**
+		 * Sets the customer ID.
+		 *
+		 * @param customerID the new customer ID
+		 */
 		public void setCustomerID(String customerID) {
 			this.customerID = customerID;
 		}
 
+		/**
+		 * Gets the amount of purchase.
+		 *
+		 * @return the amount of purchase
+		 */
 		public String getAmountOfPurchase() {
 			return priceOfPurchase;
 		}
 
+		/**
+		 * Sets the amount of purchase.
+		 *
+		 * @param amountOfPurchase the new amount of purchase
+		 */
 		public void setAmountOfPurchase(String amountOfPurchase) {
 			this.priceOfPurchase = amountOfPurchase;
 		}
@@ -1001,7 +1238,8 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * load the selected sales details 
+	 * load the selected sales details .
+	 *
 	 * @param b to move forward or backward
 	 */
 	private void loadSaleFullDetails(boolean b) {
@@ -1030,6 +1268,12 @@ public class MarketingManagerController implements Initializable {
 		saleDaysSaleDAta.setText(sale.getSaleDays());
 	}
 
+	/**
+	 * Start.
+	 *
+	 * @param primaryStage the primary stage
+	 * @throws Exception the exception
+	 */
 	public void start(Stage primaryStage) throws Exception {
 		Pane mainPane;
 		Scene s;
@@ -1047,6 +1291,10 @@ public class MarketingManagerController implements Initializable {
 
 	}
 
+	/**
+	 * this function Switches between available panes.
+	 * @param newPane the new pane
+	 */
 	private void switchPanes(Pane newPane) {
 		currentPane.setVisible(false);
 		currentPane = newPane;
@@ -1054,7 +1302,7 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * initialize Analitic Data table
+	 * initialize Analytic Data table.
 	 */
 	public void initializeAnaliticData() {
 
@@ -1100,10 +1348,11 @@ public class MarketingManagerController implements Initializable {
 
 	
 	/**
-	 * get All Analitic Data By Year And Month
-	 * @param month
-	 * @param year
-	 * @return
+	 * get All Analitic Data By Year And Month.
+	 *
+	 * @param month the month
+	 * @param year the year
+	 * @return the all analitic data by year and month
 	 */
 	public ObservableList<AnaliticDataReport> getAllAnaliticDataByYearAndMonth(String month, String year) {
 
@@ -1118,9 +1367,10 @@ public class MarketingManagerController implements Initializable {
 	
 	
 	/**
-	 * analitic Data By Year And Month
-	 * @param fileName
-	 * @param type
+	 * analitic Data By Year And Month.
+	 *
+	 * @param fileName the file name
+	 * @param type the type
 	 */
 
 	public void analiticDataByYearAndMonth(String fileName, String type) {
@@ -1200,9 +1450,10 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * bar char initilize and fill 
-	 * @param data
-	 * @return
+	 * bar char initilize and fill .
+	 *
+	 * @param data the data
+	 * @return the pie chart data for car num and total purchase
 	 */
 	public ArrayList<XYChart.Series<String, Number>> getpieChartDataForCarNumAndTotalPurchase(String data) {
 		String array[] = data.split("\n");
@@ -1224,9 +1475,10 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * get pie Chart Data For Fuel Type
-	 * @param data
-	 * @return
+	 * get pie Chart Data For Fuel Type.
+	 *
+	 * @param data the data
+	 * @return the pie chart data for fuel type
 	 */
 	public ObservableList<PieChart.Data> getpieChartDataForFuelType(String data) {
 		String array[] = data.split("\n");
@@ -1249,9 +1501,10 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * get pie Chart Data For Hours
-	 * @param data
-	 * @return
+	 * get pie Chart Data For Hours.
+	 *
+	 * @param data the data
+	 * @return the pie chart data for hours
 	 */
 	public ObservableList<PieChart.Data> getpieChartDataForHours(String data) {
 		String array[] = data.split("\n");
@@ -1274,7 +1527,7 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * initialize Ranks Table
+	 * initialize Ranks Table.
 	 */
 	public void initializeRanksTable() {
 
@@ -1288,7 +1541,10 @@ public class MarketingManagerController implements Initializable {
 	}
 
 	/**
-	 * initilize all the data and the structuers of the tabels
+	 * initilize all the data and the structuers of the tabels.
+	 *
+	 * @param location the location
+	 * @param resources the resources
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

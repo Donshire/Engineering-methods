@@ -36,26 +36,53 @@ import enums.StationManagerReportsTypes;
 import ocsf.server.*;
 import server.GasStationControllerServer;
 
+/**
+ * The Class MyFuelServer controls all the my fuel system buttons and users.
+ */
 public class MyFuelServer extends AbstractServer {
 
+	/** The users online. */
 	public static ArrayList<UserOnline> usersOnline = new ArrayList<UserOnline>();
+	
+	/** The db password. */
 	public static String schemaName, dbPassword;
 
+	/** The analtic data. */
 	private AnalticData analticData;
+	
+	/** The thread. */
 	private Thread thread;
+	
+	/** The auto matic purchase model 3 calc. */
 	//
 	private AutoMaticPurchaseModel3Calc autoMaticPurchaseModel3Calc;
+	
+	/** The sec thread. */
 	private Thread secThread;
 
+	/** The orders. */
 	ArrayList<GasStationOrder> orders;
+	
+	/** The status. */
 	String status;
 
+	/**
+	 * Instantiates a new my fuel server.
+	 *
+	 * @param port the port
+	 */
 	public MyFuelServer(int port) {
 		super(port);
 	}
 
 	// this.sendToAllClients(students[i].toString());
 
+	/**
+	 * Handle message from client.
+	 *
+	 * @param msg the msg
+	 * @param client the client
+	 */
 	public void handleMessageFromClient(Object msg, ConnectionToClient client) {
 		Message message = (Message) msg;
 		PricingModule pricingModel;
@@ -635,11 +662,11 @@ public class MyFuelServer extends AbstractServer {
 	}
 
 	/**
-	 * Generic function that send to client any arrayList
-	 * 
-	 * @param        <T>
-	 * @param obj
-	 * @param client
+	 * Generic function that send to client any arrayList.
+	 *
+	 * @param <T> the generic type
+	 * @param obj the obj
+	 * @param client the client
 	 */
 	private <T> void sendToClientArrayList(ArrayList<T> obj, ConnectionToClient client) {
 		try {
@@ -660,11 +687,11 @@ public class MyFuelServer extends AbstractServer {
 	}
 
 	/**
-	 * sends to the client single object from the arrayList
-	 * 
-	 * @param        <T>
-	 * @param obj
-	 * @param client
+	 * sends to the client single object from the arrayList.
+	 *
+	 * @param <T> the generic type
+	 * @param obj the obj
+	 * @param client the client
 	 */
 	private <T> void sendToClientObject(T obj, ConnectionToClient client) {
 		try {
@@ -678,11 +705,10 @@ public class MyFuelServer extends AbstractServer {
 	}
 
 	/**
-	 * convert File To Seializable
-	 * 
-	 * @param fileName
-	 * @param filePath
-	 * @return
+	 * convert File To Seializable.
+	 *
+	 * @param file the file
+	 * @return the my file
 	 */
 
 	private MyFile convertFileToSeializable(File file) {
@@ -703,6 +729,9 @@ public class MyFuelServer extends AbstractServer {
 		return msg;
 	}
 
+	/**
+	 * Server started.
+	 */
 	protected void serverStarted() {
 		ConnectionToDB.connectToDB(schemaName, dbPassword);
 		// ServerController.writeToServerConsole("Server listening for connections on
@@ -723,6 +752,9 @@ public class MyFuelServer extends AbstractServer {
 		secThread.start();
 	}
 
+	/**
+	 * Server stopped.
+	 */
 	protected void serverStopped() {
 		// ServerController.writeToServerConsole("Server has stopped listening for
 		// connections.");
@@ -779,41 +811,71 @@ public class MyFuelServer extends AbstractServer {
 
 	// just to show in the GUI
 	/**
-	 * String UserID ,String userType
-	 * 
-	 * @author iamme
+	 * String UserID ,String userType.
 	 *
+	 * @author iamme
 	 */
 	public static class UserOnline {
+		
+		/** The User ID. */
 		String UserID;
+		
+		/** The user type. */
 		String userType;
 
 		/**
-		 * 
-		 * @param userID
-		 * @param userType
+		 * Instantiates a new user online.
+		 *
+		 * @param userID the user ID
+		 * @param userType the user type
 		 */
 		public UserOnline(String userID, String userType) {
 			UserID = userID;
 			this.userType = userType;
 		}
 
+		/**
+		 * Gets the user ID.
+		 *
+		 * @return the user ID
+		 */
 		public String getUserID() {
 			return UserID;
 		}
 
+		/**
+		 * Sets the user ID.
+		 *
+		 * @param userID the new user ID
+		 */
 		public void setUserID(String userID) {
 			UserID = userID;
 		}
 
+		/**
+		 * Gets the user type.
+		 *
+		 * @return the user type
+		 */
 		public String getUserType() {
 			return userType;
 		}
 
+		/**
+		 * Sets the user type.
+		 *
+		 * @param userType the new user type
+		 */
 		public void setUserType(String userType) {
 			this.userType = userType;
 		}
 
+		/**
+		 * Equals.
+		 *
+		 * @param obj the obj
+		 * @return true, if successful
+		 */
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -831,6 +893,11 @@ public class MyFuelServer extends AbstractServer {
 			return true;
 		}
 
+		/**
+		 * To string.
+		 *
+		 * @return the string
+		 */
 		@Override
 		public String toString() {
 			return "UserOnline [UserID=" + UserID + ", userType=" + userType + "]";

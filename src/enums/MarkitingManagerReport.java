@@ -1,5 +1,12 @@
 package enums;
 
+/**
+ * The Enum MarkitingManagerReport.
+ */
 public enum MarkitingManagerReport {
-	PeriodicReport,saleResponseReport;
+	
+	/** The Periodic report. */
+	PeriodicReport,
+/** The sale response report. */
+saleResponseReport;
 }

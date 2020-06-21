@@ -10,11 +10,26 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * The Class SendMail controls the mail sending from the system to the users.
+ */
 public class SendMail implements Runnable{
 
+	/** The station ID. */
 	int stationID;
+	
+	/** The message content. */
 	String fuelType,mail,messageHeader,messageContent;
 	
+	/**
+	 * Instantiates a new send mail.
+	 *
+	 * @param stationID the station ID
+	 * @param fuelType the fuel type
+	 * @param mail the mail
+	 * @param messageHeader the message header
+	 * @param messageContent the message content
+	 */
 	public SendMail(int stationID, String fuelType, String mail, String messageHeader, String messageContent) {
 		this.stationID = stationID;
 		this.fuelType = fuelType;
@@ -23,10 +38,22 @@ public class SendMail implements Runnable{
 		this.messageContent = messageContent;
 	}
 
+	/**
+	 * Run.
+	 */
 	public void run() {
 		sendMailToStationManager(stationID, fuelType, mail, messageHeader, messageContent);
 	}
 	
+    /**
+     * Send mail to station manager.
+     *
+     * @param stationID the station ID
+     * @param fuelType the fuel type
+     * @param mail the mail
+     * @param messageHeader the message header
+     * @param messageContent the message content
+     */
     public static void sendMailToStationManager(int stationID,String fuelType,String mail,String messageHeader,String messageContent) {
 		
 		final String username = "myfuelltm2020@gmail.com";

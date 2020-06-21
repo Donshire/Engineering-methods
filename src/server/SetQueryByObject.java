@@ -5,13 +5,17 @@ import java.sql.SQLException;
 
 import Entity.FuelPurchase;
 
+/**
+ * The Class SetQueryByObject.
+ */
 public class SetQueryByObject {
 
 	/**
 	 * recive purchase and insert the data to the statment and execute it,
-	 * purchase must contain all the data needed
-	 * @param stm
-	 * @param purchase
+	 * purchase must contain all the data needed.
+	 *
+	 * @param stm the stm
+	 * @param purchase the purchase
 	 * @return true if every thing succeded else false
 	 */
 	public static boolean SetFuelPurchaseTable(PreparedStatement stm,FuelPurchase purchase) {

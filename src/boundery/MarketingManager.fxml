@@ -295,7 +295,7 @@
             <Text fx:id="selectDateTxt" layoutX="14.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select Dates" visible="false" />
          </children>
       </Pane>
-      <Button fx:id="analiticDatabtn" alignment="BASELINE_LEFT" layoutY="286.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="AnaliticData">
+      <Button fx:id="analiticDatabtn" alignment="BASELINE_LEFT" layoutY="286.0" mnemonicParsing="false" onAction="#openAnaliticDataPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Analytic Data">
          <font>
             <Font size="18.0" />
          </font></Button>
@@ -320,12 +320,12 @@
                <font>
                   <Font size="15.0" />
                </font></Text>
-            <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analitic Data">
+            <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analytic Data">
                <font>
                   <Font name="System Bold" size="35.0" />
                </font>
             </Text>
-            <Text fill="RED" layoutX="84.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-Double click to choose analitic data diagrams">
+            <Text fill="RED" layoutX="84.0" layoutY="414.0" strokeType="OUTSIDE" strokeWidth="0.0" text="-Double click to choose analytic data diagrams">
                <font>
                   <Font size="15.0" />
                </font>

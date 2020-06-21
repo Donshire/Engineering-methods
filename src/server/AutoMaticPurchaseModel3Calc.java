@@ -11,17 +11,24 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
- * a thread that run at all the customers to proced payment on PricingModel 3
- * @author iamme
+ * a thread that run at all the customers to proced payment on PricingModel 3.
  *
+ * @author iamme
  */
 public class AutoMaticPurchaseModel3Calc implements Runnable {
 
+	/** The continue thread. */
 	public boolean continueThread = true;
 	
+	/** The old date. */
 	private LocalDate before;
+	
+	/** The late date. */
 	private LocalDate after;
 	
+	/**
+	 * Run threads function.
+	 */
 	@Override
 	public void run() {
 		while(continueThread) {
@@ -37,6 +44,11 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 		}
 	}
 
+	/**
+	 * Thread sleep.
+	 *
+	 * @return true, if successful
+	 */
 	private boolean threadSleep() {
 		boolean flag=false;//didn't finish
 		while(continueThread&&!flag)
@@ -51,6 +63,9 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	}
 	
 	
+	/**
+	 * Take money from users.
+	 */
 	public void takeMoneyFromUsers() {
 		//run at all users
 		PreparedStatement stm;
@@ -89,6 +104,11 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 	}
 	
 	
+	/**
+	 * Calculate time to sleep.
+	 *
+	 * @return the long
+	 */
 	private long calculateTimeToSleep() {
 		Calendar calendar = Calendar.getInstance(); 
 		Date currMonth = calendar.getTime();
@@ -106,6 +126,11 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 		//return 100;
 	}
 	
+	/**
+	 * Gets the first of month.
+	 *
+	 * @return the first of month
+	 */
 	private LocalDate getFirstOfMonth() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MONTH, -1);
@@ -114,6 +139,11 @@ public class AutoMaticPurchaseModel3Calc implements Runnable {
 		return nextMonthFirstDay.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 	
+	/**
+	 * Gets the last of month.
+	 *
+	 * @return the last of month
+	 */
 	private LocalDate getLastOfMonth() {
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.MONTH, -1);
