@@ -57,7 +57,6 @@ public class CustomerCC {
 		ClientUI.client.accept(new Message(userId, Commands.CustomerOrderList));
 		try {
 			ArrayList<GasOrder> array = (ArrayList<GasOrder>) MyFuelClient.ServerRetObj;
-			System.out.println(array);
 			return array;
 			
 		} catch (Exception e) {

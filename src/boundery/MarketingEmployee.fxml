@@ -153,8 +153,8 @@
                   <Font name="System Bold" size="25.0" />
                </font>
             </Label>
-            <Button fx:id="uploadCustomerBtn1" layoutX="377.0" layoutY="53.0" mnemonicParsing="false" onAction="#uploadCustomer" stylesheets="@styles.css" text="Check ID" />
-            <Button fx:id="replaceCarBtn" layoutX="377.0" layoutY="98.0" mnemonicParsing="false" onAction="#openReplaceCar" prefHeight="31.0" prefWidth="118.0" stylesheets="@styles.css" text="Replace existig car">
+            <Button fx:id="uploadCustomerBtn1" layoutX="359.0" layoutY="52.0" mnemonicParsing="false" onAction="#uploadCustomer" stylesheets="@styles.css" text="Check ID" />
+            <Button fx:id="replaceCarBtn" layoutX="359.0" layoutY="98.0" mnemonicParsing="false" onAction="#openReplaceCar" prefHeight="31.0" prefWidth="118.0" stylesheets="@styles.css" text="Replace existig car">
                <font>
                   <Font size="12.0" />
                </font>
@@ -182,6 +182,11 @@
                   <Font size="15.0" />
                </font></Label>
             <ComboBox fx:id="secFuelTypeCombox" layoutX="405.0" layoutY="387.0" prefHeight="31.0" prefWidth="109.0" />
+            <Text layoutX="484.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To update only the model leave car field empety">
+               <font>
+                  <Font name="System Italic" size="13.0" />
+               </font>
+            </Text>
          </children>
       </Pane>
       <Button fx:id="openUpdateCustomerPane" alignment="BASELINE_LEFT" layoutY="226.0" mnemonicParsing="false" onAction="#openUpdateCustomerPane" prefHeight="60.0" prefWidth="192.0" stylesheets="@styles.css" text="Update Customer">

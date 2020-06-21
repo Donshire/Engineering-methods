@@ -865,13 +865,7 @@ public class MarketingEmployeeController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		CVVImage.setVisible(false);
 		CVVImage1.setVisible(false);
-		System.out.println("employee:  " + markem);
-		fuelTypes.add("95");
-		fuelTypes.add("MOTOR CYCLES");
-		fuelTypes.add("Solar");
 		// loading the main window data
-		System.out.println("hello");
-		System.out.println(markem);
 		// set the current pane as the main
 		currentPane = NewClientPane;
 		// show the main pane and hide the others
@@ -881,7 +875,7 @@ public class MarketingEmployeeController implements Initializable {
 		updateCustomerPane.setVisible(false);
 		salesPane.setVisible(false);
 		createNewSalePane.setVisible(false);
-		hellomessage.setText(markem.getFirstName());
+		hellomessage.setText(markem.getFirstName()+"\n"+markem.getCompanyName());
 		ObservableList<PricingModel> pricing = FXCollections.observableArrayList(PricingModel.values());
 		pricingModelCombox.setItems(pricing);
 
@@ -954,7 +948,6 @@ public class MarketingEmployeeController implements Initializable {
 		creditCardNo = CreditCardTxt.getText();
 		expDateMon = ExpDateMonthTxt.getText();
 		expDateYear = ExpDateYearTxt.getText();
-		System.out.println(expDateMon + "  " + expDateYear);
 
 		CVV = CVVTxt.getText();
 
@@ -1044,7 +1037,6 @@ public class MarketingEmployeeController implements Initializable {
 					fullAddress.toString(), 0, 0, creditCardNo, expDate.toString(), CVV, cusType.toString(),
 					companyName);
 
-			System.out.println(customer);
 			res = EmployeeCC.checkIfExist(customer.getId());
 			if (res == 1) {
 				JOptionPane.showMessageDialog(null, "This customer id already exist in the system.");
@@ -1443,7 +1435,6 @@ public class MarketingEmployeeController implements Initializable {
 		chPhone = phoneChangeTxt.getText();
 		chAddress = addressChangeTxt.getText();
 		chAddressNo = upAdrdressNoTxt.getText();
-		System.out.println("no: " + chAddressNo);
 		chId = UpdateIdTxt.getText();
 
 		if (chFirst == null || chLast == null || chEmail == null || chCreditNo == null || expDateMon.isEmpty()
@@ -1895,7 +1886,6 @@ public class MarketingEmployeeController implements Initializable {
 	public static boolean testTime(String time) {
 		if (Integer.parseInt(time.substring(0, 2)) > 23 || Integer.parseInt(time.substring(0, 2)) < 0)
 			return false;
-		System.out.println(Integer.parseInt(time.substring(3, 4)));
 		if (Integer.parseInt(time.substring(3, 5)) > 59 || Integer.parseInt(time.substring(3, 5)) < 0)
 			return false;
 		return true;

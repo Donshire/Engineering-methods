@@ -117,7 +117,6 @@ public class ServerController implements Initializable {
 	 */
 	public static void onlineUserTableCont(String ID,String userType) {
 		UserOnline user = new UserOnline(ID, userType);
-		System.out.println(user);
 		if(UsersTableStatic.getItems().contains(user)) {
 			MyFuelServer.usersOnline.remove(user);
 			UsersTableStatic.getItems().remove(user);

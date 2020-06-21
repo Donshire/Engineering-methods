@@ -339,8 +339,6 @@ public class CeoGUIController implements Initializable {
 
 					GenericReport clickedRow = row.getItem();
 					showReport(null, clickedRow);
-
-					System.out.println(clickedRow.toString());
 				}
 			});
 			return row;
@@ -569,7 +567,7 @@ public class CeoGUIController implements Initializable {
 		RequestListTable.setItems(data1);
 		// ArrayList<PricingModule> companyPricingModuleByStatus;
 		currentPane = RateApprovalPane;
-		ceo_hello.setText(ceo.getFirstName());
+		ceo_hello.setText(ceo.getFirstName()+"\n"+ceo.getCompanyName());
 		// show the main pane and hide the others1
 		currentPane.setVisible(true);
 		reportsPane.setVisible(false);

@@ -617,7 +617,6 @@ public class StationManagerController implements Initializable {
 					GenericReport clickedRow = row.getItem();
 					showReport(null, clickedRow);
 
-					System.out.println(clickedRow.toString());
 				}
 			});
 			return row;
@@ -689,7 +688,7 @@ public class StationManagerController implements Initializable {
 		StationReportsView.setVisible(false);
 		QuantityView.setVisible(true);
 		curr = QuantityView;
-		nametxt.setText(stationManager.getFirstName());
+		nametxt.setText(stationManager.getFirstName()+"\n"+stationManager.getCompanyName()+"/"+stationManager.getStationID());
 		initializeOrderTable();
 		initializeMinQuantityTable();
 		initializeReportTable();

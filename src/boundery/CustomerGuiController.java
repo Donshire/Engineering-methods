@@ -256,7 +256,6 @@ public class CustomerGuiController implements Initializable {
 	@FXML
 	void supplyDateSelected(ActionEvent event) {
 		supplyDate=formatter.format(filedSupplyDate.getValue());
-		System.out.println(supplyDate);
 	}
 
 	/**
@@ -276,7 +275,6 @@ public class CustomerGuiController implements Initializable {
 			GasOrder order = new GasOrder(-1, customer.getId(), supplyDate, currentTime, gasAmount, currentDate, priceOfPurchase,
 					!normalSupply.isSelected(), OrderStatus.processing);
 			
-			System.out.println(order.toString());
 			
 			if (CustomerCC.createNewOrder(order)) {
 			JOptionPane.showMessageDialog(null,"Order created succesfully");

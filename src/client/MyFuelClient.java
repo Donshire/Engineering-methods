@@ -88,7 +88,6 @@ public class MyFuelClient extends AbstractClient {
 	private static File saveFile(MyFile file) {
 		try {
 			int fileSize = file.getSize();
-			System.out.println("Message received: " + file.getFileName() + "length " + fileSize);
 			FileManagmentSys.createSingleFolder("C:\\MyFuel_Client");
 			FileOutputStream fos = new FileOutputStream("C:\\MyFuel_Client\\temp.txt");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);

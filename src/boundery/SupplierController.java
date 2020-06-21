@@ -269,14 +269,12 @@ public class SupplierController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		// loading the main window data
-		System.out.println("hello");
-		System.out.println(supplier);
 		// set the current pane as the main
 		currentPane = SupplierOrdersPane;
 		// show the main pane and hide the others
 		SupplierOrdersPane.setVisible(true);
 
-		hellomessage.setText(supplier.getFirstName());
+		hellomessage.setText(supplier.getFirstName()+"\n"+supplier.getFuelType());
 
 		ObservableList<SupplierOrderStatus> orderTypes = FXCollections
 				.observableArrayList(SupplierOrderStatus.confirmed,SupplierOrderStatus.supplied);

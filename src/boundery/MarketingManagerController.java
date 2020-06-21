@@ -1438,7 +1438,6 @@ public class MarketingManagerController implements Initializable {
 					}
 
 					//
-					System.out.println(userDtails);
 					ObservableList<UserAnaliticRanks> analiticData = FXCollections.observableArrayList(userDtails);
 					analiticRanksTable.setItems(analiticData);
 				} catch (IOException e) {
@@ -1549,14 +1548,14 @@ public class MarketingManagerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// loading the main window data
-		System.out.println("hello");
 		// if agreed we can use a file to load and save the nofitications
 
 		// helloUserTxt.setText("hello " + markitingManager.getFirstName() + " " +
 		// markitingManager.getLastName());
 
 		currentPane = fuelRatesPane;
-		hellomessage.setText("Hello "+ markitingManager.getFirstName());
+		hellomessage.setText("Hello "+ markitingManager.getFirstName()+"\n"+
+		markitingManager.getCompanyName());
 		// show the main pane and hide the others
 
 		fuelRatesPane.setVisible(true);

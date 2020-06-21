@@ -89,7 +89,6 @@ public class LogInController {
 				//
 			} else if (obj instanceof Employee) {
 				Employee employee = (Employee) obj;
-				System.out.println("the employee detail:"+employee);
 				switch (employee.getRole().toLowerCase()) {
 					case "marketing manager":
 						MarketingManagerController.markitingManager = employee;
