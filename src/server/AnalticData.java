@@ -66,7 +66,6 @@ public class AnalticData implements Runnable {
 			do {
 				before = LocalDate.now();
 				after = LocalDate.now().minusDays(7);
-				System.out.println("before " + before + " after " + after);
 				
 				//create files for all companies
 				ArrayList<String> companies = getAllCompanies();
@@ -89,11 +88,6 @@ public class AnalticData implements Runnable {
 					fuelingHourRanks = calculatefuelingHourAnaleticRank(filesStatistic[index],val);
 					customerTypeRanks = calculateCustomerTypeAnaleticRank(filesStatistic[index],val);
 					fuelTypeRanks = calculatefuelTypeAnaleticRank(filesStatistic[index],val);
-					//
-					System.out.println("Houers: " + fuelingHourRanks);
-					System.out.println("CustomerType: " + customerTypeRanks);
-					System.out.println("fuelType: " + fuelTypeRanks);
-					//
 					
 					writeAnalitic(filesRank[index],currentCustomers, fuelTypeRanks, fuelingHourRanks, customerTypeRanks);
 					
@@ -694,8 +688,6 @@ public class AnalticData implements Runnable {
 			}
 			Collections.sort(startHourRank);
 
-			System.out.println(startHourRank);
-
 			ArrayList<KeyplusRank> endHoursRank = new ArrayList<KeyplusRank>();
 			//
 			int countRank = 1;
@@ -715,8 +707,6 @@ public class AnalticData implements Runnable {
 			// free
 			fuelingHourAnaleticRank = null;
 			//
-			System.out.println(startHourRank);
-			System.out.println(endHoursRank);
 
 			// ranks are ranged from 1/(countRank+1) to 1 so max will be 10 and min
 			// countRank/(countRank+1)~1
