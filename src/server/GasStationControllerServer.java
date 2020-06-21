@@ -460,6 +460,14 @@ public class GasStationControllerServer {
 
 		}
 
+		file = FileManagmentSys.createFile(
+				FileManagmentSys.createLocation(companyName, FileManagmentSys.stationManagerReports,
+						FileManagmentSys.purchasesReport),
+				FileManagmentSys.purchasesReport, stationId, quarter + "", year);
+
+		if (file == null)
+			return null;
+		
 		try {
 			stm = ConnectionToDB.conn
 					.prepareStatement("select DISTINCT(c.fuelType),sum(f.fuelQuantity) from myfueldb.car as c"
@@ -471,21 +479,15 @@ public class GasStationControllerServer {
 			res = stm.executeQuery();
 
 			if (res.next()) {
-
-				file = FileManagmentSys.createFile(
-						FileManagmentSys.createLocation(companyName, FileManagmentSys.stationManagerReports,
-								FileManagmentSys.purchasesReport),
-						FileManagmentSys.purchasesReport, stationId, quarter + "", year);
-
-				if (file == null)
-					return null;
-
 				FileManagmentSys.writeToQuarterReport(file,
 						FileManagmentSys.purchaseReportFormat(res, stationId + "", year, quarter + ""));
-
-				CompanyFuelControllerServer.createGenericReport(new GenericReport(year, quarter + "", file.getName(),
-						FileManagmentSys.purchasesReport, companyName, stationId));
 			}
+			else {
+				FileManagmentSys.writeToQuarterReport(file,String.format("No data in station %d\nYear: %s, %s quarter", stationId , year, quarter.toString()));
+			}
+			
+			CompanyFuelControllerServer.createGenericReport(new GenericReport(year, quarter + "", file.getName(),
+					FileManagmentSys.purchasesReport, companyName, stationId));
 		}
 
 		catch (Exception e) {

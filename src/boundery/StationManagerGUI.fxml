@@ -15,14 +15,14 @@
    <children>
       <AnchorPane fx:id="StationOrdersView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
-            <TableView fx:id="StationOrderTable" editable="true" layoutX="28.0" layoutY="144.0" prefHeight="235.0" prefWidth="721.0">
+            <TableView fx:id="StationOrderTable" editable="true" layoutX="28.0" layoutY="144.0" prefHeight="235.0" prefWidth="720.0">
               <columns>
                   <TableColumn fx:id="selectOrderCol" prefWidth="100.0" text="Select" />
-                <TableColumn fx:id="OrdersOrderIDCol" prefWidth="130.0" text="order ID" />
-                <TableColumn fx:id="OrdersSupplierIDCol" prefWidth="130.0" text="Supplier ID" />
-                  <TableColumn fx:id="OrdersStatusCol" prefWidth="120.0" text="Status" />
-                  <TableColumn fx:id="OrdersDateCol" prefWidth="130.0" text="Date" />
-                  <TableColumn fx:id="OrdersOrderPriceCol" prefWidth="120.0" text="Order price" />
+                <TableColumn fx:id="OrdersOrderIDCol" prefWidth="100.0" text="order ID" />
+                <TableColumn fx:id="OrdersSupplierIDCol" prefWidth="100.0" text="Supplier ID" />
+                  <TableColumn fx:id="OrdersStatusCol" prefWidth="100.0" text="Status" />
+                  <TableColumn fx:id="OrdersDateCol" prefWidth="100.0" text="Date" />
+                  <TableColumn fx:id="OrdersOrderPriceCol" prefWidth="100.0" text="Amount" />
                   <TableColumn fx:id="OrdersFuelTypeCol" prefWidth="120.0" text="Fuel type" />
               </columns>
             </TableView>
@@ -61,7 +61,7 @@
             <Text layoutX="297.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="choose fuel type" wrappingWidth="149.99999478459358" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="StationReportsView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;">
+      <AnchorPane fx:id="StationReportsView" layoutX="192.0" layoutY="108.0" prefHeight="432.0" prefWidth="768.0" style="-fx-background-color: #f2f2f2;" visible="false">
          <children>
             <TableView fx:id="ReportTable" layoutX="88.0" layoutY="235.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="158.0" prefWidth="624.0">
                <columns>

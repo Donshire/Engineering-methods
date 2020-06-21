@@ -226,16 +226,22 @@ public class StationManagerController implements Initializable {
 		case created:
 			StationOrderTable.setItems(getOrders(GasStationOrderFromSupplier.created));
 			confirmBtn.setVisible(true);
+			selectOrderCol.setVisible(true);
+			StationOrderTable.setPrefWidth(720);
 			break;
 
 		case confirmed:
 			StationOrderTable.setItems(getOrders(GasStationOrderFromSupplier.confirmed));
 			confirmBtn.setVisible(false);
+			selectOrderCol.setVisible(false);
+			StationOrderTable.setPrefWidth(720-selectOrderCol.getPrefWidth());
 			break;
 
 		case supplied:
 			StationOrderTable.setItems(getOrders(GasStationOrderFromSupplier.supplied));
 			confirmBtn.setVisible(false);
+			selectOrderCol.setVisible(false);
+			StationOrderTable.setPrefWidth(720-selectOrderCol.getPrefWidth());
 			break;
 
 		}
@@ -569,10 +575,9 @@ public class StationManagerController implements Initializable {
 		// station order table start
 		OrdersOrderIDCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Integer>("orderID"));
 		OrdersSupplierIDCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("supplierId"));
-		System.out.println("check me StationManagerController line 347 !!!!!!!!! was fuelType");
 		OrdersStatusCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("status"));
 		OrdersDateCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("date"));
-		OrdersOrderPriceCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Float>("orderPrice"));
+		OrdersOrderPriceCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, Float>("quantity"));
 		OrdersFuelTypeCol.setCellValueFactory(new PropertyValueFactory<GasStationOrder, String>("fuelType"));
 
 		StationOrderTable.setItems(getOrders(GasStationOrderFromSupplier.created));
@@ -689,7 +694,7 @@ public class StationManagerController implements Initializable {
 
 		StationOrdersView.setVisible(false);
 		StationReportsView.setVisible(false);
-		QuantityView.setVisible(false);
+		QuantityView.setVisible(true);
 		curr = QuantityView;
 		nametxt.setText(stationManager.getFirstName());
 		initializeOrderTable();
