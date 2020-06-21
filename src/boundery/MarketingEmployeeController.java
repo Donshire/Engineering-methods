@@ -1185,12 +1185,8 @@ public class MarketingEmployeeController implements Initializable {
 			}
 		}
 
-		if (id.isEmpty() || carNumber == null || fuelType == null || pricingM == null || purchaseM == null) {
+		if (id.isEmpty() || fuelType == null || pricingM == null || purchaseM == null) {
 			JOptionPane.showMessageDialog(null, "One or more of the details is empty, please fill all the fileds");
-			return;
-		}
-		if (!testCar(carNumber)) {
-			JOptionPane.showMessageDialog(null, "car number is not in the correct format");
 			return;
 		}
 
@@ -1231,9 +1227,11 @@ public class MarketingEmployeeController implements Initializable {
 		if ((purchaseM.toString() == PurchaseModel.MonthlysubscriptioOneCar.toString())
 				|| purchaseM.toString() == PurchaseModel.FullMonthlysubscription.toString()) {
 			if (carCount != 0) {
-				JOptionPane.showMessageDialog(null,
-						"In this purchase module you can register only one car\n You already have a car in the system. \n Change car number or purchase module");
-				return;
+				if (!carNumber.isEmpty()) {
+					JOptionPane.showMessageDialog(null,
+							"In this purchase module you can register only one car\n You already have a car in the system. \n Change car number or purchase module");
+					return;
+				}
 			}
 		}
 
@@ -1270,36 +1268,43 @@ public class MarketingEmployeeController implements Initializable {
 			secfuelTypeLbl.setVisible(false);
 			secFuelTypeCombox.setVisible(false);
 		}
-
+		
+		if(!carNumber.isEmpty()) {
+		
+			if (!testCar(carNumber)) {
+				JOptionPane.showMessageDialog(null, "car number is not in the correct format");
+				return;
+			}
+			
 		Car car = new Car(carNumber, fuelType, id);
 		// adding the car
 		if (!replaceCarFlag) {
-			if (EmployeeCC.addNewCar(car)) {
-				JOptionPane.showMessageDialog(null, "Car added successfully to system");
-				count++;
+				if (EmployeeCC.addNewCar(car)) {
+					JOptionPane.showMessageDialog(null, "Car added successfully to system");
+					count++;
+				} else {
+					JOptionPane.showMessageDialog(null, "There has been an error, try again");
+				}
 			} else {
-				JOptionPane.showMessageDialog(null, "There has been an error, try again");
-			}
-		} else {
-			if (EmployeeCC.updateCar(car, oldNum)) {
-				JOptionPane.showMessageDialog(null, "Car updated successfully to system");
-				count++;
+				if (EmployeeCC.updateCar(car, oldNum)) {
+					JOptionPane.showMessageDialog(null, "Car updated successfully to system");
+					count++;
 
-			} else {
-				JOptionPane.showMessageDialog(null,
-						"There has been an error or the old car number doesn't exist, try again");
-				count--;
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"There has been an error or the old car number doesn't exist, try again");
+					count--;
+				}
+			}
+
+			if (enter2CarsFlag) {
+				if (EmployeeCC.addNewCar(secCar2)) {
+					JOptionPane.showMessageDialog(null, "Second car added successfully to system");
+				} else {
+					JOptionPane.showMessageDialog(null, "There has been an error, try again");
+				}
 			}
 		}
-
-		if (enter2CarsFlag) {
-			if (EmployeeCC.addNewCar(secCar2)) {
-				JOptionPane.showMessageDialog(null, "Second car added successfully to system");
-			} else {
-				JOptionPane.showMessageDialog(null, "There has been an error, try again");
-			}
-		}
-
 		// adding the model
 		if (EmployeeCC.updateModels(pricingM.toString(), purchaseM.toString(), id)
 				&& (EmployeeCC.addModule(id, purchaseM.toString(), companyNames.toString()))) {

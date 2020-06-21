@@ -166,7 +166,6 @@ public class EmployeeController {
 			stm.executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
-			e.printStackTrace();
 			return false;
 		}
 		return true;
