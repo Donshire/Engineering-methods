@@ -26,8 +26,8 @@
                   <TableColumn fx:id="OrdersFuelTypeCol" prefWidth="120.0" text="Fuel type" />
               </columns>
             </TableView>
-            <ComboBox fx:id="ChooseOrdersStatusCombo" layoutX="531.0" layoutY="105.0" onAction="#ChooseOrdersStatus" prefWidth="150.0" />
-            <Text layoutX="357.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Orders By Status">
+            <ComboBox fx:id="ChooseOrdersStatusCombo" layoutX="598.0" layoutY="105.0" onAction="#ChooseOrdersStatus" prefWidth="150.0" />
+            <Text layoutX="424.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Orders By Status">
                <font>
                   <Font size="15.0" />
                </font></Text>
@@ -36,7 +36,6 @@
                   <Font size="25.0" />
                </font>
             </Text>
-            <Button fx:id="refresh" layoutX="691.0" layoutY="104.0" mnemonicParsing="false" onAction="#refresh" stylesheets="@styles.css" text="Refresh" />
             <Button fx:id="confirmBtn" layoutX="690.0" layoutY="391.0" mnemonicParsing="false" onAction="#confirmOrder" stylesheets="@styles.css" text="Confirm" />
          </children>
       </AnchorPane>

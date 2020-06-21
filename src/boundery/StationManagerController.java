@@ -374,11 +374,6 @@ public class StationManagerController implements Initializable {
 
 	}
 
-	@FXML
-	void refresh(ActionEvent event) {
-		System.out.println();
-	}
-
 	public boolean isValid(int year, Quarter quarter) {
 
 		int startMonth = 0;
@@ -691,7 +686,6 @@ public class StationManagerController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-
 		StationOrdersView.setVisible(false);
 		StationReportsView.setVisible(false);
 		QuantityView.setVisible(true);
