@@ -300,4 +300,62 @@ public String getSupplyDate() {
 				+ priceOfPurchase + ", urgent=" + urgent + ", status=" + status + "]";
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((custmoerId == null) ? 0 : custmoerId.hashCode());
+		result = prime * result + ((date == null) ? 0 : date.hashCode());
+		result = prime * result + Float.floatToIntBits(gasAmount);
+		result = prime * result + Float.floatToIntBits(priceOfPurchase);
+		result = prime * result + purchaseID;
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((supplyDate == null) ? 0 : supplyDate.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + (urgent ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GasOrder other = (GasOrder) obj;
+		if (custmoerId == null) {
+			if (other.custmoerId != null)
+				return false;
+		} else if (!custmoerId.equals(other.custmoerId))
+			return false;
+		if (date == null) {
+			if (other.date != null)
+				return false;
+		} else if (!date.equals(other.date))
+			return false;
+		if (Float.floatToIntBits(gasAmount) != Float.floatToIntBits(other.gasAmount))
+			return false;
+		if (Float.floatToIntBits(priceOfPurchase) != Float.floatToIntBits(other.priceOfPurchase))
+			return false;
+		if (purchaseID != other.purchaseID)
+			return false;
+		if (status != other.status)
+			return false;
+		if (supplyDate == null) {
+			if (other.supplyDate != null)
+				return false;
+		} else if (!supplyDate.equals(other.supplyDate))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
+		if (urgent != other.urgent)
+			return false;
+		return true;
+	}
+
 }

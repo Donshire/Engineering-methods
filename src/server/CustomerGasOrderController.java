@@ -89,5 +89,25 @@ public class CustomerGasOrderController {
 		}	
 		return true;
 	}
+	
+	
+	//addded just for the testing course
+	public static boolean deleteOrder(GasOrder obj) {
+		PreparedStatement stm;
+		try {
+			String query = "delete from gasorder where customerID = ? and date = ? and time = ?";
+			stm = ConnectionToDB.conn.prepareStatement(query);
+			stm.setString(1, obj.getCustmoerId());
+			stm.setString(2, obj.getSupplyDate());
+			stm.setString(3, obj.getTime());
+			
+			stm.executeUpdate();
+			stm.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}	
+		return true;
+	}
 
 }
