@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import Entity.GasOrder;
 import Entity.Message;
 import enums.Commands;
-import Entity.CustomerModule;
+import stubs.CustomerCCI;
 import Entity.FuelPurchase;
 
-public class CustomerCC {
-
+public class CustomerCC implements CustomerCCI{
+	
 	public static ArrayList<Object> fastFuelingLogIn(String carNumber) {
 		ClientUI.client.accept(new Message(carNumber, Commands.fastFuelingLogIn));
 		return (ArrayList<Object>) MyFuelClient.ServerRetObj;
@@ -52,8 +52,8 @@ public class CustomerCC {
 		return (int) MyFuelClient.ServerRetObj;
 	}
 	
-
-	public static ArrayList<GasOrder> GasOrderList(String userId) {
+	@Override
+	public ArrayList<GasOrder> GasOrderList(String userId) {
 		ClientUI.client.accept(new Message(userId, Commands.CustomerOrderList));
 		try {
 			ArrayList<GasOrder> array = (ArrayList<GasOrder>) MyFuelClient.ServerRetObj;
@@ -70,7 +70,8 @@ public class CustomerCC {
 	 * @param str - Name of product
 	 * @return - price max.
 	 */
-	public static Object getMaxPrice(String str) {
+	@Override
+	public Object getMaxPrice(String str) {
 		ClientUI.client.accept(new Message(str, Commands.GetMaxPrice));
 		return (float)MyFuelClient.ServerRetObj;
 	}
@@ -80,7 +81,8 @@ public class CustomerCC {
 	 * @param order - order to create.
 	 * @return true - if the purchase was successful.
 	 */
-	public static boolean createNewOrder(GasOrder order) {
+	@Override
+	public boolean createNewOrder(GasOrder order) {
 		ClientUI.client.accept(new Message(order, Commands.CreateNewOrder));
 		return (boolean)MyFuelClient.ServerRetObj;
 	}

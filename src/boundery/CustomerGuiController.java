@@ -34,6 +34,7 @@ import javafx.scene.input.InputMethodEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import stubs.CustomerCCI;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -41,6 +42,12 @@ import javafx.stage.Stage;
  */
 public class CustomerGuiController implements Initializable {
 
+	public static CustomerCCI customerCCI;
+	
+	public static void setContoller(CustomerCCI customercc) {
+		customerCCI=customercc;
+	}
+	
 	/** The customer. */
 	public static Customer customer;
 	
@@ -276,7 +283,7 @@ public class CustomerGuiController implements Initializable {
 					!normalSupply.isSelected(), OrderStatus.processing);
 			
 			
-			if (CustomerCC.createNewOrder(order)) {
+			if (customerCCI.createNewOrder(order)) {
 			JOptionPane.showMessageDialog(null,"Order created succesfully");
 			myOrdersClicked(null);
 			orderTable.setItems(getOrders());
@@ -394,17 +401,33 @@ public class CustomerGuiController implements Initializable {
 	/**
 	 * Sets the price.
 	 */
-	private void setPrice() {
+	public void setPrice() {
+		total.setText(String.format("%.2f", calculatePrice(pricePerUnit, gasAmount, radioImmediat.isSelected())));
+	}
+	
+	/**
+	 * 
+	 * @param pricePerUnit
+	 * @param gasAmount
+	 * @param flag if the ugret selected it is true
+	 * @return
+	 */
+	public static float calculatePrice(float pricePerUnit,float gasAmount,boolean flag) {
 		float beforeDiscount = pricePerUnit * gasAmount;
-		priceOfPurchase = (beforeDiscount + (beforeDiscount / 100) * discount);
-		total.setText(String.format("%.2f", priceOfPurchase));
+		return (beforeDiscount + (beforeDiscount / 100) * getDiscount(flag, gasAmount));
 	}
 	
 	/**
 	 * Setting discount.
 	 */
 	private void settingDiscount() {
-		if (radioImmediat.isSelected())
+		textDiscount.setText(getDiscount(radioImmediat.isSelected(),gasAmount) + "%");
+	}
+	
+	//created function
+	public static int getDiscount(boolean flag,float gasAmount) {
+		int discount;
+		if (flag)
 			discount = 2;
 		else {
 			if (gasAmount > 600.0 && gasAmount <= 800.0)
@@ -414,16 +437,21 @@ public class CustomerGuiController implements Initializable {
 			else
 				discount = 0;
 		}
-		textDiscount.setText(discount.toString() + "%");
+		return discount;
 	}
 
+	
+	public static float getHomeGasPrice() {
+		return (float) customerCCI.getMaxPrice("HOME GAS");
+	}
+	
 	/**
 	 * Order home gas initialize.
 	 */
 	public void orderHomeGasInitialize() {
 		
 		// Loading the price of per unit.
-		pricePerUnit = (float) CustomerCC.getMaxPrice("HOME GAS");
+		pricePerUnit = getHomeGasPrice();
 		priceList.setText(Float.toString(pricePerUnit));
 		
 
@@ -479,7 +507,8 @@ public class CustomerGuiController implements Initializable {
 	 * @return the orders
 	 */
 	public ObservableList<GasOrder> getOrders() {
-		ObservableList<GasOrder> orders = FXCollections.observableArrayList(CustomerCC.GasOrderList(customer.getId()));
+		ObservableList<GasOrder> orders = FXCollections.observableArrayList(customerCCI
+				.GasOrderList(customer.getId()));
 		return orders;
 	}
 	

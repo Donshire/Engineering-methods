@@ -63,9 +63,18 @@ class HomeGasServerTest {
 	}
 	
 	@Test
-	void deleteValidOrderTest() {
+	void deleteValidOrderAllReadyInDBTest() {
 		//there must be one order in the db
 		CustomerGasOrderController.deleteOrder(gasOrder);
+		ArrayList<GasOrder> actual = CustomerGasOrderController.getOrders(customerID);
+		
+		assertTrue(actual.isEmpty());
+	}
+	
+	@Test
+	void deleteNullTest() {
+		//there must be one order in the db
+		CustomerGasOrderController.deleteOrder(null);
 		ArrayList<GasOrder> actual = CustomerGasOrderController.getOrders(customerID);
 		
 		assertTrue(actual.isEmpty());

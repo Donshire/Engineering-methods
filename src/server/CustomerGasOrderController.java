@@ -80,7 +80,8 @@ public class CustomerGasOrderController {
 			stm.setFloat(6, obj.getPriceOfPurchase());
 			stm.setBoolean(7, obj.isUrgent());
 			int stat = obj.getStatusInt();		//***
-			stm.setInt(8, stat);	
+			stm.setInt(8, stat);
+			
 			stm.executeUpdate();
 			stm.close();
 		} catch (SQLException e) {
