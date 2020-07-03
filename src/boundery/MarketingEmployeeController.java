@@ -882,14 +882,18 @@ public class MarketingEmployeeController implements Initializable {
 		ObservableList<PurchaseModel> purchase = FXCollections.observableArrayList(PurchaseModel.values());
 		purchaseModelCombox.setItems(purchase);
 
-		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
+		//bug solve
+		fuelTypesForSale = EmployeeCC.getFuelTypesByCompany(markem.getCompanyName());
+		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypesForSale);
+		//
+//		ObservableList<String> fuelType = FXCollections.observableArrayList(fuelTypes);
 		FuelTypeCombox.setItems(fuelType);
 		secFuelTypeCombox.setItems(fuelType);
 
 		ObservableList<CustomerTypes> customerTypes = FXCollections.observableArrayList(CustomerTypes.values());
 		customerTypeCombox.setItems(customerTypes);
 
-		fuelTypesForSale = EmployeeCC.getFuelTypesByCompany(markem.getCompanyName());
+//		fuelTypesForSale = EmployeeCC.getFuelTypesByCompany(markem.getCompanyName());
 		ObservableList<String> fuelTypeForSale = FXCollections.observableArrayList(fuelTypesForSale);
 		fuelTypesForSaleCombox.setItems(fuelTypeForSale);
 
